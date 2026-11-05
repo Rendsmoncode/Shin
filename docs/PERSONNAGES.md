@@ -35,8 +35,9 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 - Rani Lakshmibai
 - Nader Shah
 - Knut le Grand
+- Harald Hardrada
 
-## Grands Généraux Sous les Cieux (12, validés)
+## Grands Généraux Sous les Cieux (validés)
 
 - Ouki
 - Saladin
@@ -48,7 +49,6 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 - Ménélik II
 - Jan Žižka
 - Napoléon
-- Harald Hardrada
 - Toussaint Louverture
 
 ## Guerriers mystiques
