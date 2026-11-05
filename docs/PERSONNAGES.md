@@ -27,6 +27,11 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 - Abd el-Kader
 - Tecumseh
 - Crazy Horse
+- Shaka Zulu
+- Simón Bolívar
+- Alexandre Souvorov
+- Skanderbeg
+- Subötaï
 
 ## Grands Généraux Sous les Cieux
 
@@ -37,6 +42,9 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 - Lü Bu
 - Alexandre le Grand
 - Jeanne d'Arc
+- Ménélik II
+- Toussaint Louverture
+- Jan Žižka (à confirmer : Général ou Sous les Cieux)
 
 ## Guerriers mystiques
 
@@ -44,3 +52,7 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 - Sasaki Kojirō
 - Vercingétorix
 - Kyoukai
+
+## De côté (à ressortir si besoin)
+
+- Soundiata Keïta (lore génial, peut-être en Guerrier mystique)
