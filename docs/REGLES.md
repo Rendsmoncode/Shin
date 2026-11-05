@@ -71,11 +71,11 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
   | Gendarmerie, police, pompiers | Garnison (défense du quartier). |
   | Gare, entrées d'autoroute | Déplacements plus rapides et commerce avec les autres villes. |
   | Mairie, monuments, églises, musées | Lieux uniques, avec un bonus spécial ou une quête (par exemple, la Légion étrangère donne un bonus aux troupes d'élite). |
-- ✅ **Sur un espace vide, on peut tout construire.** Un quartier sans hôpital peut s'en construire un.
+- ✅ **Sur un espace vide, on peut tout construire, sauf les lieux majeurs.** À la place, on construit une version modeste : par exemple, on ne construit pas d'hôpital mais une **infirmerie**.
 - ✅ **Lieux majeurs** : les bâtiments uniques ou quasi uniques de la ville (le vrai hôpital, la Légion étrangère…). Ils sont très durs à obtenir et demandent des **quêtes difficiles**.
 - ✅ **Guerre pour un lieu majeur** : le Game Master peut retirer les quêtes, pour que le gagnant de la guerre obtienne directement le lieu.
 - ✅ **Fonctionnement** : quand une guerre pour un lieu majeur est gagnée, le jeu prépare automatiquement le transfert du lieu au gagnant, sans quête. Le Game Master reçoit une demande et prend la décision finale (valider ou refuser).
-- 💡 Un lieu majeur est bien plus puissant que sa version construite (par exemple, le vrai hôpital soigne beaucoup plus vite et donne un bonus à toutes les armées).
+- ✅ Le vrai hôpital (lieu majeur) est bien plus puissant qu'une infirmerie : il soigne beaucoup plus vite et donne un bonus à toutes les armées.
 - ❓ Ce qui compte comme « quasi unique » (par exemple, s'il n'en existe que 2 ou 3 dans la ville).
 
 ## 4. L'économie
