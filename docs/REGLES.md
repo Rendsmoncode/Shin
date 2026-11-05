@@ -74,7 +74,7 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 - ✅ **Sur un espace vide, on peut tout construire.** Un quartier sans hôpital peut s'en construire un.
 - ✅ **Lieux majeurs** : les bâtiments uniques ou quasi uniques de la ville (le vrai hôpital, la Légion étrangère…). Ils sont très durs à obtenir et demandent des **quêtes difficiles**.
 - ✅ **Guerre pour un lieu majeur** : le Game Master peut retirer les quêtes, pour que le gagnant de la guerre obtienne directement le lieu.
-- ❓ Le retrait des quêtes : à la main par le Game Master, ou règle automatique avec exception possible ?
+- ✅ **Fonctionnement** : quand une guerre pour un lieu majeur est gagnée, le jeu prépare automatiquement le transfert du lieu au gagnant, sans quête. Le Game Master reçoit une demande et prend la décision finale (valider ou refuser).
 - 💡 Un lieu majeur est bien plus puissant que sa version construite (par exemple, le vrai hôpital soigne beaucoup plus vite et donne un bonus à toutes les armées).
 - ❓ Ce qui compte comme « quasi unique » (par exemple, s'il n'en existe que 2 ou 3 dans la ville).
 
