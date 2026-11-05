@@ -143,7 +143,9 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
   - un général a en plus une **aptitude de leader**.
 - ✅ **Doublons** : ils se transforment en XP pour le personnage (par exemple 1 doublon = 1 000 XP).
 - ✅ **Aucun argent réel dans le jeu.** La boutique contient seulement un **lien vers la page de dons de MSF** pour la Palestine. Après un don, l'admin offre lui-même un coffre au joueur.
-- ❓ Raretés et probabilités, liste des personnages, équilibrage (à faire ensemble).
+- ✅ **Raretés** : Commun · Rare · Épique · Légendaire · Sous les Cieux. Un coffre ou un trésor contient un seul personnage.
+- ✅ La liste des personnages est dans [PERSONNAGES.md](PERSONNAGES.md).
+- ❓ Probabilités et équilibrage (à faire ensemble).
 
 ## 9. Les batailles (court terme, façon Clash of Clans)
 
