@@ -169,7 +169,12 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 - ✅ **Inactivité** : sans aucune action sur le jeu pendant 3 minutes, le joueur passe hors ligne (tout combat contre lui se joue en mode Clash of Clans).
 - ✅ **Alerte d'attaque** : le défenseur connecté choisit entre « bataille rangée » et « défenses automatiques ». Sans réponse au bout de 30 secondes, ses défenses jouent à sa place.
 - ✅ **Chrono par tour** : 1 minute par tour. Si le chrono s'écoule, le tour passe ; un joueur qui abandonne en cours de route voit ses troupes se défendre automatiquement.
-- ❓ Ce qu'on gagne ou perd dans une bataille rangée (a priori comme une bataille classique : butin, pertes, XP).
+- ✅ **Champ de bataille à part** : la bataille rangée ne se joue pas autour d'un quartier. Les deux camps sont à égalité, chacun attaque et se défend (comme une petite guerre).
+- ✅ **Récompenses (symétriques)** :
+  - le vainqueur pille le perdant (une partie de ses ressources), quel que soit celui qui a lancé le combat ;
+  - le vainqueur gagne beaucoup d'XP, le perdant un peu, et les deux gagnent plus que dans une bataille classique ;
+  - plus de blessés, moins de morts : une partie des soldats tombés peuvent être soignés à l'infirmerie ou à l'hôpital ;
+  - la protection contre le pillage s'applique (pas deux fois d'affilée).
 
 ## 10. Les guerres (long terme, façon CK3)
 
@@ -236,4 +241,4 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 
 ## Prochaines étapes
 
-On reprend les thèmes un par un pour remplacer les ❓ et valider les 💡, Thèmes bouclés : 1 à 6.
+On reprend les thèmes un par un pour remplacer les ❓ et valider les 💡, Thèmes bouclés : 1 à 7.
