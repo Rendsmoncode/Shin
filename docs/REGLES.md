@@ -76,7 +76,8 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 - ✅ **Guerre pour un lieu majeur** : le Game Master peut retirer les quêtes, pour que le gagnant de la guerre obtienne directement le lieu.
 - ✅ **Fonctionnement** : quand une guerre pour un lieu majeur est gagnée, le jeu prépare automatiquement le transfert du lieu au gagnant, sans quête. Le Game Master reçoit une demande et prend la décision finale (valider ou refuser).
 - ✅ Le vrai hôpital (lieu majeur) est bien plus puissant qu'une infirmerie : il soigne beaucoup plus vite et donne un bonus à toutes les armées.
-- ❓ Ce qui compte comme « quasi unique » (par exemple, s'il n'en existe que 2 ou 3 dans la ville).
+- ✅ **Quasi unique** : un lieu qui n'existe qu'en 2 ou 3 exemplaires sur la carte (les lycées, par exemple). Il suit les mêmes règles que les lieux uniques.
+- ❓ La liste exacte des lieux majeurs, à établir avec les données réelles de la carte (y a-t-il un autre hôpital à La Valentine ?).
 
 ## 4. L'économie
 
