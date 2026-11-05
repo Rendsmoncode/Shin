@@ -51,10 +51,6 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 - Harald Hardrada
 - Toussaint Louverture
 
-## À replacer
-
-- Lü Bu (retiré des Sous les Cieux : Général, Guerrier mystique ou retiré ?)
-
 ## Guerriers mystiques
 
 - Miyamoto Musashi
@@ -62,6 +58,7 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 - Vercingétorix
 - Kyoukai
 - Ragnar Lodbrok
+- Lü Bu
 
 ## De côté (à ressortir si besoin)
 
