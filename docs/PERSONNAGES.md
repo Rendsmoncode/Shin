@@ -32,6 +32,9 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 - Alexandre Souvorov
 - Skanderbeg
 - Subötaï
+- Shivaji
+- Rani Lakshmibai
+- Nader Shah
 
 ## Grands Généraux Sous les Cieux
 
@@ -44,6 +47,7 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 - Jeanne d'Arc
 - Ménélik II
 - Toussaint Louverture
+- Mehmed II
 - Jan Žižka (à confirmer : Général ou Sous les Cieux)
 
 ## Guerriers mystiques
