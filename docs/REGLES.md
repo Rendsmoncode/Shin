@@ -28,6 +28,7 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 ## 2. La carte
 
 - ✅ **La vraie carte d'Aubagne**, plus La Valentine. D'autres villes pourront être ajoutées (Cassis, La Penne-sur-Huveaune…).
+- ✅ **Découpage** : les quartiers officiels. S'il n'y en a pas assez, on les découpe en sous-quartiers.
 - ✅ Si la carte pose problème, on agrandit les zones vides (par exemple entre Aubagne et La Penne, et entre La Penne et La Valentine).
 - ✅ **Quartiers de départ** :
   | Joueur | Quartier |
@@ -49,7 +50,11 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 - ✅ **Défense** : soldats, tours, garnisons.
 - ✅ **Pas de murs** : c'est une vraie ville. De simples contours délimitent les quartiers, comme les frontières dans CK3. La défense repose sur les tours, les garnisons et les soldats.
 - ✅ **Vue d'un quartier** : on zoome dessus comme dans CK3. Si c'est trop difficile à réaliser, on « entre » dedans comme dans Clash of Clans.
-- ❓ La liste des bâtiments (à voir avec une base visuelle).
+- ✅ **Bâtiments (option C, le mélange)** :
+  - on garde la structure réelle de la ville et on **améliore ce qui existe déjà** (les vrais lieux produisent les ressources et donnent des bonus uniques) ;
+  - s'il y a du **vide** (un grand parking, un champ…), on peut **construire dedans** ;
+  - la maison du joueur sert d'hôtel de ville.
+- ❓ Le rôle de chaque type de lieu réel, et la liste des bâtiments constructibles.
 
 ## 4. L'économie
 
