@@ -124,7 +124,7 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 - ✅ **Échelle des effectifs** : 5 → 10 → 20 → 100 → 1 000 → 3 000 → 5 000 → sans limite (ou limite lointaine).
 - 💡 **Noms des grades** (proposition inspirée de Kingdom) : 5 Chef de bande · 10 Chef d'escouade · 20 Sergent · 100 Centurion · 1 000 Commandant de mille · 3 000 Commandant de trois mille · 5 000 Commandant de cinq mille · sans limite **Général** (grade final).
 - ✅ **Grand Général Sous les Cieux** : ce n'est pas un grade mais une **rareté**, la plus haute pour un général (comme un LR dans Dokkan Battle). On l'obtient, on ne l'atteint pas avec de l'XP. Il prend la place d'un général et possède un effet en plus, par exemple une **attaque spéciale** activable en bataille.
-- ❓ Le Grand Général Sous les Cieux est-il unique dans tout le jeu, ou plusieurs joueurs peuvent-ils en avoir un ?
+- ✅ Le Grand Général Sous les Cieux est **rare mais pas unique** : plusieurs joueurs peuvent en avoir un.
 - ✅ **Rareté** : de commun à légendaire.
 - ✅ **Expérience** : en améliorant son armée, en gagnant des batailles et des guerres, ou directement avec de l'argent.
 - ✅ **Le grade débloque tout le reste** (effectifs, stratégies, aptitudes), comme dans Rise of Kingdoms.
