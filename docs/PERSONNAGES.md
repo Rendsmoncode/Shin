@@ -40,7 +40,6 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 - Saladin
 - Gengis Khan
 - Alexandre le Grand
-- Jeanne d'Arc
 - Mehmed II
 - Ménélik II
 - Napoléon
@@ -65,6 +64,7 @@ Deux généraux invaincus, absents de la légende des 12, uniques dans tout le j
 - Kyoukai
 - Ragnar Lodbrok
 - Lü Bu
+- Jeanne d'Arc
 
 ## De côté (à ressortir si besoin)
 
