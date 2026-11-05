@@ -75,6 +75,13 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 - ✅ **Lieux majeurs** : les bâtiments uniques ou quasi uniques de la ville (le vrai hôpital, la Légion étrangère…). Ils sont très durs à obtenir et demandent des **quêtes difficiles**.
 - ✅ **Guerre pour un lieu majeur** : le Game Master peut retirer les quêtes, pour que le gagnant de la guerre obtienne directement le lieu.
 - ✅ **Fonctionnement** : quand une guerre pour un lieu majeur est gagnée, le jeu prépare automatiquement le transfert du lieu au gagnant, sans quête. Le Game Master reçoit une demande et prend la décision finale (valider ou refuser).
+- ✅ **Chaque lieu majeur a sa version modeste constructible** :
+  | Lieu majeur | Version constructible |
+  |---|---|
+  | Hôpital | Infirmerie |
+  | Légion étrangère | Caserne |
+  | Gare | Relais (déplacements un peu plus rapides) |
+  | Mairie | Aucune (bonus réservé à son propriétaire) |
 - ✅ Le vrai hôpital (lieu majeur) est bien plus puissant qu'une infirmerie : il soigne beaucoup plus vite et donne un bonus à toutes les armées.
 - ✅ **Quasi unique** : un lieu qui n'existe qu'en 2 ou 3 exemplaires sur la carte (les lycées, par exemple). Il suit les mêmes règles que les lieux uniques.
 - ❓ La liste exacte des lieux majeurs, à établir avec les données réelles de la carte (y a-t-il un autre hôpital à La Valentine ?).
