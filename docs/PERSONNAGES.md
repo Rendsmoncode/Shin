@@ -19,7 +19,7 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 - César
 - Takeda Shingen
 - Kanki
-- Baudouin II
+- Baudouin IV (le roi lépreux, vainqueur de Saladin à Montgisard)
 - Shin
 - Samori Touré
 - Abd el-Kader
@@ -54,7 +54,7 @@ Deux généraux invaincus, absents de la légende des 7, uniques dans tout le je
 
 - **Khalid ibn al-Walid** : l'invincible face aux deux plus grands empires de son époque.
 - **Jan Žižka** : l'aveugle à la tête de paysans, jamais vaincu.
-- ❓ Mise en scène : deux légendes parallèles, ou double révélation (un 13ᵉ, puis un 14ᵉ que personne n'attend) ? Dans quel ordre ?
+- ✅ Mise en scène : **deux légendes parallèles**. On sait dès le début qu'il existe deux généraux cachés, chacun avec son surnom et sa propre chaîne de quêtes.
 
 ## Guerriers mystiques
 
