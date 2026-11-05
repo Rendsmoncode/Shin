@@ -47,7 +47,7 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 - ✅ **Construction et amélioration** : on s'inspire de Rise of Kingdoms.
 - ✅ **La capitale** (quartier de départ) gère les finances et sert de centre des opérations militaires.
 - ✅ **Défense** : soldats, tours, garnisons.
-- 💡 **Murs** : des barricades sur les routes qui entrent dans le quartier ont été proposées, mais l'idée ne convainc pas. ❓ Sans murs, la défense repose sur les tours, les garnisons et les soldats.
+- ✅ **Pas de murs** : c'est une vraie ville. De simples contours délimitent les quartiers, comme les frontières dans CK3. La défense repose sur les tours, les garnisons et les soldats.
 - ✅ **Vue d'un quartier** : on zoome dessus comme dans CK3. Si c'est trop difficile à réaliser, on « entre » dedans comme dans Clash of Clans.
 - ❓ La liste des bâtiments (à voir avec une base visuelle).
 
@@ -118,7 +118,7 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 - ✅ **Joueur hors ligne** : ses défenses le remplacent.
 - ✅ **Affichage** : vue de dessus, avec animations.
 - ✅ **Protection contre le pillage** : un joueur ne peut pas être pillé deux fois d'affilée. Il reste protégé tant qu'il ne s'est pas reconnecté, n'a pas soigné ses troupes et n'a pas réparé ses infrastructures. Soins et réparations se lancent en cliquant sur les troupes et les bâtiments, comme dans Clash of Clans.
-- 💡 Un bâtiment endommagé ne produit plus rien, pour que personne ne reste protégé indéfiniment en refusant de réparer.
+- ✅ Un bâtiment endommagé ne produit plus rien, pour que personne ne reste protégé indéfiniment en refusant de réparer.
 - ❓ La préparation (choix du général, composition, formation) et les stratégies (embuscade, encerclement, charge…).
 
 ## 10. Les guerres (long terme, façon CK3)
