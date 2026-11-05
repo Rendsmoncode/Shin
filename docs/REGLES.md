@@ -126,7 +126,7 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 - ✅ **Rareté** : de commun à légendaire.
 - ✅ **Expérience** : en améliorant son armée, en gagnant des batailles et des guerres, ou directement avec de l'argent.
 - ✅ **Le grade débloque tout le reste** (effectifs, stratégies, aptitudes), comme dans Rise of Kingdoms.
-- ❓ **Nombre de généraux** : 1 général pour 3 ou 5 quartiers.
+- ✅ **Nombre de généraux** : 1 général pour 3 quartiers, plus le roi (toujours général dès le départ).
 - ✅ **Blessures** : un général peut être blessé, et le temps le soigne (par exemple 3 jours).
 - ✅ **Les joueurs ne créent rien** : ni personnages, ni cartes.
 - ✅ **Les joueurs sont des rois de quartier.** Un roi est automatiquement général et possède un passif offensif et un passif défensif.
