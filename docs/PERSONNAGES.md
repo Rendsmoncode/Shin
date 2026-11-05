@@ -17,7 +17,6 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 ## Généraux (Légendaire, rareté à confirmer au cas par cas)
 
 - César
-- Hannibal Barca
 - Takeda Shingen
 - Kanki
 - Baudouin II
@@ -34,10 +33,9 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 - Shivaji
 - Rani Lakshmibai
 - Nader Shah
-- Knut le Grand
 - Harald Hardrada
 
-## Grands Généraux Sous les Cieux (validés)
+## Grands Généraux Sous les Cieux (13 : les « 12 » de la légende, et un 13ᵉ hors catégorie à désigner)
 
 - Ouki
 - Saladin
@@ -50,6 +48,8 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 - Jan Žižka
 - Napoléon
 - Toussaint Louverture
+- Hannibal Barca
+- Knut le Grand
 
 ## Guerriers mystiques
 
