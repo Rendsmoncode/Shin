@@ -165,7 +165,8 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 - ✅ **Terrain tiré au hasard** : désert, montagne, champ, ruines…
 - ✅ **Tour par tour** : à chaque tour, on déplace ses troupes, on attaque ou non, etc.
 - ✅ Les aptitudes spéciales s'y utilisent (par exemple, l'attaque spéciale d'un Grand Général Sous les Cieux).
-- ❓ Quand et pourquoi une bataille rangée se déclenche, et ce qu'on y gagne ou perd.
+- ✅ **Quand** : tout combat entre joueurs **connectés** se joue en bataille rangée. Si l'un des deux n'est pas connecté, le combat se joue en mode Clash of Clans (ses défenses le remplacent).
+- ❓ Un joueur connecté mais indisponible peut-il laisser ses défenses jouer à sa place ?
 
 ## 10. Les guerres (long terme, façon CK3)
 
