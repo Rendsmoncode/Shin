@@ -14,7 +14,7 @@ Liste de travail des personnages du gacha. Stats et aptitudes à définir ensemb
 
 Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 
-## Généraux (Légendaire)
+## Généraux (Légendaire, rareté à confirmer au cas par cas)
 
 - Napoléon
 - César
