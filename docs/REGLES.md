@@ -1,4 +1,6 @@
-# Shin — Règles du jeu (version 0)
+# Règles du jeu (version 0)
+
+« Shin » est seulement le nom de code du projet.
 
 Document de référence des règles et des mécaniques. On le complète thème par thème.
 Les réponses d'origine au questionnaire sont dans le dossier [`questionnaire/`](questionnaire/).

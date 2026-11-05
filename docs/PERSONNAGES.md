@@ -1,4 +1,4 @@
-# Shin — Personnages (brouillon)
+# Personnages (brouillon)
 
 Liste de travail des personnages du gacha. Stats et aptitudes à définir ensemble.
 
@@ -8,6 +8,7 @@ Liste de travail des personnages du gacha. Stats et aptitudes à définir ensemb
 - C'est un jeu de guerre : on ne juge pas la morale des personnages (Napoléon reste). On fait du cas par cas.
 - On équilibre les origines (pas trop de personnages asiatiques).
 - Pas de pharaons, et peu de personnages de l'Antiquité.
+- On exclut ceux dont l'héritage principal est un crime de masse.
 - Chaque personnage aura son **lore** (son histoire et ses exploits), affiché pendant les parties pour que les joueurs comprennent à quel point c'est de la folie.
 
 ## Raretés
@@ -19,8 +20,6 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 - César
 - Takeda Shingen
 - Kanki
-- Baudouin IV (le roi lépreux, vainqueur de Saladin à Montgisard)
-- Shin
 - Samori Touré
 - Abd el-Kader
 - Tecumseh
@@ -37,6 +36,22 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 - Ménélik II
 - Toussaint Louverture
 - Knut le Grand
+- Ri Boku
+- Ousen
+
+## Généraux épiques
+
+- Baudouin IV (le roi lépreux, vainqueur de Saladin à Montgisard)
+
+## Généraux de départ (un par joueur)
+
+- Le créateur du jeu : **Shin** (général lambda)
+- Nicolas : ❓
+- Mathieu : ❓
+
+## Exclus
+
+- Bai Qi (Haku Ki) : connu avant tout pour un massacre de masse (prisonniers enterrés vivants à Changping), même règle que pour Hitler.
 
 ## Grands Généraux Sous les Cieux : les 7 de la légende
 

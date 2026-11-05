@@ -1,4 +1,6 @@
-# Shin
+# Shin (nom de code)
+
+« Shin » est le nom de code du projet, pas le nom du jeu.
 
 Jeu de stratégie multijoueur dans le navigateur, entre amis.
 
