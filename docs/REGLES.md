@@ -1,0 +1,189 @@
+# Shin — Règles du jeu (version 0)
+
+Document de référence des règles et des mécaniques. On le complète thème par thème.
+Les réponses d'origine au questionnaire sont dans le dossier [`questionnaire/`](questionnaire/).
+
+Légende : ✅ décidé · 💡 proposé, à valider · ❓ à décider plus tard
+
+---
+
+## Le concept
+
+Un mélange de **Crusader Kings III** (carte, guerres longues, diplomatie) et de **Rise of Kingdoms / Clash of Clans** (ville à développer, batailles rapides), sur la **vraie carte d'Aubagne et de La Valentine**.
+Chaque joueur part de son quartier et cherche à s'agrandir en prenant les quartiers neutres, puis ceux des autres joueurs.
+Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 hommes et finit à la tête d'armées immenses.
+
+---
+
+## 1. Le cadre général
+
+- ✅ **Joueurs** : uniquement nous 3 pour l'instant. Les nouveaux joueurs arrivent sur invitation.
+- ✅ **Monde persistant** : la partie ne s'arrête jamais. Des événements par saison pourront être ajoutés plus tard.
+- ✅ **Rythme** : en temps réel, comme Rise of Kingdoms.
+- ✅ **Plateforme** : navigateur (pas d'application mobile pour l'instant).
+- ✅ **Absence** : il ne se passe rien de spécial pour un joueur absent.
+- ✅ **Récompenses de connexion** : une récompense quotidienne, plus des récompenses de jours de connexion d'affilée.
+- ✅ **Ton** : un mélange de sérieux (c'est un jeu de gestion) et d'humour.
+
+## 2. La carte
+
+- ✅ **La vraie carte d'Aubagne**, plus La Valentine. D'autres villes pourront être ajoutées (Cassis, La Penne-sur-Huveaune…).
+- ✅ Si la carte pose problème, on agrandit les zones vides (par exemple entre Aubagne et La Penne, et entre La Penne et La Valentine).
+- ✅ **Quartiers de départ** :
+  | Joueur | Quartier |
+  |---|---|
+  | Mathieu | Les Passons |
+  | Nico | La Valentine |
+  | Le créateur du jeu | Pin Vert |
+- ✅ **Tous les terrains réels** sont présents : Garlaban, Huveaune, autoroute, centre-ville, zones commerciales…
+- ✅ **Le terrain compte** : le Garlaban est une colline ou montagne avec des quêtes, et les véhicules ne peuvent pas y aller.
+- ✅ **Déplacements uniquement par les routes.**
+- ✅ **Brouillard de guerre** : la carte et les frontières sont visibles par tous. Les armées, les défenses et les stocks des autres sont cachés, sauf pour les alliés et via les espions.
+- ✅ **Zoom progressif comme dans CK3** : vue des villes → vue des quartiers → détails.
+
+## 3. Le quartier du joueur
+
+- ✅ **La vraie maison du joueur sert d'hôtel de ville** (comme dans Clash of Clans), avec tout ce qu'il y a autour. Des commerces réels à proximité sont un avantage, leur absence un handicap.
+- ✅ **Construction et amélioration** : on s'inspire de Rise of Kingdoms.
+- ✅ **La capitale** (quartier de départ) gère les finances et sert de centre des opérations militaires.
+- ✅ **Défense** : soldats, tours, garnisons.
+- 💡 **Murs** : des barricades sur les routes qui entrent dans le quartier ont été proposées, mais l'idée ne convainc pas. ❓ Sans murs, la défense repose sur les tours, les garnisons et les soldats.
+- ✅ **Vue d'un quartier** : on zoome dessus comme dans CK3. Si c'est trop difficile à réaliser, on « entre » dedans comme dans Clash of Clans.
+- ❓ La liste des bâtiments (à voir avec une base visuelle).
+
+## 4. L'économie
+
+- ✅ **Ressources de départ** : Argent, Nourriture, Matériaux, Population, et la monnaie du gacha.
+- ✅ **Ressources des époques suivantes** : Mana (mages), Munitions et Carburant (armes à feu et véhicules), objets spéciaux (accélérateurs, livres d'XP…).
+- ✅ **Pas de prestige ni d'influence.**
+- ✅ **Production** :
+  - les commerces produisent de l'argent ;
+  - les zones vides produisent de la nourriture ;
+  - les magasins de bricolage (Leroy Merlin, Gedimat…) produisent des matériaux ;
+  - les matériaux sont aussi disponibles dans la boutique.
+- ✅ **Cours variables selon les villes** : un sac de nourriture peut coûter 100 à Aubagne et 90 à Cassis. On peut acheter dans une ville et revendre dans une autre. Les cours changent souvent, pour la nourriture comme pour les matériaux.
+- ✅ **Stockage** : la capacité dépend de la taille de l'empire.
+- ✅ **Consommation** : construction, recrutement, entretien des armées… comme dans Clash of Clans et Rise of Kingdoms.
+- ✅ **Pillage, échange et vente entre joueurs** autorisés.
+
+## 5. Les quartiers neutres
+
+- ✅ Certains quartiers neutres se récupèrent en accomplissant des **missions**.
+- ✅ La plupart des quartiers intéressants ont leur propre **roi, leurs généraux et leur armée**.
+- ❓ Loyauté, révoltes, temps d'intégration après la conquête (peut-être trop complexe).
+
+## 6. Les troupes
+
+- ✅ **On mélange les époques et les mondes** : passé, présent, réel et fiction.
+- ✅ **Progression par époques** :
+  1. au début : infanterie, cavalerie, archers (à pied et à cheval, voire à vélo pour l'humour) ;
+  2. puis armes à feu ;
+  3. puis véhicules ;
+  4. puis mages, etc.
+- ✅ **Recrutement** : les soldats dépendent de la population et de la taille des quartiers (on s'inspire de Rise of Kingdoms et Clash of Clans).
+- ✅ **Soignants** : ils remettent les troupes d'aplomb pendant les batailles et les guerres, et donnent des bonus (par exemple +300 vitalité pour tous les fantassins).
+- ❓ Moral et fatigue (on verra s'il y a la place).
+
+## 7. Les généraux et les grades
+
+- ✅ **Échelle des effectifs** : 5 → 10 → 20 → 100 → 1 000 → 3 000 → 5 000 → sans limite (ou limite lointaine).
+- ❓ Le nom de chaque grade.
+- ✅ **Rareté** : de commun à légendaire.
+- ✅ **Expérience** : en améliorant son armée, en gagnant des batailles et des guerres, ou directement avec de l'argent.
+- ✅ **Le grade débloque tout le reste** (effectifs, stratégies, aptitudes), comme dans Rise of Kingdoms.
+- ❓ **Nombre de généraux** : 1 général pour 3 ou 5 quartiers.
+- ✅ **Blessures** : un général peut être blessé, et le temps le soigne (par exemple 3 jours).
+- ✅ **Les joueurs ne créent rien** : ni personnages, ni cartes.
+- ✅ **Les joueurs sont des rois de quartier.** Un roi est automatiquement général et possède un passif offensif et un passif défensif.
+
+## 8. Les personnages du gacha
+
+- ✅ **Catégories** : Général, Soldat d'élite, Soignant, Espion, Stratège, Architecte, Ingénieur, Économiste, Archéologue (très rare).
+- ✅ **Guerrier Mystique** : catégorie à part, uniquement des légendaires (voire au-delà), capables de battre une armée entière à eux seuls.
+- ✅ **Stats** : ATK, DEF, END, INT, VIT, Mana (peut-être d'autres).
+- ✅ **Aptitudes** :
+  - tout le monde a une **aptitude passive**. Elle peut agir sur lui-même, lui et ses alliés, uniquement ses alliés, son général, le lieu de la bataille, le lieu où il campe, les commerces autour de lui, etc. ;
+  - un général a en plus une **aptitude de leader**.
+- ✅ **Doublons** : ils se transforment en XP pour le personnage (par exemple 1 doublon = 1 000 XP).
+- ✅ **Aucun argent réel dans le jeu.** La boutique contient seulement un **lien vers la page de dons de MSF** pour la Palestine. Après un don, l'admin offre lui-même un coffre au joueur.
+- ❓ Raretés et probabilités, liste des personnages, équilibrage (à faire ensemble).
+
+## 9. Les batailles (court terme, façon Clash of Clans)
+
+- ✅ **N'importe qui attaque n'importe qui, à tout moment.**
+- ✅ **Déroulement** : le joueur pose ses troupes autour du quartier visé, comme dans Clash of Clans.
+- ✅ **Le terrain compte**, en restant logique : par exemple, la cavalerie est rapide en terrain plat mais lente en montagne.
+- ✅ **Durée** : comme dans Clash of Clans.
+- ✅ **Conséquences** : le perdant perd une partie de son butin et de ses ressources, pas tout.
+- ✅ **Joueur hors ligne** : ses défenses le remplacent.
+- ✅ **Affichage** : vue de dessus, avec animations.
+- ✅ **Protection contre le pillage** : un joueur ne peut pas être pillé deux fois d'affilée. Il reste protégé tant qu'il ne s'est pas reconnecté, n'a pas soigné ses troupes et n'a pas réparé ses infrastructures. Soins et réparations se lancent en cliquant sur les troupes et les bâtiments, comme dans Clash of Clans.
+- 💡 Un bâtiment endommagé ne produit plus rien, pour que personne ne reste protégé indéfiniment en refusant de réparer.
+- ❓ La préparation (choix du général, composition, formation) et les stratégies (embuscade, encerclement, charge…).
+
+## 10. Les guerres (long terme, façon CK3)
+
+- ✅ **Conditions pour déclarer une guerre** (d'autres conditions pourront s'ajouter) :
+  - un objectif important (une contrée, un trésor…) ;
+  - au moins 2 parties prenantes ;
+  - une mise : au minimum un personnage légendaire.
+- ✅ **Déclaration** :
+  1. le joueur 1 déclare la guerre, et son armée reste figée ;
+  2. le défenseur ne peut pas refuser : il doit **accepter** ou **négocier** ;
+  3. il a **48 h** pour répondre. Passé ce délai, la guerre démarre automatiquement.
+- ✅ **Négociation** : le défenseur peut proposer des ressources, un quartier, un personnage ou un contrat. Si l'attaquant refuse, la guerre démarre.
+- ✅ **Fins possibles** :
+  - **paix** : personne ne gagne rien ;
+  - **reddition** : le perdant perd ;
+  - **défaite totale** : ses armées sont détruites.
+- ✅ **Coût d'une guerre** : elle coûte des hommes et des ressources. Sans ressources, les soldats meurent progressivement. Les généraux et les soldats rares ne meurent pas : ils sont blessés jusqu'à la fin de la guerre.
+- ✅ **Plusieurs guerres et alliances** : on peut être en guerre contre n'importe qui, et former des alliances avant ou pendant une guerre.
+- ❓ Comment les batailles font avancer la guerre (score de guerre ?).
+
+## 11. La diplomatie
+
+- ✅ **Contrats violables et inviolables** : ils servent pour les alliances, les pactes, la vassalité, les tributs…
+- ✅ **Trahison** : une **quête secrète très difficile**.
+  1. Le joueur décide de lancer une trahison.
+  2. Il doit réussir plusieurs quêtes.
+  3. S'il en rate une seule, la cible reçoit une notification lui révélant qui a tenté de la trahir.
+  4. Le traître reçoit un marqueur **« traître »**.
+- ✅ **Le journal** : chaque joueur peut publier un journal par jour, dont il rédige le gros titre de la une.
+- ✅ **Chat** entre joueurs.
+
+## 12. Les trésors et l'exploration
+
+- ✅ Un trésor est un coffre trouvé quelque part. Il peut contenir des ressources, des personnages, des objets, des titres ou des bonus.
+- ❓ Où les trouver et comment, trésors uniques ou non.
+
+## 13. Les références et les événements
+
+- ✅ Toute la ville est représentée. Les références locales s'ajoutent au cas par cas.
+- ✅ Les blagues entre amis seront ajoutées ensemble, plus tard.
+- ✅ Des événements seront organisés.
+
+## 14. La progression et la fin
+
+- ✅ **Le but** : s'agrandir au maximum, prendre toute la carte et avoir des généraux.
+- ✅ **Pas de gagnant ni de classement** (pour éviter que ça devienne toxique). À la place : des hauts faits, des titres, et le journal comme chronique de la partie.
+- ✅ **Rééquilibrage** : une option **Game Master** permet de corriger un joueur qui écrase tout le monde.
+- ✅ **Un joueur qui perd tout** repart avec sa maison, son quartier et ses personnages rares (c'est plus doux que CK3, où la partie s'arrête).
+- ✅ **Nouveaux joueurs** : ils peuvent arriver en cours de partie, sur invitation.
+
+## 15. L'interface et le visuel
+
+- ✅ **Tous les onglets nécessaires** pour jouer agréablement.
+- ✅ **Style** : un mélange de réalisme et de manga/anime.
+- ✅ **Notifications** (« tu es attaqué ! »…).
+- ❓ Ce qui est animé, le son et la musique.
+
+## 16. L'administration
+
+- ✅ **La création des personnages, l'équilibrage et les récompenses** sont gérés uniquement par le créateur du jeu et Claude.
+- ✅ **Les outils d'admin** comprennent l'option Game Master et l'envoi de coffres (par exemple après un don à MSF).
+
+---
+
+## Prochaines étapes
+
+On reprend les thèmes un par un pour remplacer les ❓ et valider les 💡, en commençant par **la carte et le quartier**.
