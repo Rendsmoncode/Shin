@@ -158,6 +158,15 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 - ✅ Un bâtiment endommagé ne produit plus rien, pour que personne ne reste protégé indéfiniment en refusant de réparer.
 - ❓ La préparation (choix du général, composition, formation) et les stratégies (embuscade, encerclement, charge…).
 
+## 9 bis. Les batailles rangées (tour par tour, façon Warhammer)
+
+- ✅ **Un troisième mode de conflit**, qui s'ajoute aux batailles façon Clash of Clans et aux guerres. Il ne remplace rien.
+- ✅ **Formats** : 1v1, 1v1v1, 2v1, 2v2.
+- ✅ **Terrain tiré au hasard** : désert, montagne, champ, ruines…
+- ✅ **Tour par tour** : à chaque tour, on déplace ses troupes, on attaque ou non, etc.
+- ✅ Les aptitudes spéciales s'y utilisent (par exemple, l'attaque spéciale d'un Grand Général Sous les Cieux).
+- ❓ Quand et pourquoi une bataille rangée se déclenche, et ce qu'on y gagne ou perd.
+
 ## 10. Les guerres (long terme, façon CK3)
 
 - ✅ **Conditions pour déclarer une guerre** (d'autres conditions pourront s'ajouter) :
