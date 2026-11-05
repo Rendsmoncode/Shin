@@ -16,7 +16,6 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 
 ## Généraux (Légendaire, rareté à confirmer au cas par cas)
 
-- Napoléon
 - César
 - Hannibal Barca
 - Takeda Shingen
@@ -36,21 +35,25 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 - Rani Lakshmibai
 - Nader Shah
 - Knut le Grand
-- Harald Hardrada
 
-## Grands Généraux Sous les Cieux
+## Grands Généraux Sous les Cieux (12, validés)
 
 - Ouki
 - Saladin
 - Khalid ibn al-Walid
 - Gengis Khan
-- Lü Bu
 - Alexandre le Grand
 - Jeanne d'Arc
-- Ménélik II
-- Toussaint Louverture
 - Mehmed II
-- Jan Žižka (à confirmer : Général ou Sous les Cieux)
+- Ménélik II
+- Jan Žižka
+- Napoléon
+- Harald Hardrada
+- Toussaint Louverture
+
+## À replacer
+
+- Lü Bu (retiré des Sous les Cieux : Général, Guerrier mystique ou retiré ?)
 
 ## Guerriers mystiques
 
