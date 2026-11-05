@@ -166,7 +166,10 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 - ✅ **Tour par tour** : à chaque tour, on déplace ses troupes, on attaque ou non, etc.
 - ✅ Les aptitudes spéciales s'y utilisent (par exemple, l'attaque spéciale d'un Grand Général Sous les Cieux).
 - ✅ **Quand** : tout combat entre joueurs **connectés** se joue en bataille rangée. Si l'un des deux n'est pas connecté, le combat se joue en mode Clash of Clans (ses défenses le remplacent).
-- ❓ Un joueur connecté mais indisponible peut-il laisser ses défenses jouer à sa place ?
+- ✅ **Inactivité** : sans aucune action sur le jeu pendant 3 minutes, le joueur passe hors ligne (tout combat contre lui se joue en mode Clash of Clans).
+- ✅ **Alerte d'attaque** : le défenseur connecté choisit entre « bataille rangée » et « défenses automatiques ». Sans réponse au bout de 30 secondes, ses défenses jouent à sa place.
+- ✅ **Chrono par tour** : 1 minute par tour. Si le chrono s'écoule, le tour passe ; un joueur qui abandonne en cours de route voit ses troupes se défendre automatiquement.
+- ❓ Ce qu'on gagne ou perd dans une bataille rangée (a priori comme une bataille classique : butin, pertes, XP).
 
 ## 10. Les guerres (long terme, façon CK3)
 
