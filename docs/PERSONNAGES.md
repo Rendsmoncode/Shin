@@ -52,6 +52,8 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 ## Exclus
 
 - Bai Qi (Haku Ki) : connu avant tout pour un massacre de masse (prisonniers enterrés vivants à Changping), même règle que pour Hitler.
+- Vlad III l'Empaleur : connu avant tout pour ses empalements de masse.
+- Tamerlan : connu pour ses massacres et ses pyramides de crânes (cas à confirmer, même logique).
 
 ## Grands Généraux Sous les Cieux : les 7 de la légende
 
