@@ -117,7 +117,7 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
   4. puis mages, etc.
 - ✅ **Recrutement** : les soldats dépendent de la population et de la taille des quartiers (on s'inspire de Rise of Kingdoms et Clash of Clans).
 - ✅ **Soignants** : ils remettent les troupes d'aplomb pendant les batailles et les guerres, et donnent des bonus (par exemple +300 vitalité pour tous les fantassins).
-- ❓ Moral et fatigue (on verra s'il y a la place).
+- ✅ **Ni moral ni fatigue** : une troupe se bat à 100 % tant qu'elle a des soldats (pour ne pas rendre le jeu trop sérieux).
 
 ## 7. Les généraux et les grades
 
@@ -221,4 +221,4 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 
 ## Prochaines étapes
 
-On reprend les thèmes un par un pour remplacer les ❓ et valider les 💡, Thèmes bouclés : 1 à 5.
+On reprend les thèmes un par un pour remplacer les ❓ et valider les 💡, Thèmes bouclés : 1 à 6.
