@@ -35,6 +35,8 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 - Shivaji
 - Rani Lakshmibai
 - Nader Shah
+- Knut le Grand
+- Harald Hardrada
 
 ## Grands Généraux Sous les Cieux
 
@@ -56,6 +58,7 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 - Sasaki Kojirō
 - Vercingétorix
 - Kyoukai
+- Ragnar Lodbrok
 
 ## De côté (à ressortir si besoin)
 
