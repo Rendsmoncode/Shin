@@ -22,16 +22,12 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 - Kanki
 - Samori Touré
 - Abd el-Kader
-- Tecumseh
-- Crazy Horse
 - Shaka Zulu
 - Simón Bolívar
 - Skanderbeg
 - Subötaï
 - Shivaji
-- Rani Lakshmibai
 - Nader Shah
-- Harald Hardrada
 - Mehmed II
 - Ménélik II
 - Toussaint Louverture
@@ -42,6 +38,10 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 ## Généraux épiques
 
 - Baudouin IV (le roi lépreux, vainqueur de Saladin à Montgisard)
+- Harald Hardrada
+- Rani Lakshmibai
+- Tecumseh
+- Crazy Horse
 
 ## Généraux de départ (un par joueur)
 
