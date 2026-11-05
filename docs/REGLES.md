@@ -241,4 +241,4 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 
 ## Prochaines étapes
 
-On reprend les thèmes un par un pour remplacer les ❓ et valider les 💡, Thèmes bouclés : 1 à 7.
+On reprend les thèmes un par un pour remplacer les ❓ et valider les 💡. Thèmes bouclés : 1 à 7.
