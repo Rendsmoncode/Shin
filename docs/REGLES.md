@@ -105,7 +105,7 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 
 - ✅ Certains quartiers neutres se récupèrent en accomplissant des **missions**.
 - ✅ La plupart des quartiers intéressants ont leur propre **roi, leurs généraux et leur armée**.
-- ❓ Loyauté, révoltes, temps d'intégration après la conquête (peut-être trop complexe).
+- ✅ **Période d'intégration** : après une conquête, le quartier ne produit que la moitié de ses ressources pendant quelques jours (durée exacte à fixer à l'équilibrage), puis il produit normalement. Pas de jauge de loyauté ni de révoltes.
 
 ## 6. Les troupes
 
@@ -221,4 +221,4 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 
 ## Prochaines étapes
 
-On reprend les thèmes un par un pour remplacer les ❓ et valider les 💡, en commençant par **la carte et le quartier**.
+On reprend les thèmes un par un pour remplacer les ❓ et valider les 💡, Thèmes bouclés : 1 à 5.
