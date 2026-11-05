@@ -54,7 +54,29 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
   - on garde la structure réelle de la ville et on **améliore ce qui existe déjà** (les vrais lieux produisent les ressources et donnent des bonus uniques) ;
   - s'il y a du **vide** (un grand parking, un champ…), on peut **construire dedans** ;
   - la maison du joueur sert d'hôtel de ville.
-- ❓ Le rôle de chaque type de lieu réel, et la liste des bâtiments constructibles.
+- ✅ **Rôle des lieux réels** :
+  | Lieu réel | Rôle dans le jeu |
+  |---|---|
+  | Maison du joueur | Hôtel de ville. Son niveau débloque tout le reste. |
+  | Maisons et immeubles | Population (soldats recrutables). |
+  | Commerces, restaurants, bars | Argent. |
+  | Champs, jardins, espaces verts | Nourriture. |
+  | Supermarchés, marchés | Nourriture et argent. |
+  | Bricolage, BTP, carrières | Matériaux. |
+  | Banques | Stockage d'argent protégé du pillage. |
+  | Entrepôts, zones industrielles (Les Paluds) | Stockage de nourriture et de matériaux. |
+  | Stades, gymnases | Caserne et entraînement des troupes. |
+  | Hôpitaux, cliniques, pharmacies | Infirmerie (soins plus rapides). |
+  | Écoles, collèges, lycées | Académie (XP des généraux, recherches). |
+  | Gendarmerie, police, pompiers | Garnison (défense du quartier). |
+  | Gare, entrées d'autoroute | Déplacements plus rapides et commerce avec les autres villes. |
+  | Mairie, monuments, églises, musées | Lieux uniques, avec un bonus spécial ou une quête (par exemple, la Légion étrangère donne un bonus aux troupes d'élite). |
+- ✅ **Sur un espace vide, on peut tout construire.** Un quartier sans hôpital peut s'en construire un.
+- ✅ **Lieux majeurs** : les bâtiments uniques ou quasi uniques de la ville (le vrai hôpital, la Légion étrangère…). Ils sont très durs à obtenir et demandent des **quêtes difficiles**.
+- ✅ **Guerre pour un lieu majeur** : le Game Master peut retirer les quêtes, pour que le gagnant de la guerre obtienne directement le lieu.
+- ❓ Le retrait des quêtes : à la main par le Game Master, ou règle automatique avec exception possible ?
+- 💡 Un lieu majeur est bien plus puissant que sa version construite (par exemple, le vrai hôpital soigne beaucoup plus vite et donne un bonus à toutes les armées).
+- ❓ Ce qui compte comme « quasi unique » (par exemple, s'il n'en existe que 2 ou 3 dans la ville).
 
 ## 4. L'économie
 
