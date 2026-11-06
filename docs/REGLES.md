@@ -191,14 +191,16 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 - ✅ **Deux types de généraux** :
   - **Les stratèges** : plus de possibilités stratégiques (formations, effets…).
   - **Les combattants** : plus forts, et capables d'attaquer plus durement avec leur armée.
-- ❓ Le chef d'une unité compte-t-il comme homme clé (une action par tour et 1 point) ?
+- ✅ **Le chef d'une unité est un homme clé** (il vaut 1 point).
+- ✅ **Limite d'actions par tour** : on ne peut pas faire agir tous ses hommes clés à chaque tour (par exemple, avec 10 hommes clés, seulement 5 actions par tour).
+- ❓ Ce qui fixe la limite d'actions par tour.
 - ✅ **Structure d'une armée** : le général est le cœur de l'armée. Il a des sous-généraux, qui dirigent chacun un certain nombre d'hommes.
 - ✅ **Points de vie de l'armée** : le général vaut 3 points, chaque sous-général vaut 1 point. Un joueur qui tombe à 0 point perd la bataille.
 - ✅ **Quartier général** : le général a un quartier général, invisible pour l'adversaire. Pour le voir, il faut envoyer des éclaireurs, ou avoir des soldats assez proches. Le quartier général peut se déplacer, mais lentement.
 - ✅ **Le général reste dans son quartier général.** Certains généraux ont une aptitude qui leur permet d'en sortir (par exemple Kanki pour la ruse, ou Souvorov pour rejoindre la bataille).
 - ✅ **Défense du quartier général** : le général a une barre de vie bien plus grande que les autres, et des soldats restent forcément au quartier général pour le protéger. Il peut résister un temps à une attaque trop nombreuse, mais pas longtemps.
 - ✅ **Hommes clés** : le général, les sous-généraux et les guerriers mystiques (2 emplacements maximum par général). C'est tout.
-- ✅ **Actions** : à chaque tour, un joueur réalise 1 action par homme clé.
+- ✅ **Actions** : chaque homme clé peut réaliser 1 action par tour, dans la limite d'actions par tour.
 - ✅ **Mort d'un sous-général** : ses hommes perdent la raison et sont étourdis pendant un temps (durée en tours à fixer). Ensuite, le joueur choisit de les renvoyer au quartier général ou de les envoyer dans une autre armée, et répartit le nombre d'hommes comme il veut.
 - ✅ **Résolution d'un affrontement** : on compare la puissance des deux armées.
   - Si l'attaquant est bien plus fort, il écrase l'ennemi et le combat se termine dans le tour.
