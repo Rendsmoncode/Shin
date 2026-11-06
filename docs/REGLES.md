@@ -207,6 +207,14 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
   - poser des pièges (avec l'aide d'un architecte) ;
   - construire des bâtiments sur le champ de bataille (avec l'aide d'un architecte) ;
   - utiliser une stratégie qui dépend de la composition de l'armée (par exemple, lever un nuage de poussière s'il y a des chevaux dans l'armée).
+- ✅ **Deux types d'ordres** :
+  - **ordres rapides** (changer de formation, lancer une stratégie, transférer des hommes, utiliser une attaque spéciale) : on peut en faire un et se déplacer dans la même action ;
+  - **ordres lourds** (construire, poser un piège, créer une unité) : ils prennent toute l'action.
+- ✅ **Construction et pièges** : pendant une construction ou la pose d'un piège, toute l'armée est étourdie jusqu'à la fin des travaux. La durée dépend du niveau de la construction et du niveau de l'architecte.
+- ✅ **Amélioration des troupes (hors bataille)** :
+  - la cavalerie monte de niveau pour débloquer des véhicules (chars, etc.) ;
+  - les archers montent de niveau pour débloquer des flèches spéciales (enflammées, empoisonnées, etc.) ;
+  - l'infanterie monte de niveau pour obtenir de meilleurs équipements.
 - ✅ **Structure d'une armée** : le général est le cœur de l'armée. Il a des sous-généraux, qui dirigent chacun un certain nombre d'hommes.
 - ✅ **Points de vie de l'armée** : le général vaut 3 points, chaque sous-général vaut 1 point. Un joueur qui tombe à 0 point perd la bataille.
 - ✅ **Quartier général** : le général a un quartier général, invisible pour l'adversaire. Pour le voir, il faut envoyer des éclaireurs, ou avoir des soldats assez proches. Le quartier général peut se déplacer, mais lentement.
