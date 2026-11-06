@@ -212,7 +212,7 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
   - **ordres lourds** (construire, poser un piège, créer une unité) : ils prennent toute l'action.
 - ✅ **Construction et pièges** : pendant une construction ou la pose d'un piège, toute l'armée est étourdie jusqu'à la fin des travaux. La durée dépend du niveau de la construction et du niveau de l'architecte.
 - ✅ **Amélioration des troupes (hors bataille)** :
-  - la cavalerie monte de niveau pour débloquer des véhicules (chars, etc.) ;
+  - la cavalerie monte de niveau pour débloquer des véhicules (chars de guerre tirés par des chevaux, etc.) ;
   - les archers montent de niveau pour débloquer des flèches spéciales (enflammées, empoisonnées, etc.) ;
   - l'infanterie monte de niveau pour obtenir de meilleurs équipements.
 - ✅ **Structure d'une armée** : le général est le cœur de l'armée. Il a des sous-généraux, qui dirigent chacun un certain nombre d'hommes.
