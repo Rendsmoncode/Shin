@@ -229,6 +229,8 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
   - Si les puissances sont proches, les deux armées restent au contact. À chaque tour, le calcul se refait et chacune perd des hommes en fonction de la puissance de l'autre.
   - Les écarts doivent être bien réglés : les écrasements doivent rester minoritaires (pas 80 % des affrontements).
 - ✅ **Calcul de puissance** : chaque armée a une puissance de base, multipliée par tous ses effets (général, sous-généraux, aptitudes, formation…), puis ajustée selon le terrain (formule à définir).
+- ✅ **Soldats affichés** : un soldat à l'écran représente plusieurs hommes (piste : 1 pour 10, réglable). La bannière affiche toujours l'effectif réel.
+- ✅ **Carte de bataille assemblée** : la carte n'est pas une image unique. Le code l'assemble (sol, relief, rivière, forêts, rochers, bâtiments) à partir de pièces générées dans le style de référence, avec une caméra qui se déplace et zoome. La carte peut être différente à chaque bataille.
 - ✅ **Rendu des armées sur le champ de bataille** : une armée est affichée sous forme de blocs de 100 soldats vus de haut (image réaliste découpée). Une armée de 1 500 hommes = 15 blocs ; quand elle perd des hommes, on retire des blocs.
   - **Blocs denses** = formation serrée (phalange, tortue, carré, mur de boucliers) : plus solide au corps à corps, plus vulnérable aux flèches, plus lente.
   - **Blocs clairsemés** = formation lâche (en marche, ordre dispersé) : plus rapide, moins touchée par les flèches, plus fragile face à une charge.

@@ -16,6 +16,7 @@ Références dans `docs/style/references/` :
 - `cavalier_seul_reference.png` : un cavalier extrait, à joindre comme modèle dans Gemini.
 - `infanterie_armee_reference.jpg` : armée de 1 000 fantassins vue de haut (bon réalisme).
 - `formation_test.png` : le rendu validé en formation, à la taille du jeu.
+- `carte_champ_de_bataille_reference.webp` : la cible de style des cartes de bataille (jeu de stratégie moderne, réaliste mais lisible, Provence au printemps).
 
 Règles :
 - **Caméra haute et inclinée** (environ 55 à 70°), comme un général qui regarde la bataille du haut d'une colline. On voit le dessus des casques et des épaules, et le sujet de dos ou de trois quarts selon la direction.
@@ -58,6 +59,7 @@ Adaptations :
 - **Cavaliers** : variations de robes de chevaux (bai, alezan, noir, gris, isabelle). En formation, les cavaliers sont plus espacés que les fantassins, car les chevaux ont besoin de plus de place.
 - **Personnage sur le terrain** (un général, un guerrier mystique) : 1 à 4 sujets au lieu de 12, reconnaissables à leur tenue, mais à la même échelle que les soldats.
 - **Bâtiments** (tente de quartier général, palissade, tour…) : même caméra. On voit le toit et la façade tournée vers le bas de l'image. Un seul bâtiment par case de la grille.
+- **Cartes de bataille** : ne jamais demander une carte entière en une image (Gemini ne sait pas dézoomer, et une seule image est trop petite pour des milliers de soldats). La carte est assemblée par le code à partir de pièces dans le style de `carte_champ_de_bataille_reference.webp` : textures de sol raccordables et planches d'éléments (arbres, bosquets, rochers, fermes, chapelle, tour en ruine, ponts, murets). Style : jeu de stratégie moderne, réaliste mais simplifié et lisible, contours nets, couleurs naturelles un peu vives. Pas de photo réelle.
 - **Terrains** (herbe, forêt, colline, marais, ruines, eau) : même caméra, mais demander une **texture de sol vue de haut, raccordable sur ses quatre bords** (« seamless tileable texture »), sans fond vert, sans personnage. Pour les éléments posés (arbre isolé, rocher, ruine), utiliser la grille de 12 sur fond vert.
 
 ## Traitement de l'image reçue
