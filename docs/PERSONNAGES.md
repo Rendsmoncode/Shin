@@ -18,7 +18,6 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 ## Généraux (Légendaire, rareté à confirmer au cas par cas)
 
 - César
-- Takeda Shingen
 - Kanki
 - Samori Touré
 - Abd el-Kader
@@ -34,6 +33,7 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 - Knut le Grand
 - Ri Boku
 - Ousen
+- Richard Cœur de Lion
 
 ## Généraux épiques
 
@@ -42,6 +42,7 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 - Rani Lakshmibai
 - Tecumseh
 - Crazy Horse
+- Takeda Shingen
 
 ## Généraux de départ (un par joueur)
 
@@ -82,6 +83,21 @@ Deux généraux invaincus, absents de la légende des 7, uniques dans tout le je
 - Ragnar Lodbrok
 - Lü Bu
 - Jeanne d'Arc
+- Thorfinn
+- Hou Ken
+
+## Soldats d'élite
+
+- Thorkell
+
+## Explorateurs
+
+- Leif Erikson
+- ❓ « Explorateur » devient une catégorie à part, ou on la fusionne avec « Archéologue » ?
+
+## Généraux rares (à faire plus tard)
+
+Des personnages modernes ou historiques, et des blagues : un manager de McDonald's, un PDG, un entraîneur de foot…
 
 ## De côté (à ressortir si besoin)
 
