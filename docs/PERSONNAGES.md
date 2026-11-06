@@ -15,6 +15,12 @@ Liste de travail des personnages du gacha. Stats et aptitudes à définir ensemb
 
 - Chaque personnage a un surnom, qui peut être long (comme « le soldat le plus fort de l'humanité »). On peut inventer un surnom, à condition que le lore explique les vrais faits qui l'inspirent.
 
+## Animations d'obtention
+
+- ✅ Une animation d'obtention pour chacun des 7 Grands Généraux Sous les Cieux et des 2 généraux cachés.
+- ❓ Peut-être aussi pour les guerriers mystiques (à décider).
+- Pas d'animation propre à chaque personnage pour les attaques spéciales.
+
 ## Raretés
 
 Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
