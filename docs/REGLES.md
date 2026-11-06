@@ -196,6 +196,17 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 - ✅ **La limite d'actions est la même pour tout le monde** : le vrai général, c'est le joueur. Elle ne change que si l'effet d'un général le prévoit (par exemple : « Contrairement aux règles du jeu, votre général peut décider d'un mouvement supplémentaire »).
 - ✅ **5 actions maximum par tour.** Avec moins de 5 hommes clés, on ne peut faire agir que ceux qu'on a (par exemple, 4 actions avec 4 hommes clés).
 - ✅ Pas de prototype papier : on teste directement sur PC.
+- ✅ **Actions possibles d'un homme clé** (liste à compléter, le système doit être versatile) :
+  - se déplacer (et attaquer en entrant dans une zone ennemie) ;
+  - se replier ;
+  - changer de formation ;
+  - utiliser son attaque spéciale ;
+  - transférer des hommes vers une autre armée ou le quartier général ;
+  - créer une unité ;
+  - attendre en défense ;
+  - poser des pièges (avec l'aide d'un architecte) ;
+  - construire des bâtiments sur le champ de bataille (avec l'aide d'un architecte) ;
+  - utiliser une stratégie qui dépend de la composition de l'armée (par exemple, lever un nuage de poussière s'il y a des chevaux dans l'armée).
 - ✅ **Structure d'une armée** : le général est le cœur de l'armée. Il a des sous-généraux, qui dirigent chacun un certain nombre d'hommes.
 - ✅ **Points de vie de l'armée** : le général vaut 3 points, chaque sous-général vaut 1 point. Un joueur qui tombe à 0 point perd la bataille.
 - ✅ **Quartier général** : le général a un quartier général, invisible pour l'adversaire. Pour le voir, il faut envoyer des éclaireurs, ou avoir des soldats assez proches. Le quartier général peut se déplacer, mais lentement.
