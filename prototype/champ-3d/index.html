@@ -4,7 +4,7 @@
 <style>
 /* Prototype plein écran : la scène 3D occupe tout, un petit panneau flotte en haut à gauche. Aspect sombre unique, volontaire. */
 :root{
-  --bg:#141a16; --panel:rgba(20,26,22,.86); --line:#33443a; --fg:#e7e3d6; --muted:#a3ab9f; --gold:#e3b54a;
+  --bg:#141a16; --panel:rgba(20,26,22,.86); --line:#33443a; --fg:#e7e3d6; --muted:#a3ab9f; --gold:#e3b54a; --blue:#6fa3ec; --red:#e0796e;
   --ui:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
   color-scheme:dark;
 }
@@ -12,7 +12,7 @@ html,body{height:100%;background:var(--bg);color:var(--fg)}
 body{margin:0;overflow:hidden;font-family:var(--ui)}
 #scene{position:fixed;inset:0}
 #scene canvas{display:block;width:100%;height:100%}
-.panel{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));left:max(12px,env(safe-area-inset-left,0px));max-width:min(340px,calc(100vw - 24px));background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px 14px;display:grid;gap:8px;font-size:15px;line-height:1.35}
+.panel{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));left:max(12px,env(safe-area-inset-left,0px));max-width:min(340px,calc(100vw - 24px));max-height:calc(100vh - 24px);overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px 14px;display:grid;gap:8px;font-size:15px;line-height:1.35}
 .panel h1{margin:0;font-size:20px;letter-spacing:.05em;text-transform:uppercase}
 .panel p{margin:0;color:var(--muted)}
 .row{display:flex;flex-wrap:wrap;gap:6px}
@@ -20,19 +20,31 @@ button{font:inherit;font-weight:600;letter-spacing:.04em;color:var(--fg);backgro
 button:hover{border-color:var(--gold)}
 button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 #status{color:var(--gold)}
+#sel{border-top:1px solid var(--line);padding-top:8px;display:grid;gap:3px}
+#sel:empty{display:none}
+#sel b{font-size:17px;letter-spacing:.03em}
+#sel .k{color:var(--muted)}
+#sel .hid{color:#9fd18b}
+#sel .warn{color:var(--red)}
+kbd{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:3px;padding:0 4px;color:var(--fg)}
+#toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);max-width:calc(100vw - 32px);background:rgba(90,26,22,.92);border:1px solid #b24a3e;color:#fff;padding:8px 16px;border-radius:4px;font-size:18px;font-weight:600;letter-spacing:.03em;opacity:0;transition:opacity .3s;pointer-events:none;text-align:center}
+#toast.on{opacity:1}
 </style>
 
-<div id="scene" aria-label="Champ de bataille en 3D avec relief, rivière, forêts et deux armées"></div>
+<div id="scene" aria-label="Champ de bataille en 3D avec relief, rivière, forêts et deux armées. Les armées bleues se commandent à la souris."></div>
 <div class="panel">
   <h1>Champ de bataille 3D</h1>
-  <p>Prototype : carte de 3 km sur 2 km avec relief, rivière, forêts denses, bois clairsemés, bosquets, ferme et deux armées. Glisser pour se déplacer, molette pour zoomer, clic droit pour pivoter.</p>
+  <p><b>Clic gauche</b> sur une armée bleue pour la choisir (<kbd>Maj</kbd> pour en ajouter, touches <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd>). <b>Clic droit</b> sur le terrain pour l'y envoyer, sur une armée rouge pour marcher sur elle. Glisser pour se déplacer, molette pour zoomer, glisser avec le clic droit pour pivoter. <kbd>Espace</kbd> centre la vue, <kbd>Échap</kbd> désélectionne.</p>
   <div class="row">
-    <button type="button" id="b-anim" aria-pressed="true">Pause marche</button>
+    <button type="button" id="b-fog" aria-pressed="true">Brouillard : oui</button>
+    <button type="button" id="b-ai" aria-pressed="true">Rouges : en patrouille</button>
     <button type="button" id="b-shadow" aria-pressed="true">Ombres : oui</button>
     <button type="button" id="b-view">Vue d'ensemble</button>
   </div>
   <p id="status">Chargement…</p>
+  <div id="sel" aria-live="polite"></div>
 </div>
+<div id="toast" role="status"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/controls/OrbitControls.js"></script>
@@ -50,6 +62,7 @@ function vnoise(x,y){const xi=Math.floor(x),yi=Math.floor(y),xf=x-xi,yf=y-yi;con
 function fbm(x,y,o=5){let s=0,a=.5,f=1;for(let i=0;i<o;i++){s+=a*vnoise(x*f,y*f);f*=2;a*=.5}return s;}
 const sm=(a,b,x)=>{const t=Math.min(1,Math.max(0,(x-a)/(b-a)));return t*t*(3-2*t)};
 const bump=(x,z,cx,cz,r,h)=>h*Math.exp(-((x-cx)**2+(z-cz)**2)/(r*r));
+const wrapA=a=>Math.atan2(Math.sin(a),Math.cos(a));
 
 // ---------- terrain (mètres) ----------
 const W=3000,D=2000,SX=600,SZ=400,WATER=-8.5;
@@ -67,6 +80,28 @@ function height(x,z){
   return h;
 }
 
+// ---------- brouillard de guerre : une grille de 10 m sur toute la carte ----------
+const FC=10,FW=W/FC,FD=D/FC;
+const cellOf=(x,z)=>{const cx=Math.min(FW-1,Math.max(0,Math.floor((x+W/2)/FC))),cz=Math.min(FD-1,Math.max(0,Math.floor((z+D/2)/FC)));return cz*FW+cx;};
+const fogData=new Uint8Array(FW*FD*4).fill(255);
+const fogTex=new THREE.DataTexture(fogData,FW,FD,THREE.RGBAFormat);
+fogTex.magFilter=fogTex.minFilter=THREE.LinearFilter;fogTex.needsUpdate=true;
+const fogU={fogMap:{value:fogTex},fogOn:{value:1}};
+const FOG_V=`vec4 fogWp=vec4(transformed,1.0);
+#ifdef USE_INSTANCING
+fogWp=instanceMatrix*fogWp;
+#endif
+fogWp=modelMatrix*fogWp;vFogUv=(fogWp.xz+vec2(${(W/2).toFixed(1)},${(D/2).toFixed(1)}))/vec2(${W.toFixed(1)},${D.toFixed(1)});`;
+// ce qui n'est pas vu est assombri et désaturé (le terrain reste connu, les armées sont cachées)
+const FOG_F=`{float fv=max(texture2D(fogMap,vFogUv).r,1.0-fogOn);vec3 fg=vec3(dot(gl_FragColor.rgb,vec3(.3,.59,.11)))*vec3(.92,.97,1.06);
+gl_FragColor.rgb=mix(mix(gl_FragColor.rgb,fg,.6)*.46,gl_FragColor.rgb,fv);}`;
+function fogged(mat){
+  mat.onBeforeCompile=sh=>{Object.assign(sh.uniforms,fogU);
+    sh.vertexShader='varying vec2 vFogUv;\n'+sh.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\n'+FOG_V);
+    sh.fragmentShader='uniform sampler2D fogMap;uniform float fogOn;varying vec2 vFogUv;\n'+sh.fragmentShader.replace('#include <dithering_fragment>','#include <dithering_fragment>\n'+FOG_F);};
+  return mat;
+}
+
 const scene=new THREE.Scene();
 scene.background=new THREE.Color(0x9fb4c2);
 scene.fog=new THREE.Fog(0x9fb4c2,3400,7500);
@@ -82,6 +117,7 @@ controls.enableDamping=true; controls.dampingFactor=.08;
 controls.minDistance=40; controls.maxDistance=3200;
 controls.minPolarAngle=.35; controls.maxPolarAngle=1.15;
 controls.screenSpacePanning=false;
+controls.keyPanSpeed=30; controls.listenToKeyEvents(window);   // flèches du clavier
 function viewArmy(){camera.position.set(-150,300,1260);controls.target.set(-150,0,780);controls.update();}
 function viewAll(){camera.position.set(0,1900,2150);controls.target.set(0,0,0);controls.update();}
 viewArmy();
@@ -99,6 +135,13 @@ const geo=new THREE.PlaneGeometry(W,D,SX,SZ); geo.rotateX(-Math.PI/2);
 const pos=geo.attributes.position, col=new Float32Array(pos.count*3);
 for(let i=0;i<pos.count;i++){const x=pos.getX(i),z=pos.getZ(i);pos.setY(i,height(x,z));}
 geo.computeVertexNormals();
+// hauteur du sol exactement comme le maillage affiché (rapide, pour les soldats et les lignes de vue)
+const HG=new Float32Array(pos.count);for(let i=0;i<pos.count;i++)HG[i]=pos.getY(i);
+function hAt(x,z){
+  const u=Math.min(SX-1e-3,Math.max(0,(x+W/2)/W*SX)),v=Math.min(SZ-1e-3,Math.max(0,(z+D/2)/D*SZ));
+  const ix=u|0,iy=v|0,fu=u-ix,fv=v-iy,r=SX+1,a=HG[iy*r+ix],b=HG[(iy+1)*r+ix],cc=HG[(iy+1)*r+ix+1],d=HG[iy*r+ix+1];
+  return fu+fv<=1?a+(d-a)*fu+(b-a)*fv:cc+(b-cc)*(1-fu)+(d-cc)*(1-fv);
+}
 const nrm=geo.attributes.normal, c=new THREE.Color();
 const grass=new THREE.Color(.42,.55,.24), gold=new THREE.Color(.74,.66,.34), dark=new THREE.Color(.30,.42,.20), rock=new THREE.Color(.86,.85,.80), sand=new THREE.Color(.70,.64,.50);
 for(let i=0;i<pos.count;i++){
@@ -113,11 +156,11 @@ geo.setAttribute('color',new THREE.BufferAttribute(col,3));
 const tc=document.createElement('canvas');tc.width=tc.height=256;const tg=tc.getContext('2d');
 for(let i=0;i<9000;i++){const v=200+R()*55|0;tg.fillStyle=`rgb(${v},${v},${v})`;tg.fillRect(R()*256,R()*256,2,2);}
 const detail=new THREE.CanvasTexture(tc);detail.wrapS=detail.wrapT=THREE.RepeatWrapping;detail.repeat.set(440,280);
-const ground=new THREE.Mesh(geo,new THREE.MeshLambertMaterial({vertexColors:true,map:detail}));
+const ground=new THREE.Mesh(geo,fogged(new THREE.MeshLambertMaterial({vertexColors:true,map:detail})));
 ground.receiveShadow=true; scene.add(ground);
 
 // eau
-const water=new THREE.Mesh(new THREE.PlaneGeometry(W,D),new THREE.MeshPhongMaterial({color:0x3b6f86,transparent:true,opacity:.82,shininess:80,specular:0x99bbcc}));
+const water=new THREE.Mesh(new THREE.PlaneGeometry(W,D),fogged(new THREE.MeshPhongMaterial({color:0x3b6f86,transparent:true,opacity:.82,shininess:80,specular:0x99bbcc})));
 water.rotation.x=-Math.PI/2; water.position.y=WATER; scene.add(water);
 
 // ---------- forêts ----------
@@ -134,56 +177,268 @@ for(let n=0;n<70000&&spots.length<11000;n++){
 for(let g=0;g<70;g++){const cx=(R()-.5)*W*.95,cz=(R()-.5)*D*.95,k=4+Math.floor(R()*18),r=10+R()*22;
   for(let i=0;i<k;i++){const a=R()*6.28,d=Math.sqrt(R())*r,x=cx+Math.cos(a)*d,z=cz+Math.sin(a)*d,y=treeOk(x,z);if(y!==null)spots.push([x,y,z]);}}
 for(let i=0;i<260;i++){const x=(R()-.5)*W*.97,z=(R()-.5)*D*.97,y=treeOk(x,z);if(y!==null)spots.push([x,y,z]);}
-const M=new THREE.Matrix4(),Q=new THREE.Quaternion(),S=new THREE.Vector3(),P=new THREE.Vector3();
+// carte des zones boisées (case de 10 m) : sert à cacher les armées, ralentir la marche et bloquer la vue
+const forest=new Uint8Array(FW*FD);{const cnt=new Uint8Array(FW*FD);for(const [x,,z] of spots)cnt[cellOf(x,z)]++;
+  for(let j=0;j<FD;j++)for(let i=0;i<FW;i++){let s=0;for(let b=-1;b<=1;b++)for(let a=-1;a<=1;a++){const ii=i+a,jj=j+b;if(ii>=0&&jj>=0&&ii<FW&&jj<FD)s+=cnt[jj*FW+ii];}
+    forest[j*FW+i]=s>=3?1:0;}}
+const inForest=(x,z)=>forest[cellOf(x,z)]===1;
+const M=new THREE.Matrix4(),Q=new THREE.Quaternion(),S=new THREE.Vector3(),P=new THREE.Vector3(),UP=new THREE.Vector3(0,1,0);
 // les arbres sont des images (rendues depuis un modèle 3D Meshy) posées sur le terrain, voir build()
 
 // rochers calcaires sur la crête et la grande colline
 const rocks=[];for(let n=0;n<40000&&rocks.length<900;n++){const x=(R()-.5)*W,z=(R()-.5)*D,y=height(x,z);
-  const e=1e-2,sl=Math.abs(height(x+3,z)-y)+Math.abs(height(x,z+3)-y);if(sl>2.4&&y>18)rocks.push([x,y,z]);}
-const rockM=new THREE.InstancedMesh(new THREE.DodecahedronGeometry(3,0),new THREE.MeshLambertMaterial({color:0xd9d6cc}),rocks.length);
+  const sl=Math.abs(height(x+3,z)-y)+Math.abs(height(x,z+3)-y);if(sl>2.4&&y>18)rocks.push([x,y,z]);}
+const rockM=new THREE.InstancedMesh(new THREE.DodecahedronGeometry(3,0),fogged(new THREE.MeshLambertMaterial({color:0xd9d6cc})),rocks.length);
 rocks.forEach(([x,y,z],i)=>{const s=.6+R()*1.6;P.set(x,y+s,z);Q.setFromEuler(new THREE.Euler(R()*3,R()*3,R()*3));S.set(s*1.4,s,s*1.2);M.compose(P,Q,S);rockM.setMatrixAt(i,M);});
 rockM.castShadow=rockM.receiveShadow=true;scene.add(rockM);
 
 // ferme provençale, pont
-function box(w,h,d,color,x,y,z,ry=0){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),new THREE.MeshLambertMaterial({color}));m.position.set(x,y+h/2,z);m.rotation.y=ry;m.castShadow=m.receiveShadow=true;scene.add(m);return m;}
+function box(w,h,d,color,x,y,z,ry=0){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),fogged(new THREE.MeshLambertMaterial({color})));m.position.set(x,y+h/2,z);m.rotation.y=ry;m.castShadow=m.receiveShadow=true;scene.add(m);return m;}
 const fx=-1050,fz=560,fy=height(fx,fz);
 box(22,8,12,0xd8c9a8,fx,fy,fz);
-const roof=new THREE.Mesh(new THREE.CylinderGeometry(0,9,5,4,1),new THREE.MeshLambertMaterial({color:0xb5562f}));roof.rotation.y=Math.PI/4;roof.scale.set(1.75,1,1);roof.position.set(fx,fy+10.5,fz);roof.castShadow=true;scene.add(roof);
+const roof=new THREE.Mesh(new THREE.CylinderGeometry(0,9,5,4,1),fogged(new THREE.MeshLambertMaterial({color:0xb5562f})));roof.rotation.y=Math.PI/4;roof.scale.set(1.75,1,1);roof.position.set(fx,fy+10.5,fz);roof.castShadow=true;scene.add(roof);
 box(30,2,1,0xcbbd9c,fx,fy,fz+16);box(1,2,24,0xcbbd9c,fx-15,fy,fz+4);box(1,2,24,0xcbbd9c,fx+15,fy,fz+4);
 const bz=-60,bx=riverX(bz);box(70,2.5,9,0x9c8f78,bx,1.2,bz,0);
+const onBridge=(x,z)=>Math.abs(z-bz)<7&&Math.abs(x-bx)<36;
+const inWater=(x,z)=>hAt(x,z)<WATER-.4&&!onBridge(x,z);
 
-// ---------- armées (sprites posés sur le terrain) ----------
+// ---------- règles de terrain (valeurs de départ, à régler) ----------
+const SPEED={inf:11,cav:22};          // m/s, accéléré environ ×8 pour le prototype
+const VISION=300,HILL=1.5,FOREST_SEE=50,TREE_H=14;
+function isHill(x,z){const h=hAt(x,z);let s=0;for(let k=0;k<8;k++){const a=k*Math.PI/4;s+=hAt(x+Math.cos(a)*200,z+Math.sin(a)*200);}return h-s/8>12;}
+function grade(x,z){const gx=(hAt(x+3,z)-hAt(x-3,z))/6,gz=(hAt(x,z+3)-hAt(x,z-3))/6;return Math.hypot(gx,gz);}
+const blocked=(x,z)=>Math.abs(x)>W/2-30||Math.abs(z)>D/2-30||grade(x,z)>.85;   // bords et falaises
+function terrainMult(kind,x,z,ux,uz){
+  let m=1;
+  if(onBridge(x,z)){}else if(inWater(x,z))m*=.35;          // gué dans la rivière
+  else if(inForest(x,z))m*=kind==='cav'?.5:.75;
+  const up=(hAt(x+ux*4,z+uz*4)-hAt(x,z))/4;                 // pente dans le sens de la marche
+  m*=Math.min(1.15,Math.max(.35,1-up*3));
+  return m;
+}
+function terrainName(x,z){
+  if(onBridge(x,z))return'pont';if(inWater(x,z))return'rivière (gué)';
+  if(inForest(x,z))return'forêt';if(isHill(x,z))return'colline';return'terrain découvert';
+}
+
+// ---------- armées ----------
 const names={arbre:[...Array(8)].map((_,i)=>`sprites/arbre_${String(i+1).padStart(2,'0')}.png`),inf:[...Array(16)].map((_,i)=>`sprites/fantassin_${String(i+1).padStart(2,'0')}.png`),cav:[...Array(12)].map((_,i)=>`sprites/cavalier_${String(i+1).padStart(2,'0')}.png`)};
 const loader=new THREE.TextureLoader(); const mats={arbre:[],inf:[],cav:[]};
 let toLoad=names.arbre.length+names.inf.length+names.cav.length,loaded=0,failed=0;
-const soldiers=[];
+const regs=[];
 const shadowG=new THREE.CircleGeometry(1,10);shadowG.rotateX(-Math.PI/2);
 const shadowMat=new THREE.MeshBasicMaterial({color:0x000000,transparent:true,opacity:.32,depthWrite:false});
+const GOLD=0xe3b54a;
 
-function banner(text,color){
-  const cv=document.createElement('canvas');const g0=cv.getContext('2d');g0.font='600 52px "Barlow Condensed", Arial Narrow, sans-serif';
+function bannerTex(text,color,sel){
+  const font='600 52px "Barlow Condensed", Arial Narrow, sans-serif';
+  const cv=document.createElement('canvas');const g0=cv.getContext('2d');g0.font=font;
   cv.width=Math.ceil(g0.measureText(text).width+44);cv.height=96;const g=cv.getContext('2d');
-  g.fillStyle=color;g.fillRect(0,0,cv.width,96);g.fillStyle='#fff';g.font='600 52px "Barlow Condensed", Arial Narrow, sans-serif';g.textBaseline='middle';g.fillText(text,22,50);
-  const t=new THREE.CanvasTexture(cv);t.encoding=THREE.sRGBEncoding;
-  const s=new THREE.Sprite(new THREE.SpriteMaterial({map:t,depthTest:false}));s.scale.set(9*cv.width/96,9,1);s.renderOrder=10;return s;
+  g.fillStyle=color;g.fillRect(0,0,cv.width,96);
+  if(sel){g.strokeStyle='#e3b54a';g.lineWidth=12;g.strokeRect(6,6,cv.width-12,84);}
+  g.fillStyle='#fff';g.font=font;g.textBaseline='middle';g.fillText(text,22,50);
+  const t=new THREE.CanvasTexture(cv);t.encoding=THREE.sRGBEncoding;t.userData.aspect=cv.width/96;return t;
 }
-function regiment(kind,cx,cz,cols,rows,dx,dz,label,color){
-  const h=kind==='cav'?7:4.5; const set=mats[kind]; if(!set.length) return;
-  for(let r=0;r<rows;r++)for(let k=0;k<cols;k++){
-    const x=cx+(k-(cols-1)/2)*dx+(R()-.5)*.8, z=cz+(r-(rows-1)/2)*dz+(R()-.5)*.8;
-    const y=height(x,z);
+function groundLine(color,opacity){
+  const l=new THREE.Line(new THREE.BufferGeometry(),new THREE.LineBasicMaterial({color,transparent:true,opacity,depthTest:false}));
+  l.renderOrder=9;l.frustumCulled=false;l.visible=false;scene.add(l);return l;
+}
+function setLine(line,pts){const a=new Float32Array(pts.length*3);pts.forEach((p,i)=>{a[i*3]=p[0];a[i*3+1]=Math.max(hAt(p[0],p[1]),WATER)+1.2;a[i*3+2]=p[1];});
+  line.geometry.setAttribute('position',new THREE.BufferAttribute(a,3));line.geometry.computeBoundingSphere();}
+const ringG=new THREE.RingGeometry(5,7,32);ringG.rotateX(-Math.PI/2);
+
+function regiment(o){
+  const set=mats[o.kind]; if(!set.length) return;
+  const h=o.kind==='cav'?7:4.5;
+  const g={...o,men:o.cols*o.rows*2,soldiers:[],tx:null,tz:null,chase:null,contact:null,moving:false,wait:2+R()*6,shown:true,
+    hw:o.cols*o.dx/2,hd:o.rows*o.dz/2,label:`${o.name} · ${o.cols*o.rows*2}`};
+  for(let r=0;r<o.rows;r++)for(let k=0;k<o.cols;k++){
     const m=set[Math.floor(R()*set.length)];
     const sp=new THREE.Sprite(m.mat);sp.center.set(.5,0);
-    const w=h*m.aspect*(R()<.5?-1:1);sp.scale.set(w,h,1);sp.position.set(x,y,z);
-    scene.add(sp);soldiers.push({sp,y,ph:R()*6.28});
+    sp.scale.set(h*m.aspect*(R()<.5?-1:1),h,1);scene.add(sp);
+    g.soldiers.push({sp,lx:(k-(o.cols-1)/2)*o.dx+(R()-.5)*.8,lz:(r-(o.rows-1)/2)*o.dz+(R()-.5)*.8,ph:R()*6.28});
   }
-  // ombres au sol (une seule géométrie instanciée)
-  const n=cols*rows,sh=new THREE.InstancedMesh(shadowG,shadowMat,n);let i=0;
-  for(let r=0;r<rows;r++)for(let k=0;k<cols;k++){const x=cx+(k-(cols-1)/2)*dx,z=cz+(r-(rows-1)/2)*dz;P.set(x+.8,height(x,z)+.25,z+.6);Q.identity();S.set(kind==='cav'?1.6:1.1,1,kind==='cav'?2.6:1.1);M.compose(P,Q,S);sh.setMatrixAt(i++,M);}
-  scene.add(sh);
-  const b=banner(label,color);b.position.set(cx-cols*dx/2+20,height(cx,cz)+16,cz-rows*dz/2-4);scene.add(b);
+  g.shadows=new THREE.InstancedMesh(shadowG,shadowMat,g.soldiers.length);g.shadows.frustumCulled=false;scene.add(g.shadows);
+  g.texN=bannerTex(g.label,o.color,false);g.texS=bannerTex(g.label,o.color,true);
+  g.banner=new THREE.Sprite(new THREE.SpriteMaterial({map:g.texN,depthTest:false}));g.banner.scale.set(9*g.texN.userData.aspect,9,1);g.banner.renderOrder=10;g.banner.userData.reg=g;scene.add(g.banner);
+  if(o.side==='bleu'){
+    g.outline=groundLine(GOLD,.95);g.path=groundLine(0xffffff,.55);
+    g.mark=new THREE.Mesh(ringG,new THREE.MeshBasicMaterial({color:GOLD,transparent:true,opacity:.85,depthTest:false}));g.mark.renderOrder=9;g.mark.visible=false;scene.add(g.mark);
+  }
+  place(g,0);regs.push(g);
 }
-function forest(){
+const toWorld=(g,lx,lz)=>{const c=Math.cos(g.heading),s=Math.sin(g.heading);return[g.x+lx*c-lz*s,g.z+lx*s+lz*c];};
+function place(g,t){
+  const bob=g.moving&&walkAnim, sx=g.kind==='cav'?1.6:1.1, sz=g.kind==='cav'?2.6:1.1;
+  Q.setFromAxisAngle(UP,-g.heading);S.set(sx,1,sz);
+  g.soldiers.forEach((s,i)=>{const [x,z]=toWorld(g,s.lx,s.lz),y=hAt(x,z);
+    s.sp.position.set(x,Math.max(y,WATER-1.3)+(bob?Math.abs(Math.sin(t*6+s.ph))*.25:0),z);
+    P.set(x+.8,y+.25,z+.6);M.compose(P,Q,S);g.shadows.setMatrixAt(i,M);});
+  g.shadows.instanceMatrix.needsUpdate=true;
+  g.banner.position.set(g.x,Math.max(hAt(g.x,g.z),WATER)+18,g.z);
+  if(g.outline&&g.outline.visible)drawOutline(g);
+}
+function drawOutline(g){
+  const pts=[],m=4,c=[[-g.hw-m,-g.hd-m],[g.hw+m,-g.hd-m],[g.hw+m,g.hd+m],[-g.hw-m,g.hd+m],[-g.hw-m,-g.hd-m]];
+  for(let k=0;k<4;k++)for(let i=0;i<12;i++){const a=c[k],b=c[k+1],f=i/12;pts.push(toWorld(g,a[0]+(b[0]-a[0])*f,a[1]+(b[1]-a[1])*f));}
+  pts.push(toWorld(g,c[0][0],c[0][1]));
+  // petite flèche vers l'avant
+  pts.push(toWorld(g,-8,-g.hd-m),toWorld(g,0,-g.hd-m-9),toWorld(g,8,-g.hd-m));
+  setLine(g.outline,pts);
+}
+function showReg(g,v){if(g.shown===v)return;g.shown=v;g.soldiers.forEach(s=>s.sp.visible=v);g.shadows.visible=v;g.banner.visible=v;}
+const corners=g=>[[g.x,g.z],toWorld(g,-g.hw,-g.hd),toWorld(g,g.hw,-g.hd),toWorld(g,g.hw,g.hd),toWorld(g,-g.hw,g.hd)];
+const isHidden=g=>corners(g).every(([x,z])=>inForest(x,z));
+const contactDist=(a,b)=>Math.hypot(a.x-b.x,a.z-b.z)<a.hd+b.hd+10;
+
+// ---------- marche ----------
+const TURN=.55;
+function step(g,dt){
+  if(g.chase){g.tx=g.chase.x;g.tz=g.chase.z;}
+  g.contact=regs.find(e=>e.side!==g.side&&contactDist(g,e))||null;
+  if(g.contact&&(g.chase===g.contact||g.side==='rouge')){g.tx=null;g.chase=null;}
+  if(g.tx===null){g.moving=false;return;}
+  const dx=g.tx-g.x,dz=g.tz-g.z,dist=Math.hypot(dx,dz);
+  if(dist<1.5){g.tx=null;g.moving=false;return;}
+  const want=Math.atan2(dx,-dz),diff=wrapA(want-g.heading),tr=TURN*dt;
+  g.heading+=Math.max(-tr,Math.min(tr,diff));g.moving=true;
+  if(Math.abs(diff)>.6)return;                                   // pivote d'abord sur place
+  const ux=dx/dist,uz=dz/dist,v=SPEED[g.kind]*terrainMult(g.kind,g.x,g.z,ux,uz),d=Math.min(dist,v*dt);
+  const nx=g.x+ux*d,nz=g.z+uz*d;
+  if(blocked(nx,nz)){g.tx=null;g.chase=null;g.moving=false;if(g.side==='bleu')toast(`${g.name} : passage impossible (falaise)`,'#5a4a16');return;}
+  g.x=nx;g.z=nz;
+}
+// les rouges patrouillent au hasard autour d'eux
+let aiOn=true;
+function ai(g,dt){
+  if(!aiOn||g.tx!==null||g.contact)return;
+  if((g.wait-=dt)>0)return;
+  for(let k=0;k<12;k++){const a=R()*6.28,d=150+R()*350,x=Math.max(-1400,Math.min(1400,g.x+Math.cos(a)*d)),z=Math.max(-940,Math.min(940,g.z+Math.sin(a)*d));
+    if(hAt(x,z)>WATER+1&&!blocked(x,z)){g.tx=x;g.tz=z;break;}}
+  g.wait=6+R()*14;
+}
+
+// ---------- lignes de vue ----------
+const seen=new Uint8Array(FW*FD),blur=new Float32Array(FW*FD),disp=new Float32Array(FW*FD);
+function viewshed(g){
+  const h0=Math.max(hAt(g.x,g.z),WATER),eye=h0+(g.kind==='cav'?3.2:2.2);
+  const Rv=VISION*(isHill(g.x,g.z)?HILL:1);g.range=Rv;
+  const N=Math.ceil(2*Math.PI*Rv/6);
+  for(let k=0;k<N;k++){const a=k/N*Math.PI*2,ca=Math.cos(a),sa=Math.sin(a);let maxS=-1e9;
+    for(let d=5;d<=Rv;d+=5){const x=g.x+ca*d,z=g.z+sa*d;if(x<-W/2||x>W/2||z<-D/2||z>D/2)break;
+      const ci=cellOf(x,z),h=Math.max(hAt(x,z),WATER);
+      if((h+2-eye)/d>=maxS)seen[ci]=1;                                         // on voit un homme debout ici
+      const occ=(h+(d>FOREST_SEE&&forest[ci]?TREE_H:0)-eye)/d;if(occ>maxS)maxS=occ;}}  // le relief et les arbres masquent la suite
+  for(const [x,z] of corners(g))seen[cellOf(x,z)]=1;
+}
+function spotted(e,blues){
+  return corners(e).some(([x,z])=>{const ci=cellOf(x,z);if(!seen[ci])return false;
+    if(!forest[ci])return true;
+    return blues.some(b=>corners(b).some(([bx,bz])=>Math.hypot(bx-x,bz-z)<FOREST_SEE));});     // caché sous les arbres sauf de tout près
+}
+let fogOn=true,firstFog=true;const known=new Set();
+function updateFog(){
+  const blues=regs.filter(g=>g.side==='bleu');
+  seen.fill(0);blues.forEach(viewshed);
+  // flou léger pour des bords doux
+  for(let j=0;j<FD;j++)for(let i=0;i<FW;i++){let s=0,n=0;for(let b=-1;b<=1;b++)for(let a=-1;a<=1;a++){const ii=i+a,jj=j+b;if(ii>=0&&jj>=0&&ii<FW&&jj<FD){s+=seen[jj*FW+ii];n++;}}blur[j*FW+i]=s/n;}
+  for(let i=0;i<FW*FD;i++){disp[i]=firstFog?blur[i]:disp[i]+(blur[i]-disp[i])*.5;fogData[i*4]=disp[i]*255;}
+  firstFog=false;fogTex.needsUpdate=true;
+  regs.filter(g=>g.side==='rouge').forEach(e=>{
+    const v=!fogOn||spotted(e,blues);
+    if(v&&fogOn&&!known.has(e)){known.add(e);toast(`Ennemi repéré : ${e.name} (${e.men} hommes)`);}
+    if(!v)known.delete(e);
+    showReg(e,v);});
+}
+
+// ---------- sélection et ordres ----------
+let selected=[];
+function select(list){
+  selected.forEach(g=>{g.banner.material.map=g.texN;g.outline.visible=false;});
+  selected=list;
+  selected.forEach(g=>{g.banner.material.map=g.texS;g.outline.visible=true;drawOutline(g);});
+  renderSel(true);
+}
+function order(tx,tz,target){
+  if(!selected.length)return;
+  const cx=selected.reduce((s,g)=>s+g.x,0)/selected.length,cz=selected.reduce((s,g)=>s+g.z,0)/selected.length;
+  selected.forEach(g=>{
+    g.chase=target||null;
+    // en groupe, chaque armée garde sa place par rapport aux autres
+    let x=target?target.x:tx+(selected.length>1?g.x-cx:0),z=target?target.z:tz+(selected.length>1?g.z-cz:0);
+    x=Math.max(-W/2+40,Math.min(W/2-40,x));z=Math.max(-D/2+40,Math.min(D/2-40,z));
+    g.tx=x;g.tz=z;
+  });
+  renderSel(true);
+}
+const ray=new THREE.Raycaster(),ndc=new THREE.Vector2();
+function pick(ev){
+  const r=renderer.domElement.getBoundingClientRect();ndc.set((ev.clientX-r.left)/r.width*2-1,-(ev.clientY-r.top)/r.height*2+1);
+  ray.setFromCamera(ndc,camera);
+  const hitB=ray.intersectObjects(regs.filter(g=>g.shown).map(g=>g.banner))[0];
+  // le sol : on avance le long du rayon jusqu'à passer sous le terrain
+  const o=ray.ray.origin,d=ray.ray.direction;let pt=null,prev=0;
+  for(let t=1;t<14000;t+=4){const x=o.x+d.x*t,y=o.y+d.y*t,z=o.z+d.z*t;if(Math.abs(x)>W/2+200||Math.abs(z)>D/2+200){if(t>4000)break;prev=t;continue;}
+    if(y<Math.max(hAt(x,z),WATER)){let a=prev,b=t;for(let i=0;i<10;i++){const m=(a+b)/2,X=o.x+d.x*m,Y=o.y+d.y*m,Z=o.z+d.z*m;if(Y<Math.max(hAt(X,Z),WATER))b=m;else a=m;}
+      pt=[o.x+d.x*b,o.z+d.z*b];break;}prev=t;}
+  let reg=hitB?hitB.object.userData.reg:null;
+  if(!reg&&pt){let best=1e9;for(const g of regs){if(!g.shown)continue;const c=Math.cos(-g.heading),s=Math.sin(-g.heading),lx=(pt[0]-g.x)*c-(pt[1]-g.z)*s,lz=(pt[0]-g.x)*s+(pt[1]-g.z)*c;
+    if(Math.abs(lx)<g.hw+5&&Math.abs(lz)<g.hd+5){const dd=Math.hypot(lx,lz);if(dd<best){best=dd;reg=g;}}}}
+  return{pt,reg};
+}
+let down=null;
+renderer.domElement.addEventListener('pointerdown',e=>{down={x:e.clientX,y:e.clientY,b:e.button};});
+renderer.domElement.addEventListener('pointerup',e=>{
+  if(!down||e.button!==down.b||Math.hypot(e.clientX-down.x,e.clientY-down.y)>6){down=null;return;}
+  down=null;const {pt,reg}=pick(e);
+  const isOrder=e.button===2||(e.pointerType!=='mouse'&&selected.length&&!(reg&&reg.side==='bleu'));
+  if(isOrder){
+    if(reg&&reg.side==='rouge')order(0,0,reg);
+    else if(pt)order(pt[0],pt[1],null);
+    return;
+  }
+  if(e.button!==0)return;
+  if(reg&&reg.side==='bleu'){
+    if(e.shiftKey)select(selected.includes(reg)?selected.filter(g=>g!==reg):[...selected,reg]);
+    else select([reg]);
+  }else if(!e.shiftKey)select([]);
+});
+window.addEventListener('keydown',e=>{
+  const blues=regs.filter(g=>g.side==='bleu');
+  if(/^[1-9]$/.test(e.key)){const g=blues[+e.key-1];if(g)select(e.shiftKey?[...new Set([...selected,g])]:[g]);}
+  else if(e.key==='Escape')select([]);
+  else if(e.key===' '&&selected.length){e.preventDefault();centerOn(selected);}
+});
+function centerOn(list){
+  const x=list.reduce((s,g)=>s+g.x,0)/list.length,z=list.reduce((s,g)=>s+g.z,0)/list.length;
+  const off=camera.position.clone().sub(controls.target);controls.target.set(x,Math.max(hAt(x,z),0),z);camera.position.copy(controls.target).add(off);controls.update();
+}
+
+// ---------- affichage des infos ----------
+const selEl=document.getElementById('sel'),toastEl=document.getElementById('toast');let toastT=0,lastSel='';
+function toast(msg,bg){toastEl.textContent=msg;toastEl.style.background=bg?bg+'ee':'';toastEl.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>toastEl.classList.remove('on'),3200);}
+const fmt=n=>String(Math.round(n)).replace('.',',');
+function renderSel(force){
+  let h='';
+  if(selected.length===1){const g=selected[0],t=terrainName(g.x,g.z),ux=g.tx!==null?Math.sin(g.heading):0,uz=g.tx!==null?-Math.cos(g.heading):0;
+    const etat=g.contact?`<span class="warn">Au contact de ${g.contact.shown?g.contact.name:'l\'ennemi'} (le combat arrive à la prochaine étape)</span>`:g.chase?`Marche sur ${g.chase.name}`:g.tx!==null?'En marche':'À l\'arrêt';
+    h=`<b>${g.name}</b><span>${g.kind==='cav'?'Cavalerie':'Infanterie'} · ${g.men} hommes</span><span>${etat}</span>
+      <span><span class="k">Terrain :</span> ${t}${g.tx!==null?` · <span class="k">vitesse</span> ×${(terrainMult(g.kind,g.x,g.z,ux,uz)).toFixed(2).replace('.',',')}`:''}</span>
+      <span><span class="k">Vision :</span> ${fmt(g.range||VISION)} m${(g.range||0)>VISION?' (colline : +50 %)':''}</span>
+      ${isHidden(g)?'<span class="hid">Caché dans la forêt : invisible à plus de 50 m</span>':''}`;
+  }else if(selected.length>1){
+    h=`<b>${selected.length} armées</b><span>${selected.map(g=>g.name).join(', ')}</span><span>${selected.reduce((s,g)=>s+g.men,0)} hommes au total</span>`;
+  }
+  if(force||h!==lastSel){selEl.innerHTML=h;lastSel=h;}
+}
+function renderStatus(){
+  const reds=regs.filter(g=>g.side==='rouge'),vis=reds.filter(g=>g.shown);
+  status.textContent=!fogOn?'Brouillard désactivé : toutes les armées sont visibles.':
+    vis.length?`Ennemis repérés : ${vis.map(g=>g.name).join(', ')} (${vis.length} sur ${reds.length}).`:`Aucun ennemi en vue. ${reds.length} armées rouges se cachent quelque part au nord.`;
+  if(failed)status.textContent+=` ${failed} image(s) manquante(s).`;
+}
+
+function forestMesh(){
   const set=mats.arbre; if(!set.length) return;
   // planche de 4 x 2 vues de l'arbre
   const cv=document.createElement('canvas');cv.width=1024;cv.height=512;const g=cv.getContext('2d');
@@ -193,47 +448,58 @@ function forest(){
   const n=spots.length,base=new THREE.PlaneGeometry(1,1),geo=new THREE.InstancedBufferGeometry();
   geo.index=base.index;geo.setAttribute('position',base.attributes.position);geo.setAttribute('uv',base.attributes.uv);
   const ip=new Float32Array(n*3),is=new Float32Array(n*2),it=new Float32Array(n),ic=new Float32Array(n);
-  const sh=new THREE.InstancedMesh(shadowG,new THREE.MeshBasicMaterial({color:0x000000,transparent:true,opacity:.28,depthWrite:false}),n);
+  const sh=new THREE.InstancedMesh(shadowG,fogged(new THREE.MeshBasicMaterial({color:0x000000,transparent:true,opacity:.28,depthWrite:false})),n);
   spots.forEach(([x,y,z],i)=>{const h=11+R()*7;ip.set([x,y,z],i*3);is.set([h*(R()<.5?-1:1),h],i*2);it[i]=Math.floor(R()*set.length);ic[i]=.82+R()*.28;
     P.set(x+3,y+.3,z+2.5);Q.identity();S.set(h*.36,1,h*.3);M.compose(P,Q,S);sh.setMatrixAt(i,M);});
   geo.setAttribute('iPos',new THREE.InstancedBufferAttribute(ip,3));geo.setAttribute('iSize',new THREE.InstancedBufferAttribute(is,2));
   geo.setAttribute('iTile',new THREE.InstancedBufferAttribute(it,1));geo.setAttribute('iShade',new THREE.InstancedBufferAttribute(ic,1));
   geo.instanceCount=n;
-  const mat=new THREE.ShaderMaterial({uniforms:{map:{value:atlas}},side:THREE.DoubleSide,
-    vertexShader:`attribute vec3 iPos;attribute vec2 iSize;attribute float iTile;attribute float iShade;varying vec2 vUv;varying float vShade;
+  const mat=new THREE.ShaderMaterial({uniforms:{map:{value:atlas},...fogU},side:THREE.DoubleSide,
+    vertexShader:`attribute vec3 iPos;attribute vec2 iSize;attribute float iTile;attribute float iShade;varying vec2 vUv;varying float vShade;varying vec2 vFogUv;
       void main(){vec4 mv=modelViewMatrix*vec4(iPos,1.0);vec2 p=position.xy;p.y+=0.42;mv.xy+=p*iSize;gl_Position=projectionMatrix*mv;
-      float c=mod(iTile,4.0),r=floor(iTile/4.0);vUv=vec2((c+uv.x)/4.0,1.0-(r+1.0-uv.y)/2.0);vShade=iShade;}`,
-    fragmentShader:`uniform sampler2D map;varying vec2 vUv;varying float vShade;
-      void main(){vec4 c=texture2D(map,vUv);if(c.a<0.5)discard;gl_FragColor=vec4(c.rgb*vShade,1.0);}`});
+      float c=mod(iTile,4.0),r=floor(iTile/4.0);vUv=vec2((c+uv.x)/4.0,1.0-(r+1.0-uv.y)/2.0);vShade=iShade;
+      vFogUv=(iPos.xz+vec2(${(W/2).toFixed(1)},${(D/2).toFixed(1)}))/vec2(${W.toFixed(1)},${D.toFixed(1)});}`,
+    fragmentShader:`uniform sampler2D map;uniform sampler2D fogMap;uniform float fogOn;varying vec2 vUv;varying float vShade;varying vec2 vFogUv;
+      void main(){vec4 c=texture2D(map,vUv);if(c.a<0.5)discard;gl_FragColor=vec4(c.rgb*vShade,1.0);${FOG_F}}`});
   const trees=new THREE.Mesh(geo,mat);trees.frustumCulled=false;scene.add(trees);scene.add(sh);
 }
+let ready=false;
 function build(){
-  forest();
-  // Bleus (premier plan) : 1 soldat affiché = 2 hommes
-  regiment('inf',-420,790,25,10,2.2,3.0,'Souvorov · 500','#3f7fd6');
-  regiment('inf',-160,810,25,10,2.2,3.0,'Robin des Bois · 500','#3f7fd6');
-  regiment('cav',120,770,14,6,3.6,5.2,'Uesugi Kenshin · 168','#3f7fd6');
-  // Rouges (de l'autre côté de la vallée)
-  regiment('inf',-640,-480,25,9,2.2,3.0,'Kanki · 450','#c94b3f');
-  regiment('inf',-380,-510,22,9,2.2,3.0,'Ri Boku · 396','#c94b3f');
-  regiment('cav',-920,-450,12,6,3.6,5.2,'Lü Bu · 144','#c94b3f');
-  status.textContent=`Carte de 3 km × 2 km, ${spots.length} arbres, ${soldiers.length} soldats affichés (${soldiers.length*2} hommes). Tous vus de dos pour l'instant.`+(failed?` ${failed} image(s) manquante(s).`:'');
+  forestMesh();
+  // Bleus (premier plan, le joueur) : 1 soldat affiché = 2 hommes
+  regiment({kind:'inf',side:'bleu',name:'Souvorov',color:'#3f7fd6',x:-420,z:790,cols:25,rows:10,dx:2.2,dz:3.0,heading:0});
+  regiment({kind:'inf',side:'bleu',name:'Robin des Bois',color:'#3f7fd6',x:-160,z:810,cols:25,rows:10,dx:2.2,dz:3.0,heading:0});
+  regiment({kind:'cav',side:'bleu',name:'Uesugi Kenshin',color:'#3f7fd6',x:120,z:770,cols:14,rows:6,dx:3.6,dz:5.2,heading:0});
+  // Rouges (de l'autre côté de la vallée, cachés par le brouillard)
+  regiment({kind:'inf',side:'rouge',name:'Kanki',color:'#c94b3f',x:-640,z:-480,cols:25,rows:9,dx:2.2,dz:3.0,heading:Math.PI});
+  regiment({kind:'inf',side:'rouge',name:'Ri Boku',color:'#c94b3f',x:-380,z:-510,cols:22,rows:9,dx:2.2,dz:3.0,heading:Math.PI});
+  regiment({kind:'cav',side:'rouge',name:'Lü Bu',color:'#c94b3f',x:-920,z:-450,cols:12,rows:6,dx:3.6,dz:5.2,heading:Math.PI});
+  updateFog();renderStatus();ready=true;
 }
 function done(){if(++loaded===toLoad)build();}
 ['arbre','inf','cav'].forEach(k=>names[k].forEach(url=>loader.load(url,t=>{t.encoding=THREE.sRGBEncoding;t.anisotropy=4;
   mats[k].push({mat:new THREE.SpriteMaterial({map:t,alphaTest:.5}),aspect:t.image.width/t.image.height});done();},undefined,()=>{failed++;done();})));
 
 // ---------- boucle ----------
-let walking=!window.matchMedia('(prefers-reduced-motion: reduce)').matches,t0=performance.now();
+const walkAnim=!window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+let last=performance.now(),acc=0;
 function resize(){const w=window.innerWidth,h=window.innerHeight;renderer.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix();}
 window.addEventListener('resize',resize);resize();
-function loop(now){const t=(now-t0)/1000;
-  if(walking)for(const s of soldiers)s.sp.position.y=s.y+Math.abs(Math.sin(t*5+s.ph))*.25;
+function loop(now){const dt=Math.min(.1,(now-last)/1000),t=now/1000;last=now;
+  if(ready){
+    for(const g of regs){if(g.side==='rouge')ai(g,dt);const was=g.moving;step(g,dt);if(g.moving||was)place(g,t);}
+    if((acc+=dt)>.2){acc=0;updateFog();renderStatus();renderSel(false);
+      for(const g of regs)if(g.path){const on=g.tx!==null;g.path.visible=g.mark.visible=on;
+        if(on){const d=Math.hypot(g.tx-g.x,g.tz-g.z),n=Math.max(2,Math.ceil(d/10)),pts=[];for(let i=0;i<=n;i++)pts.push([g.x+(g.tx-g.x)*i/n,g.z+(g.tz-g.z)*i/n]);setLine(g.path,pts);
+          g.mark.position.set(g.tx,Math.max(hAt(g.tx,g.tz),WATER)+1,g.tz);}}}
+  }
   controls.update();renderer.render(scene,camera);requestAnimationFrame(loop);}
 requestAnimationFrame(loop);
 
-document.getElementById('b-anim').addEventListener('click',e=>{walking=!walking;e.currentTarget.textContent=walking?'Pause marche':'Reprendre la marche';e.currentTarget.setAttribute('aria-pressed',walking);});
+document.getElementById('b-fog').addEventListener('click',e=>{fogOn=!fogOn;fogU.fogOn.value=fogOn?1:0;updateFog();renderStatus();e.currentTarget.textContent='Brouillard : '+(fogOn?'oui':'non');e.currentTarget.setAttribute('aria-pressed',fogOn);});
+document.getElementById('b-ai').addEventListener('click',e=>{aiOn=!aiOn;if(!aiOn)regs.forEach(g=>{if(g.side==='rouge')g.tx=null;});e.currentTarget.textContent='Rouges : '+(aiOn?'en patrouille':'immobiles');e.currentTarget.setAttribute('aria-pressed',aiOn);});
 document.getElementById('b-shadow').addEventListener('click',e=>{renderer.shadowMap.enabled=!renderer.shadowMap.enabled;scene.traverse(o=>{if(o.material)o.material.needsUpdate=true});e.currentTarget.textContent='Ombres : '+(renderer.shadowMap.enabled?'oui':'non');});
 let overall=false;document.getElementById('b-view').addEventListener('click',e=>{overall=!overall;overall?viewAll():viewArmy();e.currentTarget.textContent=overall?'Vue des armées':'Vue d\'ensemble';});
+window.__shin={regs,select,order,get selected(){return selected},seen,forest};   // pour les tests
 })();
 </script>
