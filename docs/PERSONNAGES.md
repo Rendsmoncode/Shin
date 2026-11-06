@@ -97,9 +97,10 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 
 Deux généraux invaincus, absents de la légende des 7, uniques dans tout le jeu et obtenus par des chaînes de quêtes secrètes.
 
-- **Khalid ibn al-Walid** : l'invincible face aux deux plus grands empires de son époque.
-- **Jan Žižka** : l'aveugle à la tête de paysans, jamais vaincu.
+- **Khalid ibn al-Walid**, « L'Épée de Dieu » : l'invincible face aux deux plus grands empires de son époque.
+- **Jan Žižka**, « La Tempête aveugle » : l'aveugle à la tête de paysans, jamais vaincu.
 - ✅ Mise en scène : **deux légendes parallèles**. On sait dès le début qu'il existe deux généraux cachés, chacun avec son surnom et sa propre chaîne de quêtes.
+- ✅ Une animation spéciale se déclenche quand un joueur obtient l'un des deux.
 
 ## Guerriers mystiques
 
