@@ -130,6 +130,8 @@ Deux généraux invaincus, absents de la légende des 7, uniques dans tout le je
 
 ## Soldats d'élite
 
+Raretés : rare et épique (environ 30 épiques). Les guerriers mystiques sont au-dessus, au niveau légendaire.
+
 - Thorkell
 - Ulysse
 
