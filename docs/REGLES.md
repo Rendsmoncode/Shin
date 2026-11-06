@@ -290,6 +290,26 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 - ✅ **Pas de pillage en bataille rangée** : le pillage des ressources se gagne uniquement dans le mode Clash of Clans. En bataille rangée, le vainqueur remporte seulement la mise ou l'objectif (sauf bataille amicale).
 - ✅ **XP** : en bataille rangée, même amicale, tout le monde gagne de l'XP.
 
+## 9 ter. Le mode raid (façon Clash of Clans)
+
+On reprend les mécaniques de Clash of Clans (pas ses noms ni ses visuels).
+
+- ✅ **La base** : le quartier du joueur, sur la vraie carte d'Aubagne. La maison du joueur joue le rôle de l'hôtel de ville.
+- ✅ **Défenses** : tours, garnisons et défenses du quartier, améliorables. Pas de murs.
+- ✅ **Pièges** : posés par les architectes, invisibles pour l'attaquant. On peut les placer sur les routes et sur les bâtiments.
+- ✅ **Placement** : le quartier suit la vraie ville, on ne déplace pas la maison ni les commerces. On place librement les défenses et les pièges.
+- ✅ **Déploiement** : l'attaquant fait entrer ses troupes par les bords du quartier (par exemple par les routes).
+- ✅ **Troupes autonomes** : une fois déployées, les troupes agissent seules (l'infanterie vise le bâtiment le plus proche, la cavalerie les défenses, les archers restent à distance). Le joueur choisit seulement le moment et l'endroit où il les fait entrer.
+- ✅ **Héros** : les généraux et guerriers mystiques qui participent au raid ont simplement de meilleures stats. Pas d'attaque spéciale en raid.
+- ✅ **Stratégies** (nuage de poussière, flèches enflammées…) : utilisables une fois par raid, comme des sorts.
+- ✅ **Durée** : 3 minutes.
+- ✅ **Étoiles** : une étoile à 50 % du quartier détruit, une étoile si la maison du joueur est détruite, une étoile à 100 %.
+- ✅ **Butin** : le vainqueur pille un pourcentage des ressources stockées dans le quartier.
+- ✅ **Protection, troupes indisponibles, défense hors ligne, réparation** : voir les règles déjà fixées (pas deux pillages d'affilée, pas de mort définitive, défenses automatiques, bâtiment endommagé improductif).
+- ✅ **Renforts** : les alliés (via les contrats de diplomatie) peuvent envoyer des troupes en renfort dans le quartier d'un ami.
+- ✅ **Replay et vengeance** : le défenseur peut revoir l'attaque et lancer une contre-attaque.
+- ❓ **Construire ses défenses** : transformer des bâtiments du quartier en tours ou en défenses, et faire apparaître des tours sur les routes (chantier à traiter).
+
 ## 10. Les guerres (long terme, façon CK3)
 
 - ✅ **Conditions pour déclarer une guerre** (d'autres conditions pourront s'ajouter) :
