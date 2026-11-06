@@ -262,7 +262,8 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 - ✅ **Formations** : les armées peuvent prendre des formations, selon celles que maîtrisent leurs généraux et sous-généraux. Elles fonctionnent en pierre-feuille-ciseaux : chacune a une force et une faiblesse.
 - ✅ **Courbe progressive** : plus l'écart de puissance grandit, plus les pertes deviennent déséquilibrées, jusqu'à l'écrasement (pas de paliers brutaux).
 - ✅ **Hasard** : ±10 % sur le résultat d'un affrontement.
-- ✅ **Morts et blessés** : les pertes se divisent entre morts (définitifs) et blessés (récupérables grâce aux soignants et aux lieux de soin).
+- ✅ **Pas de mort définitive pour les soldats** : les hommes sont liés à leurs lieux de vie (la population des quartiers). Un soldat tombé au combat n'est pas perdu : il est indisponible pendant un certain temps, puis il revient. Ça évite qu'un joueur plus nombreux gagne des batailles en boucle contre un adversaire qui n'a pas eu le temps de se refaire.
+- 💡 **Deux niveaux d'indisponibilité** : les « tombés » sont indisponibles longtemps (piste : 24 h), les « blessés » moins longtemps (piste : 6 h). Les soignants remettent une partie des blessés sur pied pendant la bataille, et l'infirmerie ou l'hôpital raccourcit les durées. Proportions et durées à régler à l'équilibrage.
 - ✅ **Le terrain dépend du type d'unité** : chaque type a un terrain favori et un terrain difficile.
 
   | Unité | Terrain favori | Terrain difficile |
@@ -285,7 +286,6 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 - ✅ **Bataille qui s'éternise** : au bout d'un nombre maximum de tours, la victoire revient au joueur qui a le plus de points. Le nombre de tours sera fixé à la fin du développement, en simulant des batailles.
 - ✅ **Champ de bataille à part** : la bataille rangée ne se joue pas autour d'un quartier. Les deux camps sont à égalité, chacun attaque et se défend (comme une petite guerre).
 - ✅ **Pas de pillage en bataille rangée** : le pillage des ressources se gagne uniquement dans le mode Clash of Clans. En bataille rangée, le vainqueur remporte seulement la mise ou l'objectif (sauf bataille amicale).
-- ✅ Plus de blessés, moins de morts : une partie des soldats tombés peuvent être soignés à l'infirmerie ou à l'hôpital.
 - ❓ L'XP gagnée en bataille rangée (vainqueur et perdant).
 
 ## 10. Les guerres (long terme, façon CK3)
