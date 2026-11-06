@@ -229,8 +229,17 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
   - Si les puissances sont proches, les deux armées restent au contact. À chaque tour, le calcul se refait et chacune perd des hommes en fonction de la puissance de l'autre.
   - Les écarts doivent être bien réglés : les écrasements doivent rester minoritaires (pas 80 % des affrontements).
 - ✅ **Calcul de puissance** : chaque armée a une puissance de base, multipliée par tous ses effets (général, sous-généraux, aptitudes, formation…), puis ajustée selon le terrain (formule à définir).
-- ✅ **Soldats affichés** : un soldat à l'écran représente plusieurs hommes (piste : 1 pour 10, réglable). La bannière affiche toujours l'effectif réel.
-- ✅ **Taille de la carte** : le terrain est immense par rapport aux armées (piste : 5 km × 3 km). Chaque camp commence loin de l'autre, pour que l'exploration, les éclaireurs et les embuscades aient un sens.
+- ✅ **Soldats affichés** : 1 soldat à l'écran pour 2 hommes (réglable). La bannière affiche toujours l'effectif réel.
+- ✅ **Échelle (réglable)** :
+  | Réglage | Valeur |
+  |---|---|
+  | Taille d'un soldat au zoom normal | environ 24 pixels de haut |
+  | Échelle du terrain | 1 pixel = 20 cm (une ferme ≈ 100 pixels) |
+  | Agrandissement des soldats | environ ×2,5 par rapport au terrain |
+  | Taille de la carte | 3 km × 2 km, soit 15 000 × 10 000 pixels (environ 8 écrans de large et 9 de haut) |
+  | Régiment de 1 000 hommes | 500 soldats affichés, un bloc d'environ 240 × 400 pixels |
+- ✅ **Navigation** : la carte est plus grande que l'écran. On la fait défiler en faisant glisser la souris, avec les bords de l'écran ou les flèches du clavier. Une mini-carte permet de se repérer et de s'y rendre en un clic.
+- ✅ **Taille de la carte** : le terrain est immense par rapport aux armées. Chaque camp commence loin de l'autre, pour que l'exploration, les éclaireurs et les embuscades aient un sens.
 - ✅ **Trois niveaux de zoom** : de près (soldats en grand, environ 30 pixels ou plus), tactique (le secteur autour de ses armées), stratégique (toute la carte, les armées deviennent des bannières).
 - ✅ **Vision à l'échelle réelle** : un régiment ne voit qu'à quelques centaines de mètres, pas à travers les forêts ni derrière les collines. Les éclaireurs voient beaucoup plus loin. On peut cacher une armée dans un bois ou derrière une crête (distances exactes à fixer).
 - ✅ **Le relief a une physique** : une carte des hauteurs détermine les pentes. Les pentes ralentissent la montée, donnent un bonus aux charges en descente, augmentent la portée des archers en hauteur, et bloquent la vue. Les falaises sont infranchissables.
