@@ -84,6 +84,8 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 
 ## Exclus
 
+- Thors (Vinland Saga) : légendaire ou rien, et il n'est pas retenu en guerrier mystique.
+
 - Bai Qi (Haku Ki) : connu avant tout pour un massacre de masse (prisonniers enterrés vivants à Changping), même règle que pour Hitler.
 - Vlad III l'Empaleur : connu avant tout pour ses empalements de masse.
 - Tamerlan : connu pour ses massacres et ses pyramides de crânes (cas à confirmer, même logique).
@@ -132,8 +134,41 @@ Deux généraux invaincus, absents de la légende des 7, uniques dans tout le je
 
 Raretés : rare et épique (environ 30 épiques). Les guerriers mystiques sont au-dessus, au niveau légendaire.
 
-- Thorkell
-- Ulysse
+### Épiques
+
+- Thorkell, « Le Grand »
+- Ulysse, « Le Rusé »
+- Bayard, « Le Chevalier sans peur et sans reproche »
+- D'Artagnan
+- Cyrano de Bergerac
+- Cambronne, « Le Mot de Cambronne »
+- Surcouf, « Le Roi des corsaires »
+- Georges Guynemer, « L'As des as »
+- Guillaume le Maréchal, « Le Meilleur Chevalier du monde »
+- Léonidas
+- Hector, « Le Dompteur de chevaux »
+- Le Cid, « El Campeador »
+- Robin des Bois, « Le Prince des voleurs »
+- Guillaume Tell
+- Lagertha, « La Skjaldmö »
+- Björn Côtes-de-Fer, « Côtes-de-Fer »
+- Manfred von Richthofen, « Le Baron rouge »
+- Barbe Noire
+- Simo Häyhä, « La Mort blanche »
+- Vassili Zaïtsev
+- Audie Murphy
+- Yasuke, « Le Samouraï noir »
+- Lapu-Lapu
+- Antar ibn Shaddad, « Le Chevalier noir d'Arabie »
+- Tomoe Gozen
+- Hiroo Onoda
+- Mikasa Ackerman (L'Attaque des Titans)
+- Jin Sakai (Ghost of Tsushima), « Le Fantôme »
+- Sandor Clegane (Game of Thrones), « Le Limier »
+
+### Rares
+
+- ❓ À définir
 
 ## Explorateurs
 
