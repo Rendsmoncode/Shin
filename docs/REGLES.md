@@ -137,7 +137,7 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 
 ## 8. Les personnages du gacha
 
-- ✅ **Catégories** : Général, Soldat d'élite, Soignant, Espion, Stratège, Architecte, Ingénieur, Économiste, Archéologue (très rare).
+- ✅ **Catégories** : Général, Soldat d'élite, Soignant, Espion, Architecte, Ingénieur, Économiste, Archéologue (très rare).
 - ✅ **Guerrier Mystique** : catégorie à part, uniquement des légendaires (voire au-delà), capables de battre une armée entière à eux seuls.
 - ✅ **Stats** : ATK, DEF, END, INT, VIT, Mana (peut-être d'autres).
 - ✅ **Aptitudes** :

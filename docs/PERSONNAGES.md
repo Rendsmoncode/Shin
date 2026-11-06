@@ -116,11 +116,11 @@ Deux généraux invaincus, absents de la légende des 7, uniques dans tout le je
 - Thorkell
 - Ulysse
 
-## Stratèges
+## À placer en généraux (la catégorie Stratège est supprimée)
 
-- Sun Tzu (Légendaire)
-- Zhuge Liang (Épique)
-- Shikamaru (Naruto) (Épique)
+- Sun Tzu (légitimité légendaire : 9/10)
+- Zhuge Liang (épique)
+- Shikamaru (Naruto) (épique)
 
 ## Explorateurs
 
