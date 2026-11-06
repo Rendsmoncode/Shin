@@ -61,6 +61,10 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 - Baybars
 - Trần Hưng Đạo
 - Soundiata Keïta
+- Griffith (Berserk)
+- Erwin Smith (L'Attaque des Titans)
+- Maximus (Gladiator)
+- Aragorn (Le Seigneur des Anneaux)
 
 ## Généraux de départ (un par joueur)
 
