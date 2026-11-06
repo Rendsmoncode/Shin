@@ -186,7 +186,12 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 - ✅ **Sous-généraux** : n'importe quel personnage peut être sous-général.
 - ✅ **Effet de leader hiérarchique** : l'effet de leader ne s'applique qu'aux soldats placés en dessous dans la hiérarchie. Celui du général touche tout le monde, celui d'un sous-général uniquement son armée, et celui du chef d'une unité uniquement les membres de l'unité.
 - ✅ **Unités** : on peut créer une unité, une petite armée indépendante de moins de 1 000 hommes.
-- ❓ Qui commande une unité, et quelle est sa taille minimale (le minimum de 500 hommes d'un sous-général s'applique-t-il) ?
+- ✅ **Chef d'unité** : n'importe quel personnage peut diriger une unité, mais les généraux sont les meilleurs pour ça.
+- ✅ **Taille d'une unité** : 10 hommes minimum, moins de 1 000.
+- ✅ **Deux types de généraux** :
+  - **Les stratèges** : plus de possibilités stratégiques (formations, effets…).
+  - **Les combattants** : plus forts, et capables d'attaquer plus durement avec leur armée.
+- ❓ Le chef d'une unité compte-t-il comme homme clé (une action par tour et 1 point) ?
 - ✅ **Structure d'une armée** : le général est le cœur de l'armée. Il a des sous-généraux, qui dirigent chacun un certain nombre d'hommes.
 - ✅ **Points de vie de l'armée** : le général vaut 3 points, chaque sous-général vaut 1 point. Un joueur qui tombe à 0 point perd la bataille.
 - ✅ **Quartier général** : le général a un quartier général, invisible pour l'adversaire. Pour le voir, il faut envoyer des éclaireurs, ou avoir des soldats assez proches. Le quartier général peut se déplacer, mais lentement.
