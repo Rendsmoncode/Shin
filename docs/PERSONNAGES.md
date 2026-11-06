@@ -19,24 +19,24 @@ Liste de travail des personnages du gacha. Stats et aptitudes à définir ensemb
 
 Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 
-## Généraux (Légendaire, rareté à confirmer au cas par cas)
+## Généraux légendaires
 
-- Kanki
-- Abd el-Kader
-- Shaka Zulu
-- Simón Bolívar
-- Subötaï
-- Shivaji
-- Nader Shah
-- Mehmed II
-- Ménélik II
-- Toussaint Louverture
-- Ri Boku
-- Ousen
-- Richard Cœur de Lion
-- Võ Nguyên Giáp
-- Sun Tzu
-- Alexandre Souvorov
+- Kanki, « L'Obscurité de Qin »
+- Abd el-Kader, « L'Émir »
+- Shaka Zulu, ❓
+- Simón Bolívar, « El Libertador »
+- Subötaï, « Le Chien de guerre »
+- Shivaji, « Le Seigneur de l'ombre » (son vrai titre, *Chhatrapati*, veut dire « Seigneur de l'ombrelle »)
+- Nader Shah, ❓
+- Mehmed II, « Fatih, le Conquérant »
+- Ménélik II, « Le Lion de Juda »
+- Toussaint Louverture, « Le Spartacus noir »
+- Ri Boku, « Le Dernier Rempart de Zhao »
+- Ousen, « L'Homme le plus dangereux de Qin »
+- Richard Cœur de Lion, « Cœur de Lion »
+- Võ Nguyên Giáp, ❓
+- Sun Tzu, « Le Père de la guerre »
+- Alexandre Souvorov, ❓
 
 ## Généraux épiques
 
