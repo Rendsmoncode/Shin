@@ -34,8 +34,9 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 - Ri Boku
 - Ousen
 - Richard Cœur de Lion
+- Võ Nguyên Giáp
 
-## Généraux épiques
+## Généraux épiques (objectif : 30)
 
 - Baudouin IV (le roi lépreux, vainqueur de Saladin à Montgisard)
 - Harald Hardrada
@@ -43,6 +44,16 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 - Tecumseh
 - Crazy Horse
 - Takeda Shingen
+- Clovis
+- Charles Martel
+- Charlemagne
+- Foch
+- Leclerc
+- Spartacus
+- Scipion l'Africain
+- Uesugi Kenshin
+- La reine Nzinga
+- Koutouzov
 
 ## Généraux de départ (un par joueur)
 
@@ -102,3 +113,4 @@ Des personnages modernes ou historiques, et des blagues : un manager de McDonald
 ## De côté (à ressortir si besoin)
 
 - Soundiata Keïta (lore génial, peut-être en Guerrier mystique)
+- Proposés en épique, non retenus pour l'instant : Godefroy de Bouillon, Bertrand du Guesclin, le Grand Condé, Turenne, La Fayette, Davout, Guillaume le Conquérant, Baybars, Trần Hưng Đạo, Jean Hunyadi, Wellington, Dessalines, Geronimo
