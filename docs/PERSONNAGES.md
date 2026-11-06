@@ -87,7 +87,8 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 
 - Le créateur du jeu : **Shin** (général lambda)
 - Nicolas : ❓
-- Mathieu : ❓
+- Mathieu : **Koby** (One Piece), l'élève formé par Garp qui part de tout en bas et devient un héros
+- 💡 Idée de personnage rare : Adolphe Sax, inventeur du saxophone, qui l'a créé pour les musiques militaires (bonus aux troupes)
 
 ## Exclus
 
