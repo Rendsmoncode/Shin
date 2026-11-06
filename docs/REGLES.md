@@ -279,6 +279,10 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 - 💡 **Aperçu avant l'attaque** : pas de chiffres exacts, seulement une estimation (« écrasant », « avantage », « équilibré », « désavantage », « suicide »), et seulement si l'armée ennemie est visible. Un espion rend l'estimation plus précise.
 - ✅ **Le mouvement crée l'attaque** : entrer dans la zone d'une armée ennemie déclenche le combat. Selon l'angle (de face, de flanc, de dos), ça donne un affrontement de face, une attaque surprise, etc.
 - ✅ **Brouillard de guerre** : une armée n'est visible que si elle est dans la portée visuelle de soldats adverses. Une armée cachée derrière une montagne ou une forêt reste invisible, même toute proche.
+- ✅ **Placement de départ** : chaque joueur place ses forces où il veut, dans une large zone de sa moitié de la carte. Il a 59 secondes pour se placer.
+- 💡 Les deux joueurs se placent en même temps, sans voir le placement de l'adversaire (brouillard de guerre).
+- ✅ **Enjeu d'une bataille** : si la bataille n'est pas amicale, le vainqueur remporte la mise ou l'objectif fixé. Une bataille amicale n'a pas d'enjeu.
+- 💡 **Bataille qui s'éternise** : au bout d'un nombre maximum de tours (piste : 40), la victoire revient au joueur qui a le plus de points.
 - ✅ **Champ de bataille à part** : la bataille rangée ne se joue pas autour d'un quartier. Les deux camps sont à égalité, chacun attaque et se défend (comme une petite guerre).
 - ✅ **Récompenses (symétriques)** :
   - le vainqueur pille le perdant (une partie de ses ressources), quel que soit celui qui a lancé le combat ;
