@@ -186,7 +186,14 @@ Raretés : rare et épique (environ 30 épiques). Les guerriers mystiques sont a
 - Marin-pompier de Marseille
 - Videur de boîte de nuit
 - Manager de McDo
-- ❓ D'autres personnages du même genre à ajouter
+- Livreur Uber Eats, « Ce vélo est motorisé diesel »
+- Contrôleur de la RTM, « Titre de transport, s'il vous plaît »
+- Supporter de l'OM, « On est encore guez cette année »
+- Joueur de pétanque, « Moi je pointe »
+- Mamie du marché, « Mets-moi 3 tomates, le sang »
+- Prof de sport, « Bonjour, je m'appelle Yoan »
+- Boulanger, « C'est toi le pain »
+- Vigile de Carrefour, ❓
 
 ## Explorateurs
 
