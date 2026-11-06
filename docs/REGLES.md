@@ -183,6 +183,13 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 - ✅ **Hommes clés** : le général, les sous-généraux et les guerriers mystiques (2 emplacements maximum par général). C'est tout.
 - ✅ **Actions** : à chaque tour, un joueur réalise 1 action par homme clé.
 - ✅ **Mort d'un sous-général** : ses hommes perdent la raison et sont étourdis pendant un temps (durée en tours à fixer). Ensuite, le joueur choisit de les renvoyer au quartier général ou de les envoyer dans une autre armée, et répartit le nombre d'hommes comme il veut.
+- ✅ **Résolution d'un affrontement** : on compare la puissance des deux armées.
+  - Si l'attaquant est bien plus fort, il écrase l'ennemi et le combat se termine dans le tour.
+  - Si l'attaquant est bien plus faible, il se fait écraser, et le combat se termine aussi dans le tour.
+  - Si les puissances sont proches, les deux armées restent au contact. À chaque tour, le calcul se refait et chacune perd des hommes en fonction de la puissance de l'autre.
+  - Les écarts doivent être bien réglés : les écrasements doivent rester minoritaires (pas 80 % des affrontements).
+- ✅ **Calcul de puissance** : chaque armée a une puissance de base, multipliée par tous ses effets (général, sous-généraux, aptitudes, formation…), puis ajustée selon le terrain (formule à définir).
+- ✅ **Formations** : les armées peuvent prendre des formations, selon celles que maîtrisent leurs généraux et sous-généraux.
 - ✅ **Le mouvement crée l'attaque** : entrer dans la zone d'une armée ennemie déclenche le combat. Selon l'angle (de face, de flanc, de dos), ça donne un affrontement de face, une attaque surprise, etc.
 - ✅ **Brouillard de guerre** : une armée n'est visible que si elle est dans la portée visuelle de soldats adverses. Une armée cachée derrière une montagne ou une forêt reste invisible, même toute proche.
 - ✅ **Champ de bataille à part** : la bataille rangée ne se joue pas autour d'un quartier. Les deux camps sont à égalité, chacun attaque et se défend (comme une petite guerre).
