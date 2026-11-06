@@ -180,10 +180,13 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 - ✅ **Répartition libre** : une armée se divise comme on veut entre les sous-généraux (par exemple 1 000 hommes pour l'un et 500 pour deux autres).
 - ✅ **Effectif d'un sous-général** : 500 hommes minimum, 5 000 maximum.
 - ✅ **Garde du quartier général** : ni minimum ni maximum imposés. Un minimum limiterait les actions, un maximum empêcherait les sièges.
-- ✅ **Garde rapprochée** : le général est toujours accompagné de 5 soldats, uniquement destinés à le défendre et impossibles à séparer de lui. On ne peut tuer le général qu'une fois ces 5 soldats morts. La barre de vie du général est donc réduite en conséquence.
+- ✅ **Garde rapprochée** : le général est toujours accompagné de 3 soldats, uniquement destinés à le défendre et impossibles à séparer de lui. On ne peut tuer le général qu'une fois ces 3 soldats morts. La barre de vie du général est donc réduite en conséquence.
   - N'importe quel personnage peut faire partie de la garde rapprochée, y compris les 2 guerriers mystiques. On la compose avant la bataille.
+  - Un guerrier mystique placé dans la garde rapprochée ne compte plus comme homme clé, et il ne peut pas utiliser son attaque spéciale.
 - ✅ **Sous-généraux** : n'importe quel personnage peut être sous-général.
-- ✅ **Effet de leader d'un sous-général** : si un général (légendaire par exemple) est placé en sous-général, son effet de leader ne s'applique qu'à sa propre armée, pas aux autres.
+- ✅ **Effet de leader hiérarchique** : l'effet de leader ne s'applique qu'aux soldats placés en dessous dans la hiérarchie. Celui du général touche tout le monde, celui d'un sous-général uniquement son armée, et celui du chef d'une unité uniquement les membres de l'unité.
+- ✅ **Unités** : on peut créer une unité, une petite armée indépendante de moins de 1 000 hommes.
+- ❓ Qui commande une unité, et quelle est sa taille minimale (le minimum de 500 hommes d'un sous-général s'applique-t-il) ?
 - ✅ **Structure d'une armée** : le général est le cœur de l'armée. Il a des sous-généraux, qui dirigent chacun un certain nombre d'hommes.
 - ✅ **Points de vie de l'armée** : le général vaut 3 points, chaque sous-général vaut 1 point. Un joueur qui tombe à 0 point perd la bataille.
 - ✅ **Quartier général** : le général a un quartier général, invisible pour l'adversaire. Pour le voir, il faut envoyer des éclaireurs, ou avoir des soldats assez proches. Le quartier général peut se déplacer, mais lentement.
