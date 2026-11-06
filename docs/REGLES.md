@@ -229,6 +229,11 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
   - Si les puissances sont proches, les deux armées restent au contact. À chaque tour, le calcul se refait et chacune perd des hommes en fonction de la puissance de l'autre.
   - Les écarts doivent être bien réglés : les écrasements doivent rester minoritaires (pas 80 % des affrontements).
 - ✅ **Calcul de puissance** : chaque armée a une puissance de base, multipliée par tous ses effets (général, sous-généraux, aptitudes, formation…), puis ajustée selon le terrain (formule à définir).
+- ✅ **Rendu des armées sur le champ de bataille** : une armée est affichée sous forme de blocs de 100 soldats vus de haut (image réaliste découpée). Une armée de 1 500 hommes = 15 blocs ; quand elle perd des hommes, on retire des blocs.
+  - **Blocs denses** = formation serrée (phalange, tortue, carré, mur de boucliers) : plus solide au corps à corps, plus vulnérable aux flèches, plus lente.
+  - **Blocs clairsemés** = formation lâche (en marche, ordre dispersé) : plus rapide, moins touchée par les flèches, plus fragile face à une charge.
+  - **Marche** : le bloc glisse, les rangs ondulent légèrement avec un décalage (effet de pas), de la poussière se lève, et le bloc pivote pour changer de direction.
+  - Les joueurs se distinguent par leurs bannières (pas de recoloration des soldats).
 - ✅ **Formations** : les armées peuvent prendre des formations, selon celles que maîtrisent leurs généraux et sous-généraux. Elles fonctionnent en pierre-feuille-ciseaux : chacune a une force et une faiblesse.
 - ✅ **Courbe progressive** : plus l'écart de puissance grandit, plus les pertes deviennent déséquilibrées, jusqu'à l'écrasement (pas de paliers brutaux).
 - ✅ **Hasard** : ±10 % sur le résultat d'un affrontement.
