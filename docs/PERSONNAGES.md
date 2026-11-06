@@ -109,10 +109,18 @@ Deux généraux invaincus, absents de la légende des 7, uniques dans tout le je
 - Jeanne d'Arc
 - Thorfinn
 - Hou Ken
+- Livaï (L'Attaque des Titans)
 
 ## Soldats d'élite
 
 - Thorkell
+- Ulysse
+
+## Stratèges
+
+- Sun Tzu (Légendaire)
+- Zhuge Liang (Épique)
+- Shikamaru (Naruto) (Épique)
 
 ## Explorateurs
 
