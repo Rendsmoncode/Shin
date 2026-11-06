@@ -193,7 +193,8 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
   - **Les combattants** : plus forts, et capables d'attaquer plus durement avec leur armée.
 - ✅ **Le chef d'une unité est un homme clé** (il vaut 1 point).
 - ✅ **Limite d'actions par tour** : on ne peut pas faire agir tous ses hommes clés à chaque tour (par exemple, avec 10 hommes clés, seulement 5 actions par tour).
-- ❓ Ce qui fixe la limite d'actions par tour.
+- ✅ **La limite d'actions est la même pour tout le monde** : le vrai général, c'est le joueur. Elle ne change que si l'effet d'un général le prévoit (par exemple : « Contrairement aux règles du jeu, votre général peut décider d'un mouvement supplémentaire »).
+- ❓ Le nombre exact d'actions par tour (piste : 5).
 - ✅ **Structure d'une armée** : le général est le cœur de l'armée. Il a des sous-généraux, qui dirigent chacun un certain nombre d'hommes.
 - ✅ **Points de vie de l'armée** : le général vaut 3 points, chaque sous-général vaut 1 point. Un joueur qui tombe à 0 point perd la bataille.
 - ✅ **Quartier général** : le général a un quartier général, invisible pour l'adversaire. Pour le voir, il faut envoyer des éclaireurs, ou avoir des soldats assez proches. Le quartier général peut se déplacer, mais lentement.
