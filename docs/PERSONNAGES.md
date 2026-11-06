@@ -86,9 +86,16 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 ## Généraux de départ (un par joueur)
 
 - Le créateur du jeu : **Shin** (général lambda)
-- Nicolas : ❓
+- Nicolas : **Gustave** (Clair Obscur : Expedition 33), le chef de l'expédition, ingénieur au bras mécanique
 - Mathieu : **Koby** (One Piece), l'élève formé par Garp qui part de tout en bas et devient un héros
 - 💡 Idée de personnage rare : Adolphe Sax, inventeur du saxophone, qui l'a créé pour les musiques militaires (bonus aux troupes)
+
+## Légendaires dédiés (gacha arrangé, à garder secret)
+
+Certains joueurs doivent obtenir les légendaires qui leur correspondent. Le Game Master pourra forcer ces tirages.
+
+- Nicolas : **Napoléon**
+- ❓ Les autres attributions (le créateur du jeu, Mathieu)
 
 ## Exclus
 
