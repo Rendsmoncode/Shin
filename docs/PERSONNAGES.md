@@ -41,40 +41,40 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 
 ## Généraux épiques
 
-- Baudouin IV (le roi lépreux, vainqueur de Saladin à Montgisard)
-- Harald Hardrada
-- Rani Lakshmibai
-- Tecumseh
-- Crazy Horse
-- Takeda Shingen
-- Clovis
-- Charles Martel
-- Charlemagne
-- Foch
-- Leclerc
-- Spartacus
-- Scipion l'Africain
-- Uesugi Kenshin
-- La reine Nzinga
-- Koutouzov
-- José Mourinho
-- Pep Guardiola
-- Luis Enrique
-- Jean Hunyadi
-- Baybars
-- Trần Hưng Đạo
-- Soundiata Keïta
-- Griffith (Berserk)
-- Erwin Smith (L'Attaque des Titans)
-- Maximus (Gladiator)
-- Aragorn (Le Seigneur des Anneaux)
-- Mavis Vermillion (Fairy Tail)
-- Lelouch (Code Geass)
-- Knut le Grand
-- Samori Touré
-- Skanderbeg
-- Zhuge Liang
-- Shikamaru (Naruto)
+- Baudouin IV, « Le Roi lépreux » (vainqueur de Saladin à Montgisard)
+- Harald Hardrada, « Hardrada, l'Impitoyable »
+- Rani Lakshmibai, « La Jeanne d'Arc indienne »
+- Tecumseh, « L'Étoile filante »
+- Crazy Horse, « Son cheval est fou »
+- Takeda Shingen, « Le Tigre de Kai »
+- Clovis, « Le Premier Roi des Francs »
+- Charles Martel, « Le Marteau »
+- Charlemagne, « L'Empereur à la barbe fleurie »
+- Foch, « Le Généralissime »
+- Leclerc, « Le Libérateur de Paris »
+- Spartacus, « Le Gladiateur »
+- Scipion l'Africain, « L'Africain »
+- Uesugi Kenshin, « Le Dragon d'Echigo »
+- La reine Nzinga, « Le Trône vivant »
+- Koutouzov, « Le Vieux Renard du Nord »
+- José Mourinho, « The Special One »
+- Pep Guardiola, « Le Philosophe »
+- Luis Enrique, « Lucho »
+- Jean Hunyadi, « Le Chevalier blanc »
+- Baybars, « Le Père des conquêtes »
+- Trần Hưng Đạo, « Le Saint Trần »
+- Soundiata Keïta, « Le Lion du Mali »
+- Griffith (Berserk), « Le Faucon blanc »
+- Erwin Smith (L'Attaque des Titans), « Le 13ᵉ Major du Bataillon d'exploration »
+- Maximus (Gladiator), « L'Espagnol »
+- Aragorn (Le Seigneur des Anneaux), « Grands-Pas »
+- Mavis Vermillion (Fairy Tail), « La Stratège des Fées »
+- Lelouch (Code Geass), « Zero »
+- Knut le Grand, « Le Grand »
+- Samori Touré, « L'Almamy »
+- Skanderbeg, « L'Athlète du Christ »
+- Zhuge Liang, « Le Dragon couché »
+- Shikamaru (Naruto), « Le 8ᵉ Hokage »
 
 ## Généraux de départ (un par joueur)
 
