@@ -178,7 +178,11 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 - ✅ **Structure d'une armée** : le général est le cœur de l'armée. Il a des sous-généraux, qui dirigent chacun un certain nombre d'hommes.
 - ✅ **Points de vie de l'armée** : le général vaut 3 points, chaque sous-général vaut 1 point. Un joueur qui tombe à 0 point perd la bataille.
 - ✅ **Quartier général** : le général a un quartier général, invisible pour l'adversaire. Pour le voir, il faut envoyer des éclaireurs, ou avoir des soldats assez proches. Le quartier général peut se déplacer, mais lentement.
-- ✅ **Actions** : à chaque tour, un joueur réalise 1 action par « homme clé » (définition à fixer).
+- ✅ **Le général reste dans son quartier général.** Certains généraux ont une aptitude qui leur permet d'en sortir (par exemple Kanki pour la ruse, ou Souvorov pour rejoindre la bataille).
+- ✅ **Défense du quartier général** : le général a une barre de vie bien plus grande que les autres, et des soldats restent forcément au quartier général pour le protéger. Il peut résister un temps à une attaque trop nombreuse, mais pas longtemps.
+- ✅ **Hommes clés** : le général, les sous-généraux et les guerriers mystiques (2 emplacements maximum par général). C'est tout.
+- ✅ **Actions** : à chaque tour, un joueur réalise 1 action par homme clé.
+- ✅ **Mort d'un sous-général** : ses hommes perdent la raison et sont étourdis pendant un temps (durée en tours à fixer). Ensuite, le joueur choisit de les renvoyer au quartier général ou de les envoyer dans une autre armée, et répartit le nombre d'hommes comme il veut.
 - ✅ **Le mouvement crée l'attaque** : entrer dans la zone d'une armée ennemie déclenche le combat. Selon l'angle (de face, de flanc, de dos), ça donne un affrontement de face, une attaque surprise, etc.
 - ✅ **Brouillard de guerre** : une armée n'est visible que si elle est dans la portée visuelle de soldats adverses. Une armée cachée derrière une montagne ou une forêt reste invisible, même toute proche.
 - ✅ **Champ de bataille à part** : la bataille rangée ne se joue pas autour d'un quartier. Les deux camps sont à égalité, chacun attaque et se défend (comme une petite guerre).
