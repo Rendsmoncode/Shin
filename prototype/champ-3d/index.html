@@ -1,0 +1,213 @@
+<meta charset="utf-8">
+<title>Champ de bataille 3D</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Prototype plein écran : la scène 3D occupe tout, un petit panneau flotte en haut à gauche. Aspect sombre unique, volontaire. */
+:root{
+  --bg:#141a16; --panel:rgba(20,26,22,.86); --line:#33443a; --fg:#e7e3d6; --muted:#a3ab9f; --gold:#e3b54a;
+  --ui:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  color-scheme:dark;
+}
+html,body{height:100%;background:var(--bg);color:var(--fg)}
+body{margin:0;overflow:hidden;font-family:var(--ui)}
+#scene{position:fixed;inset:0}
+#scene canvas{display:block;width:100%;height:100%}
+.panel{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));left:max(12px,env(safe-area-inset-left,0px));max-width:min(340px,calc(100vw - 24px));background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px 14px;display:grid;gap:8px;font-size:15px;line-height:1.35}
+.panel h1{margin:0;font-size:20px;letter-spacing:.05em;text-transform:uppercase}
+.panel p{margin:0;color:var(--muted)}
+.row{display:flex;flex-wrap:wrap;gap:6px}
+button{font:inherit;font-weight:600;letter-spacing:.04em;color:var(--fg);background:#26332a;border:1px solid var(--line);padding:5px 10px;border-radius:3px;cursor:pointer}
+button:hover{border-color:var(--gold)}
+button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+#status{color:var(--gold)}
+</style>
+
+<div id="scene" aria-label="Champ de bataille en 3D avec relief, rivière, forêts et deux armées"></div>
+<div class="panel">
+  <h1>Champ de bataille 3D</h1>
+  <p>Prototype : relief, rivière, forêts, ferme et deux armées. Glisser pour se déplacer, molette pour zoomer, clic droit pour pivoter.</p>
+  <div class="row">
+    <button type="button" id="b-anim" aria-pressed="true">Pause marche</button>
+    <button type="button" id="b-shadow" aria-pressed="true">Ombres : oui</button>
+    <button type="button" id="b-view">Vue d'ensemble</button>
+  </div>
+  <p id="status">Chargement…</p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+(function(){
+const status=document.getElementById('status');
+if(!window.THREE){status.textContent='La bibliothèque 3D n\'a pas pu se charger.';return;}
+
+// ---------- outils ----------
+function rng(a){return function(){a|=0;a=a+0x6D2B79F5|0;let x=Math.imul(a^a>>>15,1|a);x=x+Math.imul(x^x>>>7,61|x)^x;return((x^x>>>14)>>>0)/4294967296}}
+const R=rng(7);
+const perm=new Uint8Array(512);{const p=[...Array(256).keys()];for(let i=255;i>0;i--){const j=Math.floor(R()*(i+1));[p[i],p[j]]=[p[j],p[i]]}for(let i=0;i<512;i++)perm[i]=p[i&255]}
+function vnoise(x,y){const xi=Math.floor(x),yi=Math.floor(y),xf=x-xi,yf=y-yi;const h=(a,b)=>perm[(perm[(a&255)]+(b&255))&511]/255;
+  const u=xf*xf*(3-2*xf),v=yf*yf*(3-2*yf);const a=h(xi,yi),b=h(xi+1,yi),c=h(xi,yi+1),d=h(xi+1,yi+1);return a+(b-a)*u+(c-a)*v+(a-b-c+d)*u*v;}
+function fbm(x,y,o=5){let s=0,a=.5,f=1;for(let i=0;i<o;i++){s+=a*vnoise(x*f,y*f);f*=2;a*=.5}return s;}
+const sm=(a,b,x)=>{const t=Math.min(1,Math.max(0,(x-a)/(b-a)));return t*t*(3-2*t)};
+const bump=(x,z,cx,cz,r,h)=>h*Math.exp(-((x-cx)**2+(z-cz)**2)/(r*r));
+
+// ---------- terrain (mètres) ----------
+const W=1600,D=1000,SX=320,SZ=200,WATER=-8.5;
+const riverX=z=>110+75*Math.sin(z/170)+25*Math.sin(z/53);
+function height(x,z){
+  let h=(fbm(x/380+10,z/380+3)-.5)*26;
+  h+=bump(x,z,-470,-260,190,48)+bump(x,z,380,-300,230,66)+bump(x,z,560,230,150,26)+bump(x,z,-640,180,170,22);
+  h+=sm(-260,-480,z)*(52+fbm(x/90,z/90)*30);            // crête au fond
+  const farm=sm(150,330,z); h=h*(1-farm*.75);            // plaine au premier plan
+  const d=Math.abs(x-riverX(z));
+  h-=5*sm(170,0,d); h-=11*sm(30,0,d);                     // vallée + lit de la rivière
+  return h;
+}
+
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(0x9fb4c2);
+scene.fog=new THREE.Fog(0x9fb4c2,1600,3200);
+const renderer=new THREE.WebGLRenderer({antialias:true});
+renderer.setPixelRatio(Math.min(2,window.devicePixelRatio||1));
+renderer.outputEncoding=THREE.sRGBEncoding;
+renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+document.getElementById('scene').appendChild(renderer.domElement);
+
+const camera=new THREE.PerspectiveCamera(40,1,1,6000);
+const controls=new THREE.MapControls(camera,renderer.domElement);
+controls.enableDamping=true; controls.dampingFactor=.08;
+controls.minDistance=40; controls.maxDistance=1500;
+controls.minPolarAngle=.35; controls.maxPolarAngle=1.15;
+controls.screenSpacePanning=false;
+function viewArmy(){camera.position.set(-60,75,520);controls.target.set(-60,0,370);controls.update();}
+function viewAll(){camera.position.set(0,900,980);controls.target.set(0,0,0);controls.update();}
+viewArmy();
+
+scene.add(new THREE.HemisphereLight(0xdfe9f2,0x5a5236,.65));
+const sun=new THREE.DirectionalLight(0xfff1d6,1.15);
+sun.position.set(-500,700,300); sun.castShadow=true;
+sun.shadow.mapSize.set(4096,4096);
+Object.assign(sun.shadow.camera,{left:-900,right:900,top:600,bottom:-600,near:10,far:2200});
+sun.shadow.bias=-.0006;
+scene.add(sun);
+
+// géométrie du sol avec couleurs par sommet
+const geo=new THREE.PlaneGeometry(W,D,SX,SZ); geo.rotateX(-Math.PI/2);
+const pos=geo.attributes.position, col=new Float32Array(pos.count*3);
+for(let i=0;i<pos.count;i++){const x=pos.getX(i),z=pos.getZ(i);pos.setY(i,height(x,z));}
+geo.computeVertexNormals();
+const nrm=geo.attributes.normal, c=new THREE.Color();
+const grass=new THREE.Color(.42,.55,.24), gold=new THREE.Color(.74,.66,.34), dark=new THREE.Color(.30,.42,.20), rock=new THREE.Color(.86,.85,.80), sand=new THREE.Color(.70,.64,.50);
+for(let i=0;i<pos.count;i++){
+  const x=pos.getX(i),z=pos.getZ(i),y=pos.getY(i),slope=1-nrm.getY(i);
+  c.copy(grass).lerp(gold,sm(.42,.66,fbm(x/160,z/160))).lerp(dark,sm(.55,.75,fbm(x/70+40,z/70))*.5);
+  const d=Math.abs(x-riverX(z)); if(d<44) c.lerp(sand,sm(44,24,d));
+  if(slope>.18||y>58) c.lerp(rock,sm(.18,.34,slope)*.9+sm(58,80,y)*.6);
+  col[i*3]=c.r;col[i*3+1]=c.g;col[i*3+2]=c.b;
+}
+geo.setAttribute('color',new THREE.BufferAttribute(col,3));
+// petite texture de détail pour casser l'aspect lisse
+const tc=document.createElement('canvas');tc.width=tc.height=256;const tg=tc.getContext('2d');
+for(let i=0;i<9000;i++){const v=200+R()*55|0;tg.fillStyle=`rgb(${v},${v},${v})`;tg.fillRect(R()*256,R()*256,2,2);}
+const detail=new THREE.CanvasTexture(tc);detail.wrapS=detail.wrapT=THREE.RepeatWrapping;detail.repeat.set(220,140);
+const ground=new THREE.Mesh(geo,new THREE.MeshLambertMaterial({vertexColors:true,map:detail}));
+ground.receiveShadow=true; scene.add(ground);
+
+// eau
+const water=new THREE.Mesh(new THREE.PlaneGeometry(W,D),new THREE.MeshPhongMaterial({color:0x3b6f86,transparent:true,opacity:.82,shininess:80,specular:0x99bbcc}));
+water.rotation.x=-Math.PI/2; water.position.y=WATER; scene.add(water);
+
+// ---------- forêts (arbres en 3D, instanciés) ----------
+const spots=[];
+for(let n=0;n<26000&&spots.length<3200;n++){
+  const x=(R()-.5)*W*.98,z=(R()-.5)*D*.98,y=height(x,z);
+  if(y<WATER+1.5)continue;
+  if(Math.abs(x-riverX(z))<40)continue;
+  if(z>250&&x>-420&&x<420)continue;                 // plaine de déploiement dégagée
+  const m=fbm(x/210+70,z/210+20); if(m<.55)continue;
+  spots.push([x,y,z]);
+}
+const trunkG=new THREE.CylinderGeometry(.5,.8,5,5); trunkG.translate(0,2.5,0);
+const crownG=new THREE.IcosahedronGeometry(4.2,1); crownG.translate(0,7.5,0);
+const trunks=new THREE.InstancedMesh(trunkG,new THREE.MeshLambertMaterial({color:0x4a3a28}),spots.length);
+const crowns=new THREE.InstancedMesh(crownG,new THREE.MeshLambertMaterial({color:0xffffff}),spots.length);
+const M=new THREE.Matrix4(),Q=new THREE.Quaternion(),S=new THREE.Vector3(),P=new THREE.Vector3();
+spots.forEach(([x,y,z],i)=>{const s=.8+R()*.8;P.set(x,y,z);Q.setFromEuler(new THREE.Euler(0,R()*6,0));S.set(s*(.9+R()*.3),s*(.85+R()*.4),s*(.9+R()*.3));M.compose(P,Q,S);
+  trunks.setMatrixAt(i,M);crowns.setMatrixAt(i,M);crowns.setColorAt(i,new THREE.Color().setHSL(.28+R()*.06,.38+R()*.12,.18+R()*.08));});
+[trunks,crowns].forEach(m=>{m.castShadow=true;m.receiveShadow=true;scene.add(m)});
+
+// rochers calcaires sur la crête et la grande colline
+const rocks=[];for(let n=0;n<9000&&rocks.length<420;n++){const x=(R()-.5)*W,z=(R()-.5)*D,y=height(x,z);
+  const e=1e-2,sl=Math.abs(height(x+3,z)-y)+Math.abs(height(x,z+3)-y);if(sl>2.4&&y>18)rocks.push([x,y,z]);}
+const rockM=new THREE.InstancedMesh(new THREE.DodecahedronGeometry(3,0),new THREE.MeshLambertMaterial({color:0xd9d6cc}),rocks.length);
+rocks.forEach(([x,y,z],i)=>{const s=.6+R()*1.6;P.set(x,y+s,z);Q.setFromEuler(new THREE.Euler(R()*3,R()*3,R()*3));S.set(s*1.4,s,s*1.2);M.compose(P,Q,S);rockM.setMatrixAt(i,M);});
+rockM.castShadow=rockM.receiveShadow=true;scene.add(rockM);
+
+// ferme provençale, pont
+function box(w,h,d,color,x,y,z,ry=0){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),new THREE.MeshLambertMaterial({color}));m.position.set(x,y+h/2,z);m.rotation.y=ry;m.castShadow=m.receiveShadow=true;scene.add(m);return m;}
+const fx=-560,fz=300,fy=height(fx,fz);
+box(22,8,12,0xd8c9a8,fx,fy,fz);
+const roof=new THREE.Mesh(new THREE.CylinderGeometry(0,9,5,4,1),new THREE.MeshLambertMaterial({color:0xb5562f}));roof.rotation.y=Math.PI/4;roof.scale.set(1.75,1,1);roof.position.set(fx,fy+10.5,fz);roof.castShadow=true;scene.add(roof);
+box(30,2,1,0xcbbd9c,fx,fy,fz+16);box(1,2,24,0xcbbd9c,fx-15,fy,fz+4);box(1,2,24,0xcbbd9c,fx+15,fy,fz+4);
+const bz=-30,bx=riverX(bz);box(70,2.5,9,0x9c8f78,bx,1.2,bz,0);
+
+// ---------- armées (sprites posés sur le terrain) ----------
+const names={inf:[...Array(16)].map((_,i)=>`sprites/fantassin_${String(i+1).padStart(2,'0')}.png`),cav:[...Array(12)].map((_,i)=>`sprites/cavalier_${String(i+1).padStart(2,'0')}.png`)};
+const loader=new THREE.TextureLoader(); const mats={inf:[],cav:[]};
+let toLoad=names.inf.length+names.cav.length,loaded=0,failed=0;
+const soldiers=[];
+const shadowG=new THREE.CircleGeometry(1,10);shadowG.rotateX(-Math.PI/2);
+const shadowMat=new THREE.MeshBasicMaterial({color:0x000000,transparent:true,opacity:.32,depthWrite:false});
+
+function banner(text,color){
+  const cv=document.createElement('canvas');const g0=cv.getContext('2d');g0.font='600 52px "Barlow Condensed", Arial Narrow, sans-serif';
+  cv.width=Math.ceil(g0.measureText(text).width+44);cv.height=96;const g=cv.getContext('2d');
+  g.fillStyle=color;g.fillRect(0,0,cv.width,96);g.fillStyle='#fff';g.font='600 52px "Barlow Condensed", Arial Narrow, sans-serif';g.textBaseline='middle';g.fillText(text,22,50);
+  const t=new THREE.CanvasTexture(cv);t.encoding=THREE.sRGBEncoding;
+  const s=new THREE.Sprite(new THREE.SpriteMaterial({map:t,depthTest:false}));s.scale.set(9*cv.width/96,9,1);s.renderOrder=10;return s;
+}
+function regiment(kind,cx,cz,cols,rows,dx,dz,label,color){
+  const h=kind==='cav'?7:4.5; const set=mats[kind]; if(!set.length) return;
+  for(let r=0;r<rows;r++)for(let k=0;k<cols;k++){
+    const x=cx+(k-(cols-1)/2)*dx+(R()-.5)*.8, z=cz+(r-(rows-1)/2)*dz+(R()-.5)*.8;
+    const y=height(x,z);
+    const m=set[Math.floor(R()*set.length)];
+    const sp=new THREE.Sprite(m.mat);sp.center.set(.5,0);
+    const w=h*m.aspect*(R()<.5?-1:1);sp.scale.set(w,h,1);sp.position.set(x,y,z);
+    scene.add(sp);soldiers.push({sp,y,ph:R()*6.28});
+  }
+  // ombres au sol (une seule géométrie instanciée)
+  const n=cols*rows,sh=new THREE.InstancedMesh(shadowG,shadowMat,n);let i=0;
+  for(let r=0;r<rows;r++)for(let k=0;k<cols;k++){const x=cx+(k-(cols-1)/2)*dx,z=cz+(r-(rows-1)/2)*dz;P.set(x+.8,height(x,z)+.25,z+.6);Q.identity();S.set(kind==='cav'?1.6:1.1,1,kind==='cav'?2.6:1.1);M.compose(P,Q,S);sh.setMatrixAt(i++,M);}
+  scene.add(sh);
+  const b=banner(label,color);b.position.set(cx-cols*dx/2+20,height(cx,cz)+16,cz-rows*dz/2-4);scene.add(b);
+}
+function build(){
+  // Bleus (premier plan) : 1 soldat affiché = 2 hommes
+  regiment('inf',-260,360,25,10,2.2,3.0,'Souvorov · 500','#3f7fd6');
+  regiment('inf',-20,380,25,10,2.2,3.0,'Robin des Bois · 500','#3f7fd6');
+  regiment('cav',230,350,14,6,3.6,5.2,'Uesugi Kenshin · 168','#3f7fd6');
+  // Rouges (de l'autre côté de la vallée)
+  regiment('inf',-330,-90,25,9,2.2,3.0,'Kanki · 450','#c94b3f');
+  regiment('inf',-90,-120,22,9,2.2,3.0,'Ri Boku · 396','#c94b3f');
+  regiment('cav',-560,-60,12,6,3.6,5.2,'Lü Bu · 144','#c94b3f');
+  status.textContent=`${soldiers.length} soldats affichés (${soldiers.length*2} hommes). Tous vus de dos pour l'instant.`+(failed?` ${failed} image(s) manquante(s).`:'');
+}
+function done(){if(++loaded===toLoad)build();}
+['inf','cav'].forEach(k=>names[k].forEach(url=>loader.load(url,t=>{t.encoding=THREE.sRGBEncoding;t.anisotropy=4;
+  mats[k].push({mat:new THREE.SpriteMaterial({map:t,alphaTest:.5}),aspect:t.image.width/t.image.height});done();},undefined,()=>{failed++;done();})));
+
+// ---------- boucle ----------
+let walking=!window.matchMedia('(prefers-reduced-motion: reduce)').matches,t0=performance.now();
+function resize(){const w=window.innerWidth,h=window.innerHeight;renderer.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix();}
+window.addEventListener('resize',resize);resize();
+function loop(now){const t=(now-t0)/1000;
+  if(walking)for(const s of soldiers)s.sp.position.y=s.y+Math.abs(Math.sin(t*5+s.ph))*.25;
+  controls.update();renderer.render(scene,camera);requestAnimationFrame(loop);}
+requestAnimationFrame(loop);
+
+document.getElementById('b-anim').addEventListener('click',e=>{walking=!walking;e.currentTarget.textContent=walking?'Pause marche':'Reprendre la marche';e.currentTarget.setAttribute('aria-pressed',walking);});
+document.getElementById('b-shadow').addEventListener('click',e=>{renderer.shadowMap.enabled=!renderer.shadowMap.enabled;scene.traverse(o=>{if(o.material)o.material.needsUpdate=true});e.currentTarget.textContent='Ombres : '+(renderer.shadowMap.enabled?'oui':'non');});
+let overall=false;document.getElementById('b-view').addEventListener('click',e=>{overall=!overall;overall?viewAll():viewArmy();e.currentTarget.textContent=overall?'Vue des armées':'Vue d\'ensemble';});
+})();
+</script>
