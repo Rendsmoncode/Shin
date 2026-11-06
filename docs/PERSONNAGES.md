@@ -111,16 +111,16 @@ Deux généraux invaincus, absents de la légende des 7, uniques dans tout le je
 
 ## Guerriers mystiques
 
-- Miyamoto Musashi
-- Sasaki Kojirō
-- Vercingétorix
-- Kyoukai
-- Ragnar Lodbrok
-- Lü Bu
-- Jeanne d'Arc
-- Thorfinn
-- Hou Ken
-- Livaï (L'Attaque des Titans)
+- Miyamoto Musashi, « Le Saint du sabre »
+- Sasaki Kojirō, « L'Hirondelle »
+- Vercingétorix, « Le Rempart de la Gaule »
+- Kyoukai, « L'Ombre dansante du champ de bataille »
+- Ragnar, « Lodbrok »
+- Lü Bu, « Le Général volant »
+- Jeanne d'Arc, « La Pucelle d'Orléans »
+- Thorfinn, « Le Guerrier de la paix »
+- Hou Ken, « Le Bushin »
+- Livaï (L'Attaque des Titans), « Le soldat le plus fort de l'humanité »
 
 ## Soldats d'élite
 
