@@ -241,7 +241,16 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 - ✅ **Navigation** : la carte est plus grande que l'écran. On la fait défiler en faisant glisser la souris, avec les bords de l'écran ou les flèches du clavier. Une mini-carte permet de se repérer et de s'y rendre en un clic.
 - ✅ **Taille de la carte** : le terrain est immense par rapport aux armées. Chaque camp commence loin de l'autre, pour que l'exploration, les éclaireurs et les embuscades aient un sens.
 - ✅ **Trois niveaux de zoom** : de près (soldats en grand, environ 30 pixels ou plus), tactique (le secteur autour de ses armées), stratégique (toute la carte, les armées deviennent des bannières).
-- ✅ **Vision à l'échelle réelle** : un régiment ne voit qu'à quelques centaines de mètres, pas à travers les forêts ni derrière les collines. Les éclaireurs voient beaucoup plus loin. On peut cacher une armée dans un bois ou derrière une crête (distances exactes à fixer).
+- ✅ **Vision à l'échelle réelle** (valeurs de départ, à ajuster pendant les tests) :
+  | Qui | Distance de vision |
+  |---|---|
+  | Régiment | 300 m (environ un écran autour de lui) |
+  | Éclaireur | 700 m |
+  | Quartier général | 200 m |
+  | Espion | 300 m, et repère les armées cachées dans les forêts et les ruines jusqu'à 150 m |
+  | Depuis une colline | +50 % |
+  | Dans une forêt | 50 m |
+- ✅ **Se cacher** : une armée dans une forêt est invisible de l'extérieur, sauf pour un ennemi à moins de 50 m (ou un espion à moins de 150 m). Une armée derrière une crête est invisible tant que l'ennemi n'a pas de vue dégagée. Un nuage de poussière rend une armée difficile à repérer pendant un tour.
 - ✅ **Le relief a une physique** : une carte des hauteurs détermine les pentes. Les pentes ralentissent la montée, donnent un bonus aux charges en descente, augmentent la portée des archers en hauteur, et bloquent la vue. Les falaises sont infranchissables.
 - ✅ **Le terrain est prioritaire sur les soldats** : chaque zone de la carte est paramétrée (praticable ou non, vitesse, bonus de défense, couverture, blocage de la vue). Les soldats ne traversent pas les bâtiments ni les rochers. Dans une forêt, ils passent sous les arbres et sont cachés par le feuillage. L'affichage respecte la profondeur (ce qui est devant passe devant).
 - ✅ **Carte de bataille assemblée** : la carte n'est pas une image unique. Le code l'assemble (sol, relief, rivière, forêts, rochers, bâtiments) à partir de pièces générées dans le style de référence, avec une caméra qui se déplace et zoome. La carte peut être différente à chaque bataille.
