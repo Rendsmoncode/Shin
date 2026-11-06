@@ -17,7 +17,6 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 
 ## Généraux (Légendaire, rareté à confirmer au cas par cas)
 
-- César
 - Kanki
 - Abd el-Kader
 - Shaka Zulu
@@ -33,6 +32,7 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 - Richard Cœur de Lion
 - Võ Nguyên Giáp
 - Sun Tzu
+- Alexandre Souvorov
 
 ## Généraux épiques
 
@@ -91,7 +91,7 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 - Napoléon
 - Saladin
 - Ouki
-- Alexandre Souvorov
+- César
 
 ## Les généraux cachés (hors catégorie)
 
