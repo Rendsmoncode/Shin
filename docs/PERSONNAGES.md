@@ -123,6 +123,8 @@ Deux généraux invaincus, absents de la légende des 7, uniques dans tout le je
 - Livaï (L'Attaque des Titans), « Le soldat le plus fort de l'humanité »
 - Benkei, ❓
 - Achille, ❓
+- Cristiano Ronaldo, ❓
+- Lionel Messi, ❓
 
 ## Soldats d'élite
 
