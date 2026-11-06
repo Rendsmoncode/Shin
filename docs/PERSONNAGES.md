@@ -20,6 +20,7 @@ Liste de travail des personnages du gacha. Stats et aptitudes à définir ensemb
 - ✅ Une animation d'obtention pour chacun des 7 Grands Généraux Sous les Cieux et des 2 généraux cachés.
 - ❓ Peut-être aussi pour les guerriers mystiques (à décider).
 - Pas d'animation propre à chaque personnage pour les attaques spéciales.
+- 💡 Voix du narrateur : une voix de synthèse sous licence (ElevenLabs), dans l'esprit d'un narrateur épique. Pas d'imitation de la voix d'un vrai comédien sans son accord.
 
 ## Raretés
 
