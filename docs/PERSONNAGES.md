@@ -89,13 +89,14 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 
 ## Grands Généraux Sous les Cieux : les 7 de la légende
 
-- Alexandre le Grand
-- Gengis Khan
-- Hannibal Barca
-- Napoléon
-- Saladin
-- Ouki
-- César
+- Alexandre le Grand, « Le Grand »
+- Gengis Khan, « Le Souverain universel »
+- Hannibal Barca, « L'Enfer aux portes de Rome »
+  - Animation : la dernière phrase de sa présentation est « Les Romains hurlaient : Hannibal est aux portes !! », puis son surnom s'écrase sur l'écran.
+- Napoléon, « Le Petit Caporal »
+- Saladin, « Le Roi victorieux »
+- Ouki, « L'Oiseau millénaire de Qin »
+- César, « Le Divin Jules » (provisoire, à remplacer si on trouve mieux)
 
 ## Les généraux cachés (hors catégorie)
 
