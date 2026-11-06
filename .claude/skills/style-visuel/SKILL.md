@@ -27,6 +27,8 @@ Règles :
 
 ## Méthode (leçons des essais précédents)
 
+0. **Toujours demander l'accord de l'utilisateur avant toute génération payante** (Meshy, Gemini…), en annonçant le coût prévu. Une génération = un accord.
+
 1. **Ne jamais demander d'animation image par image** à Gemini : il produit des fantômes flous et des incohérences. Les mouvements sont faits dans le code (glissement, balancement, poussière).
 2. **Ne jamais demander une armée entière pour la découper** : les sujets se touchent et la découpe les coupe en deux. Demander des **sujets individuels séparés** sur une planche, puis le jeu les multiplie en formation.
 3. **Une planche = 12 sujets, en grille de 4 colonnes × 3 rangées**, bien espacés, tous orientés vers le haut de l'image, tous à la même taille, avec des petites variations entre eux (variantes pour éviter l'effet clone).
