@@ -193,7 +193,14 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 - ✅ **Courbe progressive** : plus l'écart de puissance grandit, plus les pertes deviennent déséquilibrées, jusqu'à l'écrasement (pas de paliers brutaux).
 - ✅ **Hasard** : ±10 % sur le résultat d'un affrontement.
 - ✅ **Morts et blessés** : les pertes se divisent entre morts (définitifs) et blessés (récupérables grâce aux soignants et aux lieux de soin).
-- ✅ **Le terrain dépend du type d'unité** (par exemple, la cavalerie est forte en plaine et faible en forêt).
+- ✅ **Le terrain dépend du type d'unité** : chaque type a un terrain favori et un terrain difficile.
+
+  | Unité | Terrain favori | Terrain difficile |
+  |---|---|---|
+  | Cavalerie | Plaine (×1,3) | Forêt et marais (×0,6), montagne (×0,7) |
+  | Infanterie | Forêt et ruines (×1,2) | Marais (×0,8) |
+  | Archers | Colline (×1,3, et portée plus longue) | Forêt (×0,7) |
+
 - ✅ **Attaques spéciales** : elles viennent uniquement des généraux et des guerriers mystiques.
   - Deux types : le **coup de grâce** (proposé quand l'attaque peut mathématiquement achever l'ennemi, par exemple la charge de Souvorov seul contre une armée) et l'**effet** (un bonus ou un effet sur le champ de bataille).
   - Chaque général a l'un **ou** l'autre. Les **Grands Généraux Sous les Cieux ont les deux** : c'est ce qui les distingue sur le terrain.
