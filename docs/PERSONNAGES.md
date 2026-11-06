@@ -193,7 +193,7 @@ Raretés : rare et épique (environ 30 épiques). Les guerriers mystiques sont a
 - Mamie du marché, « Mets-moi 3 tomates, le sang »
 - Prof de sport, « Bonjour, je m'appelle Yoan »
 - Boulanger, « C'est toi le pain »
-- Vigile de Carrefour, ❓
+- Vigile de Carrefour, « Ne suit que les noirs » (critique du contrôle au faciès : c'est le vigile qui est ridicule)
 
 ## Explorateurs
 
