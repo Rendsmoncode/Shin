@@ -60,6 +60,7 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 - Jean Hunyadi
 - Baybars
 - Trần Hưng Đạo
+- Soundiata Keïta
 
 ## Généraux de départ (un par joueur)
 
@@ -118,5 +119,4 @@ Des personnages modernes ou historiques, et des blagues : un manager de McDonald
 
 ## De côté (à ressortir si besoin)
 
-- Soundiata Keïta (lore génial, peut-être en Guerrier mystique)
 - Proposés en épique, non retenus pour l'instant : Godefroy de Bouillon, Bertrand du Guesclin, le Grand Condé, Turenne, La Fayette, Davout, Guillaume le Conquérant, Wellington, Dessalines, Geronimo
