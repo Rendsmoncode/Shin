@@ -282,13 +282,11 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 - ✅ **Placement de départ** : chaque joueur place ses forces où il veut, dans une large zone de sa moitié de la carte. Il a 59 secondes pour se placer.
 - 💡 Les deux joueurs se placent en même temps, sans voir le placement de l'adversaire (brouillard de guerre).
 - ✅ **Enjeu d'une bataille** : si la bataille n'est pas amicale, le vainqueur remporte la mise ou l'objectif fixé. Une bataille amicale n'a pas d'enjeu.
-- 💡 **Bataille qui s'éternise** : au bout d'un nombre maximum de tours (piste : 40), la victoire revient au joueur qui a le plus de points.
+- ✅ **Bataille qui s'éternise** : au bout d'un nombre maximum de tours, la victoire revient au joueur qui a le plus de points. Le nombre de tours sera fixé à la fin du développement, en simulant des batailles.
 - ✅ **Champ de bataille à part** : la bataille rangée ne se joue pas autour d'un quartier. Les deux camps sont à égalité, chacun attaque et se défend (comme une petite guerre).
-- ✅ **Récompenses (symétriques)** :
-  - le vainqueur pille le perdant (une partie de ses ressources), quel que soit celui qui a lancé le combat ;
-  - le vainqueur gagne beaucoup d'XP, le perdant un peu, et les deux gagnent plus que dans une bataille classique ;
-  - plus de blessés, moins de morts : une partie des soldats tombés peuvent être soignés à l'infirmerie ou à l'hôpital ;
-  - la protection contre le pillage s'applique (pas deux fois d'affilée).
+- ✅ **Pas de pillage en bataille rangée** : le pillage des ressources se gagne uniquement dans le mode Clash of Clans. En bataille rangée, le vainqueur remporte seulement la mise ou l'objectif (sauf bataille amicale).
+- ✅ Plus de blessés, moins de morts : une partie des soldats tombés peuvent être soignés à l'infirmerie ou à l'hôpital.
+- ❓ L'XP gagnée en bataille rangée (vainqueur et perdant).
 
 ## 10. Les guerres (long terme, façon CK3)
 
