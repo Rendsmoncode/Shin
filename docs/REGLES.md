@@ -180,8 +180,10 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 - ✅ **Répartition libre** : une armée se divise comme on veut entre les sous-généraux (par exemple 1 000 hommes pour l'un et 500 pour deux autres).
 - ✅ **Effectif d'un sous-général** : 500 hommes minimum, 5 000 maximum.
 - ✅ **Garde du quartier général** : ni minimum ni maximum imposés. Un minimum limiterait les actions, un maximum empêcherait les sièges.
-- ❓ Le quartier général peut-il être vide ? (piste : le général a une garde personnelle fixe, qui ne compte pas dans l'armée)
-- ❓ Qui sont les sous-généraux : des généraux de la collection, d'autres personnages, ou des chefs génériques ?
+- ✅ **Garde rapprochée** : le général est toujours accompagné de 5 soldats, uniquement destinés à le défendre et impossibles à séparer de lui. On ne peut tuer le général qu'une fois ces 5 soldats morts. La barre de vie du général est donc réduite en conséquence.
+  - N'importe quel personnage peut faire partie de la garde rapprochée, y compris les 2 guerriers mystiques. On la compose avant la bataille.
+- ✅ **Sous-généraux** : n'importe quel personnage peut être sous-général.
+- ✅ **Effet de leader d'un sous-général** : si un général (légendaire par exemple) est placé en sous-général, son effet de leader ne s'applique qu'à sa propre armée, pas aux autres.
 - ✅ **Structure d'une armée** : le général est le cœur de l'armée. Il a des sous-généraux, qui dirigent chacun un certain nombre d'hommes.
 - ✅ **Points de vie de l'armée** : le général vaut 3 points, chaque sous-général vaut 1 point. Un joueur qui tombe à 0 point perd la bataille.
 - ✅ **Quartier général** : le général a un quartier général, invisible pour l'adversaire. Pour le voir, il faut envoyer des éclaireurs, ou avoir des soldats assez proches. Le quartier général peut se déplacer, mais lentement.
