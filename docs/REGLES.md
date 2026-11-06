@@ -189,7 +189,13 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
   - Si les puissances sont proches, les deux armées restent au contact. À chaque tour, le calcul se refait et chacune perd des hommes en fonction de la puissance de l'autre.
   - Les écarts doivent être bien réglés : les écrasements doivent rester minoritaires (pas 80 % des affrontements).
 - ✅ **Calcul de puissance** : chaque armée a une puissance de base, multipliée par tous ses effets (général, sous-généraux, aptitudes, formation…), puis ajustée selon le terrain (formule à définir).
-- ✅ **Formations** : les armées peuvent prendre des formations, selon celles que maîtrisent leurs généraux et sous-généraux.
+- ✅ **Formations** : les armées peuvent prendre des formations, selon celles que maîtrisent leurs généraux et sous-généraux. Elles fonctionnent en pierre-feuille-ciseaux : chacune a une force et une faiblesse.
+- ✅ **Courbe progressive** : plus l'écart de puissance grandit, plus les pertes deviennent déséquilibrées, jusqu'à l'écrasement (pas de paliers brutaux).
+- ✅ **Hasard** : ±10 % sur le résultat d'un affrontement.
+- ✅ **Morts et blessés** : les pertes se divisent entre morts (définitifs) et blessés (récupérables grâce aux soignants et aux lieux de soin).
+- ✅ **Le terrain dépend du type d'unité** (par exemple, la cavalerie est forte en plaine et faible en forêt).
+- ✅ **Attaques spéciales** : elles viennent uniquement des généraux et des guerriers mystiques.
+- 💡 **Aperçu avant l'attaque** : pas de chiffres exacts, seulement une estimation (« écrasant », « avantage », « équilibré », « désavantage », « suicide »), et seulement si l'armée ennemie est visible. Un espion rend l'estimation plus précise.
 - ✅ **Le mouvement crée l'attaque** : entrer dans la zone d'une armée ennemie déclenche le combat. Selon l'angle (de face, de flanc, de dos), ça donne un affrontement de face, une attaque surprise, etc.
 - ✅ **Brouillard de guerre** : une armée n'est visible que si elle est dans la portée visuelle de soldats adverses. Une armée cachée derrière une montagne ou une forêt reste invisible, même toute proche.
 - ✅ **Champ de bataille à part** : la bataille rangée ne se joue pas autour d'un quartier. Les deux camps sont à égalité, chacun attaque et se défend (comme une petite guerre).
