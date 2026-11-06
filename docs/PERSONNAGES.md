@@ -65,6 +65,8 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 - Erwin Smith (L'Attaque des Titans)
 - Maximus (Gladiator)
 - Aragorn (Le Seigneur des Anneaux)
+- Mavis Vermillion (Fairy Tail)
+- Lelouch (Code Geass)
 
 ## Généraux de départ (un par joueur)
 
