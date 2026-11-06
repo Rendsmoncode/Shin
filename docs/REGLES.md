@@ -176,16 +176,12 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 - ✅ **Alerte d'attaque** : le défenseur connecté choisit entre « bataille rangée » et « défenses automatiques ». Sans réponse au bout de 30 secondes, ses défenses jouent à sa place.
 - ✅ **Chrono par tour** : 1 minute par tour. Si le chrono s'écoule, le tour passe ; un joueur qui abandonne en cours de route voit ses troupes se défendre automatiquement.
 - ✅ **Seuil de la bataille rangée** : la bataille rangée se débloque au grade de Commandant de mille. En dessous de 1 000 hommes, les combats se règlent automatiquement (même formule de puissance, courte scène de résultat). Les raids façon Clash of Clans fonctionnent quel que soit l'effectif.
-- 💡 **Composition d'une armée selon le grade** :
-
-  | Grade | Effectif max | Sous-généraux max | Garde du QG (minimum) |
-  |---|---|---|---|
-  | Commandant de mille | 1 000 | 4 | 200 |
-  | Commandant de trois mille | 3 000 | 5 | 600 |
-  | Commandant de cinq mille | 5 000 | 6 | 1 000 |
-  | Général | Sans limite | 7, puis +1 par tranche de 5 000 hommes | 20 % de l'armée |
-
-  La garde du QG représente au moins 20 % de l'armée. Le reste est réparti librement entre les sous-généraux. Les guerriers mystiques s'ajoutent (2 emplacements maximum par général).
+- ✅ **Progression rapide** : les armées doivent atteindre 1 000 hommes très vite, pour pouvoir jouer des batailles rangées dès la première soirée.
+- ✅ **Répartition libre** : une armée se divise comme on veut entre les sous-généraux (par exemple 1 000 hommes pour l'un et 500 pour deux autres).
+- ✅ **Effectif d'un sous-général** : 500 hommes minimum, 5 000 maximum.
+- ✅ **Garde du quartier général** : ni minimum ni maximum imposés. Un minimum limiterait les actions, un maximum empêcherait les sièges.
+- ❓ Le quartier général peut-il être vide ? (piste : le général a une garde personnelle fixe, qui ne compte pas dans l'armée)
+- ❓ Qui sont les sous-généraux : des généraux de la collection, d'autres personnages, ou des chefs génériques ?
 - ✅ **Structure d'une armée** : le général est le cœur de l'armée. Il a des sous-généraux, qui dirigent chacun un certain nombre d'hommes.
 - ✅ **Points de vie de l'armée** : le général vaut 3 points, chaque sous-général vaut 1 point. Un joueur qui tombe à 0 point perd la bataille.
 - ✅ **Quartier général** : le général a un quartier général, invisible pour l'adversaire. Pour le voir, il faut envoyer des éclaireurs, ou avoir des soldats assez proches. Le quartier général peut se déplacer, mais lentement.
