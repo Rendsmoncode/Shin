@@ -23,6 +23,8 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 - ✅ **Monde persistant** : la partie ne s'arrête jamais. Des événements par saison pourront être ajoutés plus tard.
 - ✅ **Rythme** : en temps réel, comme Rise of Kingdoms.
 - ✅ **Plateforme** : navigateur (pas d'application mobile pour l'instant).
+- ✅ **PC et téléphone** : les batailles et les guerres se jouent uniquement sur PC. Sur téléphone, on ne peut que gérer son quartier.
+- 💡 Un joueur connecté sur téléphone compte comme hors ligne pour les combats : ses défenses jouent à sa place.
 - ✅ **Absence** : il ne se passe rien de spécial pour un joueur absent.
 - ✅ **Récompenses de connexion** : une récompense quotidienne, plus des récompenses de jours de connexion d'affilée.
 - ✅ **Ton** : un mélange de sérieux (c'est un jeu de gestion) et d'humour.
