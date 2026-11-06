@@ -117,7 +117,7 @@ ground.receiveShadow=true; scene.add(ground);
 const water=new THREE.Mesh(new THREE.PlaneGeometry(W,D),new THREE.MeshPhongMaterial({color:0x3b6f86,transparent:true,opacity:.82,shininess:80,specular:0x99bbcc}));
 water.rotation.x=-Math.PI/2; water.position.y=WATER; scene.add(water);
 
-// ---------- forêts (arbres en 3D, instanciés) ----------
+// ---------- forêts ----------
 const spots=[];
 for(let n=0;n<26000&&spots.length<3200;n++){
   const x=(R()-.5)*W*.98,z=(R()-.5)*D*.98,y=height(x,z);
@@ -127,14 +127,8 @@ for(let n=0;n<26000&&spots.length<3200;n++){
   const m=fbm(x/210+70,z/210+20); if(m<.55)continue;
   spots.push([x,y,z]);
 }
-const trunkG=new THREE.CylinderGeometry(.5,.8,5,5); trunkG.translate(0,2.5,0);
-const crownG=new THREE.IcosahedronGeometry(4.2,1); crownG.translate(0,7.5,0);
-const trunks=new THREE.InstancedMesh(trunkG,new THREE.MeshLambertMaterial({color:0x4a3a28}),spots.length);
-const crowns=new THREE.InstancedMesh(crownG,new THREE.MeshLambertMaterial({color:0xffffff}),spots.length);
 const M=new THREE.Matrix4(),Q=new THREE.Quaternion(),S=new THREE.Vector3(),P=new THREE.Vector3();
-spots.forEach(([x,y,z],i)=>{const s=.8+R()*.8;P.set(x,y,z);Q.setFromEuler(new THREE.Euler(0,R()*6,0));S.set(s*(.9+R()*.3),s*(.85+R()*.4),s*(.9+R()*.3));M.compose(P,Q,S);
-  trunks.setMatrixAt(i,M);crowns.setMatrixAt(i,M);crowns.setColorAt(i,new THREE.Color().setHSL(.28+R()*.06,.38+R()*.12,.18+R()*.08));});
-[trunks,crowns].forEach(m=>{m.castShadow=true;m.receiveShadow=true;scene.add(m)});
+// les arbres sont des images (rendues depuis un modèle 3D Meshy) posées sur le terrain, voir build()
 
 // rochers calcaires sur la crête et la grande colline
 const rocks=[];for(let n=0;n<9000&&rocks.length<420;n++){const x=(R()-.5)*W,z=(R()-.5)*D,y=height(x,z);
@@ -152,9 +146,9 @@ box(30,2,1,0xcbbd9c,fx,fy,fz+16);box(1,2,24,0xcbbd9c,fx-15,fy,fz+4);box(1,2,24,0
 const bz=-30,bx=riverX(bz);box(70,2.5,9,0x9c8f78,bx,1.2,bz,0);
 
 // ---------- armées (sprites posés sur le terrain) ----------
-const names={inf:[...Array(16)].map((_,i)=>`sprites/fantassin_${String(i+1).padStart(2,'0')}.png`),cav:[...Array(12)].map((_,i)=>`sprites/cavalier_${String(i+1).padStart(2,'0')}.png`)};
-const loader=new THREE.TextureLoader(); const mats={inf:[],cav:[]};
-let toLoad=names.inf.length+names.cav.length,loaded=0,failed=0;
+const names={arbre:[...Array(8)].map((_,i)=>`sprites/arbre_${String(i+1).padStart(2,'0')}.png`),inf:[...Array(16)].map((_,i)=>`sprites/fantassin_${String(i+1).padStart(2,'0')}.png`),cav:[...Array(12)].map((_,i)=>`sprites/cavalier_${String(i+1).padStart(2,'0')}.png`)};
+const loader=new THREE.TextureLoader(); const mats={arbre:[],inf:[],cav:[]};
+let toLoad=names.arbre.length+names.inf.length+names.cav.length,loaded=0,failed=0;
 const soldiers=[];
 const shadowG=new THREE.CircleGeometry(1,10);shadowG.rotateX(-Math.PI/2);
 const shadowMat=new THREE.MeshBasicMaterial({color:0x000000,transparent:true,opacity:.32,depthWrite:false});
@@ -182,7 +176,18 @@ function regiment(kind,cx,cz,cols,rows,dx,dz,label,color){
   scene.add(sh);
   const b=banner(label,color);b.position.set(cx-cols*dx/2+20,height(cx,cz)+16,cz-rows*dz/2-4);scene.add(b);
 }
+function forest(){
+  const set=mats.arbre; if(!set.length) return;
+  const sh=new THREE.InstancedMesh(shadowG,new THREE.MeshBasicMaterial({color:0x000000,transparent:true,opacity:.28,depthWrite:false}),spots.length);
+  spots.forEach(([x,y,z],i)=>{
+    const m=set[Math.floor(R()*set.length)],h=11+R()*6;
+    const sp=new THREE.Sprite(m.mat);sp.center.set(.5,.08);sp.scale.set(h*m.aspect*(R()<.5?-1:1),h,1);sp.position.set(x,y,z);scene.add(sp);
+    P.set(x+3,y+.3,z+2.5);Q.identity();S.set(h*.38,1,h*.32);M.compose(P,Q,S);sh.setMatrixAt(i,M);
+  });
+  scene.add(sh);
+}
 function build(){
+  forest();
   // Bleus (premier plan) : 1 soldat affiché = 2 hommes
   regiment('inf',-260,360,25,10,2.2,3.0,'Souvorov · 500','#3f7fd6');
   regiment('inf',-20,380,25,10,2.2,3.0,'Robin des Bois · 500','#3f7fd6');
@@ -194,7 +199,7 @@ function build(){
   status.textContent=`${soldiers.length} soldats affichés (${soldiers.length*2} hommes). Tous vus de dos pour l'instant.`+(failed?` ${failed} image(s) manquante(s).`:'');
 }
 function done(){if(++loaded===toLoad)build();}
-['inf','cav'].forEach(k=>names[k].forEach(url=>loader.load(url,t=>{t.encoding=THREE.sRGBEncoding;t.anisotropy=4;
+['arbre','inf','cav'].forEach(k=>names[k].forEach(url=>loader.load(url,t=>{t.encoding=THREE.sRGBEncoding;t.anisotropy=4;
   mats[k].push({mat:new THREE.SpriteMaterial({map:t,alphaTest:.5}),aspect:t.image.width/t.image.height});done();},undefined,()=>{failed++;done();})));
 
 // ---------- boucle ----------
