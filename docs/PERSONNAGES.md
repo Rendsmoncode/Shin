@@ -19,24 +19,22 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 
 - César
 - Kanki
-- Samori Touré
 - Abd el-Kader
 - Shaka Zulu
 - Simón Bolívar
-- Skanderbeg
 - Subötaï
 - Shivaji
 - Nader Shah
 - Mehmed II
 - Ménélik II
 - Toussaint Louverture
-- Knut le Grand
 - Ri Boku
 - Ousen
 - Richard Cœur de Lion
 - Võ Nguyên Giáp
+- Sun Tzu
 
-## Généraux épiques (objectif : 30)
+## Généraux épiques
 
 - Baudouin IV (le roi lépreux, vainqueur de Saladin à Montgisard)
 - Harald Hardrada
@@ -67,6 +65,11 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 - Aragorn (Le Seigneur des Anneaux)
 - Mavis Vermillion (Fairy Tail)
 - Lelouch (Code Geass)
+- Knut le Grand
+- Samori Touré
+- Skanderbeg
+- Zhuge Liang
+- Shikamaru (Naruto)
 
 ## Généraux de départ (un par joueur)
 
@@ -115,12 +118,6 @@ Deux généraux invaincus, absents de la légende des 7, uniques dans tout le je
 
 - Thorkell
 - Ulysse
-
-## À placer en généraux (la catégorie Stratège est supprimée)
-
-- Sun Tzu (légitimité légendaire : 9/10)
-- Zhuge Liang (épique)
-- Shikamaru (Naruto) (épique)
 
 ## Explorateurs
 
