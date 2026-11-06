@@ -23,20 +23,21 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 
 - Kanki, « L'Obscurité de Qin »
 - Abd el-Kader, « L'Émir »
-- Shaka Zulu, ❓
+- Shaka Zulu, « La Corne du Buffle »
 - Simón Bolívar, « El Libertador »
 - Subötaï, « Le Chien de guerre »
 - Shivaji, « Le Seigneur de l'ombre » (son vrai titre, *Chhatrapati*, veut dire « Seigneur de l'ombrelle »)
-- Nader Shah, ❓
+- Nader Shah, « Le Berger de la nation »
 - Mehmed II, « Fatih, le Conquérant »
 - Ménélik II, « Le Lion de Juda »
 - Toussaint Louverture, « Le Spartacus noir »
 - Ri Boku, « Le Dernier Rempart de Zhao »
 - Ousen, « L'Homme le plus dangereux de Qin »
 - Richard Cœur de Lion, « Cœur de Lion »
-- Võ Nguyên Giáp, ❓
+- Võ Nguyên Giáp, « Le Traumatisme »
+  - Lore : il a vaincu deux des cinq plus grandes puissances militaires de son temps (la France, puis les États-Unis). On parle encore du « syndrome du Vietnam » aux États-Unis et du « traumatisme de Diên Biên Phu » en France.
 - Sun Tzu, « Le Père de la guerre »
-- Alexandre Souvorov, ❓
+- Alexandre Souvorov, « Le Soldat »
 
 ## Généraux épiques
 
