@@ -95,7 +95,8 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 Certains joueurs doivent obtenir les légendaires qui leur correspondent. Le Game Master pourra forcer ces tirages.
 
 - Nicolas : **Napoléon**
-- ❓ Les autres attributions (le créateur du jeu, Mathieu)
+- Le créateur du jeu : **Khalid ibn al-Walid**, **Saladin**, **Ouki**
+- ❓ Mathieu
 
 ## Exclus
 
