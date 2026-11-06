@@ -195,6 +195,10 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 - ✅ **Morts et blessés** : les pertes se divisent entre morts (définitifs) et blessés (récupérables grâce aux soignants et aux lieux de soin).
 - ✅ **Le terrain dépend du type d'unité** (par exemple, la cavalerie est forte en plaine et faible en forêt).
 - ✅ **Attaques spéciales** : elles viennent uniquement des généraux et des guerriers mystiques.
+  - Deux types : le **coup de grâce** (proposé quand l'attaque peut mathématiquement achever l'ennemi, par exemple la charge de Souvorov seul contre une armée) et l'**effet** (un bonus ou un effet sur le champ de bataille).
+  - Chaque général a l'un **ou** l'autre. Les **Grands Généraux Sous les Cieux ont les deux** : c'est ce qui les distingue sur le terrain.
+  - Chaque attaque a des conditions de déclenchement, ou une jauge si elle n'en a pas.
+  - Pas d'animation propre à chaque général pour les attaques spéciales.
 - 💡 **Aperçu avant l'attaque** : pas de chiffres exacts, seulement une estimation (« écrasant », « avantage », « équilibré », « désavantage », « suicide »), et seulement si l'armée ennemie est visible. Un espion rend l'estimation plus précise.
 - ✅ **Le mouvement crée l'attaque** : entrer dans la zone d'une armée ennemie déclenche le combat. Selon l'angle (de face, de flanc, de dos), ça donne un affrontement de face, une attaque surprise, etc.
 - ✅ **Brouillard de guerre** : une armée n'est visible que si elle est dans la portée visuelle de soldats adverses. Une armée cachée derrière une montagne ou une forêt reste invisible, même toute proche.
