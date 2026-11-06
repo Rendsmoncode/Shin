@@ -165,10 +165,28 @@ Raretés : rare et épique (environ 30 épiques). Les guerriers mystiques sont a
 - Mikasa Ackerman (L'Attaque des Titans)
 - Jin Sakai (Ghost of Tsushima), « Le Fantôme »
 - Sandor Clegane (Game of Thrones), « Le Limier »
+- Zinédine Zidane, « Zizou »
+- Mike Tyson, « Iron Mike »
+- Khabib Nurmagomedov, « L'Aigle »
+- Teddy Riner, « Big Ted »
 
 ### Rares
 
-- ❓ À définir
+- Hoplite spartiate
+- Légionnaire romain
+- Berserker viking
+- Chevalier templier
+- Archer gallois
+- Ninja
+- Janissaire
+- Mousquetaire
+- Grognard de la Garde
+- Poilu
+- Légionnaire d'Aubagne
+- Marin-pompier de Marseille
+- Videur de boîte de nuit
+- Manager de McDo
+- ❓ D'autres personnages du même genre à ajouter
 
 ## Explorateurs
 
@@ -177,8 +195,7 @@ Raretés : rare et épique (environ 30 épiques). Les guerriers mystiques sont a
 
 ## Généraux rares (à faire plus tard)
 
-Des personnages modernes ou historiques, et des blagues : un manager de McDonald's, un PDG, un entraîneur de foot…
-Pistes de sportifs : Mike Tyson (« Iron Mike »), Khabib (« l'Aigle »), Teddy Riner (« Big Ted »), Zidane (et son coup de tête).
+Des personnages modernes ou historiques, et des blagues : un PDG, un entraîneur de foot…
 
 ## De côté (à ressortir si besoin)
 
