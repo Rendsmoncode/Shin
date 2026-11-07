@@ -20,6 +20,13 @@ jobs:
       url: ${{ steps.deploiement.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+      # La carte de la ville (OpenStreetMap) est téléchargée à chaque publication.
+      # Si le service ne répond pas, la page la téléchargera elle-même dans le navigateur.
+      - name: Télécharger la carte de la ville
+        run: |
+          curl -sf --max-time 150 -o prototype/carte/osm.json --data-urlencode "data@prototype/carte/requete.overpassql" https://overpass-api.de/api/interpreter \
+            || curl -sf --max-time 150 -o prototype/carte/osm.json --data-urlencode "data@prototype/carte/requete.overpassql" https://overpass.kumi.systems/api/interpreter \
+            || { rm -f prototype/carte/osm.json; echo "Carte non téléchargée"; }
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

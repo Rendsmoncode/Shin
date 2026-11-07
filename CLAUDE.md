@@ -6,4 +6,4 @@
 - L'utilisateur surveille ses crédits Claude : éviter les itérations inutiles, faire une seule passe quand c'est possible, et prévenir avant un travail coûteux.
 - Répondre en français, simplement : l'utilisateur n'est pas développeur.
 - Les règles du jeu sont dans `docs/REGLES.md`, les personnages dans `docs/PERSONNAGES.md`, le style visuel dans le skill `style-visuel`.
-- **Ne pas tester le jeu dans la session** (pas de rendu dans un navigateur headless, pas de captures d'écran) sauf si l'utilisateur le demande : coder, envoyer sur `main`, et l'utilisateur teste sur le site publié (`https://rendsmoncode.github.io/Shin/champ-3d/`).
+- **Ne pas tester le jeu dans la session** (pas de rendu dans un navigateur headless, pas de captures d'écran) sauf si l'utilisateur le demande : coder, envoyer sur `main`, et l'utilisateur teste sur le site publié (`https://rendsmoncode.github.io/Shin/`, carte de la ville dans `carte/`, champ de bataille dans `champ-3d/`).

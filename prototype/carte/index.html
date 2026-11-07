@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Carte d'Aubagne</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+/* Carte de la ville façon CK3 : vraies rues (OpenStreetMap) teintées, quartiers aux couleurs des joueurs. Aspect sombre unique, comme le champ de bataille. */
+:root{
+  --bg:#141a16; --panel:rgba(20,26,22,.9); --line:#33443a; --fg:#e7e3d6; --muted:#a3ab9f; --gold:#e3b54a;
+  --ui:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  color-scheme:dark;
+}
+html,body{height:100%;margin:0;background:var(--bg);color:var(--fg);font-family:var(--ui)}
+#map{position:fixed;inset:0;background:#1d241f}
+/* les tuiles OpenStreetMap prennent une teinte de vieux papier */
+.leaflet-tile-pane{filter:sepia(.45) saturate(.75) brightness(.92) contrast(.95)}
+.z-far .leaflet-tile-pane{filter:sepia(.6) saturate(.5) brightness(.75) contrast(.9)}
+.panel{position:fixed;z-index:1000;top:calc(12px + env(safe-area-inset-top,0px));left:max(12px,env(safe-area-inset-left,0px));width:min(320px,calc(100vw - 24px));max-height:calc(100vh - 24px);overflow:auto;box-sizing:border-box;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px 14px;display:grid;gap:8px;font-size:15px;line-height:1.35}
+.panel h1{margin:0;font-size:20px;letter-spacing:.05em;text-transform:uppercase}
+.panel p{margin:0;color:var(--muted)}
+.legend{display:grid;gap:3px}
+.legend span{display:flex;align-items:center;gap:8px}
+.legend i{width:14px;height:14px;border-radius:2px;flex:none;border:1px solid rgba(255,255,255,.4)}
+#status{color:var(--gold)}
+#info{border-top:1px solid var(--line);padding-top:8px;display:grid;gap:3px}
+#info:empty{display:none}
+#info b{font-size:18px}
+#info .k{color:var(--muted)}
+button{font:inherit;font-weight:600;letter-spacing:.04em;color:var(--fg);background:#26332a;border:1px solid var(--line);padding:5px 10px;border-radius:3px;cursor:pointer;justify-self:start}
+button:hover{border-color:var(--gold)}
+button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+/* étiquettes */
+.lbl{pointer-events:none}
+.lbl span{display:block;transform:translate(-50%,-50%);white-space:nowrap;text-align:center;color:#fff;text-shadow:0 0 3px #000,0 0 6px #000,0 1px 2px #000;font-family:var(--ui)}
+.q-lbl span{font-size:13px;font-weight:600;letter-spacing:.03em}
+.q-lbl.own span{font-size:15px}
+.v-lbl span{font-size:26px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#f3e6c4}
+.z-far .q-lbl{display:none}
+.z-near .v-lbl{display:none}
+.leaflet-container{font-family:var(--ui)}
+.leaflet-control-attribution{background:rgba(20,26,22,.8)!important;color:var(--muted)!important}
+.leaflet-control-attribution a{color:var(--fg)!important}
+</style>
+</head>
+<body>
+<div id="map" aria-label="Carte d'Aubagne et de La Valentine avec les quartiers"></div>
+<div class="panel">
+  <h1>Carte d'Aubagne</h1>
+  <p>Les vraies rues (OpenStreetMap) et les quartiers. Molette ou pincement pour zoomer : la ville, puis les quartiers, puis les rues. Clic sur un quartier pour le voir.</p>
+  <div class="legend" id="legend"></div>
+  <button type="button" id="b-all">Vue d'ensemble</button>
+  <p id="status">Chargement de la carte…</p>
+  <div id="info" aria-live="polite"></div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@turf/turf@6.5.0/turf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3-delaunay@6.0.4/dist/d3-delaunay.min.js"></script>
+<script>
+(function(){
+const status=document.getElementById('status'),info=document.getElementById('info');
+if(!window.L||!window.turf||!window.d3){status.textContent='Une bibliothèque n\'a pas pu se charger.';return;}
+
+// ---------- réglages ----------
+// Les joueurs et leur quartier de départ (docs/REGLES.md, section 2)
+const JOUEURS=[
+  {nom:'Mathieu',quartier:'Les Passons',couleur:'#3f7fd6'},
+  {nom:'Nico',quartier:'La Valentine',couleur:'#c94b3f'},
+  {nom:'Le créateur',quartier:'Pin Vert',couleur:'#d6a53f'},
+];
+// Positions de secours si un quartier n'est pas nommé dans OpenStreetMap (approximatives, à vérifier)
+const SECOURS={'les passons':[43.2905,5.5935],'pin vert':[43.3045,5.5855]};
+const VILLES_JEU=['Aubagne'];                 // découpées en quartiers
+const VILLES_HORS_JEU=['La Penne-sur-Huveaune']; // affichées, pas encore dans le jeu
+const ECART_MIN=280;                          // deux quartiers plus proches que ça (m) n'en font qu'un
+
+const norm=s=>s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[-’']/g,' ').replace(/\s+/g,' ').trim();
+const ownerOf=name=>JOUEURS.find(j=>norm(j.quartier)===norm(name))||null;
+
+document.getElementById('legend').innerHTML=JOUEURS.map(j=>`<span><i style="background:${j.couleur}"></i>${j.nom} · ${j.quartier}</span>`).join('')+
+  '<span><i style="background:transparent;border-style:dashed"></i>Quartier neutre</span>';
+
+// ---------- la carte ----------
+const map=L.map('map',{zoomControl:false,minZoom:11,maxZoom:18,zoomSnap:.5}).setView([43.300,5.545],13);
+L.control.zoom({position:'bottomright'}).addTo(map);
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© les contributeurs d\'<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(map);
+function zoomClass(){const z=map.getZoom(),el=map.getContainer();el.classList.toggle('z-far',z<13);el.classList.toggle('z-near',z>=14);}
+map.on('zoomend',zoomClass);zoomClass();
+let allBounds=null;
+document.getElementById('b-all').addEventListener('click',()=>{if(allBounds)map.fitBounds(allBounds,{padding:[20,20]});});
+
+// ---------- les données OpenStreetMap ----------
+const SERVEURS=['https://overpass-api.de/api/interpreter','https://overpass.kumi.systems/api/interpreter'];
+async function charger(){
+  // 1) le fichier préparé à la publication du site
+  try{const r=await fetch('osm.json',{cache:'no-cache'});if(r.ok){const j=await r.json();if(j.elements&&j.elements.length)return j;}}catch(e){}
+  // 2) sinon, la copie gardée dans ce navigateur
+  try{const c=localStorage.getItem('shin-osm');if(c)return JSON.parse(c);}catch(e){}
+  // 3) sinon, on la demande directement à OpenStreetMap
+  status.textContent='Téléchargement de la carte depuis OpenStreetMap (peut prendre 30 secondes)…';
+  const q=await (await fetch('requete.overpassql')).text();
+  for(const s of SERVEURS){
+    try{const r=await fetch(s,{method:'POST',body:'data='+encodeURIComponent(q),headers:{'Content-Type':'application/x-www-form-urlencoded'}});
+      if(!r.ok)continue;const j=await r.json();try{localStorage.setItem('shin-osm',JSON.stringify(j));}catch(e){}return j;}catch(e){}
+  }
+  throw new Error('OpenStreetMap ne répond pas');
+}
+
+// relie les morceaux de frontière d'une commune en contours fermés
+function contours(rel){
+  const eq=(a,b)=>Math.abs(a[0]-b[0])<1e-9&&Math.abs(a[1]-b[1])<1e-9;
+  let segs=rel.members.filter(m=>m.type==='way'&&m.geometry&&m.role!=='inner').map(m=>m.geometry.map(p=>[p.lon,p.lat]));
+  const out=[];
+  while(segs.length){
+    let ring=segs.shift(),changed=true;
+    while(changed&&!eq(ring[0],ring[ring.length-1])){changed=false;
+      for(let i=0;i<segs.length;i++){const s=segs[i],end=ring[ring.length-1];
+        if(eq(s[0],end))ring=ring.concat(s.slice(1));
+        else if(eq(s[s.length-1],end))ring=ring.concat(s.slice().reverse().slice(1));
+        else if(eq(s[s.length-1],ring[0]))ring=s.concat(ring.slice(1));
+        else if(eq(s[0],ring[0]))ring=s.slice().reverse().concat(ring.slice(1));
+        else continue;
+        segs.splice(i,1);changed=true;break;}}
+    if(ring.length>3&&eq(ring[0],ring[ring.length-1]))out.push([ring]);
+  }
+  return out.length?turf.multiPolygon(out,{nom:rel.tags.name}):null;
+}
+
+// découpe une commune en quartiers autour des lieux-dits d'OpenStreetMap
+function decouper(commune,lieux){
+  const lat0=43.3*Math.PI/180,kx=Math.cos(lat0);
+  let pts=lieux.filter(p=>turf.booleanPointInPolygon(turf.point([p.lon,p.lat]),commune));
+  // on garde les plus importants quand deux lieux-dits sont collés
+  const rang={suburb:0,quarter:1,village:2,neighbourhood:3,hamlet:4,locality:5,isolated_dwelling:6};
+  pts.sort((a,b)=>(rang[a.place]??9)-(rang[b.place]??9)||(ownerOf(b.nom)?1:0)-(ownerOf(a.nom)?1:0));
+  pts.sort((a,b)=>(ownerOf(b.nom)?1:0)-(ownerOf(a.nom)?1:0));          // les quartiers des joueurs passent en premier
+  const keep=[];
+  for(const p of pts)if(!keep.some(k=>turf.distance([k.lon,k.lat],[p.lon,p.lat])*1000<ECART_MIN))keep.push(p);
+  if(keep.length<2)return keep.map(p=>({nom:p.nom,poly:commune,lieu:p}));
+  const [w,s,e,n]=turf.bbox(commune);
+  const del=d3.Delaunay.from(keep.map(p=>[p.lon*kx,p.lat]));
+  const vor=del.voronoi([(w-.01)*kx,s-.01,(e+.01)*kx,n+.01]);
+  const res=[];
+  keep.forEach((p,i)=>{const cell=vor.cellPolygon(i);if(!cell)return;
+    const poly=turf.polygon([cell.map(([x,y])=>[x/kx,y])]);
+    let inter=null;try{inter=turf.intersect(poly,commune);}catch(e){}
+    if(inter)res.push({nom:p.nom,poly:inter,lieu:p});});
+  return res;
+}
+
+function etiquette(latlng,texte,cls){
+  const span=document.createElement('span');span.textContent=texte;
+  return L.marker(latlng,{icon:L.divIcon({className:'lbl '+cls,html:span,iconSize:null}),interactive:false,keyboard:false}).addTo(map);
+}
+
+let selLayer=null;
+function montrer(q,layer){
+  if(selLayer)selLayer.setStyle(selLayer.baseStyle);
+  selLayer=layer;layer.setStyle({...layer.baseStyle,weight:4,color:'#e3b54a'});layer.bringToFront();
+  const km2=turf.area(q.poly)/1e6;
+  const own=ownerOf(q.nom);
+  info.innerHTML='';
+  const add=(html)=>{const s=document.createElement('span');s.innerHTML=html;info.appendChild(s);};
+  const b=document.createElement('b');b.textContent=q.nom;info.appendChild(b);
+  add(`<span class="k">Ville :</span> ${q.ville}`);
+  add(`<span class="k">Superficie :</span> ${km2.toFixed(2).replace('.',',')} km²`);
+  add(own?`<span class="k">Roi :</span> ${own.nom} (capitale)`:'<span class="k">Statut :</span> quartier neutre');
+  add('<span class="k">Entrer dans le quartier : à venir.</span>');
+}
+
+charger().then(data=>{
+  const els=data.elements||[];
+  const rels=els.filter(e=>e.type==='relation'&&e.tags&&e.tags.name);
+  const lieux=els.filter(e=>e.type==='node'&&e.tags&&e.tags.name).map(e=>({nom:e.tags.name,lat:e.lat,lon:e.lon,place:e.tags.place}));
+  // positions de secours pour les quartiers des joueurs absents d'OpenStreetMap
+  const manquants=[];
+  for(const [k,[lat,lon]] of Object.entries(SECOURS)){
+    if(!lieux.some(p=>norm(p.nom)===k)){const j=JOUEURS.find(j=>norm(j.quartier)===k);lieux.push({nom:j.quartier,lat,lon,place:'suburb'});manquants.push(j.quartier);}
+  }
+  const quartiers=[],bounds=L.latLngBounds([]);
+  const communes={};rels.forEach(r=>{const f=contours(r);if(f)communes[r.tags.name]=f;});
+
+  // villes hors jeu : simple contour
+  VILLES_HORS_JEU.forEach(v=>{const f=communes[v];if(!f)return;
+    L.geoJSON(f,{interactive:false,style:{color:'#cfc6ad',weight:1.5,dashArray:'2 6',fill:true,fillColor:'#000',fillOpacity:.25}}).addTo(map);
+    const c=turf.pointOnFeature(f).geometry.coordinates;etiquette([c[1],c[0]],v+' (pas encore en jeu)','q-lbl');});
+
+  // villes du jeu : découpées en quartiers
+  VILLES_JEU.forEach(v=>{const f=communes[v];if(!f)return;
+    decouper(f,lieux).forEach(q=>quartiers.push({...q,ville:v}));
+    L.geoJSON(f,{interactive:false,style:{color:'#f3e6c4',weight:3,fill:false}}).addTo(map);
+    const c=turf.centroid(f).geometry.coordinates;etiquette([c[1],c[0]],v,'v-lbl');});
+
+  // La Valentine : quartier officiel de Marseille, gardé tel quel
+  const lv=communes['La Valentine'];
+  if(lv)quartiers.push({nom:'La Valentine',ville:'Marseille (11ᵉ)',poly:lv});
+  else{const p=lieux.find(p=>norm(p.nom)==='la valentine');if(p)quartiers.push({nom:'La Valentine',ville:'Marseille (11ᵉ)',poly:turf.circle([p.lon,p.lat],.7,{units:'kilometers'})});}
+  if(lv||quartiers.some(q=>q.nom==='La Valentine')){const q=quartiers.find(q=>q.nom==='La Valentine');const c=turf.centroid(q.poly).geometry.coordinates;etiquette([c[1]+.006,c[0]],'Marseille','v-lbl');}
+
+  quartiers.forEach(q=>{
+    const own=ownerOf(q.nom);
+    const base=own?{color:own.couleur,weight:2.5,opacity:1,fillColor:own.couleur,fillOpacity:.38}:{color:'#f3e6c4',weight:1.2,opacity:.85,dashArray:'4 4',fillColor:'#1d241f',fillOpacity:.12};
+    const layer=L.geoJSON(q.poly,{style:base}).addTo(map);
+    layer.baseStyle=base;
+    layer.on('mouseover',()=>{if(layer!==selLayer)layer.setStyle({...base,fillOpacity:base.fillOpacity+.15});});
+    layer.on('mouseout',()=>{if(layer!==selLayer)layer.setStyle(base);});
+    layer.on('click',()=>montrer(q,layer));
+    bounds.extend(layer.getBounds());
+    const c=turf.pointOnFeature(q.poly).geometry.coordinates;
+    etiquette([c[1],c[0]],own?`${q.nom} · ${own.nom}`:q.nom,'q-lbl'+(own?' own':''));
+  });
+  if(bounds.isValid()){allBounds=bounds;map.fitBounds(bounds,{padding:[20,20]});}
+  const trouves=JOUEURS.filter(j=>quartiers.some(q=>norm(q.nom)===norm(j.quartier))).length;
+  status.textContent=`${quartiers.length} quartiers, dont ${trouves} quartiers de départ.`+(manquants.length?` Position approximative pour : ${manquants.join(', ')} (absent d'OpenStreetMap, à vérifier).`:'');
+}).catch(e=>{status.textContent='La carte n\'a pas pu être téléchargée ('+e.message+'). Réessaie dans quelques minutes.';});
+})();
+</script>
+</body>
+</html>
