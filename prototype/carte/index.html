@@ -4,217 +4,351 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Carte d'Aubagne</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
-/* Carte de la ville façon CK3 : vraies rues (OpenStreetMap) teintées, quartiers aux couleurs des joueurs. Aspect sombre unique, comme le champ de bataille. */
+/* La vraie ville en 3D (OpenStreetMap + relief réel), dans le même style que le champ de bataille. Aspect sombre unique, volontaire. */
 :root{
-  --bg:#141a16; --panel:rgba(20,26,22,.9); --line:#33443a; --fg:#e7e3d6; --muted:#a3ab9f; --gold:#e3b54a;
+  --bg:#141a16; --panel:rgba(20,26,22,.88); --line:#33443a; --fg:#e7e3d6; --muted:#a3ab9f; --gold:#e3b54a;
   --ui:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
   color-scheme:dark;
 }
 html,body{height:100%;margin:0;background:var(--bg);color:var(--fg);font-family:var(--ui)}
-#map{position:fixed;inset:0;background:#1d241f}
-/* les tuiles OpenStreetMap prennent une teinte de vieux papier */
-.leaflet-tile-pane{filter:sepia(.45) saturate(.75) brightness(.92) contrast(.95)}
-.z-far .leaflet-tile-pane{filter:sepia(.6) saturate(.5) brightness(.75) contrast(.9)}
-.panel{position:fixed;z-index:1000;top:calc(12px + env(safe-area-inset-top,0px));left:max(12px,env(safe-area-inset-left,0px));width:min(320px,calc(100vw - 24px));max-height:calc(100vh - 24px);overflow:auto;box-sizing:border-box;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px 14px;display:grid;gap:8px;font-size:15px;line-height:1.35}
+body{overflow:hidden}
+#scene{position:fixed;inset:0}
+#scene canvas{display:block;width:100%;height:100%}
+.panel{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));left:max(12px,env(safe-area-inset-left,0px));width:min(330px,calc(100vw - 24px));max-height:calc(100vh - 24px);overflow:auto;box-sizing:border-box;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px 14px;display:grid;gap:8px;font-size:15px;line-height:1.35}
 .panel h1{margin:0;font-size:20px;letter-spacing:.05em;text-transform:uppercase}
 .panel p{margin:0;color:var(--muted)}
+.row{display:flex;flex-wrap:wrap;gap:6px}
 .legend{display:grid;gap:3px}
 .legend span{display:flex;align-items:center;gap:8px}
 .legend i{width:14px;height:14px;border-radius:2px;flex:none;border:1px solid rgba(255,255,255,.4)}
+button{font:inherit;font-weight:600;letter-spacing:.04em;color:var(--fg);background:#26332a;border:1px solid var(--line);padding:5px 10px;border-radius:3px;cursor:pointer}
+button:hover{border-color:var(--gold)}
+button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 #status{color:var(--gold)}
 #info{border-top:1px solid var(--line);padding-top:8px;display:grid;gap:3px}
 #info:empty{display:none}
 #info b{font-size:18px}
-#info .k{color:var(--muted)}
-button{font:inherit;font-weight:600;letter-spacing:.04em;color:var(--fg);background:#26332a;border:1px solid var(--line);padding:5px 10px;border-radius:3px;cursor:pointer;justify-self:start}
-button:hover{border-color:var(--gold)}
-button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
-/* étiquettes */
-.lbl{pointer-events:none}
-.lbl span{display:block;transform:translate(-50%,-50%);white-space:nowrap;text-align:center;color:#fff;text-shadow:0 0 3px #000,0 0 6px #000,0 1px 2px #000;font-family:var(--ui)}
-.q-lbl span{font-size:13px;font-weight:600;letter-spacing:.03em}
-.q-lbl.own span{font-size:15px}
-.v-lbl span{font-size:26px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#f3e6c4}
-.z-far .q-lbl{display:none}
-.z-near .v-lbl{display:none}
-.leaflet-container{font-family:var(--ui)}
-.leaflet-control-attribution{background:rgba(20,26,22,.8)!important;color:var(--muted)!important}
-.leaflet-control-attribution a{color:var(--fg)!important}
+.k{color:var(--muted)}
+#credit{position:fixed;right:8px;bottom:calc(6px + env(safe-area-inset-bottom,0px));font-size:12px;color:var(--muted);background:rgba(20,26,22,.7);padding:2px 6px;border-radius:3px}
+#credit a{color:var(--fg)}
 </style>
 </head>
 <body>
-<div id="map" aria-label="Carte d'Aubagne et de La Valentine avec les quartiers"></div>
+<div id="scene" aria-label="La ville d'Aubagne en 3D avec ses bâtiments, ses routes, son relief et ses quartiers"></div>
 <div class="panel">
   <h1>Carte d'Aubagne</h1>
-  <p>Les vraies rues (OpenStreetMap) et les quartiers. Molette ou pincement pour zoomer : la ville, puis les quartiers, puis les rues. Clic sur un quartier pour le voir.</p>
+  <p>La vraie ville en 3D : relief, bâtiments, routes, rivière, forêts. Glisser pour se déplacer, molette pour zoomer de la ville jusqu'aux rues, clic droit pour pivoter et incliner. Clic sur un quartier pour le voir.</p>
   <div class="legend" id="legend"></div>
-  <button type="button" id="b-all">Vue d'ensemble</button>
-  <p id="status">Chargement de la carte…</p>
+  <div class="row" id="goto"></div>
+  <div class="row">
+    <button type="button" id="b-all">Vue d'ensemble</button>
+    <button type="button" id="b-shadow" aria-pressed="true">Ombres : oui</button>
+  </div>
+  <p id="status">Chargement…</p>
   <div id="info" aria-live="polite"></div>
 </div>
+<div id="credit">© les contributeurs d'<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · relief Mapzen</div>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/controls/OrbitControls.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6.5.0/turf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/d3-delaunay@6.0.4/dist/d3-delaunay.min.js"></script>
 <script>
-(function(){
+(async function(){
 const status=document.getElementById('status'),info=document.getElementById('info');
-if(!window.L||!window.turf||!window.d3){status.textContent='Une bibliothèque n\'a pas pu se charger.';return;}
+if(!window.THREE||!window.turf||!window.d3){status.textContent='Une bibliothèque n\'a pas pu se charger.';return;}
+const pause=()=>new Promise(r=>setTimeout(r,0));
+const say=async t=>{status.textContent=t;await pause();};
 
 // ---------- réglages ----------
 // Les joueurs et leur quartier de départ (docs/REGLES.md, section 2)
 const JOUEURS=[
   {nom:'Mathieu',quartier:'Les Passons',couleur:'#3f7fd6'},
   {nom:'Nico',quartier:'La Valentine',couleur:'#c94b3f'},
-  {nom:'Le créateur',quartier:'Pin Vert',couleur:'#d6a53f'},
+  {nom:'Le créateur',quartier:'Pin Vert',couleur:'#e3b54a'},
 ];
-// Positions de secours si un quartier n'est pas nommé dans OpenStreetMap (approximatives, à vérifier)
-const SECOURS={'les passons':[43.2905,5.5935],'pin vert':[43.3045,5.5855]};
-const VILLES_JEU=['Aubagne'];                 // découpées en quartiers
-const VILLES_HORS_JEU=['La Penne-sur-Huveaune']; // affichées, pas encore dans le jeu
-const ECART_MIN=280;                          // deux quartiers plus proches que ça (m) n'en font qu'un
+// Positions de secours (longitude, latitude) si un quartier n'est pas nommé dans OpenStreetMap : approximatives, à vérifier
+const SECOURS={'les passons':[5.5935,43.2905],'pin vert':[5.5855,43.3045]};
+const VILLES_JEU=['Aubagne'];                  // découpées en quartiers
+const VILLES_HORS_JEU=['La Penne-sur-Huveaune'];  // affichées, pas encore dans le jeu
+const ECART_MIN=280;                           // deux lieux-dits plus proches que ça (m) ne font qu'un quartier
 
 const norm=s=>s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[-’']/g,' ').replace(/\s+/g,' ').trim();
 const ownerOf=name=>JOUEURS.find(j=>norm(j.quartier)===norm(name))||null;
+document.getElementById('legend').innerHTML=JOUEURS.map(j=>`<span><i style="background:${j.couleur}"></i>${j.nom} · ${j.quartier}</span>`).join('')+'<span><i style="background:transparent"></i>Quartier neutre (contour clair)</span>';
 
-document.getElementById('legend').innerHTML=JOUEURS.map(j=>`<span><i style="background:${j.couleur}"></i>${j.nom} · ${j.quartier}</span>`).join('')+
-  '<span><i style="background:transparent;border-style:dashed"></i>Quartier neutre</span>';
+// ---------- données ----------
+await say('Chargement des données de la ville…');
+let V;
+try{const r=await fetch('ville.json');if(!r.ok)throw 0;V=await r.json();}
+catch(e){status.textContent='Les données de la ville ne sont pas encore prêtes : elles se préparent à la publication du site (quelques minutes). Recharge la page un peu plus tard.';return;}
+const [WM,DM]=V.taille,ll2xz=(lon,lat)=>[(lon-V.origine[0])*V.kx,-(lat-V.origine[1])*V.kz];
 
-// ---------- la carte ----------
-const map=L.map('map',{zoomControl:false,minZoom:11,maxZoom:18,zoomSnap:.5}).setView([43.300,5.545],13);
-L.control.zoom({position:'bottomright'}).addTo(map);
-L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© les contributeurs d\'<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(map);
-function zoomClass(){const z=map.getZoom(),el=map.getContainer();el.classList.toggle('z-far',z<13);el.classList.toggle('z-near',z>=14);}
-map.on('zoomend',zoomClass);zoomClass();
-let allBounds=null;
-document.getElementById('b-all').addEventListener('click',()=>{if(allBounds)map.fitBounds(allBounds,{padding:[20,20]});});
+// relief
+const RF=V.relief,NX=RF.nx,NZ=RF.nz,PAS=RF.pas,X0=-WM/2,Z0=-DM/2,GW=(NX-1)*PAS,GD=(NZ-1)*PAS;
+const HG=new Float32Array(NX*NZ);{const b=atob(RF.dm),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);const dv=new DataView(u.buffer);for(let i=0;i<NX*NZ;i++)HG[i]=dv.getInt16(i*2,true)/10;}
+function hAt(x,z){
+  const u=Math.min(NX-1-1e-3,Math.max(0,(x-X0)/PAS)),v=Math.min(NZ-1-1e-3,Math.max(0,(z-Z0)/PAS));
+  const ix=u|0,iy=v|0,fu=u-ix,fv=v-iy,a=HG[iy*NX+ix],b=HG[(iy+1)*NX+ix],c=HG[(iy+1)*NX+ix+1],d=HG[iy*NX+ix+1];
+  return fu+fv<=1?a+(d-a)*fu+(b-a)*fv:c+(b-c)*(1-fu)+(d-c)*(1-fv);
+}
+let seed=11;const R=()=>{seed|=0;seed=seed+0x6D2B79F5|0;let x=Math.imul(seed^seed>>>15,1|seed);x=x+Math.imul(x^x>>>7,61|x)^x;return((x^x>>>14)>>>0)/4294967296};
 
-// ---------- les données OpenStreetMap ----------
-const SERVEURS=['https://overpass-api.de/api/interpreter','https://overpass.kumi.systems/api/interpreter'];
-async function charger(){
-  // 1) le fichier préparé à la publication du site
-  try{const r=await fetch('osm.json',{cache:'no-cache'});if(r.ok){const j=await r.json();if(j.elements&&j.elements.length)return j;}}catch(e){}
-  // 2) sinon, la copie gardée dans ce navigateur
-  try{const c=localStorage.getItem('shin-osm');if(c)return JSON.parse(c);}catch(e){}
-  // 3) sinon, on la demande directement à OpenStreetMap
-  status.textContent='Téléchargement de la carte depuis OpenStreetMap (peut prendre 30 secondes)…';
-  const q=await (await fetch('requete.overpassql')).text();
-  for(const s of SERVEURS){
-    try{const r=await fetch(s,{method:'POST',body:'data='+encodeURIComponent(q),headers:{'Content-Type':'application/x-www-form-urlencoded'}});
-      if(!r.ok)continue;const j=await r.json();try{localStorage.setItem('shin-osm',JSON.stringify(j));}catch(e){}return j;}catch(e){}
+// ---------- scène ----------
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(0xa9bccb);
+scene.fog=new THREE.Fog(0xa9bccb,9000,30000);
+const renderer=new THREE.WebGLRenderer({antialias:true});
+renderer.setPixelRatio(Math.min(2,window.devicePixelRatio||1));
+renderer.outputEncoding=THREE.sRGBEncoding;
+renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+document.getElementById('scene').appendChild(renderer.domElement);
+const camera=new THREE.PerspectiveCamera(40,1,2,60000);
+const controls=new THREE.MapControls(camera,renderer.domElement);
+controls.enableDamping=true;controls.dampingFactor=.08;controls.screenSpacePanning=false;
+controls.minDistance=30;controls.maxDistance=16000;controls.minPolarAngle=.1;controls.maxPolarAngle=1.32;
+controls.keyPanSpeed=40;controls.listenToKeyEvents(window);
+scene.add(new THREE.HemisphereLight(0xdfe9f2,0x5a5236,.62));
+const sun=new THREE.DirectionalLight(0xfff1d6,1.15),SUN_DIR=new THREE.Vector3(-.55,.75,.36).normalize();
+sun.castShadow=true;sun.shadow.mapSize.set(4096,4096);sun.shadow.bias=-.0004;sun.shadow.normalBias=.6;
+scene.add(sun,sun.target);
+function resize(){const w=innerWidth,h=innerHeight;renderer.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix();}
+addEventListener('resize',resize);resize();
+
+// ---------- quartiers (calculés avant le sol, qui est teinté aux couleurs des joueurs) ----------
+await say('Découpage des quartiers…');
+const ringsOf=g=>g.type==='Polygon'?[g.coordinates[0]]:g.coordinates.map(p=>p[0]);
+const close=r=>{const a=[];for(let i=0;i<r.length;i+=2)a.push([r[i],r[i+1]]);a.push(a[0]);return a;};
+const communes={};for(const [nom,rs] of Object.entries(V.communes||{}))if(rs.length)communes[nom]=turf.multiPolygon(rs.map(r=>[close(r)]));
+const lieux=(V.lieux||[]).map(([nom,place,x,z])=>({nom,place,x,z}));
+const manquants=[];
+for(const [k,[lon,lat]] of Object.entries(SECOURS))if(!lieux.some(p=>norm(p.nom)===k)){const j=JOUEURS.find(j=>norm(j.quartier)===k);const [x,z]=ll2xz(lon,lat);lieux.push({nom:j.quartier,place:'suburb',x,z});manquants.push(j.quartier);}
+function decouper(commune,ville){
+  const rang={suburb:0,quarter:1,village:2,neighbourhood:3,hamlet:4,locality:5};
+  let pts=lieux.filter(p=>turf.booleanPointInPolygon([p.x,p.z],commune));
+  pts.sort((a,b)=>(ownerOf(b.nom)?1:0)-(ownerOf(a.nom)?1:0)||(rang[a.place]??9)-(rang[b.place]??9));
+  const keep=[];for(const p of pts)if(!keep.some(k=>Math.hypot(k.x-p.x,k.z-p.z)<ECART_MIN))keep.push(p);
+  if(keep.length<2)return keep.map(p=>({nom:p.nom,ville,geo:commune.geometry}));
+  const [w,s,e,n]=turf.bbox(commune),vor=d3.Delaunay.from(keep.map(p=>[p.x,p.z])).voronoi([w-50,s-50,e+50,n+50]);
+  const out=[];keep.forEach((p,i)=>{const c=vor.cellPolygon(i);if(!c)return;let it=null;try{it=turf.intersect(turf.polygon([c]),commune);}catch(e){}if(it)out.push({nom:p.nom,ville,geo:it.geometry});});
+  return out;
+}
+const quartiers=[];
+VILLES_JEU.forEach(v=>{if(communes[v])quartiers.push(...decouper(communes[v],v));});
+if(communes['La Valentine'])quartiers.push({nom:'La Valentine',ville:'Marseille (11ᵉ)',geo:communes['La Valentine'].geometry});
+else{const p=lieux.find(p=>norm(p.nom)==='la valentine');if(p)quartiers.push({nom:'La Valentine',ville:'Marseille (11ᵉ)',geo:{type:'Polygon',coordinates:[[...Array(49)].map((_,i)=>[p.x+900*Math.cos(i/48*6.2832),p.z+900*Math.sin(i/48*6.2832)])]}});}
+quartiers.forEach(q=>{q.owner=ownerOf(q.nom);q.rings=ringsOf(q.geo);
+  q.area=q.rings.reduce((s,r)=>{let a=0;for(let i=0;i<r.length-1;i++)a+=r[i][0]*r[i+1][1]-r[i+1][0]*r[i][1];return s+Math.abs(a)/2;},0);
+  q.feature={type:'Feature',geometry:q.geo,properties:{}};});
+if(!quartiers.some(q=>q.nom==='La Valentine'))manquants.push('La Valentine');
+
+// ---------- sol : relief + texture peinte (forêts, champs, eau, routes, couleurs des joueurs) ----------
+await say('Peinture du sol…');
+const CW=4096,CH=Math.round(4096*GD/GW),sx=CW/GW,sz=CH/GD;
+const cv=document.createElement('canvas');cv.width=CW;cv.height=CH;const g=cv.getContext('2d');
+const path=(flat,closed)=>{g.beginPath();for(let i=0;i<flat.length;i+=2){const px=(flat[i]-X0)*sx,py=(flat[i+1]-Z0)*sz;i?g.lineTo(px,py):g.moveTo(px,py);}if(closed)g.closePath();};
+g.fillStyle='#ada677';g.fillRect(0,0,CW,CH);
+const SOLC={residentiel:'#c2b89e',industriel:'#aaa398',champ:'#bfb072',vigne:'#9c9858',herbe:'#8d9f58',garrigue:'#7f8650',foret:'#4d6a38',roche:'#d6d0c0',sport:'#6e9a52',parking:'#a19b91',cimetiere:'#97a080',eau:'#4f7f95'};
+const ORDRE=['residentiel','industriel','champ','vigne','herbe','garrigue','foret','roche','sport','parking','cimetiere','eau'];
+const solsPar={};(V.sols||[]).forEach(s=>{const t=V.typesSol[s[0]];(solsPar[t]=solsPar[t]||[]).push(s);});
+for(const t of ORDRE){g.fillStyle=SOLC[t];for(const s of solsPar[t]||[]){path(s.slice(1),true);g.fill();}}
+// grain du sol
+{const n=document.createElement('canvas');n.width=n.height=128;const ng=n.getContext('2d');for(let i=0;i<2600;i++){const v=150+R()*105|0;ng.fillStyle=`rgb(${v},${v},${v})`;ng.fillRect(R()*128,R()*128,2,2);}
+ g.globalCompositeOperation='multiply';g.globalAlpha=.35;g.fillStyle=g.createPattern(n,'repeat');g.fillRect(0,0,CW,CH);g.globalAlpha=1;g.globalCompositeOperation='source-over';}
+// quartiers des joueurs teintés
+for(const q of quartiers)if(q.owner){g.fillStyle=q.owner.couleur;g.globalAlpha=.24;for(const r of q.rings){path(r.flat(),true);g.fill();}g.globalAlpha=1;}
+// routes peintes (utiles de loin) ; elles existent aussi en volume de près
+g.lineCap=g.lineJoin='round';
+const RC={autoroute:['#6f6c68',16],principale:['#7e7972',10],rue:['#8f897f',7],petite:['#9b948a',4.5],chemin:['#c8b78f',2.2]};
+for(const ci of [4,3,2,1,0]){const [c,w]=RC[V.classes[ci]];g.strokeStyle=c;g.lineWidth=Math.max(1,w*sx);for(const r of V.routes)if(r[0]===ci&&r[1]>=0){path(r.slice(2),false);g.stroke();}}
+g.strokeStyle='#4f7f95';for(const r of V.rivieres||[]){g.lineWidth=Math.max(1.5,r[0]*sx);path(r.slice(1),false);g.stroke();}
+const tex=new THREE.CanvasTexture(cv);tex.encoding=THREE.sRGBEncoding;tex.anisotropy=renderer.capabilities.getMaxAnisotropy();
+const tgeo=new THREE.PlaneGeometry(GW,GD,NX-1,NZ-1);tgeo.rotateX(-Math.PI/2);tgeo.translate(X0+GW/2,0,Z0+GD/2);
+{const p=tgeo.attributes.position;for(let i=0;i<p.count;i++)p.setY(i,HG[i]);tgeo.computeVertexNormals();}
+const ground=new THREE.Mesh(tgeo,new THREE.MeshLambertMaterial({map:tex}));ground.receiveShadow=true;scene.add(ground);
+
+// ---------- routes, voies ferrées, rivières en volume ----------
+await say('Construction des routes…');
+function ribbon(flat,width,yoff,out,bridge){
+  const P=[];
+  for(let i=0;i<flat.length-2;i+=2){const ax=flat[i],az=flat[i+1],bx=flat[i+2],bz=flat[i+3],L=Math.hypot(bx-ax,bz-az),n=Math.max(1,Math.ceil(L/10));for(let k=0;k<n;k++)P.push(ax+(bx-ax)*k/n,az+(bz-az)*k/n);}
+  P.push(flat[flat.length-2],flat[flat.length-1]);
+  const m=P.length/2;if(m<2)return;
+  const ya=bridge?hAt(P[0],P[1]):0,yb=bridge?hAt(P[2*m-2],P[2*m-1]):0,base=out.pos.length/3;
+  for(let i=0;i<m;i++){
+    const x=P[2*i],z=P[2*i+1],pi=Math.max(0,i-1),ni=Math.min(m-1,i+1);
+    let dx=P[2*ni]-P[2*pi],dz=P[2*ni+1]-P[2*pi+1];const l=Math.hypot(dx,dz)||1;dx/=l;dz/=l;
+    const nx=-dz*width/2,nz=dx*width/2;
+    const y=bridge?ya+(yb-ya)*i/(m-1)+.8:Math.max(hAt(x,z),hAt(x+nx,z+nz),hAt(x-nx,z-nz))+yoff;
+    out.pos.push(x+nx,y,z+nz,x-nx,y,z-nz);
   }
-  throw new Error('OpenStreetMap ne répond pas');
+  for(let i=0;i<m-1;i++){const a=base+2*i;out.idx.push(a,a+2,a+1,a+1,a+2,a+3);}
 }
+function ribbonMesh(out,color,off){
+  if(!out.pos.length)return;
+  const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(out.pos,3));geo.setIndex(out.idx);
+  const nor=new Float32Array(out.pos.length);for(let i=1;i<nor.length;i+=3)nor[i]=1;geo.setAttribute('normal',new THREE.BufferAttribute(nor,3));
+  const m=new THREE.Mesh(geo,new THREE.MeshLambertMaterial({color,polygonOffset:true,polygonOffsetFactor:-1-off,polygonOffsetUnits:-4-off*2}));m.receiveShadow=true;scene.add(m);
+}
+{const river={pos:[],idx:[]};for(const r of V.rivieres||[])ribbon(r.slice(1),r[0],.25,river,false);ribbonMesh(river,0x4f7f95,0);
+ V.classes.forEach((cl,ci)=>{const out={pos:[],idx:[]};for(const r of V.routes)if(r[0]===ci&&r[1]>=0)ribbon(r.slice(2),RC[cl][1],.35+(4-ci)*.06,out,r[1]===1);ribbonMesh(out,new THREE.Color(RC[cl][0]).convertSRGBToLinear(),1+(4-ci));});
+ const rail={pos:[],idx:[]};for(const r of V.rails||[])ribbon(r,3,.5,rail,false);ribbonMesh(rail,new THREE.Color('#5f574e').convertSRGBToLinear(),6);}
 
-// relie les morceaux de frontière d'une commune en contours fermés
-function contours(rel){
-  const eq=(a,b)=>Math.abs(a[0]-b[0])<1e-9&&Math.abs(a[1]-b[1])<1e-9;
-  let segs=rel.members.filter(m=>m.type==='way'&&m.geometry&&m.role!=='inner').map(m=>m.geometry.map(p=>[p.lon,p.lat]));
-  const out=[];
-  while(segs.length){
-    let ring=segs.shift(),changed=true;
-    while(changed&&!eq(ring[0],ring[ring.length-1])){changed=false;
-      for(let i=0;i<segs.length;i++){const s=segs[i],end=ring[ring.length-1];
-        if(eq(s[0],end))ring=ring.concat(s.slice(1));
-        else if(eq(s[s.length-1],end))ring=ring.concat(s.slice().reverse().slice(1));
-        else if(eq(s[s.length-1],ring[0]))ring=s.concat(ring.slice(1));
-        else if(eq(s[0],ring[0]))ring=s.slice().reverse().concat(ring.slice(1));
-        else continue;
-        segs.splice(i,1);changed=true;break;}}
-    if(ring.length>3&&eq(ring[0],ring[ring.length-1]))out.push([ring]);
+// ---------- bâtiments ----------
+await say(`Construction de ${V.batiments.length} bâtiments…`);
+const PAL={
+  maison:[['#ead9b8','#e3cba0','#efe2c8','#dcc395','#f1d7ae'],['#b5562f','#a84d2a','#bf6539','#b0603c']],
+  immeuble:[['#e6ddd0','#d9d0c0','#efe7d8','#e4d4b8'],['#a29c90','#9a948a','#b0623e']],
+  industrie:[['#c9c6bf','#bdbab3','#d2cbbd'],['#8e9296','#a7aaa8','#9aa0a4']],
+  commerce:[['#e0d8c8','#d6cfc2'],['#a19d94','#b4b0a6']],
+  public:[['#ead8b2','#e4cfa4'],['#b5562f','#a9a49a']],
+  religieux:[['#eadfc6'],['#a8502c']],
+  annexe:[['#cdbf9f','#c2b394'],['#8e7e66','#9a6b4c']],
+  autre:[['#e3d3b2','#dccaa6','#e9dcc2'],['#b5562f','#a8a297']],
+};
+const tmpC=new THREE.Color();
+{
+  const B=V.batiments;let NV=0;for(const b of B)NV+=5*(b.length-2)/2;
+  const pos=new Float32Array(NV*3),nor=new Float32Array(NV*3),col=new Uint8Array(NV*3),idx=[];let v=0;
+  const setC=(i,hex,k)=>{tmpC.set(hex);col[i*3]=Math.min(255,tmpC.r*255*k);col[i*3+1]=Math.min(255,tmpC.g*255*k);col[i*3+2]=Math.min(255,tmpC.b*255*k);};
+  for(const b of B){
+    const h=b[0],genre=V.genres[b[1]],n=(b.length-2)/2;
+    let xs=[],zs=[];for(let i=0;i<n;i++){xs.push(b[2+2*i]);zs.push(b[3+2*i]);}
+    let a=0;for(let i=0;i<n;i++){const j=(i+1)%n;a+=xs[i]*zs[j]-xs[j]*zs[i];}
+    if(a>0){xs.reverse();zs.reverse();}
+    let mn=1e9,mx=-1e9,sum=0;for(let i=0;i<n;i++){const y=hAt(xs[i],zs[i]);mn=Math.min(mn,y);mx=Math.max(mx,y);sum+=y;}
+    const bot=mn-1.5,top=Math.max(sum/n+h,mx+2);
+    const [walls,roofs]=PAL[genre]||PAL.autre,wc=walls[(R()*walls.length)|0],rc=roofs[(R()*roofs.length)|0],shade=.92+R()*.14;
+    for(let i=0;i<n;i++){const j=(i+1)%n,ex=xs[j]-xs[i],ez=zs[j]-zs[i],L=Math.hypot(ex,ez)||1,nx=-ez/L,nz=ex/L;
+      const q=[[xs[i],bot,zs[i]],[xs[j],bot,zs[j]],[xs[j],top,zs[j]],[xs[i],top,zs[i]]];
+      q.forEach((p,k)=>{pos.set(p,(v+k)*3);nor.set([nx,0,nz],(v+k)*3);setC(v+k,wc,shade*(k<2?.82:1));});
+      idx.push(v,v+1,v+2,v,v+2,v+3);v+=4;}
+    const r0=v;for(let i=0;i<n;i++){pos.set([xs[i],top,zs[i]],v*3);nor.set([0,1,0],v*3);setC(v,rc,shade);v++;}
+    const tris=THREE.ShapeUtils.triangulateShape(xs.map((x,i)=>new THREE.Vector2(x,zs[i])),[]);
+    for(const [p0,p1,p2] of tris){const cy=(zs[p1]-zs[p0])*(xs[p2]-xs[p0])-(xs[p1]-xs[p0])*(zs[p2]-zs[p0]);cy>0?idx.push(r0+p0,r0+p1,r0+p2):idx.push(r0+p0,r0+p2,r0+p1);}
   }
-  return out.length?turf.multiPolygon(out,{nom:rel.tags.name}):null;
+  const geo=new THREE.BufferGeometry();
+  geo.setAttribute('position',new THREE.BufferAttribute(pos,3));geo.setAttribute('normal',new THREE.BufferAttribute(nor,3));
+  geo.setAttribute('color',new THREE.BufferAttribute(col,3,true));geo.setIndex(new THREE.BufferAttribute(new Uint32Array(idx),1));
+  const mesh=new THREE.Mesh(geo,new THREE.MeshLambertMaterial({vertexColors:true}));mesh.castShadow=mesh.receiveShadow=true;scene.add(mesh);
 }
 
-// découpe une commune en quartiers autour des lieux-dits d'OpenStreetMap
-function decouper(commune,lieux){
-  const lat0=43.3*Math.PI/180,kx=Math.cos(lat0);
-  let pts=lieux.filter(p=>turf.booleanPointInPolygon(turf.point([p.lon,p.lat]),commune));
-  // on garde les plus importants quand deux lieux-dits sont collés
-  const rang={suburb:0,quarter:1,village:2,neighbourhood:3,hamlet:4,locality:5,isolated_dwelling:6};
-  pts.sort((a,b)=>(rang[a.place]??9)-(rang[b.place]??9)||(ownerOf(b.nom)?1:0)-(ownerOf(a.nom)?1:0));
-  pts.sort((a,b)=>(ownerOf(b.nom)?1:0)-(ownerOf(a.nom)?1:0));          // les quartiers des joueurs passent en premier
-  const keep=[];
-  for(const p of pts)if(!keep.some(k=>turf.distance([k.lon,k.lat],[p.lon,p.lat])*1000<ECART_MIN))keep.push(p);
-  if(keep.length<2)return keep.map(p=>({nom:p.nom,poly:commune,lieu:p}));
-  const [w,s,e,n]=turf.bbox(commune);
-  const del=d3.Delaunay.from(keep.map(p=>[p.lon*kx,p.lat]));
-  const vor=del.voronoi([(w-.01)*kx,s-.01,(e+.01)*kx,n+.01]);
-  const res=[];
-  keep.forEach((p,i)=>{const cell=vor.cellPolygon(i);if(!cell)return;
-    const poly=turf.polygon([cell.map(([x,y])=>[x/kx,y])]);
-    let inter=null;try{inter=turf.intersect(poly,commune);}catch(e){}
-    if(inter)res.push({nom:p.nom,poly:inter,lieu:p});});
-  return res;
+// ---------- arbres (les mêmes que sur le champ de bataille) ----------
+await say('Plantation des arbres…');
+const treeImgs=await Promise.all([...Array(8)].map((_,i)=>new Promise(res=>{const im=new Image();im.onload=()=>res(im);im.onerror=()=>res(null);im.src=`../champ-3d/sprites/arbre_${String(i+1).padStart(2,'0')}.png`;})));
+if(treeImgs.some(Boolean)){
+  // masque des zones boisées : rouge = forêt, vert = garrigue, bleu = parcs
+  const MW=2048,MH=Math.round(2048*GD/GW),mc=document.createElement('canvas');mc.width=MW;mc.height=MH;const mg=mc.getContext('2d');
+  const mpath=f=>{mg.beginPath();for(let i=0;i<f.length;i+=2){const px=(f[i]-X0)*MW/GW,py=(f[i+1]-Z0)*MH/GD;i?mg.lineTo(px,py):mg.moveTo(px,py);}mg.closePath();};
+  [['foret','#f00'],['garrigue','#0f0'],['herbe','#00f']].forEach(([t,c])=>{mg.fillStyle=c;for(const s of solsPar[t]||[]){mpath(s.slice(1));mg.fill();}});
+  // pas d'arbres sur les routes ni les bâtiments
+  mg.strokeStyle='#000';mg.lineWidth=2;for(const r of V.routes){if(r[0]>2)continue;const f=r.slice(2);mg.beginPath();for(let i=0;i<f.length;i+=2){const px=(f[i]-X0)*MW/GW,py=(f[i+1]-Z0)*MH/GD;i?mg.lineTo(px,py):mg.moveTo(px,py);}mg.stroke();}
+  const md=mg.getImageData(0,0,MW,MH).data,spots=[];
+  for(let k=0;k<520000&&spots.length<90000;k++){const x=X0+R()*GW,z=Z0+R()*GD,px=((x-X0)/GW*MW)|0,py=((z-Z0)/GD*MH)|0,o=(py*MW+px)*4;
+    const f=md[o]>128,ga=md[o+1]>128,pa=md[o+2]>128,keep=f?.85:ga?.22:pa?.12:0;
+    if(R()<keep)spots.push([x,hAt(x,z),z,f?11+R()*7:ga?4+R()*4:8+R()*6]);}
+  const at=document.createElement('canvas');at.width=1024;at.height=512;const ag=at.getContext('2d');
+  treeImgs.forEach((im,i)=>{if(!im)return;const sc=256/Math.max(im.width,im.height),w=im.width*sc,h=im.height*sc;ag.drawImage(im,(i%4)*256+(256-w)/2,Math.floor(i/4)*256+(256-h),w,h);});
+  const atlas=new THREE.CanvasTexture(at);atlas.anisotropy=4;
+  const n=spots.length,base=new THREE.PlaneGeometry(1,1),geo=new THREE.InstancedBufferGeometry();
+  geo.index=base.index;geo.setAttribute('position',base.attributes.position);geo.setAttribute('uv',base.attributes.uv);
+  const ip=new Float32Array(n*3),is=new Float32Array(n*2),it=new Float32Array(n),ic=new Float32Array(n);
+  spots.forEach(([x,y,z,h],i)=>{ip.set([x,y,z],i*3);is.set([h*(R()<.5?-1:1),h],i*2);it[i]=Math.floor(R()*8);ic[i]=.8+R()*.28;});
+  geo.setAttribute('iPos',new THREE.InstancedBufferAttribute(ip,3));geo.setAttribute('iSize',new THREE.InstancedBufferAttribute(is,2));
+  geo.setAttribute('iTile',new THREE.InstancedBufferAttribute(it,1));geo.setAttribute('iShade',new THREE.InstancedBufferAttribute(ic,1));geo.instanceCount=n;
+  const mat=new THREE.ShaderMaterial({uniforms:{map:{value:atlas}},side:THREE.DoubleSide,
+    vertexShader:`attribute vec3 iPos;attribute vec2 iSize;attribute float iTile;attribute float iShade;varying vec2 vUv;varying float vShade;
+      void main(){vec4 mv=modelViewMatrix*vec4(iPos,1.0);vec2 p=position.xy;p.y+=0.42;mv.xy+=p*iSize;gl_Position=projectionMatrix*mv;
+      float c=mod(iTile,4.0),r=floor(iTile/4.0);vUv=vec2((c+uv.x)/4.0,1.0-(r+1.0-uv.y)/2.0);vShade=iShade;}`,
+    fragmentShader:`uniform sampler2D map;varying vec2 vUv;varying float vShade;
+      void main(){vec4 c=texture2D(map,vUv);if(c.a<0.5)discard;gl_FragColor=vec4(c.rgb*vShade,1.0);}`});
+  const trees=new THREE.Mesh(geo,mat);trees.frustumCulled=false;scene.add(trees);
 }
 
-function etiquette(latlng,texte,cls){
-  const span=document.createElement('span');span.textContent=texte;
-  return L.marker(latlng,{icon:L.divIcon({className:'lbl '+cls,html:span,iconSize:null}),interactive:false,keyboard:false}).addTo(map);
+// ---------- frontières (rideaux lumineux façon CK3) et noms ----------
+function curtain(rings,color,height,alpha){
+  const pos=[],colr=[],idx=[],c=new THREE.Color(color);
+  for(const r of rings){const P=[];for(let i=0;i<r.length-1;i++){const [ax,az]=r[i],[bx,bz]=r[i+1],L=Math.hypot(bx-ax,bz-az),n=Math.max(1,Math.ceil(L/12));for(let k=0;k<n;k++)P.push([ax+(bx-ax)*k/n,az+(bz-az)*k/n]);}P.push(r[r.length-1]);
+    const b=pos.length/3;P.forEach(([x,z])=>{const y=hAt(x,z);pos.push(x,y+.5,z,x,y+height,z);colr.push(c.r,c.g,c.b,alpha,c.r,c.g,c.b,0);});
+    for(let i=0;i<P.length-1;i++){const a=b+2*i;idx.push(a,a+2,a+1,a+1,a+2,a+3);}}
+  const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));geo.setAttribute('color',new THREE.Float32BufferAttribute(colr,4));geo.setIndex(idx);
+  const m=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({vertexColors:true,transparent:true,depthWrite:false,side:THREE.DoubleSide}));m.renderOrder=5;scene.add(m);return m;
 }
+function label(text,x,z,lift,size,color){
+  const font=`700 ${size}px "Barlow Condensed", Arial Narrow, sans-serif`,c=document.createElement('canvas'),c0=c.getContext('2d');c0.font=font;
+  c.width=Math.ceil(c0.measureText(text).width+24);c.height=Math.ceil(size*1.4);const cg=c.getContext('2d');
+  cg.font=font;cg.textBaseline='middle';cg.lineWidth=size/6;cg.strokeStyle='rgba(0,0,0,.85)';cg.strokeText(text,12,c.height/2);cg.fillStyle=color;cg.fillText(text,12,c.height/2);
+  const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;
+  const s=new THREE.Sprite(new THREE.SpriteMaterial({map:t,depthTest:false,sizeAttenuation:false,transparent:true}));
+  const k=size/1400;s.scale.set(k*c.width/c.height,k,1);s.position.set(x,hAt(x,z)+lift,z);s.renderOrder=20;scene.add(s);return s;
+}
+const qLabels=[],vLabels=[];
+for(const q of quartiers){
+  q.border=q.owner?curtain(q.rings,q.owner.couleur,40,.75):curtain(q.rings,'#fff4dc',14,.45);
+  const p=turf.pointOnFeature(q.feature).geometry.coordinates;q.c=p;
+  qLabels.push(label(q.owner?`${q.nom} · ${q.owner.nom}`:q.nom,p[0],p[1],30,q.owner?46:36,q.owner?'#fff':'#f3ead2'));
+}
+for(const v of VILLES_JEU.concat(VILLES_HORS_JEU)){const f=communes[v];if(!f)continue;
+  curtain(ringsOf(f.geometry),VILLES_JEU.includes(v)?'#f3e6c4':'#9a968c',VILLES_JEU.includes(v)?70:30,.55);
+  const c=turf.centroid(f).geometry.coordinates;vLabels.push(label(VILLES_JEU.includes(v)?v:v+' (pas encore en jeu)',c[0],c[1],200,VILLES_JEU.includes(v)?72:48,'#f3e6c4'));}
+{const q=quartiers.find(q=>q.nom==='La Valentine');if(q)vLabels.push(label('Marseille',q.c[0]-600,q.c[1]-500,200,64,'#f3e6c4'));}
 
-let selLayer=null;
-function montrer(q,layer){
-  if(selLayer)selLayer.setStyle(selLayer.baseStyle);
-  selLayer=layer;layer.setStyle({...layer.baseStyle,weight:4,color:'#e3b54a'});layer.bringToFront();
-  const km2=turf.area(q.poly)/1e6;
-  const own=ownerOf(q.nom);
-  info.innerHTML='';
-  const add=(html)=>{const s=document.createElement('span');s.innerHTML=html;info.appendChild(s);};
-  const b=document.createElement('b');b.textContent=q.nom;info.appendChild(b);
+// ---------- vues ----------
+let fly=null;
+function goTo(x,z,dist,pitch=.85){
+  const y=Math.max(hAt(x,z),0),off=new THREE.Vector3(0,Math.cos(pitch)*dist,Math.sin(pitch)*dist);
+  fly={t0:performance.now(),from:[controls.target.clone(),camera.position.clone()],to:[new THREE.Vector3(x,y,z),new THREE.Vector3(x,y,z).add(off)]};
+}
+let allView=[0,0];
+{const f=communes['Aubagne'];if(f){const c=turf.centroid(f).geometry.coordinates;allView=c;}}
+function viewAll(){goTo(allView[0]-1500,allView[1],11000,.75);}
+{const t=new THREE.Vector3(allView[0]-1500,0,allView[1]);controls.target.copy(t);camera.position.set(t.x,Math.cos(.75)*11000,t.z+Math.sin(.75)*11000);controls.update();}
+document.getElementById('b-all').addEventListener('click',viewAll);
+const gotoEl=document.getElementById('goto');
+JOUEURS.forEach(j=>{const q=quartiers.find(q=>norm(q.nom)===norm(j.quartier));if(!q)return;
+  const b=document.createElement('button');b.type='button';b.textContent=j.quartier;b.style.borderColor=j.couleur;
+  b.addEventListener('click',()=>{goTo(q.c[0],q.c[1],1600,.9);montrer(q);});gotoEl.appendChild(b);});
+document.getElementById('b-shadow').addEventListener('click',e=>{renderer.shadowMap.enabled=!renderer.shadowMap.enabled;scene.traverse(o=>{if(o.material)o.material.needsUpdate=true});e.currentTarget.textContent='Ombres : '+(renderer.shadowMap.enabled?'oui':'non');e.currentTarget.setAttribute('aria-pressed',renderer.shadowMap.enabled);});
+
+// ---------- clic sur un quartier ----------
+let sel=null,selCurtain=null;
+function montrer(q){
+  if(selCurtain){scene.remove(selCurtain);selCurtain.geometry.dispose();}
+  sel=q;selCurtain=curtain(q.rings,'#e3b54a',70,.9);
+  let nb=0;for(const b of V.batiments){let x=0,z=0;const n=(b.length-2)/2;for(let i=0;i<n;i++){x+=b[2+2*i];z+=b[3+2*i];}if(turf.booleanPointInPolygon([x/n,z/n],q.feature))nb++;}
+  info.innerHTML='';const b=document.createElement('b');b.textContent=q.nom;info.appendChild(b);
+  const add=h=>{const s=document.createElement('span');s.innerHTML=h;info.appendChild(s);};
   add(`<span class="k">Ville :</span> ${q.ville}`);
-  add(`<span class="k">Superficie :</span> ${km2.toFixed(2).replace('.',',')} km²`);
-  add(own?`<span class="k">Roi :</span> ${own.nom} (capitale)`:'<span class="k">Statut :</span> quartier neutre');
+  add(`<span class="k">Superficie :</span> ${(q.area/1e6).toFixed(2).replace('.',',')} km² · ${nb} bâtiments`);
+  add(q.owner?`<span class="k">Roi :</span> ${q.owner.nom} (capitale)`:'<span class="k">Statut :</span> quartier neutre');
   add('<span class="k">Entrer dans le quartier : à venir.</span>');
 }
+const ray=new THREE.Raycaster(),ndc=new THREE.Vector2();let down=null;
+renderer.domElement.addEventListener('pointerdown',e=>{down={x:e.clientX,y:e.clientY,b:e.button};});
+renderer.domElement.addEventListener('pointerup',e=>{
+  if(!down||e.button!==0||down.b!==0||Math.hypot(e.clientX-down.x,e.clientY-down.y)>6){down=null;return;}down=null;
+  const r=renderer.domElement.getBoundingClientRect();ndc.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);ray.setFromCamera(ndc,camera);
+  const o=ray.ray.origin,d=ray.ray.direction;let pt=null,prev=0;
+  for(let t=2;t<60000;t+=Math.max(2,t/400)){const x=o.x+d.x*t,y=o.y+d.y*t,z=o.z+d.z*t;
+    if(y<hAt(x,z)){let a=prev,b=t;for(let i=0;i<12;i++){const m=(a+b)/2;if(o.y+d.y*m<hAt(o.x+d.x*m,o.z+d.z*m))b=m;else a=m;}pt=[o.x+d.x*b,o.z+d.z*b];break;}prev=t;}
+  if(!pt)return;const q=quartiers.find(q=>turf.booleanPointInPolygon(pt,q.feature));if(q)montrer(q);
+});
 
-charger().then(data=>{
-  const els=data.elements||[];
-  const rels=els.filter(e=>e.type==='relation'&&e.tags&&e.tags.name);
-  const lieux=els.filter(e=>e.type==='node'&&e.tags&&e.tags.name).map(e=>({nom:e.tags.name,lat:e.lat,lon:e.lon,place:e.tags.place}));
-  // positions de secours pour les quartiers des joueurs absents d'OpenStreetMap
-  const manquants=[];
-  for(const [k,[lat,lon]] of Object.entries(SECOURS)){
-    if(!lieux.some(p=>norm(p.nom)===k)){const j=JOUEURS.find(j=>norm(j.quartier)===k);lieux.push({nom:j.quartier,lat,lon,place:'suburb'});manquants.push(j.quartier);}
-  }
-  const quartiers=[],bounds=L.latLngBounds([]);
-  const communes={};rels.forEach(r=>{const f=contours(r);if(f)communes[r.tags.name]=f;});
-
-  // villes hors jeu : simple contour
-  VILLES_HORS_JEU.forEach(v=>{const f=communes[v];if(!f)return;
-    L.geoJSON(f,{interactive:false,style:{color:'#cfc6ad',weight:1.5,dashArray:'2 6',fill:true,fillColor:'#000',fillOpacity:.25}}).addTo(map);
-    const c=turf.pointOnFeature(f).geometry.coordinates;etiquette([c[1],c[0]],v+' (pas encore en jeu)','q-lbl');});
-
-  // villes du jeu : découpées en quartiers
-  VILLES_JEU.forEach(v=>{const f=communes[v];if(!f)return;
-    decouper(f,lieux).forEach(q=>quartiers.push({...q,ville:v}));
-    L.geoJSON(f,{interactive:false,style:{color:'#f3e6c4',weight:3,fill:false}}).addTo(map);
-    const c=turf.centroid(f).geometry.coordinates;etiquette([c[1],c[0]],v,'v-lbl');});
-
-  // La Valentine : quartier officiel de Marseille, gardé tel quel
-  const lv=communes['La Valentine'];
-  if(lv)quartiers.push({nom:'La Valentine',ville:'Marseille (11ᵉ)',poly:lv});
-  else{const p=lieux.find(p=>norm(p.nom)==='la valentine');if(p)quartiers.push({nom:'La Valentine',ville:'Marseille (11ᵉ)',poly:turf.circle([p.lon,p.lat],.7,{units:'kilometers'})});}
-  if(lv||quartiers.some(q=>q.nom==='La Valentine')){const q=quartiers.find(q=>q.nom==='La Valentine');const c=turf.centroid(q.poly).geometry.coordinates;etiquette([c[1]+.006,c[0]],'Marseille','v-lbl');}
-
-  quartiers.forEach(q=>{
-    const own=ownerOf(q.nom);
-    const base=own?{color:own.couleur,weight:2.5,opacity:1,fillColor:own.couleur,fillOpacity:.38}:{color:'#f3e6c4',weight:1.2,opacity:.85,dashArray:'4 4',fillColor:'#1d241f',fillOpacity:.12};
-    const layer=L.geoJSON(q.poly,{style:base}).addTo(map);
-    layer.baseStyle=base;
-    layer.on('mouseover',()=>{if(layer!==selLayer)layer.setStyle({...base,fillOpacity:base.fillOpacity+.15});});
-    layer.on('mouseout',()=>{if(layer!==selLayer)layer.setStyle(base);});
-    layer.on('click',()=>montrer(q,layer));
-    bounds.extend(layer.getBounds());
-    const c=turf.pointOnFeature(q.poly).geometry.coordinates;
-    etiquette([c[1],c[0]],own?`${q.nom} · ${own.nom}`:q.nom,'q-lbl'+(own?' own':''));
-  });
-  if(bounds.isValid()){allBounds=bounds;map.fitBounds(bounds,{padding:[20,20]});}
-  const trouves=JOUEURS.filter(j=>quartiers.some(q=>norm(q.nom)===norm(j.quartier))).length;
-  status.textContent=`${quartiers.length} quartiers, dont ${trouves} quartiers de départ.`+(manquants.length?` Position approximative pour : ${manquants.join(', ')} (absent d'OpenStreetMap, à vérifier).`:'');
-}).catch(e=>{status.textContent='La carte n\'a pas pu être téléchargée ('+e.message+'). Réessaie dans quelques minutes.';});
+// ---------- boucle ----------
+function loop(now){
+  if(fly){const k=Math.min(1,(now-fly.t0)/1400),e=k*k*(3-2*k);controls.target.lerpVectors(fly.from[0],fly.to[0],e);camera.position.lerpVectors(fly.from[1],fly.to[1],e);if(k>=1)fly=null;}
+  controls.update();
+  const dist=camera.position.distanceTo(controls.target);
+  qLabels.forEach(s=>s.visible=dist<7000);vLabels.forEach(s=>s.visible=dist>2500);
+  // l'ombre du soleil suit la zone regardée
+  const ext=Math.min(3500,Math.max(250,dist*.9)),sc=sun.shadow.camera;
+  if(Math.abs(sc.right-ext)>ext*.1){Object.assign(sc,{left:-ext,right:ext,top:ext,bottom:-ext,near:10,far:ext*4+3000});sc.updateProjectionMatrix();}
+  sun.target.position.copy(controls.target);sun.position.copy(controls.target).addScaledVector(SUN_DIR,ext*2+1500);
+  renderer.render(scene,camera);requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+status.textContent=`${V.batiments.length} bâtiments, ${V.routes.length} routes, ${quartiers.length} quartiers.`+(manquants.length?` Position approximative pour : ${manquants.join(', ')} (absent d'OpenStreetMap, à vérifier).`:'');
 })();
 </script>
 </body>

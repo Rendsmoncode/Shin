@@ -20,13 +20,19 @@ jobs:
       url: ${{ steps.deploiement.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
-      # La carte de la ville (OpenStreetMap) est téléchargée à chaque publication.
-      # Si le service ne répond pas, la page la téléchargera elle-même dans le navigateur.
-      - name: Télécharger la carte de la ville
+      # Données de la carte 3D de la ville (OpenStreetMap + relief), générées une seule fois puis gardées en cache.
+      # Elles sont régénérées si le script outils/carte_ville.py change.
+      - uses: actions/cache@v4
+        with:
+          path: prototype/carte/ville.json
+          key: ville-${{ hashFiles('outils/carte_ville.py') }}
+      - name: Générer la carte de la ville
+        if: hashFiles('prototype/carte/ville.json') == ''
+        continue-on-error: true
+        timeout-minutes: 40
         run: |
-          curl -sf --max-time 150 -o prototype/carte/osm.json --data-urlencode "data@prototype/carte/requete.overpassql" https://overpass-api.de/api/interpreter \
-            || curl -sf --max-time 150 -o prototype/carte/osm.json --data-urlencode "data@prototype/carte/requete.overpassql" https://overpass.kumi.systems/api/interpreter \
-            || { rm -f prototype/carte/osm.json; echo "Carte non téléchargée"; }
+          pip install --quiet pillow
+          python3 outils/carte_ville.py prototype/carte/ville.json
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
