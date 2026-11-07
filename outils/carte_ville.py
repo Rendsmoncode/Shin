@@ -1,14 +1,14 @@
 """Prépare les données de la carte 3D de la ville (Aubagne, La Penne, La Valentine).
 
 Lancé automatiquement par GitHub au moment de la publication du site (voir .github/workflows/pages.yml).
-Télécharge :
-  - les bâtiments, routes, rivières, forêts, champs… depuis OpenStreetMap (service Overpass) ;
-  - le relief depuis les tuiles d'altitude publiques « Terrarium » (AWS).
-Écrit un seul fichier compact, en mètres autour du centre de la carte : prototype/carte/ville.json
+Entrée : la zone d'Aubagne extraite du fichier OpenStreetMap de la région PACA (Geofabrik),
+         convertie par osmium en GeoJSON (une entité par ligne).
+Relief : tuiles d'altitude publiques « Terrarium » (AWS).
+Sortie : un seul fichier compact, en mètres autour du centre de la carte : prototype/carte/ville.json
 
-Usage : python3 outils/carte_ville.py prototype/carte/ville.json
+Usage : python3 outils/carte_ville.py zone.geojsonseq prototype/carte/ville.json
 """
-import base64, io, json, math, os, re, struct, sys, time, urllib.parse, urllib.request
+import base64, io, json, math, os, re, struct, sys, urllib.request
 
 # zone couverte (sud, ouest, nord, est)
 S, W, N, E = 43.250, 5.470, 43.345, 5.650
@@ -16,7 +16,6 @@ LAT0, LON0 = (S + N) / 2, (W + E) / 2
 KX = 111320 * math.cos(math.radians(LAT0))
 KZ = 110540
 UA = {"User-Agent": "shin-carte/1.0 (jeu entre amis, generation unique)"}
-SERVEURS = ["https://overpass-api.de/api/interpreter", "https://overpass.kumi.systems/api/interpreter"]
 
 
 def xz(lon, lat):
@@ -29,39 +28,6 @@ def lonlat(x, z):
 
 
 TAILLE = (round((E - W) * KX), round((N - S) * KZ))
-BBOX = f"({S},{W},{N},{E})"
-
-
-def overpass(requete, essais=2):
-    data = urllib.parse.urlencode({"data": requete}).encode()
-    for essai in range(essais):
-        for s in SERVEURS:
-            try:
-                req = urllib.request.Request(s, data=data, headers=UA)
-                with urllib.request.urlopen(req, timeout=400) as r:
-                    return json.load(r)
-            except Exception as e:  # serveur saturé : on essaie le suivant
-                print(f"  {s} : {e}", flush=True)
-        time.sleep(15)
-    raise RuntimeError("OpenStreetMap ne répond pas")
-
-
-def charger(corps, s=S, w=W, n=N, e=E, profondeur=0):
-    """Télécharge une partie de la carte. Si c'est trop gros pour le serveur, on coupe la zone en 4 et on recommence."""
-    bb = f"({s},{w},{n},{e})"
-    q = f"[out:json][timeout:300][maxsize:1073741824];({corps.replace('BBOX', bb)});out tags geom;"
-    try:
-        return overpass(q)["elements"]
-    except Exception:
-        if profondeur >= 3:
-            raise
-        print(f"  trop gros : découpage en 4 (niveau {profondeur + 1})", flush=True)
-        ms, mw = (s + n) / 2, (w + e) / 2
-        res = {}
-        for z in [(s, w, ms, mw), (s, mw, ms, e), (ms, w, n, mw), (ms, mw, n, e)]:
-            for el in charger(corps, *z, profondeur + 1):
-                res[(el["type"], el["id"])] = el
-        return list(res.values())
 
 
 # ---------- bâtiments ----------
@@ -165,43 +131,6 @@ def type_sol(t):
     return None
 
 
-def anneaux(rel):
-    """Relie les morceaux extérieurs d'une relation en contours fermés (listes de points lon/lat)."""
-    segs = [[(p["lon"], p["lat"]) for p in m["geometry"] if p] for m in rel.get("members", [])
-            if m.get("type") == "way" and m.get("geometry") and m.get("role") != "inner"]
-    segs = [s for s in segs if len(s) > 1]
-    out = []
-    while segs:
-        ring = segs.pop(0)
-        change = True
-        while change and ring[0] != ring[-1]:
-            change = False
-            for i, s in enumerate(segs):
-                if s[0] == ring[-1]:
-                    ring = ring + s[1:]
-                elif s[-1] == ring[-1]:
-                    ring = ring + s[::-1][1:]
-                elif s[-1] == ring[0]:
-                    ring = s + ring[1:]
-                elif s[0] == ring[0]:
-                    ring = s[::-1] + ring[1:]
-                else:
-                    continue
-                segs.pop(i)
-                change = True
-                break
-        if len(ring) > 3 and ring[0] == ring[-1]:
-            out.append(ring)
-    return out
-
-
-def plat_ll(ring):
-    out = []
-    for lon, lat in ring[:-1]:
-        out += list(xz(lon, lat))
-    return out
-
-
 # ---------- relief ----------
 def relief(pas=20):
     z = 13
@@ -249,77 +178,78 @@ def relief(pas=20):
     return {"nx": nx, "nz": nz, "pas": pas, "dm": data}
 
 
-def main(sortie):
+LIEUX = ("suburb", "quarter", "neighbourhood", "hamlet", "locality", "village")
+
+
+def lire(chemin):
+    with open(chemin, encoding="utf-8") as f:
+        for ligne in f:
+            ligne = ligne.strip().lstrip("\x1e")
+            if ligne:
+                yield json.loads(ligne)
+
+
+def ligne_xz(coords):
+    return [v for lon, lat in coords for v in xz(lon, lat)]
+
+
+def anneau_xz(ring):
+    if len(ring) > 1 and ring[0] == ring[-1]:
+        ring = ring[:-1]
+    return ligne_xz(ring)
+
+
+def main(entree, sortie):
     print("Relief…", flush=True)
     dem = relief()
-    print("Bâtiments…", flush=True)
-    bat = charger('way["building"]BBOX;')
-    batiments = []
-    for e in bat:
-        if e.get("type") != "way" or not e.get("geometry"):
+    print("Lecture d'OpenStreetMap…", flush=True)
+    batiments, routes, rails, rivieres, sols, communes, lieux = [], [], [], [], [], {}, []
+    for f in lire(entree):
+        t = f.get("properties") or {}
+        g = f.get("geometry") or {}
+        typ, c = g.get("type"), g.get("coordinates")
+        if not c:
             continue
-        t = e.get("tags", {})
-        g = genre_batiment(t)
-        pts = plat(e["geometry"])
-        if len(pts) >= 6:
-            batiments.append([hauteur(t, g), GENRES.index(g)] + pts)
-    print(f"  {len(batiments)} bâtiments", flush=True)
-
-    elements = []
-    parties = [
-        ("Routes", 'way["highway"]BBOX;', True),
-        ("Rivières et voies ferrées", 'way["railway"="rail"]BBOX;way["waterway"~"^(river|stream|canal)$"]BBOX;', True),
-        ("Forêts et nature", 'way["natural"~"^(water|wood|scrub|heath|grassland|bare_rock)$"]BBOX;', True),
-        ("Champs, parcs et zones", 'way["landuse"]BBOX;way["leisure"~"^(park|pitch|garden|golf_course|stadium|sports_centre)$"]BBOX;way["amenity"="parking"]BBOX;', True),
-        ("Grandes zones naturelles", 'relation["natural"~"^(water|wood|scrub|heath)$"]BBOX;relation["landuse"~"^(forest|farmland|vineyard|residential|industrial|meadow|grass)$"]BBOX;', False),
-        ("Communes", 'relation["boundary"="administrative"]["admin_level"="8"]["name"~"^(Aubagne|La Penne-sur-Huveaune)$"];relation["boundary"="administrative"]["name"="La Valentine"](43.28,5.44,43.34,5.53);', True),
-        ("Lieux-dits", 'node["place"~"^(suburb|quarter|neighbourhood|hamlet|locality|village)$"]BBOX;', True),
-    ]
-    for nom, corps, obligatoire in parties:
-        print(f"{nom}…", flush=True)
-        try:
-            els = charger(corps)
-        except Exception as e:
-            if obligatoire:
-                raise
-            print(f"  ignoré ({e})", flush=True)
-            els = []
-        print(f"  {len(els)} éléments", flush=True)
-        elements += els
-    routes, rails, rivieres, sols, communes, lieux = [], [], [], [], {}, []
-    for e in elements:
-        t = e.get("tags", {})
-        if e["type"] == "node":
-            if t.get("name"):
-                lieux.append([t["name"], t.get("place", "")] + list(xz(e["lon"], e["lat"])))
-            continue
-        if e["type"] == "relation":
-            if t.get("boundary") == "administrative":
-                communes[t.get("name", "?")] = [plat_ll(r) for r in anneaux(e)]
-                continue
-            s = type_sol(t)
-            if s:
-                for r in anneaux(e):
-                    sols.append([SOLS.index(s)] + plat_ll(r))
-            continue
-        geom = e.get("geometry")
-        if not geom:
-            continue
-        if "highway" in t:
-            c = classe_route(t["highway"])
-            if c:
+        polys = [c] if typ == "Polygon" else c if typ == "MultiPolygon" else []
+        lignes = [c] if typ == "LineString" else c if typ == "MultiLineString" else [p[0] for p in polys]
+        if typ == "Point":
+            if t.get("place") in LIEUX and t.get("name"):
+                lieux.append([t["name"], t["place"]] + list(xz(*c)))
+        elif "building" in t and t.get("building") != "no":
+            gen = genre_batiment(t)
+            for p in polys:
+                pts = anneau_xz(p[0])
+                if len(pts) >= 6:
+                    batiments.append([hauteur(t, gen), GENRES.index(gen)] + pts)
+        elif t.get("boundary") == "administrative":
+            nom = t.get("name", "")
+            if polys and ((t.get("admin_level") == "8" and nom in ("Aubagne", "La Penne-sur-Huveaune")) or nom == "La Valentine"):
+                communes[nom] = [anneau_xz(p[0]) for p in polys]
+        elif "highway" in t:
+            cl = classe_route(t["highway"])
+            if cl:
                 pont = 1 if t.get("bridge") not in (None, "no") else (-1 if t.get("tunnel") not in (None, "no") else 0)
-                routes.append([ROUTES.index(c), pont] + [v for p in geom for v in xz(p["lon"], p["lat"])])
-        elif t.get("railway") == "rail":
-            rails.append([v for p in geom for v in xz(p["lon"], p["lat"])])
-        elif "waterway" in t:
+                for l in lignes:
+                    if len(l) > 1:
+                        routes.append([ROUTES.index(cl), pont] + ligne_xz(l))
+        elif t.get("railway") == "rail" and t.get("tunnel") in (None, "no"):
+            for l in lignes:
+                rails.append(ligne_xz(l))
+        elif t.get("waterway") in ("river", "stream", "canal") and typ in ("LineString", "MultiLineString"):
             large = {"river": 12, "canal": 6, "stream": 3}[t["waterway"]]
-            rivieres.append([large] + [v for p in geom for v in xz(p["lon"], p["lat"])])
+            for l in lignes:
+                rivieres.append([large] + ligne_xz(l))
         else:
-            s = type_sol(t)
-            if s and len(geom) > 3:
-                sols.append([SOLS.index(s)] + plat(geom))
-    print(f"  {len(routes)} routes, {len(sols)} zones, {len(rivieres)} cours d'eau, {len(lieux)} lieux-dits, communes : {list(communes)}", flush=True)
+            sol = type_sol(t)
+            if sol:
+                for p in polys:
+                    pts = anneau_xz(p[0])
+                    if len(pts) >= 6:
+                        sols.append([SOLS.index(sol)] + pts)
+    print(f"  {len(batiments)} bâtiments, {len(routes)} routes, {len(sols)} zones, {len(rivieres)} cours d'eau, "
+          f"{len(lieux)} lieux-dits, communes : {list(communes)}", flush=True)
+    if not batiments or "Aubagne" not in communes:
+        raise RuntimeError("Données incomplètes : pas de bâtiments ou pas de commune d'Aubagne")
 
     out = {"taille": TAILLE, "origine": [LON0, LAT0], "kx": KX, "kz": KZ, "relief": dem,
            "genres": GENRES, "batiments": batiments, "classes": ROUTES, "routes": routes, "rails": rails,
@@ -333,4 +263,4 @@ def main(sortie):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1] if len(sys.argv) > 1 else "prototype/carte/ville.json")
+    main(sys.argv[1], sys.argv[2] if len(sys.argv) > 2 else "prototype/carte/ville.json")

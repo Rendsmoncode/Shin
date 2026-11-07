@@ -31,8 +31,12 @@ jobs:
         continue-on-error: true
         timeout-minutes: 40
         run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq osmium-tool
           pip install --quiet pillow
-          python3 outils/carte_ville.py prototype/carte/ville.json
+          curl -sfL --retry 3 -o "$RUNNER_TEMP/paca.osm.pbf" https://download.geofabrik.de/europe/france/provence-alpes-cote-d-azur-latest.osm.pbf
+          osmium extract -b 5.47,43.25,5.65,43.345 --strategy smart "$RUNNER_TEMP/paca.osm.pbf" -o "$RUNNER_TEMP/zone.osm.pbf"
+          osmium export "$RUNNER_TEMP/zone.osm.pbf" -f geojsonseq -o "$RUNNER_TEMP/zone.geojsonseq"
+          python3 outils/carte_ville.py "$RUNNER_TEMP/zone.geojsonseq" prototype/carte/ville.json
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
