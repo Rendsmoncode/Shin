@@ -32,18 +32,36 @@ TAILLE = (round((E - W) * KX), round((N - S) * KZ))
 BBOX = f"({S},{W},{N},{E})"
 
 
-def overpass(requete):
+def overpass(requete, essais=2):
     data = urllib.parse.urlencode({"data": requete}).encode()
-    for essai in range(3):
+    for essai in range(essais):
         for s in SERVEURS:
             try:
                 req = urllib.request.Request(s, data=data, headers=UA)
-                with urllib.request.urlopen(req, timeout=900) as r:
+                with urllib.request.urlopen(req, timeout=400) as r:
                     return json.load(r)
             except Exception as e:  # serveur saturé : on essaie le suivant
                 print(f"  {s} : {e}", flush=True)
-        time.sleep(30)
+        time.sleep(15)
     raise RuntimeError("OpenStreetMap ne répond pas")
+
+
+def charger(corps, s=S, w=W, n=N, e=E, profondeur=0):
+    """Télécharge une partie de la carte. Si c'est trop gros pour le serveur, on coupe la zone en 4 et on recommence."""
+    bb = f"({s},{w},{n},{e})"
+    q = f"[out:json][timeout:300][maxsize:1073741824];({corps.replace('BBOX', bb)});out tags geom;"
+    try:
+        return overpass(q)["elements"]
+    except Exception:
+        if profondeur >= 3:
+            raise
+        print(f"  trop gros : découpage en 4 (niveau {profondeur + 1})", flush=True)
+        ms, mw = (s + n) / 2, (w + e) / 2
+        res = {}
+        for z in [(s, w, ms, mw), (s, mw, ms, e), (ms, w, n, mw), (ms, mw, n, e)]:
+            for el in charger(corps, *z, profondeur + 1):
+                res[(el["type"], el["id"])] = el
+        return list(res.values())
 
 
 # ---------- bâtiments ----------
@@ -235,9 +253,9 @@ def main(sortie):
     print("Relief…", flush=True)
     dem = relief()
     print("Bâtiments…", flush=True)
-    bat = overpass(f'[out:json][timeout:900][maxsize:1073741824];way["building"]{BBOX};out tags geom;')
+    bat = charger('way["building"]BBOX;')
     batiments = []
-    for e in bat["elements"]:
+    for e in bat:
         if e.get("type") != "way" or not e.get("geometry"):
             continue
         t = e.get("tags", {})
@@ -247,29 +265,29 @@ def main(sortie):
             batiments.append([hauteur(t, g), GENRES.index(g)] + pts)
     print(f"  {len(batiments)} bâtiments", flush=True)
 
-    print("Routes, eau, sols, quartiers…", flush=True)
-    reste = overpass(f'''[out:json][timeout:900][maxsize:1073741824];
-(
-  way["highway"]{BBOX};
-  way["railway"="rail"]{BBOX};
-  way["waterway"~"^(river|stream|canal)$"]{BBOX};
-  way["natural"~"^(water|wood|scrub|heath|grassland|bare_rock)$"]{BBOX};
-  relation["natural"~"^(water|wood|scrub|heath)$"]{BBOX};
-  way["landuse"]{BBOX};
-  relation["landuse"]{BBOX};
-  way["leisure"~"^(park|pitch|garden|golf_course|stadium|sports_centre)$"]{BBOX};
-  way["amenity"="parking"]{BBOX};
-);
-out tags geom;
-(
-  relation["boundary"="administrative"]["admin_level"="8"]["name"~"^(Aubagne|La Penne-sur-Huveaune)$"];
-  relation["boundary"="administrative"]["name"="La Valentine"](43.28,5.44,43.34,5.53);
-);
-out tags geom;
-node["place"~"^(suburb|quarter|neighbourhood|hamlet|locality|village)$"]{BBOX};
-out;''')
+    elements = []
+    parties = [
+        ("Routes", 'way["highway"]BBOX;', True),
+        ("Rivières et voies ferrées", 'way["railway"="rail"]BBOX;way["waterway"~"^(river|stream|canal)$"]BBOX;', True),
+        ("Forêts et nature", 'way["natural"~"^(water|wood|scrub|heath|grassland|bare_rock)$"]BBOX;', True),
+        ("Champs, parcs et zones", 'way["landuse"]BBOX;way["leisure"~"^(park|pitch|garden|golf_course|stadium|sports_centre)$"]BBOX;way["amenity"="parking"]BBOX;', True),
+        ("Grandes zones naturelles", 'relation["natural"~"^(water|wood|scrub|heath)$"]BBOX;relation["landuse"~"^(forest|farmland|vineyard|residential|industrial|meadow|grass)$"]BBOX;', False),
+        ("Communes", 'relation["boundary"="administrative"]["admin_level"="8"]["name"~"^(Aubagne|La Penne-sur-Huveaune)$"];relation["boundary"="administrative"]["name"="La Valentine"](43.28,5.44,43.34,5.53);', True),
+        ("Lieux-dits", 'node["place"~"^(suburb|quarter|neighbourhood|hamlet|locality|village)$"]BBOX;', True),
+    ]
+    for nom, corps, obligatoire in parties:
+        print(f"{nom}…", flush=True)
+        try:
+            els = charger(corps)
+        except Exception as e:
+            if obligatoire:
+                raise
+            print(f"  ignoré ({e})", flush=True)
+            els = []
+        print(f"  {len(els)} éléments", flush=True)
+        elements += els
     routes, rails, rivieres, sols, communes, lieux = [], [], [], [], {}, []
-    for e in reste["elements"]:
+    for e in elements:
         t = e.get("tags", {})
         if e["type"] == "node":
             if t.get("name"):
