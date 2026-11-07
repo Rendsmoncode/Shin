@@ -256,7 +256,7 @@ function tileGeo(T,L){
 
 // ---------- routes, voies ferrées, rivières et murs de soutènement : rangés par carré ----------
 await say('Construction des routes…');
-function decouper(flat,cb){   // coupe une ligne aux bords des carrés
+function couperLignes(flat,cb){   // coupe une ligne aux bords des carrés
   let cur=null,ck=-1;
   for(let s=0;s+3<flat.length;s+=2){
     const ax=flat[s],az=flat[s+1],bx=flat[s+2],bz=flat[s+3],ts=[0,1];
@@ -273,9 +273,9 @@ function decouper(flat,cb){   // coupe une ligne aux bords des carrés
   }
   if(cur&&cur.length>=4)cb(tiles[ck],cur);
 }
-for(const r of V.routes)decouper(r.slice(1),(T,f)=>T.routes.push([r[0],f]));
-for(const r of V.rivieres||[])decouper(r.slice(1),(T,f)=>T.rivieres.push([r[0],f]));
-for(const m of V.murs||[])decouper(m,(T,f)=>T.murs.push(f));
+for(const r of V.routes)couperLignes(r.slice(1),(T,f)=>T.routes.push([r[0],f]));
+for(const r of V.rivieres||[])couperLignes(r.slice(1),(T,f)=>T.rivieres.push([r[0],f]));
+for(const m of V.murs||[])couperLignes(m,(T,f)=>T.murs.push(f));
 function dens(f,k){const P=[];for(let i=0;i+3<f.length;i+=2){const ax=f[i],az=f[i+1],bx=f[i+2],bz=f[i+3],n=Math.max(1,Math.ceil(Math.hypot(bx-ax,bz-az)/k));for(let q=0;q<n;q++)P.push(ax+(bx-ax)*q/n,az+(bz-az)*q/n);}P.push(f[f.length-2],f[f.length-1]);return P;}
 function perp(P,i){const m=P.length/2,pi=Math.max(0,i-1),ni=Math.min(m-1,i+1);let dx=P[2*ni]-P[2*pi],dz=P[2*ni+1]-P[2*pi+1];const l=Math.hypot(dx,dz)||1;return [-dz/l,dx/l];}
 // ruban (route, rivière, tablier de pont) : yf donne son altitude en chaque point
