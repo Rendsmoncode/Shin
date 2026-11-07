@@ -20,19 +20,21 @@ jobs:
       url: ${{ steps.deploiement.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
-      # Données de la carte 3D de la ville (OpenStreetMap + relief), générées une seule fois puis gardées en cache.
-      # Elles sont régénérées si le script outils/carte_ville.py change.
+      # Données de la carte 3D de la ville (OpenStreetMap, relief IGN RGE ALTI, bâtiments IGN BD TOPO),
+      # générées une seule fois puis gardées en cache. Elles sont régénérées si le script outils/carte_ville.py change.
       - uses: actions/cache@v4
         with:
-          path: prototype/carte/ville.json
+          path: |
+            prototype/carte/ville.json
+            prototype/carte/relief
           key: ville-${{ hashFiles('outils/carte_ville.py') }}
       - name: Générer la carte de la ville
         if: hashFiles('prototype/carte/ville.json') == ''
         continue-on-error: true
-        timeout-minutes: 40
+        timeout-minutes: 75
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq osmium-tool
-          pip install --quiet pillow
+          pip install --quiet pillow numpy
           curl -sfL --retry 3 -o "$RUNNER_TEMP/paca.osm.pbf" https://download.geofabrik.de/europe/france/provence-alpes-cote-d-azur-latest.osm.pbf
           osmium extract -b 5.47,43.25,5.65,43.345 --strategy smart -S types=multipolygon,boundary "$RUNNER_TEMP/paca.osm.pbf" -o "$RUNNER_TEMP/zone.osm.pbf"
           osmium export "$RUNNER_TEMP/zone.osm.pbf" -f geojsonseq -o "$RUNNER_TEMP/zone.geojsonseq"

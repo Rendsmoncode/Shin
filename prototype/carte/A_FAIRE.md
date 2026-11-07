@@ -1,6 +1,6 @@
 # Carte de la ville : à faire
 
-Version 3D : relief réel, tous les bâtiments, routes, rivières, forêts et champs (OpenStreetMap), Aubagne découpée en quartiers autour des lieux-dits, La Valentine (quartier officiel de Marseille), les 3 quartiers de départ aux couleurs des joueurs. Les données sont préparées par `outils/carte_ville.py` à la publication du site.
+Version 3D : relief IGN précis (2 m près de la caméra), bâtiments IGN à leur vraie hauteur, murs de soutènement, ponts, tous les bâtiments, routes, rivières, forêts et champs (OpenStreetMap), Aubagne découpée en quartiers autour des lieux-dits, La Valentine (quartier officiel de Marseille), les 3 quartiers de départ aux couleurs des joueurs. Les données sont préparées par `outils/carte_ville.py` à la publication du site.
 
 - [ ] Vérifier le découpage des quartiers d'Aubagne avec l'utilisateur (fusionner ou découper à la main si besoin).
 - [ ] Vérifier la position des Passons et du Pin Vert s'ils sont absents d'OpenStreetMap.

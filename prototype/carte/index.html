@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Carte d'Aubagne</title>
 <style>
-/* La vraie ville en 3D (OpenStreetMap + relief réel), dans le même style que le champ de bataille. Aspect sombre unique, volontaire. */
+/* La vraie ville en 3D (OpenStreetMap, relief et bâtiments IGN), dans le même style que le champ de bataille. Aspect sombre unique, volontaire. */
 :root{
   --bg:#141a16; --panel:rgba(20,26,22,.88); --line:#33443a; --fg:#e7e3d6; --muted:#a3ab9f; --gold:#e3b54a;
   --ui:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
@@ -38,7 +38,7 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 <div id="scene" aria-label="La ville d'Aubagne en 3D avec ses bâtiments, ses routes, son relief et ses quartiers"></div>
 <div class="panel">
   <h1>Carte d'Aubagne</h1>
-  <p>La vraie ville en 3D : relief, bâtiments, routes, rivière, forêts. Glisser pour se déplacer, molette pour zoomer de la ville jusqu'aux rues, clic droit pour pivoter et incliner. Clic sur un quartier pour le voir.</p>
+  <p>La vraie ville en 3D : relief précis, bâtiments à leur vraie hauteur, routes, ponts, murs de soutènement, rivière, forêts. Glisser pour se déplacer, molette pour zoomer de la ville jusqu'aux rues, clic droit pour pivoter et incliner. Clic sur un quartier pour le voir.</p>
   <div class="legend" id="legend"></div>
   <div class="row" id="goto"></div>
   <div class="row">
@@ -48,7 +48,7 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
   <p id="status">Chargement…</p>
   <div id="info" aria-live="polite"></div>
 </div>
-<div id="credit">© les contributeurs d'<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · relief Mapzen</div>
+<div id="credit">© les contributeurs d'<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · relief et bâtiments <a href="https://geoservices.ign.fr/">IGN</a></div>
 
 <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/controls/OrbitControls.js"></script>
@@ -83,16 +83,37 @@ await say('Chargement des données de la ville…');
 let V;
 try{const r=await fetch('ville.json');if(!r.ok)throw 0;V=await r.json();}
 catch(e){status.textContent='Les données de la ville ne sont pas encore prêtes : elles se préparent à la publication du site (quelques minutes). Recharge la page un peu plus tard.';return;}
-const [WM,DM]=V.taille,ll2xz=(lon,lat)=>[(lon-V.origine[0])*V.kx,-(lat-V.origine[1])*V.kz];
+if(V.source)document.getElementById('credit').textContent=V.source;
+const ll2xz=(lon,lat)=>[(lon-V.origine[0])*V.kx,-(lat-V.origine[1])*V.kz];
 
-// relief
-const RF=V.relief,NX=RF.nx,NZ=RF.nz,PAS=RF.pas,X0=-WM/2,Z0=-DM/2,GW=(NX-1)*PAS,GD=(NZ-1)*PAS;
-const HG=new Float32Array(NX*NZ);{const b=atob(RF.dm),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);const dv=new DataView(u.buffer);for(let i=0;i<NX*NZ;i++)HG[i]=dv.getInt16(i*2,true)/10;}
-function hAt(x,z){
-  const u=Math.min(NX-1-1e-3,Math.max(0,(x-X0)/PAS)),v=Math.min(NZ-1-1e-3,Math.max(0,(z-Z0)/PAS));
-  const ix=u|0,iy=v|0,fu=u-ix,fv=v-iy,a=HG[iy*NX+ix],b=HG[(iy+1)*NX+ix],c=HG[(iy+1)*NX+ix+1],d=HG[iy*NX+ix+1];
-  return fu+fv<=1?a+(d-a)*fu+(b-a)*fv:c+(b-c)*(1-fu)+(d-c)*(1-fv);
+// relief : une image globale (un point tous les 10 m) et une image par carré de 500 m (un point tous les 2 m),
+// altitude codée en centimètres sur les 3 couleurs (voir outils/carte_ville.py)
+const RF=V.relief,TU=RF.tuile,NTX=RF.nt[0],NTZ=RF.nt[1],X0=RF.x0,Z0=RF.z0,GW=NTX*TU,GD=NTZ*TU;
+const GP=RF.gpas,GNX=RF.gn[0],GNZ=RF.gn[1],FN=TU/RF.pas+3,GT=TU/GP;
+async function lireRelief(url,w,h){
+  const r=await fetch(url);if(!r.ok)throw new Error(url);const blob=await r.blob();
+  let src=null;
+  if(window.createImageBitmap){try{src=await createImageBitmap(blob,{colorSpaceConversion:'none',premultiplyAlpha:'none'});}catch(e){src=null;}}
+  if(!src)src=await new Promise((res,rej)=>{const im=new Image(),u=URL.createObjectURL(blob);im.onload=()=>{URL.revokeObjectURL(u);res(im);};im.onerror=rej;im.src=u;});
+  const c=document.createElement('canvas');c.width=w;c.height=h;const g=c.getContext('2d',{willReadFrequently:true});g.drawImage(src,0,0);
+  const d=g.getImageData(0,0,w,h).data,out=new Float32Array(w*h);
+  for(let i=0;i<w*h;i++)out[i]=(d[4*i]*65536+d[4*i+1]*256+d[4*i+2])/100-1000;
+  if(src.close)src.close();
+  return out;
 }
+await say('Chargement du relief…');
+let HG;
+try{HG=await lireRelief(RF.dossier+'global.png',GNX,GNZ);}
+catch(e){status.textContent='Le relief de la ville n\'a pas pu se charger. Recharge la page un peu plus tard.';return;}
+// altitude sur une grille régulière, avec les mêmes triangles que le maillage 3D
+function tri(get,u,v,nu,nv){
+  u=Math.min(nu-1e-6,Math.max(0,u));v=Math.min(nv-1e-6,Math.max(0,v));
+  const c=u|0,r=v|0,fu=u-c,fv=v-r,a=get(c,r),b=get(c,r+1),d=get(c+1,r);
+  if(fu+fv<=1)return a+(d-a)*fu+(b-a)*fv;
+  const e=get(c+1,r+1);return e+(b-e)*(1-fu)+(d-e)*(1-fv);
+}
+const getG=(c,r)=>HG[r*GNX+c];
+function hAt(x,z){return tri(getG,(x-X0)/GP,(z-Z0)/GP,GNX-1,GNZ-1);}   // relief de loin (10 m)
 let seed=11;const R=()=>{seed|=0;seed=seed+0x6D2B79F5|0;let x=Math.imul(seed^seed>>>15,1|seed);x=x+Math.imul(x^x>>>7,61|x)^x;return((x^x>>>14)>>>0)/4294967296};
 
 // ---------- scène ----------
@@ -158,42 +179,219 @@ for(const t of ORDRE){g.fillStyle=SOLC[t];for(const s of solsPar[t]||[]){path(s.
  g.globalCompositeOperation='multiply';g.globalAlpha=.35;g.fillStyle=g.createPattern(n,'repeat');g.fillRect(0,0,CW,CH);g.globalAlpha=1;g.globalCompositeOperation='source-over';}
 // quartiers des joueurs teintés
 for(const q of quartiers)if(q.owner){g.fillStyle=q.owner.couleur;g.globalAlpha=.24;for(const r of q.rings){path(r.flat(),true);g.fill();}g.globalAlpha=1;}
-// routes peintes (utiles de loin) ; elles existent aussi en volume de près
+// routes peintes (utiles de loin) ; de près elles existent aussi en volume, posées sur le relief fin
 g.lineCap=g.lineJoin='round';
-const RC={autoroute:['#6f6c68',16],principale:['#7e7972',10],rue:['#8f897f',7],petite:['#9b948a',4.5],chemin:['#c8b78f',2.2]};
-for(const ci of [4,3,2,1,0]){const [c,w]=RC[V.classes[ci]];g.strokeStyle=c;g.lineWidth=Math.max(1,w*sx);for(const r of V.routes)if(r[0]===ci&&r[1]>=0){path(r.slice(2),false);g.stroke();}}
+const CL=V.classes,LARG=V.largeurs;
+const RC={autoroute:'#6f6c68',principale:'#7e7972',rue:'#8f897f',petite:'#9b948a',chemin:'#c8b78f',rail:'#5f574e'};
+const YOFF={autoroute:.6,principale:.54,rue:.48,petite:.42,chemin:.36,rail:.66};   // les plus grandes routes passent dessus
+for(const cl of ['chemin','petite','rue','principale','autoroute','rail']){const ci=CL.indexOf(cl);g.strokeStyle=RC[cl];g.lineWidth=Math.max(1,LARG[cl]*sx*(cl==='rail'?.6:1));for(const r of V.routes)if(r[0]===ci){path(r.slice(1),false);g.stroke();}}
 g.strokeStyle='#4f7f95';for(const r of V.rivieres||[]){g.lineWidth=Math.max(1.5,r[0]*sx);path(r.slice(1),false);g.stroke();}
 const tex=new THREE.CanvasTexture(cv);tex.encoding=THREE.sRGBEncoding;tex.anisotropy=renderer.capabilities.getMaxAnisotropy();
-const tgeo=new THREE.PlaneGeometry(GW,GD,NX-1,NZ-1);tgeo.rotateX(-Math.PI/2);tgeo.translate(X0+GW/2,0,Z0+GD/2);
-{const p=tgeo.attributes.position;for(let i=0;i<p.count;i++)p.setY(i,HG[i]);tgeo.computeVertexNormals();}
-const ground=new THREE.Mesh(tgeo,new THREE.MeshLambertMaterial({map:tex}));ground.receiveShadow=true;scene.add(ground);
 
-// ---------- routes, voies ferrées, rivières en volume ----------
-await say('Construction des routes…');
-function ribbon(flat,width,yoff,out,bridge){
-  const P=[];
-  for(let i=0;i<flat.length-2;i+=2){const ax=flat[i],az=flat[i+1],bx=flat[i+2],bz=flat[i+3],L=Math.hypot(bx-ax,bz-az),n=Math.max(1,Math.ceil(L/10));for(let k=0;k<n;k++)P.push(ax+(bx-ax)*k/n,az+(bz-az)*k/n);}
-  P.push(flat[flat.length-2],flat[flat.length-1]);
-  const m=P.length/2;if(m<2)return;
-  const ya=bridge?hAt(P[0],P[1]):0,yb=bridge?hAt(P[2*m-2],P[2*m-1]):0,base=out.pos.length/3;
-  for(let i=0;i<m;i++){
-    const x=P[2*i],z=P[2*i+1],pi=Math.max(0,i-1),ni=Math.min(m-1,i+1);
-    let dx=P[2*ni]-P[2*pi],dz=P[2*ni+1]-P[2*pi+1];const l=Math.hypot(dx,dz)||1;dx/=l;dz/=l;
-    const nx=-dz*width/2,nz=dx*width/2;
-    const y=bridge?ya+(yb-ya)*i/(m-1)+.8:Math.max(hAt(x,z),hAt(x+nx,z+nz),hAt(x-nx,z-nz))+yoff;
-    out.pos.push(x+nx,y,z+nz,x-nx,y,z-nz);
+// ---------- relief en carrés de 500 m, plus ou moins détaillés selon la distance à la caméra ----------
+await say('Construction du relief…');
+// pas de la grille (m) et distance jusqu'à laquelle on l'utilise ; les deux premiers niveaux viennent des images fines (2 m)
+const LV=[{pas:2,d:650},{pas:4,d:1500},{pas:10,d:3600},{pas:20,d:8000},{pas:50,d:1e9}];
+let arbresIP=null,arbresAttr=null,arbresSales=false;
+// pentes fortes (ressauts sans mur, falaises) : coloriées en roche
+const groundMat=new THREE.MeshLambertMaterial({map:tex});
+groundMat.onBeforeCompile=s=>{
+  s.vertexShader=s.vertexShader.replace('#include <common>','#include <common>\nattribute float rock;\nvarying float vRock;\nvarying vec2 vXZ;')
+    .replace('#include <begin_vertex>','#include <begin_vertex>\nvRock=rock;vXZ=position.xz;');
+  s.fragmentShader=s.fragmentShader.replace('#include <common>',`#include <common>
+varying float vRock;varying vec2 vXZ;
+float hsh(vec2 p){p=mod(p,512.);return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+float vn(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hsh(i),hsh(i+vec2(1,0)),f.x),mix(hsh(i+vec2(0,1)),hsh(i+vec2(1,1)),f.x),f.y);}`)
+    .replace('#include <map_fragment>',`#include <map_fragment>
+if(vRock>.001){float nn=.5*vn(vXZ*.3)+.3*vn(vXZ*1.1)+.2*vn(vXZ*3.7);vec3 rc=mix(vec3(.30,.27,.22),vec3(.58,.54,.46),nn);diffuseColor.rgb=mix(diffuseColor.rgb,rc,vRock);}`);
+};
+const tiles=[];
+for(let j=0;j<NTZ;j++)for(let i=0;i<NTX;i++){
+  let mn=1e9,mx=-1e9;for(let r=0;r<=GT;r++)for(let c=0;c<=GT;c++){const h=HG[(j*GT+r)*GNX+i*GT+c];if(h<mn)mn=h;if(h>mx)mx=h;}
+  const T={i,j,x0:X0+i*TU,z0:Z0+j*TU,ymin:mn-10,ymax:mx+10,lvl:-1,want:-1,geos:[],fine:null,etat:0,d:0,extra:null,extraLvl:-1,routes:[],rivieres:[],murs:[],arbres:null};
+  T.mesh=new THREE.Mesh(new THREE.BufferGeometry(),groundMat);T.mesh.receiveShadow=true;T.mesh.visible=false;scene.add(T.mesh);tiles.push(T);
+}
+const tileIdx=(x,z)=>Math.min(NTZ-1,Math.max(0,Math.floor((z-Z0)/TU)))*NTX+Math.min(NTX-1,Math.max(0,Math.floor((x-X0)/TU)));
+function getter(T,L){
+  const k=LV[L].pas;
+  if(L<=1){const F=T.fine,s=k/2;return (c,r)=>F[(1+r*s)*FN+1+c*s];}
+  const s=k/GP,o=T.j*GT*GNX+T.i*GT;return (c,r)=>HG[o+r*s*GNX+c*s];
+}
+// altitude du relief tel qu'il est affiché dans ce carré (les routes et les murs s'y posent exactement)
+function hT(T,L,x,z){const k=LV[L].pas,n=TU/k;return tri(getter(T,L),(x-T.x0)/k,(z-T.z0)/k,n,n);}
+const rockOf=ny=>{const t=Math.min(1,Math.max(0,(.8-ny)/.18));return t*t*(3-2*t);};
+const IDX={};
+function indexOf(n){
+  if(IDX[n])return IDX[n];
+  const N1=n+1,ring=[],idx=[];
+  for(let r=0;r<n;r++)for(let c=0;c<n;c++){const a=r*N1+c,b=a+N1;idx.push(a,b,a+1,b,b+1,a+1);}
+  for(let c=0;c<n;c++)ring.push(c);for(let r=0;r<n;r++)ring.push(r*N1+n);for(let c=n;c>0;c--)ring.push(n*N1+c);for(let r=n;r>0;r--)ring.push(r*N1);
+  // jupe tout autour du carré : cache les fentes entre deux carrés de détail différent
+  const base=N1*N1,m=4*n;
+  for(let k=0;k<m;k++){const a=ring[k],b=ring[(k+1)%m],a2=base+k,b2=base+(k+1)%m;idx.push(a,a2,b,b,a2,b2,a,b,a2,b,b2,a2);}
+  return IDX[n]={ring,arr:base+m>65535?new Uint32Array(idx):new Uint16Array(idx)};
+}
+function tileGeo(T,L){
+  const k=LV[L].pas,n=TU/k,N1=n+1,{ring,arr}=indexOf(n),nv=N1*N1+ring.length,get=getter(T,L);
+  const pos=new Float32Array(nv*3),nor=new Float32Array(nv*3),uv=new Float32Array(nv*2),rk=new Float32Array(nv);
+  const F=T.fine,fs=k/2,gs=k/GP;
+  let v=0;
+  for(let r=0;r<=n;r++)for(let c=0;c<=n;c++,v++){
+    const x=T.x0+c*k,z=T.z0+r*k;let dx,dz;
+    if(L<=1){const o=(1+r*fs)*FN+1+c*fs;dx=(F[o+1]-F[o-1])/4;dz=(F[o+FN]-F[o-FN])/4;}
+    else{const gc=T.i*GT+c*gs,gr=T.j*GT+r*gs,c0=Math.max(0,gc-1),c1=Math.min(GNX-1,gc+1),r0=Math.max(0,gr-1),r1=Math.min(GNZ-1,gr+1);
+      dx=(HG[gr*GNX+c1]-HG[gr*GNX+c0])/((c1-c0)*GP);dz=(HG[r1*GNX+gc]-HG[r0*GNX+gc])/((r1-r0)*GP);}
+    const l=Math.hypot(dx,1,dz);
+    pos[v*3]=x;pos[v*3+1]=get(c,r);pos[v*3+2]=z;nor[v*3]=-dx/l;nor[v*3+1]=1/l;nor[v*3+2]=-dz/l;
+    uv[v*2]=(x-X0)/GW;uv[v*2+1]=1-(z-Z0)/GD;rk[v]=rockOf(1/l);
   }
+  const jupe=k*1.5+3;
+  for(const s of ring){pos[v*3]=pos[s*3];pos[v*3+1]=pos[s*3+1]-jupe;pos[v*3+2]=pos[s*3+2];for(let q=0;q<3;q++)nor[v*3+q]=nor[s*3+q];uv[v*2]=uv[s*2];uv[v*2+1]=uv[s*2+1];rk[v]=rk[s];v++;}
+  const geo=new THREE.BufferGeometry();
+  geo.setAttribute('position',new THREE.BufferAttribute(pos,3));geo.setAttribute('normal',new THREE.BufferAttribute(nor,3));
+  geo.setAttribute('uv',new THREE.BufferAttribute(uv,2));geo.setAttribute('rock',new THREE.BufferAttribute(rk,1));
+  geo.setIndex(new THREE.BufferAttribute(arr,1));geo.computeBoundingSphere();
+  return geo;
+}
+
+// ---------- routes, voies ferrées, rivières et murs de soutènement : rangés par carré ----------
+await say('Construction des routes…');
+function decouper(flat,cb){   // coupe une ligne aux bords des carrés
+  let cur=null,ck=-1;
+  for(let s=0;s+3<flat.length;s+=2){
+    const ax=flat[s],az=flat[s+1],bx=flat[s+2],bz=flat[s+3],ts=[0,1];
+    const ia=Math.floor((ax-X0)/TU),ib=Math.floor((bx-X0)/TU),ja=Math.floor((az-Z0)/TU),jb=Math.floor((bz-Z0)/TU);
+    for(let q=Math.min(ia,ib)+1;q<=Math.max(ia,ib);q++)ts.push((X0+q*TU-ax)/(bx-ax));
+    for(let q=Math.min(ja,jb)+1;q<=Math.max(ja,jb);q++)ts.push((Z0+q*TU-az)/(bz-az));
+    ts.sort((a,b)=>a-b);
+    for(let q=0;q<ts.length-1;q++){
+      const t0=ts[q],t1=ts[q+1];if(t1-t0<1e-9)continue;
+      const tm=(t0+t1)/2,key=tileIdx(ax+(bx-ax)*tm,az+(bz-az)*tm);
+      if(key!==ck){if(cur&&cur.length>=4)cb(tiles[ck],cur);cur=[ax+(bx-ax)*t0,az+(bz-az)*t0];ck=key;}
+      cur.push(ax+(bx-ax)*t1,az+(bz-az)*t1);
+    }
+  }
+  if(cur&&cur.length>=4)cb(tiles[ck],cur);
+}
+for(const r of V.routes)decouper(r.slice(1),(T,f)=>T.routes.push([r[0],f]));
+for(const r of V.rivieres||[])decouper(r.slice(1),(T,f)=>T.rivieres.push([r[0],f]));
+for(const m of V.murs||[])decouper(m,(T,f)=>T.murs.push(f));
+function dens(f,k){const P=[];for(let i=0;i+3<f.length;i+=2){const ax=f[i],az=f[i+1],bx=f[i+2],bz=f[i+3],n=Math.max(1,Math.ceil(Math.hypot(bx-ax,bz-az)/k));for(let q=0;q<n;q++)P.push(ax+(bx-ax)*q/n,az+(bz-az)*q/n);}P.push(f[f.length-2],f[f.length-1]);return P;}
+function perp(P,i){const m=P.length/2,pi=Math.max(0,i-1),ni=Math.min(m-1,i+1);let dx=P[2*ni]-P[2*pi],dz=P[2*ni+1]-P[2*pi+1];const l=Math.hypot(dx,dz)||1;return [-dz/l,dx/l];}
+// ruban (route, rivière, tablier de pont) : yf donne son altitude en chaque point
+function ruban(P,w,yf,col,out){
+  const m=P.length/2;if(m<2)return;const base=out.pos.length/3;
+  for(let i=0;i<m;i++){const x=P[2*i],z=P[2*i+1],[px,pz]=perp(P,i),nx=px*w/2,nz=pz*w/2,y=yf(i,x,z,nx,nz);
+    out.pos.push(x+nx,y,z+nz,x-nx,y,z-nz);out.col.push(col.r,col.g,col.b,col.r,col.g,col.b);}
   for(let i=0;i<m-1;i++){const a=base+2*i;out.idx.push(a,a+2,a+1,a+1,a+2,a+3);}
 }
-function ribbonMesh(out,color,off){
-  if(!out.pos.length)return;
-  const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(out.pos,3));geo.setIndex(out.idx);
-  const nor=new Float32Array(out.pos.length);for(let i=1;i<nor.length;i+=3)nor[i]=1;geo.setAttribute('normal',new THREE.BufferAttribute(nor,3));
-  const m=new THREE.Mesh(geo,new THREE.MeshLambertMaterial({color,polygonOffset:true,polygonOffsetFactor:-1-off,polygonOffsetUnits:-4-off*2}));m.receiveShadow=true;scene.add(m);
+// volume le long d'une ligne (mur, flancs d'un pont) : faces des deux côtés, dessus et/ou dessous
+function boite(P,hw,YH,YB,dessus,dessous,out){
+  const m=P.length/2;if(m<2)return;const NN=[],S=[0];
+  for(let i=0;i<m;i++){NN.push(perp(P,i));if(i)S.push(S[i-1]+Math.hypot(P[2*i]-P[2*i-2],P[2*i+1]-P[2*i-1]));}
+  for(const sd of [1,-1]){const b0=out.pos.length/3;
+    for(let i=0;i<m;i++){const [nx,nz]=NN[i],x=P[2*i]+nx*hw*sd,z=P[2*i+1]+nz*hw*sd;
+      out.pos.push(x,YH[i],z,x,YB[i],z);out.nor.push(nx*sd,0,nz*sd,nx*sd,0,nz*sd);out.uv.push(S[i]/2.5,YH[i]/2.5,S[i]/2.5,YB[i]/2.5);}
+    for(let i=0;i<m-1;i++){const a=b0+2*i;sd>0?out.idx.push(a,a+1,a+2,a+1,a+3,a+2):out.idx.push(a,a+2,a+1,a+1,a+2,a+3);}}
+  for(const [on,Y,ny] of [[dessus,YH,1],[dessous,YB,-1]]){if(!on)continue;const b0=out.pos.length/3;
+    for(let i=0;i<m;i++){const [nx,nz]=NN[i];for(const sd of [1,-1]){out.pos.push(P[2*i]+nx*hw*sd,Y[i],P[2*i+1]+nz*hw*sd);out.nor.push(0,ny,0);out.uv.push(S[i]/2.5,sd*.12);}}
+    for(let i=0;i<m-1;i++){const a=b0+2*i;ny>0?out.idx.push(a,a+2,a+1,a+1,a+2,a+3):out.idx.push(a,a+1,a+2,a+1,a+3,a+2);}}
 }
-{const river={pos:[],idx:[]};for(const r of V.rivieres||[])ribbon(r.slice(1),r[0],.25,river,false);ribbonMesh(river,0x4f7f95,0);
- V.classes.forEach((cl,ci)=>{const out={pos:[],idx:[]};for(const r of V.routes)if(r[0]===ci&&r[1]>=0)ribbon(r.slice(2),RC[cl][1],.35+(4-ci)*.06,out,r[1]===1);ribbonMesh(out,new THREE.Color(RC[cl][0]).convertSRGBToLinear(),1+(4-ci));});
- const rail={pos:[],idx:[]};for(const r of V.rails||[])ribbon(r,3,.5,rail,false);ribbonMesh(rail,new THREE.Color('#5f574e').convertSRGBToLinear(),6);}
+function meshBoite(out,mat){
+  const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(out.pos,3));geo.setAttribute('normal',new THREE.Float32BufferAttribute(out.nor,3));
+  geo.setAttribute('uv',new THREE.Float32BufferAttribute(out.uv,2));geo.setIndex(out.idx);const m=new THREE.Mesh(geo,mat);m.castShadow=m.receiveShadow=true;return m;
+}
+const roadMat=new THREE.MeshLambertMaterial({vertexColors:true,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-6});
+function meshRubans(out){
+  const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(out.pos,3));geo.setAttribute('color',new THREE.Float32BufferAttribute(out.col,3));
+  const nor=new Float32Array(out.pos.length);for(let i=1;i<nor.length;i+=3)nor[i]=1;geo.setAttribute('normal',new THREE.BufferAttribute(nor,3));
+  geo.setIndex(out.idx);const m=new THREE.Mesh(geo,roadMat);m.receiveShadow=true;return m;
+}
+const EAU=new THREE.Color('#4f7f95'),COLS={};for(const cl of CL)COLS[cl]=new THREE.Color(RC[cl]||'#8f897f');COLS.rail.convertSRGBToLinear();
+// pierre des murs de soutènement (blocs irréguliers, motif qui se répète sans couture)
+const stoneMat=(()=>{
+  const c=document.createElement('canvas');c.width=c.height=256;const s=c.getContext('2d');s.fillStyle='#7f7768';s.fillRect(0,0,256,256);
+  const hs=[];for(let i=0;i<7;i++)hs.push(28+R()*16);const kh=256/hs.reduce((a,b)=>a+b);let y=0;
+  for(const h0 of hs){const h=h0*kh,ws=[];let t=0;while(t<256){const w=34+R()*58;ws.push(w);t+=w;}const kw=256/t;let x=R()*256;
+    for(const w0 of ws){const w=w0*kw,v=R(),col=`rgb(${168+v*58|0},${157+v*52|0},${134+v*44|0})`;
+      for(const ox of [0,-256]){s.fillStyle=col;s.fillRect(x+ox+1.5,y+1.5,w-3,h-3);s.fillStyle='rgba(0,0,0,.13)';s.fillRect(x+ox+1.5,y+h-5,w-3,3.5);s.fillStyle='rgba(255,255,255,.08)';s.fillRect(x+ox+1.5,y+1.5,w-3,3);}
+      x=(x+w)%256;}
+    y+=h;}
+  const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.encoding=THREE.sRGBEncoding;t.anisotropy=8;
+  return new THREE.MeshLambertMaterial({map:t,side:THREE.DoubleSide});
+})();
+// murs de soutènement : en pierre, du pied à la tête du ressaut mesuré sur le relief de part et d'autre (3 m)
+function mursDe(T,L){
+  const out={pos:[],nor:[],uv:[],idx:[]},k=Math.min(LV[L].pas,2);
+  for(const f of T.murs){const P=dens(f,k),m=P.length/2,YH=[],YB=[];
+    for(let i=0;i<m;i++){const x=P[2*i],z=P[2*i+1],[nx,nz]=perp(P,i),a=hT(T,L,x+nx*3,z+nz*3),b=hT(T,L,x-nx*3,z-nz*3),c=hT(T,L,x,z);
+      YH.push(Math.max(a,b,c)+.35);YB.push(Math.min(a,b,c)-.6);}
+    boite(P,.3,YH,YB,true,false,out);}
+  return out.idx.length?meshBoite(out,stoneMat):null;
+}
+function construireExtra(T,L){
+  enleverExtra(T);
+  const grp=new THREE.Group(),k=LV[L].pas,out={pos:[],col:[],idx:[]};
+  for(const [w,f] of T.rivieres)ruban(dens(f,k),w,(i,x,z)=>hT(T,L,x,z)+.3,EAU,out);
+  for(const [ci,f] of T.routes){const cl=CL[ci],w=LARG[cl],yo=YOFF[cl];
+    ruban(dens(f,k),w,(i,x,z,nx,nz)=>{let h=Math.max(hT(T,L,x,z),hT(T,L,x+nx,z+nz),hT(T,L,x-nx,z-nz));if(w>8)h=Math.max(h,hT(T,L,x+nx/2,z+nz/2),hT(T,L,x-nx/2,z-nz/2));return h+yo;},COLS[cl],out);}
+  if(out.idx.length)grp.add(meshRubans(out));
+  const mu=mursDe(T,L);if(mu)grp.add(mu);
+  T.extra=grp;T.extraLvl=L;scene.add(grp);
+}
+function enleverExtra(T){if(!T.extra)return;T.extra.traverse(o=>{if(o.geometry)o.geometry.dispose();});scene.remove(T.extra);T.extra=null;T.extraLvl=-1;}
+// ponts : à plat d'une culée à l'autre (altitudes des deux bouts calculées sur le relief fin), avec un tablier
+{const deck={pos:[],col:[],idx:[]},flancs={pos:[],nor:[],uv:[],idx:[]};
+ for(const p of V.ponts||[]){const cl=CL[p[0]],w=LARG[cl],P=dens(p.slice(3),4),m=P.length/2;if(m<2)continue;
+   const S=[0];for(let i=1;i<m;i++)S.push(S[i-1]+Math.hypot(P[2*i]-P[2*i-2],P[2*i+1]-P[2*i-1]));const Lt=S[m-1]||1;
+   const Y=S.map(s=>p[1]+(p[2]-p[1])*s/Lt+YOFF[cl]),ep=cl==='chemin'?.5:1.3;
+   ruban(P,w,i=>Y[i],COLS[cl],deck);boite(P,w/2+.15,Y.map(y=>y+.25),Y.map(y=>y-ep),false,true,flancs);}
+ if(deck.idx.length){const m=meshRubans(deck);m.castShadow=true;scene.add(m);}
+ if(flancs.idx.length)scene.add(meshBoite(flancs,new THREE.MeshLambertMaterial({color:0x9a958c,side:THREE.DoubleSide})));}
+
+// ---------- choix du détail de chaque carré, chargement du relief fin à la demande ----------
+let enCours=0;const fileFin=[];
+function demanderFin(T){if(T.etat)return;T.etat=1;fileFin.push(T);}
+function pomperFin(){
+  if(!fileFin.length)return;fileFin.sort((a,b)=>a.d-b.d);
+  while(enCours<6&&fileFin.length){const T=fileFin.shift();
+    if(T.d>LV[1].d*1.3){T.etat=0;continue;}
+    enCours++;
+    lireRelief(`${RF.dossier}t_${T.i}_${T.j}.png`,FN,FN).then(F=>{T.fine=F;T.etat=2;affinerArbres(T);}).catch(()=>{T.etat=3;}).finally(()=>{enCours--;});}
+}
+function majTuiles(budgetFin,budgetGros){
+  const cp=camera.position;
+  for(const T of tiles){
+    const dx=Math.max(T.x0-cp.x,0,cp.x-T.x0-TU),dz=Math.max(T.z0-cp.z,0,cp.z-T.z0-TU),dy=Math.max(T.ymin-cp.y,0,cp.y-T.ymax);
+    T.d=Math.hypot(dx,dy,dz);
+    let w=0;while(T.d>=LV[w].d)w++;
+    if(T.lvl>=0&&w>T.lvl&&T.d<LV[T.lvl].d*1.12)w=T.lvl;   // pas de clignotement à la limite
+    if(w<=1&&!T.fine){demanderFin(T);w=2;}               // en attendant le relief fin
+    T.want=w;
+  }
+  const todo=tiles.filter(T=>T.want!==T.lvl||(T.lvl<=1&&T.extraLvl!==T.lvl)||(T.lvl>1&&T.extra)).sort((a,b)=>a.d-b.d);
+  for(const T of todo){
+    const L=T.want,fin=L<=1;
+    if(T.want!==T.lvl){
+      if(!T.geos[L]){if(fin?budgetFin<=0:budgetGros<=0)continue;T.geos[L]=tileGeo(T,L);fin?budgetFin--:budgetGros--;}
+      T.mesh.geometry=T.geos[L];T.mesh.visible=true;T.lvl=L;
+    }
+    if(L<=1){if(T.extraLvl!==L&&budgetFin>0){construireExtra(T,L);budgetFin--;}}
+    else enleverExtra(T);
+  }
+  pomperFin();
+}
+function liberer(){   // mémoire : on ne garde le détail que des carrés proches
+  let n=tiles.filter(T=>T.fine).length;
+  for(const T of tiles.filter(T=>T.fine&&T.lvl>1).sort((a,b)=>b.d-a.d)){if(n<=160)break;T.fine=null;T.etat=0;for(const L of [0,1])if(T.geos[L]){T.geos[L].dispose();T.geos[L]=null;}n--;}
+  for(const [L,lim] of [[0,40],[1,100]]){let c=tiles.filter(T=>T.geos[L]).length;
+    for(const T of tiles.filter(T=>T.geos[L]&&T.lvl!==L).sort((a,b)=>b.d-a.d)){if(c<=lim)break;T.geos[L].dispose();T.geos[L]=null;c--;}}
+}
+function affinerArbres(T){
+  if(!arbresIP||!T.arbres||!T.fine)return;const get=getter(T,0),n=TU/2;
+  for(let i=T.arbres[0];i<T.arbres[1];i++)arbresIP[i*3+1]=tri(get,(arbresIP[i*3]-T.x0)/2,(arbresIP[i*3+2]-T.z0)/2,n,n);
+  arbresSales=true;
+}
 
 // ---------- bâtiments ----------
 await say(`Construction de ${V.batiments.length} bâtiments…`);
@@ -209,16 +407,15 @@ const PAL={
 };
 const tmpC=new THREE.Color();
 {
-  const B=V.batiments;let NV=0;for(const b of B)NV+=5*(b.length-2)/2;
+  const B=V.batiments,BH=V.champsBat.length;let NV=0;for(const b of B)NV+=5*(b.length-BH)/2;
   const pos=new Float32Array(NV*3),nor=new Float32Array(NV*3),col=new Uint8Array(NV*3),idx=[];let v=0;
   const setC=(i,hex,k)=>{tmpC.set(hex);col[i*3]=Math.min(255,tmpC.r*255*k);col[i*3+1]=Math.min(255,tmpC.g*255*k);col[i*3+2]=Math.min(255,tmpC.b*255*k);};
   for(const b of B){
-    const h=b[0],genre=V.genres[b[1]],n=(b.length-2)/2;
-    let xs=[],zs=[];for(let i=0;i<n;i++){xs.push(b[2+2*i]);zs.push(b[3+2*i]);}
+    // bas des murs sous le terrain, toit à son altitude réelle (BD TOPO) : ni flottant, ni enfoncé
+    const bot=b[0],top=(b[1]+b[2])/2,genre=V.genres[b[3]],n=(b.length-BH)/2;
+    let xs=[],zs=[];for(let i=0;i<n;i++){xs.push(b[BH+2*i]);zs.push(b[BH+1+2*i]);}
     let a=0;for(let i=0;i<n;i++){const j=(i+1)%n;a+=xs[i]*zs[j]-xs[j]*zs[i];}
     if(a>0){xs.reverse();zs.reverse();}
-    let mn=1e9,mx=-1e9,sum=0;for(let i=0;i<n;i++){const y=hAt(xs[i],zs[i]);mn=Math.min(mn,y);mx=Math.max(mx,y);sum+=y;}
-    const bot=mn-1.5,top=Math.max(sum/n+h,mx+2);
     const [walls,roofs]=PAL[genre]||PAL.autre,wc=walls[(R()*walls.length)|0],rc=roofs[(R()*roofs.length)|0],shade=.92+R()*.14;
     for(let i=0;i<n;i++){const j=(i+1)%n,ex=xs[j]-xs[i],ez=zs[j]-zs[i],L=Math.hypot(ex,ez)||1,nx=-ez/L,nz=ex/L;
       const q=[[xs[i],bot,zs[i]],[xs[j],bot,zs[j]],[xs[j],top,zs[j]],[xs[i],top,zs[i]]];
@@ -243,11 +440,14 @@ if(treeImgs.some(Boolean)){
   const mpath=f=>{mg.beginPath();for(let i=0;i<f.length;i+=2){const px=(f[i]-X0)*MW/GW,py=(f[i+1]-Z0)*MH/GD;i?mg.lineTo(px,py):mg.moveTo(px,py);}mg.closePath();};
   [['foret','#f00'],['garrigue','#0f0'],['herbe','#00f']].forEach(([t,c])=>{mg.fillStyle=c;for(const s of solsPar[t]||[]){mpath(s.slice(1));mg.fill();}});
   // pas d'arbres sur les routes ni les bâtiments
-  mg.strokeStyle='#000';mg.lineWidth=2;for(const r of V.routes){if(r[0]>2)continue;const f=r.slice(2);mg.beginPath();for(let i=0;i<f.length;i+=2){const px=(f[i]-X0)*MW/GW,py=(f[i+1]-Z0)*MH/GD;i?mg.lineTo(px,py):mg.moveTo(px,py);}mg.stroke();}
+  mg.strokeStyle='#000';mg.lineWidth=2;for(const r of V.routes){if(r[0]>2)continue;const f=r.slice(1);mg.beginPath();for(let i=0;i<f.length;i+=2){const px=(f[i]-X0)*MW/GW,py=(f[i+1]-Z0)*MH/GD;i?mg.lineTo(px,py):mg.moveTo(px,py);}mg.stroke();}
   const md=mg.getImageData(0,0,MW,MH).data,spots=[];
   for(let k=0;k<520000&&spots.length<90000;k++){const x=X0+R()*GW,z=Z0+R()*GD,px=((x-X0)/GW*MW)|0,py=((z-Z0)/GD*MH)|0,o=(py*MW+px)*4;
     const f=md[o]>128,ga=md[o+1]>128,pa=md[o+2]>128,keep=f?.85:ga?.22:pa?.12:0;
     if(R()<keep)spots.push([x,hAt(x,z),z,f?11+R()*7:ga?4+R()*4:8+R()*6]);}
+  // rangés par carré : leur pied est recalé sur le relief fin quand il arrive
+  spots.forEach(s=>s.push(tileIdx(s[0],s[2])));spots.sort((a,b)=>a[4]-b[4]);
+  spots.forEach((s,i)=>{const T=tiles[s[4]];if(!T.arbres)T.arbres=[i,i];T.arbres[1]=i+1;});
   const at=document.createElement('canvas');at.width=1024;at.height=512;const ag=at.getContext('2d');
   treeImgs.forEach((im,i)=>{if(!im)return;const sc=256/Math.max(im.width,im.height),w=im.width*sc,h=im.height*sc;ag.drawImage(im,(i%4)*256+(256-w)/2,Math.floor(i/4)*256+(256-h),w,h);});
   const atlas=new THREE.CanvasTexture(at);atlas.anisotropy=4;
@@ -255,7 +455,7 @@ if(treeImgs.some(Boolean)){
   geo.index=base.index;geo.setAttribute('position',base.attributes.position);geo.setAttribute('uv',base.attributes.uv);
   const ip=new Float32Array(n*3),is=new Float32Array(n*2),it=new Float32Array(n),ic=new Float32Array(n);
   spots.forEach(([x,y,z,h],i)=>{ip.set([x,y,z],i*3);is.set([h*(R()<.5?-1:1),h],i*2);it[i]=Math.floor(R()*8);ic[i]=.8+R()*.28;});
-  geo.setAttribute('iPos',new THREE.InstancedBufferAttribute(ip,3));geo.setAttribute('iSize',new THREE.InstancedBufferAttribute(is,2));
+  arbresIP=ip;arbresAttr=new THREE.InstancedBufferAttribute(ip,3);geo.setAttribute('iPos',arbresAttr);geo.setAttribute('iSize',new THREE.InstancedBufferAttribute(is,2));
   geo.setAttribute('iTile',new THREE.InstancedBufferAttribute(it,1));geo.setAttribute('iShade',new THREE.InstancedBufferAttribute(ic,1));geo.instanceCount=n;
   const mat=new THREE.ShaderMaterial({uniforms:{map:{value:atlas}},side:THREE.DoubleSide,
     vertexShader:`attribute vec3 iPos;attribute vec2 iSize;attribute float iTile;attribute float iShade;varying vec2 vUv;varying float vShade;
@@ -270,7 +470,7 @@ if(treeImgs.some(Boolean)){
 function curtain(rings,color,height,alpha){
   const pos=[],colr=[],idx=[],c=new THREE.Color(color);
   for(const r of rings){const P=[];for(let i=0;i<r.length-1;i++){const [ax,az]=r[i],[bx,bz]=r[i+1],L=Math.hypot(bx-ax,bz-az),n=Math.max(1,Math.ceil(L/12));for(let k=0;k<n;k++)P.push([ax+(bx-ax)*k/n,az+(bz-az)*k/n]);}P.push(r[r.length-1]);
-    const b=pos.length/3;P.forEach(([x,z])=>{const y=hAt(x,z);pos.push(x,y+.5,z,x,y+height,z);colr.push(c.r,c.g,c.b,alpha,c.r,c.g,c.b,0);});
+    const b=pos.length/3;P.forEach(([x,z])=>{const y=hAt(x,z);pos.push(x,y-1.5,z,x,y+height,z);colr.push(c.r,c.g,c.b,alpha,c.r,c.g,c.b,0);});
     for(let i=0;i<P.length-1;i++){const a=b+2*i;idx.push(a,a+2,a+1,a+1,a+2,a+3);}}
   const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));geo.setAttribute('color',new THREE.Float32BufferAttribute(colr,4));geo.setIndex(idx);
   const m=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({vertexColors:true,transparent:true,depthWrite:false,side:THREE.DoubleSide}));m.renderOrder=5;scene.add(m);return m;
@@ -316,7 +516,7 @@ let sel=null,selCurtain=null;
 function montrer(q){
   if(selCurtain){scene.remove(selCurtain);selCurtain.geometry.dispose();}
   sel=q;selCurtain=curtain(q.rings,'#e3b54a',70,.9);
-  let nb=0;for(const b of V.batiments){let x=0,z=0;const n=(b.length-2)/2;for(let i=0;i<n;i++){x+=b[2+2*i];z+=b[3+2*i];}if(turf.booleanPointInPolygon([x/n,z/n],q.feature))nb++;}
+  const BH=V.champsBat.length;let nb=0;for(const b of V.batiments){let x=0,z=0;const n=(b.length-BH)/2;for(let i=0;i<n;i++){x+=b[BH+2*i];z+=b[BH+1+2*i];}if(turf.booleanPointInPolygon([x/n,z/n],q.feature))nb++;}
   info.innerHTML='';const b=document.createElement('b');b.textContent=q.nom;info.appendChild(b);
   const add=h=>{const s=document.createElement('span');s.innerHTML=h;info.appendChild(s);};
   add(`<span class="k">Ville :</span> ${q.ville}`);
@@ -345,8 +545,11 @@ function loop(now){
   const ext=Math.min(3500,Math.max(250,dist*.9)),sc=sun.shadow.camera;
   if(Math.abs(sc.right-ext)>ext*.1){Object.assign(sc,{left:-ext,right:ext,top:ext,bottom:-ext,near:10,far:ext*4+3000});sc.updateProjectionMatrix();}
   sun.target.position.copy(controls.target);sun.position.copy(controls.target).addScaledVector(SUN_DIR,ext*2+1500);
+  majTuiles(2,40);if(++frame%60===0)liberer();
+  if(arbresSales&&arbresAttr){arbresAttr.needsUpdate=true;arbresSales=false;}
   renderer.render(scene,camera);requestAnimationFrame(loop);
 }
+let frame=0;majTuiles(0,1e9);
 requestAnimationFrame(loop);
 status.textContent=`${V.batiments.length} bâtiments, ${V.routes.length} routes, ${quartiers.length} quartiers.`+(manquants.length?` Position approximative pour : ${manquants.join(', ')} (absent d'OpenStreetMap, à vérifier).`:'');
 })();
