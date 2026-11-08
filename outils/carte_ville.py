@@ -6,7 +6,9 @@ Entrées :
   en GeoJSON (une entité par ligne) : routes, rivières, sols, murs de soutènement, quartiers ;
 - le relief IGN RGE ALTI (1 à 5 m) via la Géoplateforme (WMS, valeurs d'altitude brutes), rééchantillonné
   tous les 2 m ; secours : tuiles publiques « Terrarium » (environ 30 m) là où l'IGN ne répond pas ;
-- les bâtiments IGN BD TOPO (WFS) avec leurs vraies altitudes de pied et de toit ; secours : OpenStreetMap.
+- les bâtiments IGN BD TOPO (WFS) avec leurs vraies altitudes de pied et de toit ; secours : OpenStreetMap ;
+  couleurs des façades et des toits d'OpenStreetMap (building:colour, roof:colour) quand elles existent.
+Les photos aériennes IGN ne sont pas préparées ici : la page les charge directement (WMTS), carré par carré.
 Sorties (en mètres autour du centre de la carte) :
 - prototype/carte/ville.json : tout sauf le relief fin ;
 - prototype/carte/relief/ : le relief en images PNG (altitude codée en centimètres sur les 3 couleurs) :
@@ -203,7 +205,52 @@ def ecrire_relief(dossier):
 
 # ---------- bâtiments ----------
 GENRES = ["maison", "immeuble", "industrie", "commerce", "public", "religieux", "annexe", "autre"]
-CHAMPS_BAT = ["bas", "gouttiere", "faite", "genre", "etages", "murs", "toiture"]   # puis les points x, z
+CHAMPS_BAT = ["bas", "gouttiere", "faite", "genre", "etages", "murs", "toiture", "couleur", "couleur_toit"]   # puis les points x, z
+COULEURS = []        # couleurs OpenStreetMap (texte brut) ; dans un bâtiment : 0 = aucune, k = COULEURS[k - 1]
+_ICOUL = {}
+
+
+def couleur(v):
+    s = str(v or "").strip().lower()
+    if not s or len(s) > 40:
+        return 0
+    if s not in _ICOUL:
+        COULEURS.append(s)
+        _ICOUL[s] = len(COULEURS)
+    return _ICOUL[s]
+
+
+def dans(x, z, flat):
+    """Le point (x, z) est-il dans le polygone donné en liste plate x, z ?"""
+    n, ok = len(flat) // 2, False
+    for k in range(n):
+        x1, z1, x2, z2 = flat[2 * k], flat[2 * k + 1], flat[2 * ((k + 1) % n)], flat[2 * ((k + 1) % n) + 1]
+        if (z1 > z) != (z2 > z) and x < x1 + (z - z1) * (x2 - x1) / (z2 - z1):
+            ok = not ok
+    return ok
+
+
+def poser_couleurs(batiments, colores):
+    """Donne aux bâtiments BD TOPO la couleur OSM du bâtiment OSM dont le centre tombe dedans."""
+    BH, C = len(CHAMPS_BAT), 100
+    grille = defaultdict(list)
+    for k, b in enumerate(batiments):
+        xs, zs = b[BH::2], b[BH + 1::2]
+        for i in range(int(min(xs) // C), int(max(xs) // C) + 1):
+            for j in range(int(min(zs) // C), int(max(zs) // C) + 1):
+                grille[i, j].append(k)
+    n = 0
+    for cx, cz, cm, ct in colores:
+        for k in grille.get((int(cx // C), int(cz // C)), ()):
+            b = batiments[k]
+            if dans(cx, cz, b[BH:]):
+                if cm and not b[7]:
+                    b[7] = cm
+                if ct and not b[8]:
+                    b[8] = ct
+                n += 1
+                break
+    print(f"  couleurs OpenStreetMap : {n}/{len(colores)} posées sur la BD TOPO", flush=True)
 
 
 def genre_batiment(t):
@@ -271,7 +318,7 @@ def code(v):
     return int(s) if s.isdigit() and len(s) <= 4 else 0
 
 
-def enregistrement(pts, genre, sol=None, gout=None, faite=None, h=None, etages=0, murs=0, toit=0):
+def enregistrement(pts, genre, sol=None, gout=None, faite=None, h=None, etages=0, murs=0, toit=0, coul=0, coul_toit=0):
     """Bâtiment posé sur le relief : bas des murs sous le point le plus bas du terrain, toit à sa vraie altitude."""
     xs, zs = [p[0] for p in pts], [p[1] for p in pts]
     hs = hauteurs(xs + [sum(xs) / len(xs)], zs + [sum(zs) / len(zs)])
@@ -290,7 +337,7 @@ def enregistrement(pts, genre, sol=None, gout=None, faite=None, h=None, etages=0
     if faite is None or not (gout <= faite <= gout + 25):
         faite = gout
     flat = [v for p in pts for v in p]
-    return [round(bas, 1), round(gout, 1), round(faite, 1), GENRES.index(genre), int(etages or 0), murs, toit] + flat
+    return [round(bas, 1), round(gout, 1), round(faite, 1), GENRES.index(genre), int(etages or 0), murs, toit, coul, coul_toit] + flat
 
 
 def batiments_bdtopo():
@@ -502,7 +549,7 @@ def main(entree, sortie):
             for p in polys:
                 pts = anneau(p[0])
                 if len(pts) >= 3:
-                    bat_osm.append((pts, gen, hauteur_osm(t, gen)))
+                    bat_osm.append((pts, gen, hauteur_osm(t, gen), couleur(t.get("building:colour")), couleur(t.get("roof:colour"))))
         elif t.get("boundary") == "administrative":
             nom = t.get("name", "")
             if polys and ((t.get("admin_level") == "8" and nom in ("Aubagne", "La Penne-sur-Huveaune")) or nom == "La Valentine"):
@@ -547,10 +594,15 @@ def main(entree, sortie):
         batiments, echecs, src_bat = [], None, "OpenStreetMap"
     else:
         src_bat = "IGN BD TOPO"
-    for pts, gen, h in bat_osm:   # OpenStreetMap là où la BD TOPO n'a pas répondu
+    colores = []
+    for pts, gen, h, cm, ct in bat_osm:   # OpenStreetMap là où la BD TOPO n'a pas répondu
         cx, cz = sum(p[0] for p in pts) / len(pts), sum(p[1] for p in pts) / len(pts)
         if echecs is None or any(x0 <= cx < x1 and z0 <= cz < z1 for x0, z0, x1, z1 in echecs):
-            batiments.append(enregistrement(pts, gen, h=h))
+            batiments.append(enregistrement(pts, gen, h=h, coul=cm, coul_toit=ct))
+        elif cm or ct:
+            colores.append((cx, cz, cm, ct))
+    if colores:
+        poser_couleurs(batiments, colores)
 
     print(f"  {len(batiments)} bâtiments ({src_bat}), {len(routes)} routes, {len(ponts)} ponts, {len(murs)} murs de soutènement, "
           f"{len(sols)} zones, {len(rivieres)} cours d'eau, {len(lieux)} lieux-dits, communes : {list(communes)}", flush=True)
@@ -564,7 +616,7 @@ def main(entree, sortie):
     out = {"taille": TAILLE, "origine": [LON0, LAT0], "kx": KX, "kz": KZ,
            "relief": {"tuile": TUILE, "pas": PAS, "nt": [NTX, NTZ], "x0": X0, "z0": Z0, "gpas": GPAS,
                       "gn": [(NX - 1) // GK + 1, (NZ - 1) // GK + 1], "dossier": "relief/", "source": src_relief},
-           "genres": GENRES, "champsBat": CHAMPS_BAT, "batiments": batiments, "classes": ROUTES, "largeurs": LARGEUR,
+           "genres": GENRES, "champsBat": CHAMPS_BAT, "couleursBat": COULEURS, "batiments": batiments, "classes": ROUTES, "largeurs": LARGEUR,
            "routes": routes, "ponts": ponts, "rivieres": rivieres, "murs": murs, "typesSol": SOLS, "sols": sols,
            "communes": communes, "lieux": lieux,
            "source": f"© les contributeurs d'OpenStreetMap (ODbL) ; relief : {src_relief} ; bâtiments : {src_bat}"}

@@ -21,24 +21,45 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       # Données de la carte 3D de la ville (OpenStreetMap, relief IGN RGE ALTI, bâtiments IGN BD TOPO),
-      # générées une seule fois puis gardées en cache. Elles sont régénérées si le script outils/carte_ville.py change.
-      - uses: actions/cache@v4
+      # générées une seule fois puis gardées en cache. Elles sont régénérées si le script outils/carte_ville.py change ;
+      # si la régénération échoue, la carte précédente (dernier cache) reste publiée et on réessaie à l'envoi suivant.
+      # Les photos aériennes IGN ne sont pas préparées ici : la page les charge directement.
+      - uses: actions/cache/restore@v4
+        id: cache-carte
         with:
           path: |
             prototype/carte/ville.json
             prototype/carte/relief
           key: ville-${{ hashFiles('outils/carte_ville.py') }}
+          restore-keys: ville-
       - name: Générer la carte de la ville
-        if: hashFiles('prototype/carte/ville.json') == ''
+        id: generer
         continue-on-error: true
         timeout-minutes: 75
+        env:
+          EMPREINTE: ${{ hashFiles('outils/carte_ville.py') }}
         run: |
+          if [ -f prototype/carte/ville.json ] && [ "$(cat prototype/carte/relief/empreinte.txt 2>/dev/null)" = "$EMPREINTE" ]; then
+            echo "Carte déjà à jour"; exit 0
+          fi
           sudo apt-get update -qq && sudo apt-get install -y -qq osmium-tool
           pip install --quiet pillow numpy
           curl -sfL --retry 3 -o "$RUNNER_TEMP/paca.osm.pbf" https://download.geofabrik.de/europe/france/provence-alpes-cote-d-azur-latest.osm.pbf
           osmium extract -b 5.47,43.25,5.65,43.345 --strategy smart -S types=multipolygon,boundary "$RUNNER_TEMP/paca.osm.pbf" -o "$RUNNER_TEMP/zone.osm.pbf"
           osmium export "$RUNNER_TEMP/zone.osm.pbf" -f geojsonseq -o "$RUNNER_TEMP/zone.geojsonseq"
           python3 outils/carte_ville.py "$RUNNER_TEMP/zone.geojsonseq" prototype/carte/ville.json
+          echo "$EMPREINTE" > prototype/carte/relief/empreinte.txt
+      - name: Ranger les fichiers temporaires
+        if: always()
+        run: rm -rf prototype/carte/relief.tmp prototype/carte/ville.json.tmp
+      - uses: actions/cache/save@v4
+        if: steps.generer.outcome == 'success' && steps.cache-carte.outputs.cache-hit != 'true'
+        continue-on-error: true
+        with:
+          path: |
+            prototype/carte/ville.json
+            prototype/carte/relief
+          key: ville-${{ hashFiles('outils/carte_ville.py') }}
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

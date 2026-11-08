@@ -17,10 +17,12 @@ Sources gratuites (IGN, Licence ouverte, citer « IGN ») via la Géoplateforme 
 
 Réalisé : `outils/carte_ville.py` lit le relief RGE ALTI (WMS `ELEVATION.ELEVATIONGRIDCOVERAGE.HIGHRES`, valeurs brutes) tous les 2 m et l'écrit en images dans `prototype/carte/relief/` (`global.png` à 10 m, `t_i_j.png` par carré de 500 m) ; bâtiments BD TOPO par WFS (OSM en secours carré par carré) ; ponts chaînés d'une culée à l'autre. La page choisit 5 niveaux de détail (2, 4, 10, 20, 50 m) selon la distance, pose routes, rivières et murs sur le relief affiché, colorie en roche les pentes de plus de 40° environ. Si l'IGN ne répond pas depuis GitHub, le journal de publication l'indique et le relief Terrarium est utilisé.
 
-## Étape B : vraies couleurs
+## Étape B : vraies couleurs — faite (à vérifier sur le site)
 - Photos aériennes drapées sur le relief, chargées par carrés selon la distance : vraies couleurs des routes, des champs et de la végétation.
 - La même photo projetée sur chaque toit : vraie couleur des toits.
 - Façades : matériau des murs de la BD TOPO, couleur OSM si elle existe, sinon palette d'Aubagne (ocre, crème, rosé, blanc cassé).
+
+Réalisé : la page charge elle-même les photos IGN (WMTS `ORTHOIMAGERY.ORTHOPHOTOS`, `data.geopf.fr/wmts`, grille `PM`) : une photo de toute la zone (zoom 15, environ 3,7 m), puis par carré de 500 m selon la distance : zoom 19 (environ 26 cm) à moins de 650 m, zoom 18 (environ 53 cm) jusqu'à 1,5 km, zoom 16 (environ 1,7 m) jusqu'à 3,6 km. Les tuiles sont recollées dans une image alignée sur la carte, puis projetées d'en haut sur le sol, les routes, les rivières, les tabliers de pont et les toits (bâtiments rangés par carré). Les quartiers des joueurs restent teintés et les fortes pentes restent en roche. Si l'IGN ne répond pas, la carte peinte et les toits colorés (matériau BD TOPO ou `roof:colour` OSM) restent affichés. Façades : matériau des murs BD TOPO, `building:colour` OSM (ajouté par `outils/carte_ville.py`), palette d'Aubagne. La publication garde l'ancienne carte si la régénération échoue (empreinte dans `relief/empreinte.txt`).
 
 ## Étape C : détails
 - Toits en pente en tuiles sur les maisons, toits plats sur les immeubles et l'industrie (BD TOPO et OSM).

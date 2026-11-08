@@ -38,7 +38,7 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 <div id="scene" aria-label="La ville d'Aubagne en 3D avec ses bâtiments, ses routes, son relief et ses quartiers"></div>
 <div class="panel">
   <h1>Carte d'Aubagne</h1>
-  <p>La vraie ville en 3D : relief précis, bâtiments à leur vraie hauteur, routes, ponts, murs de soutènement, rivière, forêts. Glisser pour se déplacer, molette pour zoomer de la ville jusqu'aux rues, clic droit pour pivoter et incliner. Clic sur un quartier pour le voir.</p>
+  <p>La vraie ville en 3D : photos aériennes IGN drapées sur le relief et sur les toits, relief précis, bâtiments à leur vraie hauteur, routes, ponts, murs de soutènement, rivière, forêts. Glisser pour se déplacer, molette pour zoomer de la ville jusqu'aux rues, clic droit pour pivoter et incliner. Clic sur un quartier pour le voir.</p>
   <div class="legend" id="legend"></div>
   <div class="row" id="goto"></div>
   <div class="row">
@@ -48,7 +48,7 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
   <p id="status">Chargement…</p>
   <div id="info" aria-live="polite"></div>
 </div>
-<div id="credit">© les contributeurs d'<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · relief et bâtiments <a href="https://geoservices.ign.fr/">IGN</a></div>
+<div id="credit">© les contributeurs d'<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · relief, bâtiments et photos aériennes <a href="https://geoservices.ign.fr/">IGN</a></div>
 
 <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/controls/OrbitControls.js"></script>
@@ -179,6 +179,12 @@ for(const t of ORDRE){g.fillStyle=SOLC[t];for(const s of solsPar[t]||[]){path(s.
  g.globalCompositeOperation='multiply';g.globalAlpha=.35;g.fillStyle=g.createPattern(n,'repeat');g.fillRect(0,0,CW,CH);g.globalAlpha=1;g.globalCompositeOperation='source-over';}
 // quartiers des joueurs teintés
 for(const q of quartiers)if(q.owner){g.fillStyle=q.owner.couleur;g.globalAlpha=.24;for(const r of q.rings){path(r.flat(),true);g.fill();}g.globalAlpha=1;}
+// les mêmes teintes, seules, posées par-dessus les photos aériennes
+const tcv=document.createElement('canvas');tcv.width=2048;tcv.height=Math.round(2048*GD/GW);
+{const tg=tcv.getContext('2d'),kx=tcv.width/GW,kz=tcv.height/GD;
+ for(const q of quartiers)if(q.owner){tg.fillStyle=q.owner.couleur;tg.globalAlpha=.2;
+   for(const r of q.rings){tg.beginPath();r.forEach(([x,z],i)=>i?tg.lineTo((x-X0)*kx,(z-Z0)*kz):tg.moveTo((x-X0)*kx,(z-Z0)*kz));tg.closePath();tg.fill();}}}
+const teinteTex=new THREE.CanvasTexture(tcv);
 // routes peintes (utiles de loin) ; de près elles existent aussi en volume, posées sur le relief fin
 g.lineCap=g.lineJoin='round';
 const CL=V.classes,LARG=V.largeurs;
@@ -193,23 +199,155 @@ await say('Construction du relief…');
 // pas de la grille (m) et distance jusqu'à laquelle on l'utilise ; les deux premiers niveaux viennent des images fines (2 m)
 const LV=[{pas:2,d:650},{pas:4,d:1500},{pas:10,d:3600},{pas:20,d:8000},{pas:50,d:1e9}];
 let arbresIP=null,arbresAttr=null,arbresSales=false;
-// pentes fortes (ressauts sans mur, falaises) : coloriées en roche
-const groundMat=new THREE.MeshLambertMaterial({map:tex});
-groundMat.onBeforeCompile=s=>{
-  s.vertexShader=s.vertexShader.replace('#include <common>','#include <common>\nattribute float rock;\nvarying float vRock;\nvarying vec2 vXZ;')
-    .replace('#include <begin_vertex>','#include <begin_vertex>\nvRock=rock;vXZ=position.xz;');
-  s.fragmentShader=s.fragmentShader.replace('#include <common>',`#include <common>
-varying float vRock;varying vec2 vXZ;
+// ---------- photos aériennes IGN (Géoplateforme, WMTS ORTHOIMAGERY.ORTHOPHOTOS) ----------
+// Une photo de toute la zone (environ 3,7 m par point) puis, carré par carré selon la distance, des photos plus fines.
+// Elles sont projetées d'en haut sur le sol, les routes, les rivières, les ponts et les toits.
+// Si l'IGN ne répond pas, la carte peinte et les couleurs des toits restent affichées.
+const WMTS='https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=ORTHOIMAGERY.ORTHOPHOTOS&STYLE=normal&TILEMATRIXSET=PM&FORMAT=image/jpeg';
+const LON0=V.origine[0],LAT0=V.origine[1],ANISO=renderer.capabilities.getMaxAnisotropy();
+const GROS=renderer.capabilities.maxTextureSize>=8192&&!(window.matchMedia&&matchMedia('(pointer:coarse)').matches);
+// par niveau de détail du relief : zoom WMTS et taille de l'image du carré (500 m + marges) ; près ≈ 26 cm, moyen ≈ 53 cm, loin ≈ 1,7 m par point
+const PH=[{z:19,px:GROS?2048:1024,lim:GROS?14:8},{z:18,px:GROS?1024:768,lim:48},{z:16,px:320,lim:220}];
+const PMARGE=20;
+const UG={photoG:{value:null},rectG:{value:new THREE.Vector4(X0,Z0,GW,GD)},hasG:{value:0},teinte:{value:teinteTex}};
+const PHOTO_GLSL=`uniform sampler2D photoG,photoL,teinte;uniform vec4 rectG,rectL;uniform float hasG,hasL;varying vec2 vXZ;
+vec3 versLin(vec3 c){return mix(c/12.92,pow((c+.055)/1.055,vec3(2.4)),step(.04045,c));}
+vec3 photoA(vec2 p){vec2 a=(p-rectL.xy)/rectL.zw,b=(p-rectG.xy)/rectG.zw;
+  vec3 cl=texture2D(photoL,vec2(clamp(a.x,0.,1.),1.-clamp(a.y,0.,1.))).rgb,cg=texture2D(photoG,vec2(b.x,1.-b.y)).rgb;
+  float k=hasL*step(0.,a.x)*step(a.x,1.)*step(0.,a.y)*step(a.y,1.);return versLin(mix(cg,cl,k));}
+vec3 teinter(vec3 c,vec2 p){vec2 b=(p-rectG.xy)/rectG.zw;vec4 t=texture2D(teinte,vec2(b.x,1.-b.y));return mix(c,versLin(t.rgb),t.a);}`;
+// un matériau par carré (mêmes programmes pour tous) : chaque carré a sa propre photo fine
+function matSol(T){
+  const m=new THREE.MeshLambertMaterial({map:tex});
+  m.onBeforeCompile=s=>{Object.assign(s.uniforms,UG,T.u);
+    s.vertexShader=s.vertexShader.replace('#include <common>','#include <common>\nattribute float rock;\nvarying float vRock;\nvarying vec2 vXZ;')
+      .replace('#include <begin_vertex>','#include <begin_vertex>\nvRock=rock;vXZ=position.xz;');
+    s.fragmentShader=s.fragmentShader.replace('#include <common>',`#include <common>
+varying float vRock;
+${PHOTO_GLSL}
 float hsh(vec2 p){p=mod(p,512.);return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
 float vn(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hsh(i),hsh(i+vec2(1,0)),f.x),mix(hsh(i+vec2(0,1)),hsh(i+vec2(1,1)),f.x),f.y);}`)
-    .replace('#include <map_fragment>',`#include <map_fragment>
-if(vRock>.001){float nn=.5*vn(vXZ*.3)+.3*vn(vXZ*1.1)+.2*vn(vXZ*3.7);vec3 rc=mix(vec3(.30,.27,.22),vec3(.58,.54,.46),nn);diffuseColor.rgb=mix(diffuseColor.rgb,rc,vRock);}`);
-};
+      .replace('#include <map_fragment>',`#include <map_fragment>
+float lumP=.16;
+if(hasG>.5){vec3 ph=photoA(vXZ);lumP=dot(ph,vec3(.3,.59,.11));diffuseColor.rgb=teinter(ph,vXZ);}
+if(vRock>.001){float nn=.5*vn(vXZ*.3)+.3*vn(vXZ*1.1)+.2*vn(vXZ*3.7);vec3 rc=mix(vec3(.30,.27,.22),vec3(.58,.54,.46),nn);
+  if(hasG>.5)rc*=clamp(sqrt(lumP/.16),.7,1.3);diffuseColor.rgb=mix(diffuseColor.rgb,rc,vRock*(hasG>.5?.8:1.));}`);
+  };
+  return m;
+}
+function matRoute(T){
+  const m=new THREE.MeshLambertMaterial({vertexColors:true,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-6});
+  m.onBeforeCompile=s=>{Object.assign(s.uniforms,UG,T.u);
+    s.vertexShader=s.vertexShader.replace('#include <common>','#include <common>\nvarying vec2 vXZ;').replace('#include <begin_vertex>','#include <begin_vertex>\nvXZ=position.xz;');
+    s.fragmentShader=s.fragmentShader.replace('#include <common>','#include <common>\n'+PHOTO_GLSL)
+      .replace('#include <color_fragment>','#include <color_fragment>\nif(hasG>.5)diffuseColor.rgb=teinter(photoA(vXZ),vXZ);');
+  };
+  return m;
+}
+function matBat(T){   // façades : couleur des sommets ; toits : la photo prise juste au-dessus
+  const m=new THREE.MeshLambertMaterial({vertexColors:true});
+  m.onBeforeCompile=s=>{Object.assign(s.uniforms,UG,T.u);
+    s.vertexShader=s.vertexShader.replace('#include <common>','#include <common>\nattribute float toit;\nvarying float vToit;\nvarying vec2 vXZ;')
+      .replace('#include <begin_vertex>','#include <begin_vertex>\nvToit=toit;vXZ=position.xz;');
+    s.fragmentShader=s.fragmentShader.replace('#include <common>','#include <common>\nvarying float vToit;\n'+PHOTO_GLSL)
+      .replace('#include <color_fragment>','#include <color_fragment>\nif(hasG>.5&&vToit>.5)diffuseColor.rgb=photoA(vXZ);');
+  };
+  return m;
+}
+const matR=T=>T.mR||(T.mR=matRoute(T)),matB=T=>T.mB||(T.mB=matBat(T));
+// chargement des tuiles WMTS (Web Mercator), recollées dans une image alignée sur la carte
+const merLat=(y,n)=>Math.atan(Math.sinh(Math.PI*(1-2*y/n)))*180/Math.PI;
+const tuileX=(lon,n)=>(lon+180)/360*n,tuileY=(lat,n)=>{const r=lat*Math.PI/180;return (1-Math.log(Math.tan(r)+1/Math.cos(r))/Math.PI)/2*n;};
+let photoOff=false,photoOk=0,photoKo=0,photoActifs=0,photoPause=0,photoG=null,z19Ko=0;
+const travaux=[];
+function travailPhoto(rx,rz,rw,rd,z,W,H,prio,fin){
+  const c=document.createElement('canvas');c.width=W;c.height=H;const g2=c.getContext('2d');
+  // fond : la photo globale si elle est là (sinon la carte peinte), visible seulement si une tuile manque
+  const src=photoG||cv;
+  try{g2.drawImage(src,(rx-X0)/GW*src.width,(rz-Z0)/GD*src.height,rw/GW*src.width,rd/GD*src.height,0,0,W,H);}catch(e){}
+  const n=2**z,lo0=LON0+rx/V.kx,lo1=LON0+(rx+rw)/V.kx,laN=LAT0-rz/V.kz,laS=LAT0-(rz+rd)/V.kz;
+  const tx0=Math.floor(tuileX(lo0,n)),tx1=Math.floor(tuileX(lo1,n)),ty0=Math.floor(tuileY(laN,n)),ty1=Math.floor(tuileY(laS,n));
+  const px=x=>Math.round((x-rx)/rw*W),py=zz=>Math.round((zz-rz)/rd*H);
+  const J={c,g:g2,prio,fin,rect:[rx,rz,rw,rd],tuiles:[],total:0,reste:0,ko:0,annule:false,ctrl:window.AbortController?new AbortController():null};
+  for(let ty=ty0;ty<=ty1;ty++)for(let tx=tx0;tx<=tx1;tx++){
+    const xa=(tx/n*360-180-LON0)*V.kx,xb=((tx+1)/n*360-180-LON0)*V.kx,za=-(merLat(ty,n)-LAT0)*V.kz,zb=-(merLat(ty+1,n)-LAT0)*V.kz;
+    J.tuiles.push({url:`${WMTS}&TILEMATRIX=${z}&TILEROW=${ty}&TILECOL=${tx}`,x:px(xa),y:py(za),w:px(xb)-px(xa),h:py(zb)-py(za),essai:0});
+  }
+  J.total=J.reste=J.tuiles.length;travaux.push(J);return J;
+}
+async function chargerTuile(url,ctrl){
+  const r=await fetch(url,{mode:'cors',signal:ctrl?ctrl.signal:undefined});
+  if(r.status===429||r.status===503){const e=new Error('serveur occupé');e.trop=true;throw e;}
+  if(!r.ok)throw new Error('tuile '+r.status);
+  const b=await r.blob();if(b.type&&!/^image\//.test(b.type))throw new Error('pas une image');
+  if(window.createImageBitmap)return await createImageBitmap(b);
+  return await new Promise((res,rej)=>{const im=new Image(),u=URL.createObjectURL(b);im.onload=()=>{URL.revokeObjectURL(u);res(im);};im.onerror=()=>{URL.revokeObjectURL(u);rej(new Error('image'));};im.src=u;});
+}
+async function tuilePhoto(J,t){
+  photoActifs++;
+  try{const im=await chargerTuile(t.url,J.ctrl);photoOk++;if(!J.annule)J.g.drawImage(im,t.x,t.y,t.w,t.h);if(im.close)im.close();}
+  catch(e){
+    if(!J.annule&&e&&e.trop&&t.essai<4){t.essai++;J.tuiles.push(t);photoPause=performance.now()+1500*t.essai;photoActifs--;return;}
+    if(!J.annule){photoKo++;J.ko++;if(photoKo>=40&&!photoOk)couperPhotos();}
+  }
+  photoActifs--;
+  if(--J.reste===0&&!J.annule){const i=travaux.indexOf(J);if(i>=0)travaux.splice(i,1);J.fin(J);}
+}
+function pomperPhotos(){
+  if(photoOff||performance.now()<photoPause)return;
+  while(photoActifs<8){
+    let J=null;for(const t of travaux)if(t.tuiles.length&&(!J||t.prio<J.prio))J=t;
+    if(!J)return;
+    tuilePhoto(J,J.tuiles.shift());
+  }
+}
+function annulerJob(J){J.annule=true;if(J.ctrl)J.ctrl.abort();const i=travaux.indexOf(J);if(i>=0)travaux.splice(i,1);}
+function couperPhotos(){
+  if(photoOff)return;photoOff=true;travaux.slice().forEach(annulerJob);
+  status.textContent+=' Photos aériennes IGN indisponibles pour le moment : carte peinte affichée.';
+}
+function texPhoto(c){
+  const t=new THREE.CanvasTexture(c);t.encoding=THREE.LinearEncoding;t.anisotropy=ANISO;
+  return t;
+}
+function finGlobal(J){
+  if(J.ko>J.total*.5){couperPhotos();return;}
+  photoG=J.c;UG.photoG.value=texPhoto(J.c);UG.hasG.value=1;
+  const cr=document.getElementById('credit');if(!/photos/.test(cr.textContent))cr.textContent+=' ; photos aériennes : IGN';
+}
+function choisirPhoto(T){
+  const p=[0,1,2].find(q=>T.ph[q]);
+  if(p===undefined){T.u.hasL.value=0;T.u.photoL.value=null;return;}
+  const [rx,rz,rw,rd]=T.ph[p].rect;T.u.photoL.value=T.ph[p].tex;T.u.rectL.value.set(rx,rz,rw,rd);T.u.hasL.value=1;
+}
+function demanderPhoto(T,p){
+  const rx=T.x0-PMARGE,rz=T.z0-PMARGE,rw=TU+2*PMARGE;
+  T.phEtat[p]=1;
+  T.phJob[p]=travailPhoto(rx,rz,rw,rw,PH[p].z,PH[p].px,PH[p].px,T.d,J=>{
+    T.phJob[p]=null;
+    if(J.ko>J.total*.4){
+      // zoom 19 absent ici : on se contente du zoom 18
+      if(p===0&&J.ko===J.total&&PH[0].z>18&&photoOk>50&&++z19Ko>=2)PH[0].z=18;
+      T.phEtat[p]=3;T.phRetry=performance.now()+(PH[0].z===18&&p===0?0:20000);return;
+    }
+    const t=texPhoto(J.c);
+    t.onUpdate=()=>{t.image={width:J.c.width,height:J.c.height};t.onUpdate=null;J.c=J.g=null;};   // l'image n'est plus utile une fois envoyée à la carte graphique
+    T.ph[p]={tex:t,rect:J.rect};T.phEtat[p]=2;choisirPhoto(T);
+  });
+}
+function majPhotos(T){
+  if(!photoG||photoOff)return;
+  for(let q=0;q<3;q++){const J=T.phJob[q];if(J){if(T.d>LV[q].d*1.3){annulerJob(J);T.phJob[q]=null;T.phEtat[q]=0;}else J.prio=T.d;}}
+  const p=[0,1,2].find(q=>T.d<LV[q].d);
+  if(p===undefined||T.ph[p])return;
+  if(T.phEtat[p]===0||(T.phEtat[p]===3&&performance.now()>T.phRetry))demanderPhoto(T,p);
+}
 const tiles=[];
 for(let j=0;j<NTZ;j++)for(let i=0;i<NTX;i++){
   let mn=1e9,mx=-1e9;for(let r=0;r<=GT;r++)for(let c=0;c<=GT;c++){const h=HG[(j*GT+r)*GNX+i*GT+c];if(h<mn)mn=h;if(h>mx)mx=h;}
-  const T={i,j,x0:X0+i*TU,z0:Z0+j*TU,ymin:mn-10,ymax:mx+10,lvl:-1,want:-1,geos:[],fine:null,etat:0,d:0,extra:null,extraLvl:-1,routes:[],rivieres:[],murs:[],arbres:null};
-  T.mesh=new THREE.Mesh(new THREE.BufferGeometry(),groundMat);T.mesh.receiveShadow=true;T.mesh.visible=false;scene.add(T.mesh);tiles.push(T);
+  const T={i,j,x0:X0+i*TU,z0:Z0+j*TU,ymin:mn-10,ymax:mx+10,lvl:-1,want:-1,geos:[],fine:null,etat:0,d:0,extra:null,extraLvl:-1,routes:[],rivieres:[],murs:[],arbres:null,
+    u:{photoL:{value:null},rectL:{value:new THREE.Vector4(0,0,1,1)},hasL:{value:0}},ph:[null,null,null],phEtat:[0,0,0],phJob:[null,null,null],phRetry:0};
+  T.mesh=new THREE.Mesh(new THREE.BufferGeometry(),matSol(T));T.mesh.receiveShadow=true;T.mesh.visible=false;scene.add(T.mesh);tiles.push(T);
 }
 const tileIdx=(x,z)=>Math.min(NTZ-1,Math.max(0,Math.floor((z-Z0)/TU)))*NTX+Math.min(NTX-1,Math.max(0,Math.floor((x-X0)/TU)));
 function getter(T,L){
@@ -301,11 +439,10 @@ function meshBoite(out,mat){
   const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(out.pos,3));geo.setAttribute('normal',new THREE.Float32BufferAttribute(out.nor,3));
   geo.setAttribute('uv',new THREE.Float32BufferAttribute(out.uv,2));geo.setIndex(out.idx);const m=new THREE.Mesh(geo,mat);m.castShadow=m.receiveShadow=true;return m;
 }
-const roadMat=new THREE.MeshLambertMaterial({vertexColors:true,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-6});
-function meshRubans(out){
+function meshRubans(out,mat){
   const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(out.pos,3));geo.setAttribute('color',new THREE.Float32BufferAttribute(out.col,3));
   const nor=new Float32Array(out.pos.length);for(let i=1;i<nor.length;i+=3)nor[i]=1;geo.setAttribute('normal',new THREE.BufferAttribute(nor,3));
-  geo.setIndex(out.idx);const m=new THREE.Mesh(geo,roadMat);m.receiveShadow=true;return m;
+  geo.setIndex(out.idx);const m=new THREE.Mesh(geo,mat);m.receiveShadow=true;return m;
 }
 const EAU=new THREE.Color('#4f7f95'),COLS={};for(const cl of CL)COLS[cl]=new THREE.Color(RC[cl]||'#8f897f');COLS.rail.convertSRGBToLinear();
 // pierre des murs de soutènement (blocs irréguliers, motif qui se répète sans couture)
@@ -335,18 +472,22 @@ function construireExtra(T,L){
   for(const [w,f] of T.rivieres)ruban(dens(f,k),w,(i,x,z)=>hT(T,L,x,z)+.3,EAU,out);
   for(const [ci,f] of T.routes){const cl=CL[ci],w=LARG[cl],yo=YOFF[cl];
     ruban(dens(f,k),w,(i,x,z,nx,nz)=>{let h=Math.max(hT(T,L,x,z),hT(T,L,x+nx,z+nz),hT(T,L,x-nx,z-nz));if(w>8)h=Math.max(h,hT(T,L,x+nx/2,z+nz/2),hT(T,L,x-nx/2,z-nz/2));return h+yo;},COLS[cl],out);}
-  if(out.idx.length)grp.add(meshRubans(out));
+  if(out.idx.length)grp.add(meshRubans(out,matR(T)));
   const mu=mursDe(T,L);if(mu)grp.add(mu);
   T.extra=grp;T.extraLvl=L;scene.add(grp);
 }
 function enleverExtra(T){if(!T.extra)return;T.extra.traverse(o=>{if(o.geometry)o.geometry.dispose();});scene.remove(T.extra);T.extra=null;T.extraLvl=-1;}
 // ponts : à plat d'une culée à l'autre (altitudes des deux bouts calculées sur le relief fin), avec un tablier
-{const deck={pos:[],col:[],idx:[]},flancs={pos:[],nor:[],uv:[],idx:[]};
+{const decks=new Map(),flancs={pos:[],nor:[],uv:[],idx:[]};
  for(const p of V.ponts||[]){const cl=CL[p[0]],w=LARG[cl],P=dens(p.slice(3),4),m=P.length/2;if(m<2)continue;
    const S=[0];for(let i=1;i<m;i++)S.push(S[i-1]+Math.hypot(P[2*i]-P[2*i-2],P[2*i+1]-P[2*i-1]));const Lt=S[m-1]||1;
    const Y=S.map(s=>p[1]+(p[2]-p[1])*s/Lt+YOFF[cl]),ep=cl==='chemin'?.5:1.3;
-   ruban(P,w,i=>Y[i],COLS[cl],deck);boite(P,w/2+.15,Y.map(y=>y+.25),Y.map(y=>y-ep),false,true,flancs);}
- if(deck.idx.length){const m=meshRubans(deck);m.castShadow=true;scene.add(m);}
+   const col=COLS[cl],bord=[];for(let i=0;i<m;i++){const [px,pz]=perp(P,i);bord.push(P[2*i]+px*w/2,P[2*i+1]+pz*w/2,P[2*i]-px*w/2,P[2*i+1]-pz*w/2);}
+   for(let i=0;i<m-1;i++){const T=tiles[tileIdx((P[2*i]+P[2*i+2])/2,(P[2*i+1]+P[2*i+3])/2)];let o=decks.get(T);if(!o){o={pos:[],col:[],idx:[]};decks.set(T,o);}
+     const b0=o.pos.length/3;for(const q of [i,i+1]){o.pos.push(bord[4*q],Y[q],bord[4*q+1],bord[4*q+2],Y[q],bord[4*q+3]);o.col.push(col.r,col.g,col.b,col.r,col.g,col.b);}
+     o.idx.push(b0,b0+2,b0+1,b0+1,b0+2,b0+3);}
+   boite(P,w/2+.15,Y.map(y=>y+.25),Y.map(y=>y-ep),false,true,flancs);}
+ for(const [T,o] of decks){const ms=meshRubans(o,matR(T));ms.castShadow=true;scene.add(ms);}
  if(flancs.idx.length)scene.add(meshBoite(flancs,new THREE.MeshLambertMaterial({color:0x9a958c,side:THREE.DoubleSide})));}
 
 // ---------- choix du détail de chaque carré, chargement du relief fin à la demande ----------
@@ -368,6 +509,7 @@ function majTuiles(budgetFin,budgetGros){
     if(T.lvl>=0&&w>T.lvl&&T.d<LV[T.lvl].d*1.12)w=T.lvl;   // pas de clignotement à la limite
     if(w<=1&&!T.fine){demanderFin(T);w=2;}               // en attendant le relief fin
     T.want=w;
+    majPhotos(T);
   }
   const todo=tiles.filter(T=>T.want!==T.lvl||(T.lvl<=1&&T.extraLvl!==T.lvl)||(T.lvl>1&&T.extra)).sort((a,b)=>a.d-b.d);
   for(const T of todo){
@@ -379,13 +521,16 @@ function majTuiles(budgetFin,budgetGros){
     if(L<=1){if(T.extraLvl!==L&&budgetFin>0){construireExtra(T,L);budgetFin--;}}
     else enleverExtra(T);
   }
-  pomperFin();
+  pomperFin();pomperPhotos();
 }
 function liberer(){   // mémoire : on ne garde le détail que des carrés proches
   let n=tiles.filter(T=>T.fine).length;
   for(const T of tiles.filter(T=>T.fine&&T.lvl>1).sort((a,b)=>b.d-a.d)){if(n<=160)break;T.fine=null;T.etat=0;for(const L of [0,1])if(T.geos[L]){T.geos[L].dispose();T.geos[L]=null;}n--;}
   for(const [L,lim] of [[0,40],[1,100]]){let c=tiles.filter(T=>T.geos[L]).length;
     for(const T of tiles.filter(T=>T.geos[L]&&T.lvl!==L).sort((a,b)=>b.d-a.d)){if(c<=lim)break;T.geos[L].dispose();T.geos[L]=null;c--;}}
+  // photos fines : on garde les plus proches
+  PH.forEach((P,q)=>{let c=tiles.filter(T=>T.ph[q]).length;
+    for(const T of tiles.filter(T=>T.ph[q]&&T.d>LV[q].d*1.3).sort((a,b)=>b.d-a.d)){if(c<=P.lim)break;T.ph[q].tex.dispose();T.ph[q]=null;T.phEtat[q]=0;c--;choisirPhoto(T);}});
 }
 function affinerArbres(T){
   if(!arbresIP||!T.arbres||!T.fine)return;const get=getter(T,0),n=TU/2;
@@ -405,30 +550,68 @@ const PAL={
   annexe:[['#cdbf9f','#c2b394'],['#8e7e66','#9a6b4c']],
   autre:[['#e3d3b2','#dccaa6','#e9dcc2'],['#b5562f','#a8a297']],
 };
+// façades : matériau des murs de la BD TOPO (codes des fichiers fonciers : 1 pierre, 2 meulière, 3 béton, 4 briques,
+// 5 aggloméré, 6 bois ; deux chiffres = deux matériaux), sinon la couleur OpenStreetMap, sinon la palette d'Aubagne
+const PAL_AUBAGNE=['#ebd3a2','#e2bd84','#d9aa6e','#f0e2c4','#e9d7b2','#e8c6aa','#ddb59b','#f1ece0','#e8e2d3','#eedcb6'];
+const PAL_MAT={1:['#d8c9aa','#cdbd9c','#e0d3b6','#c6b595'],2:['#c49a6c','#b98d60','#cfa877'],3:['#d0cbc1','#c4bfb4','#dad4c8','#bdb8ae'],
+  4:['#b5644a','#a95a42','#c07456'],5:['#c2beb6','#b5b1a9'],6:['#8d6b4b','#9a7754','#7f5f42']};
+// toits, quand la photo manque : 1 tuiles, 2 ardoises, 3 zinc ou aluminium, 4 béton
+const PAL_TOIT={1:['#b5562f','#a84d2a','#bf6539','#b0603c'],2:['#5f636a','#6a6e73'],3:['#9aa0a4','#a7aaa8','#8e9296'],4:['#b8b3a8','#aaa59b']};
+const pick=a=>a[(R()*a.length)|0];
+const chiffres=(v,max)=>[Math.floor(v/10)%10,v%10].filter(x=>x>=1&&x<=max);
+function couleurMur(genre,murs){
+  const d=chiffres(murs,6),m=d.length?d[(R()*d.length)|0]:0,habite=genre==='maison'||genre==='immeuble';
+  if(m===1||m===2||m===6)return pick(PAL_MAT[m]);
+  if(m===3)return habite||genre==='public'||genre==='autre'?pick(PAL_AUBAGNE):pick(PAL_MAT[3]);
+  if(m===4)return genre==='industrie'||genre==='annexe'||R()<.15?pick(PAL_MAT[4]):pick(PAL_AUBAGNE);   // en Provence, la brique est presque toujours enduite
+  if(m===5)return genre==='industrie'||genre==='annexe'?pick(PAL_MAT[5]):pick(PAL_AUBAGNE);
+  if(genre==='religieux')return pick(PAL_MAT[1]);
+  if(habite||genre==='autre')return pick(PAL_AUBAGNE);
+  return pick((PAL[genre]||PAL.autre)[0]);
+}
+function couleurToit(genre,toit){const d=chiffres(toit,4);return d.length?pick(PAL_TOIT[d[(R()*d.length)|0]]):pick((PAL[genre]||PAL.autre)[1]);}
+const ADOUCIR=new THREE.Color('#d8cfc0');
+function couleurOSM(s){
+  s=String(s||'').split(';')[0].trim().toLowerCase().replace(/[\s_-]/g,'');
+  let c=null;
+  if(/^#?([0-9a-f]{3}|[0-9a-f]{6})$/.test(s))c=new THREE.Color(s[0]==='#'?s:'#'+s);
+  else if(THREE.Color.NAMES&&THREE.Color.NAMES[s]!==undefined)c=new THREE.Color(THREE.Color.NAMES[s]);
+  return c&&c.lerp(ADOUCIR,.15);   // évite les blancs et rouges purs
+}
+const COULS=(V.couleursBat||[]).map(couleurOSM);
 const tmpC=new THREE.Color();
 {
-  const B=V.batiments,BH=V.champsBat.length;let NV=0;for(const b of B)NV+=5*(b.length-BH)/2;
-  const pos=new Float32Array(NV*3),nor=new Float32Array(NV*3),col=new Uint8Array(NV*3),idx=[];let v=0;
-  const setC=(i,hex,k)=>{tmpC.set(hex);col[i*3]=Math.min(255,tmpC.r*255*k);col[i*3+1]=Math.min(255,tmpC.g*255*k);col[i*3+2]=Math.min(255,tmpC.b*255*k);};
-  for(const b of B){
-    // bas des murs sous le terrain, toit à son altitude réelle (BD TOPO) : ni flottant, ni enfoncé
-    const bot=b[0],top=(b[1]+b[2])/2,genre=V.genres[b[3]],n=(b.length-BH)/2;
-    let xs=[],zs=[];for(let i=0;i<n;i++){xs.push(b[BH+2*i]);zs.push(b[BH+1+2*i]);}
-    let a=0;for(let i=0;i<n;i++){const j=(i+1)%n;a+=xs[i]*zs[j]-xs[j]*zs[i];}
-    if(a>0){xs.reverse();zs.reverse();}
-    const [walls,roofs]=PAL[genre]||PAL.autre,wc=walls[(R()*walls.length)|0],rc=roofs[(R()*roofs.length)|0],shade=.92+R()*.14;
-    for(let i=0;i<n;i++){const j=(i+1)%n,ex=xs[j]-xs[i],ez=zs[j]-zs[i],L=Math.hypot(ex,ez)||1,nx=-ez/L,nz=ex/L;
-      const q=[[xs[i],bot,zs[i]],[xs[j],bot,zs[j]],[xs[j],top,zs[j]],[xs[i],top,zs[i]]];
-      q.forEach((p,k)=>{pos.set(p,(v+k)*3);nor.set([nx,0,nz],(v+k)*3);setC(v+k,wc,shade*(k<2?.82:1));});
-      idx.push(v,v+1,v+2,v,v+2,v+3);v+=4;}
-    const r0=v;for(let i=0;i<n;i++){pos.set([xs[i],top,zs[i]],v*3);nor.set([0,1,0],v*3);setC(v,rc,shade);v++;}
-    const tris=THREE.ShapeUtils.triangulateShape(xs.map((x,i)=>new THREE.Vector2(x,zs[i])),[]);
-    for(const [p0,p1,p2] of tris){const cy=(zs[p1]-zs[p0])*(xs[p2]-xs[p0])-(xs[p1]-xs[p0])*(zs[p2]-zs[p0]);cy>0?idx.push(r0+p0,r0+p1,r0+p2):idx.push(r0+p0,r0+p2,r0+p1);}
+  const B=V.batiments,CB=V.champsBat,BH=CB.length,iM=CB.indexOf('murs'),iT=CB.indexOf('toiture'),iC=CB.indexOf('couleur'),iCT=CB.indexOf('couleur_toit');
+  const osm=(b,i)=>i>=0&&b[i]>0?COULS[b[i]-1]||null:null;
+  // rangés par carré de 500 m : chaque carré projette sa propre photo sur ses toits
+  const parCarre=new Map();
+  for(const b of B){const n=(b.length-BH)/2;let cx=0,cz=0;for(let i=0;i<n;i++){cx+=b[BH+2*i];cz+=b[BH+1+2*i];}
+    const T=tiles[tileIdx(cx/n,cz/n)];let l=parCarre.get(T);if(!l)parCarre.set(T,l=[]);l.push(b);}
+  for(const [T,liste] of parCarre){
+    let NV=0;for(const b of liste)NV+=5*(b.length-BH)/2;
+    const pos=new Float32Array(NV*3),nor=new Float32Array(NV*3),col=new Uint8Array(NV*3),toit=new Uint8Array(NV),idx=[];let v=0;
+    const setC=(i,c,k)=>{typeof c==='string'?tmpC.set(c):tmpC.copy(c);col[i*3]=Math.min(255,tmpC.r*255*k);col[i*3+1]=Math.min(255,tmpC.g*255*k);col[i*3+2]=Math.min(255,tmpC.b*255*k);};
+    for(const b of liste){
+      // bas des murs sous le terrain, toit à son altitude réelle (BD TOPO) : ni flottant, ni enfoncé
+      const bot=b[0],top=(b[1]+b[2])/2,genre=V.genres[b[3]],n=(b.length-BH)/2;
+      let xs=[],zs=[];for(let i=0;i<n;i++){xs.push(b[BH+2*i]);zs.push(b[BH+1+2*i]);}
+      let a=0;for(let i=0;i<n;i++){const j=(i+1)%n;a+=xs[i]*zs[j]-xs[j]*zs[i];}
+      if(a>0){xs.reverse();zs.reverse();}
+      const wc=osm(b,iC)||couleurMur(genre,iM>=0?b[iM]:0),rc=osm(b,iCT)||couleurToit(genre,iT>=0?b[iT]:0),shade=.92+R()*.14;
+      for(let i=0;i<n;i++){const j=(i+1)%n,ex=xs[j]-xs[i],ez=zs[j]-zs[i],L=Math.hypot(ex,ez)||1,nx=-ez/L,nz=ex/L;
+        const q=[[xs[i],bot,zs[i]],[xs[j],bot,zs[j]],[xs[j],top,zs[j]],[xs[i],top,zs[i]]];
+        q.forEach((p,k)=>{pos.set(p,(v+k)*3);nor.set([nx,0,nz],(v+k)*3);setC(v+k,wc,shade*(k<2?.82:1));});
+        idx.push(v,v+1,v+2,v,v+2,v+3);v+=4;}
+      const r0=v;for(let i=0;i<n;i++){pos.set([xs[i],top,zs[i]],v*3);nor.set([0,1,0],v*3);setC(v,rc,shade);toit[v]=1;v++;}
+      const tris=THREE.ShapeUtils.triangulateShape(xs.map((x,i)=>new THREE.Vector2(x,zs[i])),[]);
+      for(const [p0,p1,p2] of tris){const cy=(zs[p1]-zs[p0])*(xs[p2]-xs[p0])-(xs[p1]-xs[p0])*(zs[p2]-zs[p0]);cy>0?idx.push(r0+p0,r0+p1,r0+p2):idx.push(r0+p0,r0+p2,r0+p1);}
+    }
+    const geo=new THREE.BufferGeometry();
+    geo.setAttribute('position',new THREE.BufferAttribute(pos,3));geo.setAttribute('normal',new THREE.BufferAttribute(nor,3));
+    geo.setAttribute('color',new THREE.BufferAttribute(col,3,true));geo.setAttribute('toit',new THREE.BufferAttribute(toit,1));
+    geo.setIndex(new THREE.BufferAttribute(v>65535?new Uint32Array(idx):new Uint16Array(idx),1));
+    const mesh=new THREE.Mesh(geo,matB(T));mesh.castShadow=mesh.receiveShadow=true;scene.add(mesh);
   }
-  const geo=new THREE.BufferGeometry();
-  geo.setAttribute('position',new THREE.BufferAttribute(pos,3));geo.setAttribute('normal',new THREE.BufferAttribute(nor,3));
-  geo.setAttribute('color',new THREE.BufferAttribute(col,3,true));geo.setIndex(new THREE.BufferAttribute(new Uint32Array(idx),1));
-  const mesh=new THREE.Mesh(geo,new THREE.MeshLambertMaterial({vertexColors:true}));mesh.castShadow=mesh.receiveShadow=true;scene.add(mesh);
 }
 
 // ---------- arbres (les mêmes que sur le champ de bataille) ----------
@@ -550,6 +733,7 @@ function loop(now){
   renderer.render(scene,camera);requestAnimationFrame(loop);
 }
 let frame=0;majTuiles(0,1e9);
+travailPhoto(X0,Z0,GW,GD,15,4096,Math.round(4096*GD/GW),-1,finGlobal);pomperPhotos();
 requestAnimationFrame(loop);
 status.textContent=`${V.batiments.length} bâtiments, ${V.routes.length} routes, ${quartiers.length} quartiers.`+(manquants.length?` Position approximative pour : ${manquants.join(', ')} (absent d'OpenStreetMap, à vérifier).`:'');
 })();
