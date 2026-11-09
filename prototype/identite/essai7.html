@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trois âmes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=IM+Fell+DW+Pica:ital@0;1&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=Playfair+Display:ital,wght@1,900&family=Special+Elite&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+<style>
+/* Essai 7 : vraie matière (documents anciens du domaine public, chargés depuis Wikimedia Commons).
+   Thèmes volontairement fixes. Une couleur de secours est posée sous chaque image. */
+:root{
+  --img-journal:url("https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Le_Petit_Journal_Balkan_Crisis_%281908%29.jpg/1280px-Le_Petit_Journal_Balkan_Crisis_%281908%29.jpg");
+  --img-charte:url("https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Norfolk%2C_Charter_%2818463919602%29.jpg/1920px-Norfolk%2C_Charter_%2818463919602%29.jpg");
+  --img-velin:url("https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Towneley_Lectionary_%28blank_page%29_%28NYPL_b12455533-1610013%29.tiff/lossy-page1-1280px-Towneley_Lectionary_%28blank_page%29_%28NYPL_b12455533-1610013%29.tiff.jpg");
+  --img-reliure:url("https://upload.wikimedia.org/wikipedia/commons/c/cc/Covers_From_a_Bookbinding%2C_between_1500_and_1550.jpg");
+  --img-sceau:url("https://upload.wikimedia.org/wikipedia/commons/b/b3/NLW_Wynnstay_Estate_%2C_Ystrad_Marchell_Charters_58_%28seal_1%29_front_%288633592701%29.jpg");
+  --img-cassini:url("https://upload.wikimedia.org/wikipedia/commons/4/4a/Minute_Cassini_-_Marseille-124_-_1778.jpg");
+  --img-portulan:url("https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Mediterranean_chart_fourteenth_century2.jpg/1920px-Mediterranean_chart_fourteenth_century2.jpg");
+  --img-portulan2:url("https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/1590_Portolan_chart_of_the_Mediterranean_Sea_and_Europe.png/1920px-1590_Portolan_chart_of_the_Mediterranean_Sea_and_Europe.png");
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#0f0b08;color:#eadbbb;font-family:"EB Garamond",Georgia,serif;font-size:18px;line-height:1.5}
+.page{max-width:1240px;margin:0 auto;padding:36px 16px 56px;display:grid;gap:44px}
+.intro{display:grid;gap:10px;max-width:780px}
+.intro small{font-family:"Special Elite",monospace;font-size:13px;letter-spacing:.12em;color:#c9a35e}
+.intro h1{margin:0;font-family:"IM Fell DW Pica",serif;font-style:italic;font-weight:400;font-size:clamp(36px,6vw,58px);line-height:1.02}
+.intro p{margin:0;color:#b9a07c}
+.sommaire{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.sommaire a{color:#eadbbb;text-decoration:none;border:1px solid #4a3523;padding:4px 10px;font-size:16px}
+.sommaire a:hover{border-color:#c9a35e}
+
+.scene{display:grid;gap:14px}
+.scene>header{display:grid;gap:6px;max-width:860px}
+.scene>header .numero{font-family:"Special Elite",monospace;font-size:13px;letter-spacing:.12em;color:#c9a35e}
+.scene>header h2{margin:0;font-family:"IM Fell DW Pica",serif;font-weight:400;font-size:clamp(30px,5vw,44px);line-height:1.05}
+.scene>header p{margin:0;color:#b9a07c}
+.ecran{position:relative;overflow:hidden;min-height:640px;display:grid;grid-template-rows:auto 1fr;border:1px solid #000;isolation:isolate}
+.fond{position:absolute;inset:0;z-index:-1;background-size:cover;background-position:center}
+.barre{display:flex;flex-wrap:wrap;align-items:center;gap:6px 26px;padding:12px 22px;position:relative;z-index:2}
+.barre .jeu{margin-right:auto}
+.res{display:grid;line-height:1.1}
+.page-onglet{display:none}
+.page-onglet.active{display:block;animation:entre .35s ease-out}
+@keyframes entre{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.onglet{cursor:pointer;border:0;font:inherit;color:inherit;background:none;padding:0}
+.credits{font-size:14px;color:#8d7a60}
+.credits a{color:#b9a07c}
+.credits ul{margin:6px 0 0;padding-left:18px}
+
+/* =========================================================
+   A · LE MANIFESTE — Persona 5 × gravures anciennes : rouge, noir, os ; lettres de rançon découpées
+   ========================================================= */
+#manifeste .ecran{background:#c8101a}
+#manifeste .fond{background-image:var(--img-journal);background-size:70% auto;background-position:-6% 40%;background-repeat:no-repeat;filter:grayscale(1) contrast(1.7) brightness(1.05);mix-blend-mode:multiply;opacity:.75;transform:rotate(-5deg) scale(1.15)}
+#manifeste .ecran::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(circle,rgba(0,0,0,.55) 1.4px,transparent 1.8px) 0 0/9px 9px;mix-blend-mode:multiply;opacity:.55}
+#manifeste .ecran::after{content:"";position:absolute;z-index:-1;left:-10%;bottom:-30%;width:70%;height:90%;background:#0b0b0b;transform:rotate(-18deg);pointer-events:none}
+#manifeste .barre{background:#0b0b0b;color:#f4ecdc;clip-path:polygon(0 0,100% 0,98% 100%,1% 82%);padding-bottom:18px}
+#manifeste .jeu{font-family:"Anton",sans-serif;font-size:26px;letter-spacing:.04em;transform:skew(-10deg);text-transform:uppercase}
+#manifeste .res small{font-family:"Special Elite",monospace;font-size:11px;background:#f4ecdc;color:#0b0b0b;padding:0 5px;justify-self:start;transform:rotate(-3deg)}
+#manifeste .res:nth-child(odd) small{background:#c8101a;color:#f4ecdc;transform:rotate(2deg)}
+#manifeste .res b{font-family:"Anton",sans-serif;font-weight:400;font-size:24px;letter-spacing:.02em}
+#manifeste .corps{display:grid;grid-template-columns:200px minmax(0,560px);justify-content:end;gap:0;padding:26px 30px 40px;align-items:start}
+#manifeste .onglets{display:flex;flex-direction:column;align-items:flex-end;gap:10px;padding-top:30px;position:relative;z-index:3}
+#manifeste .onglet{font-family:"Anton",sans-serif;font-size:26px;text-transform:uppercase;letter-spacing:.03em;line-height:1;padding:8px 18px 8px 22px;background:#f4ecdc;color:#0b0b0b;clip-path:polygon(8% 0,100% 6%,94% 100%,0 90%);transition:transform .15s}
+#manifeste .onglet:nth-child(2){transform:rotate(4deg)}#manifeste .onglet:nth-child(3){transform:rotate(-3deg)}
+#manifeste .onglet:hover{transform:rotate(-6deg) scale(1.06)}
+#manifeste .onglet[aria-selected="true"]{background:#0b0b0b;color:#f4ecdc;font-size:34px;transform:rotate(-7deg) translateX(-10px);box-shadow:none;outline:3px solid #f4ecdc;outline-offset:-7px}
+#manifeste .dalle{position:relative;background:#0b0b0b;color:#f4ecdc;padding:34px 38px 38px 46px;clip-path:polygon(5% 0,100% 2%,96% 100%,0 95%);min-height:440px}
+#manifeste .dalle::before{content:"";position:absolute;inset:14px 18px 18px 26px;border:2px solid #f4ecdc;clip-path:polygon(5% 0,100% 2%,96% 100%,0 95%);pointer-events:none}
+#manifeste .surtitre{font-family:"Special Elite",monospace;font-size:13px;letter-spacing:.1em;color:#ff4d4d;margin:0 0 8px}
+#manifeste h3{margin:0 0 14px;line-height:1.25;font-weight:400;font-size:0}
+.rancon span{display:inline-block;margin:0 1px 4px 0;padding:0 4px;font-size:38px;line-height:1.05;vertical-align:middle}
+.rancon .esp{width:12px}
+#manifeste p{margin:0 0 12px;font-family:"EB Garamond",serif;font-size:18px}
+#manifeste p em{font-family:"Playfair Display",serif;font-style:italic;font-weight:900;color:#ff4d4d}
+#manifeste .liste{list-style:none;margin:10px 0;padding:0}
+#manifeste .liste li{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:2px solid #2a2a2a;font-family:"Anton",sans-serif;font-size:19px;letter-spacing:.03em;text-transform:uppercase}
+#manifeste .liste li b{font-weight:400;color:#ff4d4d}
+#manifeste .btn{cursor:pointer;margin-top:16px;font-family:"Anton",sans-serif;font-size:26px;text-transform:uppercase;letter-spacing:.04em;padding:8px 28px;border:0;background:#c8101a;color:#f4ecdc;transform:skew(-12deg) rotate(-2deg);box-shadow:6px 6px 0 #f4ecdc;transition:transform .12s,box-shadow .12s}
+#manifeste .btn:hover{transform:skew(-12deg) rotate(-4deg) scale(1.05);box-shadow:9px 9px 0 #f4ecdc}
+
+/* =========================================================
+   B · LA CHANCELLERIE — Kingdom Come / CK3 : vraie charte, vrai vélin, vrai sceau, vraie carte de Cassini
+   ========================================================= */
+#chancellerie .ecran{background:#1d140c}
+#chancellerie .fond{background-image:var(--img-charte);filter:brightness(.38) sepia(.5) contrast(1.1);transform:scale(1.05)}
+#chancellerie .ecran::after{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 30% 40%,rgba(255,170,80,.18),transparent 55%),radial-gradient(ellipse at 50% 50%,transparent 40%,rgba(0,0,0,.75) 100%);pointer-events:none}
+#chancellerie .barre{background:linear-gradient(#3b3631,#1f1c19);border-bottom:2px solid #0b0a09;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 4px 12px rgba(0,0,0,.6);color:#e9dcc0}
+#chancellerie .barre::before,#chancellerie .barre::after{content:"";position:absolute;top:50%;width:9px;height:9px;margin-top:-4.5px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#8a8178,#26221e);box-shadow:0 1px 1px rgba(0,0,0,.7)}
+#chancellerie .barre::before{left:8px}#chancellerie .barre::after{right:8px}
+#chancellerie .jeu{font-family:"IM Fell English SC",serif;font-size:24px;letter-spacing:.06em;color:#e3c27a}
+#chancellerie .res small{font-family:"IM Fell English SC",serif;font-size:13px;color:#b9a585}
+#chancellerie .res b{font-family:"EB Garamond",serif;font-weight:600;font-size:19px;font-variant-numeric:oldstyle-nums}
+#chancellerie .corps{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,560px);gap:36px;padding:30px 34px 40px;align-items:start}
+#chancellerie .carte{position:relative;justify-self:center;margin-top:18px;width:min(100%,520px);aspect-ratio:860/608;background:#d9c7a0 var(--img-cassini) center/cover;transform:rotate(-2.5deg);box-shadow:0 18px 30px rgba(0,0,0,.7),0 0 0 1px rgba(0,0,0,.4)}
+#chancellerie .carte::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 55%,rgba(80,45,15,.45) 100%)}
+#chancellerie .carte i{position:absolute;width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#d8d0c4,#5d564e 60%,#2a2622);box-shadow:0 3px 4px rgba(0,0,0,.6)}
+#chancellerie .carte i:nth-of-type(1){top:-6px;left:-6px}#chancellerie .carte i:nth-of-type(2){top:-6px;right:-6px}#chancellerie .carte i:nth-of-type(3){bottom:-6px;left:-6px}#chancellerie .carte i:nth-of-type(4){bottom:-6px;right:-6px}
+#chancellerie .carte span{position:absolute;bottom:-34px;left:0;font-family:"IM Fell English",serif;font-style:italic;font-size:15px;color:#cdb894;transform:rotate(2.5deg)}
+#chancellerie .livre{position:relative;display:grid;grid-template-columns:42px minmax(0,1fr) 56px;filter:drop-shadow(0 18px 24px rgba(0,0,0,.75))}
+#chancellerie .dos{background:#3a2414 var(--img-reliure) 40% 30%/600% auto;box-shadow:inset -8px 0 12px rgba(0,0,0,.6)}
+#chancellerie .vel{position:relative;background:#e3d2ae var(--img-velin) center/cover;color:#2a1a0d;padding:36px 34px 36px;min-height:470px;box-shadow:inset 14px 0 18px -10px rgba(0,0,0,.55)}
+#chancellerie .surtitre{font-family:"IM Fell English SC",serif;font-size:14px;letter-spacing:.12em;color:#7d1d14;margin:0 0 4px}
+#chancellerie h3{margin:0 0 10px;font-family:"IM Fell DW Pica",serif;font-weight:400;font-size:40px;line-height:1.05}
+#chancellerie p{margin:0 0 12px;font-size:18.5px}
+#chancellerie p.lettrine::first-letter{float:left;font-family:"UnifrakturMaguntia",serif;font-size:62px;line-height:.8;padding:8px 8px 0 0;color:#7d1d14}
+#chancellerie p em{color:#7d1d14}
+#chancellerie .liste{list-style:none;margin:8px 0;padding:0}
+#chancellerie .liste li{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px solid rgba(42,26,13,.25);font-size:18px}
+#chancellerie .liste b{font-weight:600;font-variant-numeric:oldstyle-nums}
+#chancellerie .actions{display:flex;align-items:center;gap:16px;margin-top:18px}
+#chancellerie .btn{cursor:pointer;display:flex;align-items:center;gap:12px;border:0;background:none;padding:0;font-family:"IM Fell English SC",serif;font-size:20px;color:#2a1a0d}
+#chancellerie .btn i{width:58px;height:58px;border-radius:50%;background:#7a1c12 var(--img-sceau) center/138%;box-shadow:0 3px 5px rgba(0,0,0,.45),inset 0 0 0 2px rgba(0,0,0,.25);transition:transform .2s}
+#chancellerie .btn:hover i{transform:rotate(-12deg) scale(1.06)}
+#chancellerie .onglets{display:flex;flex-direction:column;gap:6px;padding-top:30px}
+#chancellerie .onglet{position:relative;writing-mode:vertical-rl;min-height:118px;padding:14px 0;font-family:"IM Fell English SC",serif;font-size:16px;letter-spacing:.06em;color:#e7cf96;background:#3a2414 var(--img-reliure) center/400% auto;border-radius:0 6px 6px 0;box-shadow:inset 6px 0 10px -4px rgba(0,0,0,.8),2px 3px 6px rgba(0,0,0,.6);filter:brightness(.7)}
+#chancellerie .onglet:nth-child(2){background-position:20% 70%}#chancellerie .onglet:nth-child(3){background-position:80% 20%}
+#chancellerie .onglet[aria-selected="true"]{filter:none;color:#f6e3b0}
+#chancellerie .onglet[aria-selected="true"]::after{content:"";position:absolute;right:-16px;top:50%;width:32px;height:32px;margin-top:-16px;border-radius:50%;background:#7a1c12 var(--img-sceau) center/140%;box-shadow:0 2px 4px rgba(0,0,0,.6)}
+
+/* =========================================================
+   C · LE PORTULAN — Black Flag / Sea of Thieves : vraie carte marine du XIVᵉ siècle, pavillons de signaux
+   ========================================================= */
+#portulan .ecran{background:#2a3a3c}
+#portulan .fond{background-image:var(--img-portulan);filter:saturate(.9) brightness(.82) contrast(1.05);transform:scale(1.12);transform-origin:30% 40%}
+#portulan .ecran::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 70% 30%,rgba(255,190,110,.22),transparent 45%),radial-gradient(ellipse at 50% 50%,transparent 35%,rgba(10,6,3,.82) 100%)}
+#portulan .barre{background:linear-gradient(180deg,rgba(18,12,7,.92),rgba(18,12,7,.55));color:#f0dfba;border-bottom:1px solid rgba(201,163,94,.5)}
+#portulan .jeu{font-family:"IM Fell DW Pica",serif;font-style:italic;font-size:26px;color:#e3c27a}
+#portulan .res small{font-family:"IM Fell English SC",serif;font-size:13px;color:#c9b08a}
+#portulan .res b{font-family:"IM Fell DW Pica",serif;font-weight:400;font-size:21px}
+#portulan .corps{padding:26px 34px 40px;display:grid;justify-content:start}
+#portulan .onglets{display:flex;gap:16px;padding-left:28px;position:relative;z-index:3;margin-bottom:-6px}
+#portulan .onglet{display:grid;justify-items:center;gap:4px;font-family:"IM Fell English SC",serif;font-size:16px;color:#f0dfba;text-shadow:0 1px 2px #000;padding-bottom:10px;transition:transform .2s}
+#portulan .onglet i{display:block;width:52px;height:38px;box-shadow:0 3px 6px rgba(0,0,0,.6);transform-origin:left center;animation:flotte 3.5s ease-in-out infinite;border-left:3px solid #4a3523}
+#portulan .onglet:nth-child(1) i{background:linear-gradient(90deg,#f1e8d4 0 50%,#b3261e 50%)}
+#portulan .onglet:nth-child(2) i{background:conic-gradient(#1d3f6e 0 25%,#e3b23c 0 50%,#1d3f6e 0 75%,#e3b23c 0)}
+#portulan .onglet:nth-child(3) i{background:linear-gradient(#b3261e 0 33%,#f1e8d4 0 66%,#1d3f6e 0)}
+#portulan .onglet:nth-child(2) i{animation-delay:-1.2s}#portulan .onglet:nth-child(3) i{animation-delay:-2.1s}
+@keyframes flotte{0%,100%{transform:skewY(0) scaleX(1)}50%{transform:skewY(-5deg) scaleX(.94)}}
+#portulan .onglet[aria-selected="true"]{transform:translateY(-6px);color:#ffe7a8}
+#portulan .onglet[aria-selected="true"] i{width:62px;height:44px;outline:2px solid #e3c27a;outline-offset:2px}
+#portulan .parchemin{position:relative;width:min(100%,600px);padding:38px 40px 40px;color:#2b1a0d;background:#e2cb98 var(--img-velin) center/cover;
+  box-shadow:inset 0 0 40px rgba(90,45,10,.75),inset 0 0 6px rgba(60,25,5,.9),0 20px 30px rgba(0,0,0,.7);transform:rotate(-1deg);
+  clip-path:polygon(0 1.5%,7% 0,22% 1.2%,40% .2%,58% 1.4%,77% 0,92% 1%,100% .4%,99.3% 22%,100% 48%,99% 74%,100% 99%,82% 98.8%,63% 100%,44% 98.6%,24% 100%,6% 98.9%,0 100%,.8% 76%,0 50%,1% 24%)}
+#portulan .parchemin::after{content:"";position:absolute;right:-30px;bottom:-40px;width:220px;height:220px;background:var(--img-portulan2) 62% 48%/700% auto;border-radius:50%;opacity:.28;mix-blend-mode:multiply;pointer-events:none}
+#portulan .surtitre{font-family:"IM Fell English SC",serif;font-size:14px;letter-spacing:.12em;color:#8a2a17;margin:0 0 4px}
+#portulan h3{margin:0 0 10px;font-family:"IM Fell DW Pica",serif;font-style:italic;font-weight:400;font-size:42px;line-height:1.02}
+#portulan p{margin:0 0 12px;font-family:"IM Fell English",serif;font-size:18.5px}
+#portulan p.lettrine::first-letter{float:left;font-family:"IM Fell DW Pica",serif;font-size:64px;line-height:.8;padding:6px 8px 0 0;color:#8a2a17}
+#portulan p em{color:#8a2a17}
+#portulan .liste{list-style:none;margin:8px 0;padding:0;position:relative;z-index:1}
+#portulan .liste li{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px dashed rgba(43,26,13,.4);font-family:"IM Fell English",serif;font-size:18px}
+#portulan .liste b{font-family:"IM Fell DW Pica",serif;font-weight:400;font-size:20px}
+#portulan .btn{cursor:pointer;margin-top:18px;position:relative;z-index:1;font-family:"IM Fell English SC",serif;font-size:19px;letter-spacing:.04em;padding:10px 22px;border:0;color:#f3e3bd;background:linear-gradient(#5a3a22,#3a2414);box-shadow:inset 0 0 0 2px #c9a35e,inset 0 0 0 4px #3a2414,0 4px 6px rgba(0,0,0,.45)}
+#portulan .btn:hover{background:linear-gradient(#6d4729,#46301c)}
+
+@media (max-width:900px){
+  .ecran{min-height:0}
+  #manifeste .corps{grid-template-columns:1fr;padding:16px 14px 28px}
+  #manifeste .onglets{flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:flex-start;padding:0 0 12px}
+  #manifeste .onglet{font-size:20px}#manifeste .onglet[aria-selected="true"]{font-size:24px;transform:rotate(-4deg)}
+  #manifeste .dalle{padding:28px 22px 30px 26px;min-height:0}
+  .rancon span{font-size:28px}
+  #chancellerie .corps{grid-template-columns:1fr;padding:20px 14px 30px;gap:44px}
+  #chancellerie .livre{grid-template-columns:22px minmax(0,1fr) 44px}
+  #chancellerie .vel{padding:28px 20px;min-height:0}
+  #chancellerie .onglet{min-height:96px;font-size:14px}
+  #chancellerie h3,#portulan h3{font-size:32px}
+  #portulan .corps{padding:18px 12px 28px}
+  #portulan .onglets{padding-left:8px;gap:10px}
+  #portulan .parchemin{padding:30px 22px 32px}
+}
+@media (prefers-reduced-motion:reduce){#portulan .onglet i{animation:none}.page-onglet.active{animation:none}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<section class="intro">
+  <small>Identité visuelle · essai n° 7 · vraie matière</small>
+  <h1>Trois âmes, de vrais documents anciens</h1>
+  <p>Fini le dessin en code : les papiers, la reliure, le sceau de cire et les cartes sont de vrais documents anciens (chartes médiévales, carte marine du XIVᵉ siècle, carte de Cassini de 1778 qui montre Aubagne, journal de 1908), tous du domaine public.</p>
+  <nav class="sommaire"><a href="#manifeste">A · Persona 5</a><a href="#chancellerie">B · Kingdom Come / CK3</a><a href="#portulan">C · Black Flag / Sea of Thieves</a></nav>
+</section>
+
+<!-- ============ A ============ -->
+<section class="scene" id="manifeste">
+  <header>
+    <div class="numero">Piste A · façon Persona 5</div>
+    <h2>Le manifeste</h2>
+    <p>L'énergie de Persona 5 (rouge, noir, angles cassés, lettres de rançon découpées), mais faite avec des coupures de journaux anciens : une révolte placardée sur les murs d'Aubagne.</p>
+  </header>
+  <div class="ecran">
+    <div class="fond"></div>
+    <div class="barre"><span class="jeu">Nom du jeu</span>
+      <span class="res"><small>OR</small><b>12 400</b></span><span class="res"><small>VIVRES</small><b>3 210</b></span><span class="res"><small>MATÉRIAUX</small><b>860</b></span><span class="res"><small>HOMMES</small><b>1 450</b></span></div>
+    <div class="corps">
+      <nav class="onglets" role="tablist" aria-label="Sections">
+        <button class="onglet" role="tab" aria-selected="true">Monde</button>
+        <button class="onglet" role="tab" aria-selected="false">Armées</button>
+        <button class="onglet" role="tab" aria-selected="false">Pactes</button>
+      </nav>
+      <div class="dalle">
+        <article class="page-onglet active" role="tabpanel">
+          <p class="surtitre">// AVIS À LA POPULATION</p>
+          <h3 class="rancon" data-texte="La vallée est à prendre"></h3>
+          <p>Douze quartiers. Trois sous ta bannière. Les autres <em>tremblent déjà</em>.</p>
+          <ul class="liste"><li>Pin Vert <b>640 h.</b></li><li>Le Charrel <b>210 h.</b></li><li>Les Passons <b>neutre</b></li></ul>
+          <button class="btn" type="button">Passer à l'attaque</button>
+        </article>
+        <article class="page-onglet" role="tabpanel">
+          <p class="surtitre">// EN MARCHE · 00:18:40</p>
+          <h3 class="rancon" data-texte="Armée du Pin Vert"></h3>
+          <p>Neuf cents à pied, deux cents à cheval. <em>Personne ne recule.</em></p>
+          <ul class="liste"><li>Fantassins <b>900</b></li><li>Archers <b>350</b></li><li>Cavaliers <b>200</b></li></ul>
+          <button class="btn" type="button">Charger</button>
+        </article>
+        <article class="page-onglet" role="tabpanel">
+          <p class="surtitre">// PROPOSITION DE MATHIEU</p>
+          <h3 class="rancon" data-texte="Sept jours de paix"></h3>
+          <p>Il te tend la main. <em>Ou il cache un couteau.</em></p>
+          <ul class="liste"><li>Durée <b>7 jours</b></li><li>Garantie <b>500 or</b></li></ul>
+          <button class="btn" type="button">Accepter</button>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ B ============ -->
+<section class="scene" id="chancellerie">
+  <header>
+    <div class="numero">Piste B · façon Kingdom Come / CK3</div>
+    <h2>La chancellerie</h2>
+    <p>Le bureau d'un seigneur à la lueur de la bougie : une vraie charte médiévale en fond, la vraie carte de Cassini d'Aubagne punaisée, un livre avec un vrai vélin, une vraie reliure de cuir du XVIᵉ siècle, et le vrai sceau de cire comme bouton.</p>
+  </header>
+  <div class="ecran">
+    <div class="fond"></div>
+    <div class="barre"><span class="jeu">Nom du jeu</span>
+      <span class="res"><small>Or</small><b>12 400</b></span><span class="res"><small>Vivres</small><b>3 210</b></span><span class="res"><small>Matériaux</small><b>860</b></span><span class="res"><small>Hommes</small><b>1 450</b></span></div>
+    <div class="corps">
+      <div class="carte"><i></i><i></i><i></i><i></i><span>Aubagne et ses environs · levé de Cassini, 1778</span></div>
+      <div class="livre">
+        <div class="dos"></div>
+        <div class="vel">
+          <article class="page-onglet active" role="tabpanel">
+            <p class="surtitre">Livre premier</p>
+            <h3>De la vallée</h3>
+            <p class="lettrine">Douze quartiers se partagent la vallée de l'Huveaune. Trois ont prêté serment à ta bannière ; les autres attendent de voir <em>de quel côté soufflera le vent</em>.</p>
+            <ul class="liste"><li>Pin Vert <b>640 hommes</b></li><li>Le Charrel <b>210 hommes</b></li><li>Les Passons <b>neutre</b></li></ul>
+            <div class="actions"><button class="btn" type="button"><i></i>Lever le ban</button></div>
+          </article>
+          <article class="page-onglet" role="tabpanel">
+            <p class="surtitre">Livre deuxième</p>
+            <h3>De l'ost</h3>
+            <p class="lettrine">L'armée du Pin Vert marche vers Les Passons par la vieille route d'Aix. Le moral tient, <em>pour l'instant</em>.</p>
+            <ul class="liste"><li>Fantassins <b>900</b></li><li>Archers <b>350</b></li><li>Cavaliers <b>200</b></li></ul>
+            <div class="actions"><button class="btn" type="button"><i></i>Donner l'assaut</button></div>
+          </article>
+          <article class="page-onglet" role="tabpanel">
+            <p class="surtitre">Livre troisième</p>
+            <h3>Des serments</h3>
+            <p class="lettrine">Mathieu, seigneur de La Valentine, propose une trêve de sept jours. Quiconque la rompra <em>sera connu de tous comme parjure</em>.</p>
+            <ul class="liste"><li>Durée <b>7 jours</b></li><li>Garantie <b>500 pièces d'or</b></li></ul>
+            <div class="actions"><button class="btn" type="button"><i></i>Sceller le pacte</button></div>
+          </article>
+        </div>
+        <nav class="onglets" role="tablist" aria-label="Sections">
+          <button class="onglet" role="tab" aria-selected="true">Monde</button>
+          <button class="onglet" role="tab" aria-selected="false">Armées</button>
+          <button class="onglet" role="tab" aria-selected="false">Serments</button>
+        </nav>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ C ============ -->
+<section class="scene" id="portulan">
+  <header>
+    <div class="numero">Piste C · façon Black Flag / Sea of Thieves</div>
+    <h2>Le portulan</h2>
+    <p>Une vraie carte marine de la Méditerranée du XIVᵉ siècle étalée sous une lanterne. Les onglets sont des pavillons de signaux comme ceux des navires, qui flottent au vent. Le parchemin est déchiré, avec un morceau de rose des vents d'une carte de 1590.</p>
+  </header>
+  <div class="ecran">
+    <div class="fond"></div>
+    <div class="barre"><span class="jeu">Nom du jeu</span>
+      <span class="res"><small>Or</small><b>12 400</b></span><span class="res"><small>Vivres</small><b>3 210</b></span><span class="res"><small>Bois</small><b>860</b></span><span class="res"><small>Équipage</small><b>1 450</b></span></div>
+    <div class="corps">
+      <nav class="onglets" role="tablist" aria-label="Sections">
+        <button class="onglet" role="tab" aria-selected="true"><i></i>Monde</button>
+        <button class="onglet" role="tab" aria-selected="false"><i></i>Armées</button>
+        <button class="onglet" role="tab" aria-selected="false"><i></i>Pactes</button>
+      </nav>
+      <div class="parchemin">
+        <article class="page-onglet active" role="tabpanel">
+          <p class="surtitre">Journal du capitaine · jour 214</p>
+          <h3>Les eaux de l'Huveaune</h3>
+          <p class="lettrine">Douze ports, douze quartiers. Trois battent déjà ton pavillon ; les autres <em>attendent de voir tes voiles</em>.</p>
+          <ul class="liste"><li>Pin Vert <b>640 hommes</b></li><li>Le Charrel <b>210 hommes</b></li><li>Les Passons <b>neutre</b></li></ul>
+          <button class="btn" type="button">Hisser les voiles</button>
+        </article>
+        <article class="page-onglet" role="tabpanel">
+          <p class="surtitre">Rôle d'équipage</p>
+          <h3>L'armée du Pin Vert</h3>
+          <p class="lettrine">Neuf cents hommes à pied, deux cents cavaliers, et assez de rhum <em>pour tenir jusqu'à l'abordage</em>.</p>
+          <ul class="liste"><li>Fantassins <b>900</b></li><li>Archers <b>350</b></li><li>Cavaliers <b>200</b></li></ul>
+          <button class="btn" type="button">À l'abordage</button>
+        </article>
+        <article class="page-onglet" role="tabpanel">
+          <p class="surtitre">Lettre de Mathieu</p>
+          <h3>Une trêve en mer</h3>
+          <p class="lettrine">Sept jours sans tirer un coup de canon. Mais un pirate <em>signe-t-il vraiment</em> ?</p>
+          <ul class="liste"><li>Durée <b>7 jours</b></li><li>Garantie <b>500 doublons</b></li></ul>
+          <button class="btn" type="button">Signer</button>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="credits">
+  <b>Documents utilisés (domaine public, Wikimedia Commons)</b>
+  <ul>
+    <li><a href="https://commons.wikimedia.org/wiki/File:Le_Petit_Journal_Balkan_Crisis_(1908).jpg">Le Petit Journal, 1908</a></li>
+    <li><a href="https://commons.wikimedia.org/wiki/File:Norfolk,_Charter_(18463919602).jpg">Charte médiévale du Norfolk</a></li>
+    <li><a href="https://commons.wikimedia.org/wiki/File:Towneley_Lectionary_(blank_page)_(NYPL_b12455533-1610013).tiff">Page de vélin vierge du lectionnaire Towneley</a></li>
+    <li><a href="https://commons.wikimedia.org/wiki/File:Covers_From_a_Bookbinding,_between_1500_and_1550.jpg">Reliure en cuir, 1500-1550</a></li>
+    <li><a href="https://commons.wikimedia.org/wiki/File:NLW_Wynnstay_Estate_,_Ystrad_Marchell_Charters_58_(seal_1)_front_(8633592701).jpg">Sceau de cire, chartes d'Ystrad Marchell</a></li>
+    <li><a href="https://commons.wikimedia.org/wiki/File:Minute_Cassini_-_Marseille-124_-_1778.jpg">Minute de la carte de Cassini, Marseille n° 124, 1778</a></li>
+    <li><a href="https://commons.wikimedia.org/wiki/File:Mediterranean_chart_fourteenth_century2.jpg">Carte marine de la Méditerranée, XIVᵉ siècle</a> et <a href="https://commons.wikimedia.org/wiki/File:1590_Portolan_chart_of_the_Mediterranean_Sea_and_Europe.png">portulan de 1590</a></li>
+  </ul>
+</section>
+</div>
+
+<script>
+// Lettres de rançon (piste A) : chaque lettre découpée dans un « journal » différent
+const polices=['"Anton",sans-serif','"Playfair Display",serif','"UnifrakturMaguntia",serif','"Special Elite",monospace','"IM Fell DW Pica",serif'];
+const styles=[['#f4ecdc','#0b0b0b'],['#0b0b0b','#f4ecdc'],['#c8101a','#f4ecdc'],['#f4ecdc','#c8101a']];
+let graine=7;const hasard=()=>{graine=(graine*9301+49297)%233280;return graine/233280;};
+document.querySelectorAll('.rancon').forEach(h=>{
+  h.setAttribute('aria-label',h.dataset.texte);
+  h.innerHTML=[...h.dataset.texte].map(c=>{
+    if(c===' ')return '<span class="esp" aria-hidden="true"></span>';
+    const s=styles[Math.floor(hasard()*styles.length)],p=polices[Math.floor(hasard()*polices.length)];
+    const r=(hasard()*14-7).toFixed(1),t=(hasard()*10-5).toFixed(0);
+    return `<span aria-hidden="true" style="font-family:${p};background:${s[0]};color:${s[1]};transform:rotate(${r}deg) translateY(${t}px)${p.includes('Playfair')?';font-style:italic;font-weight:900':''}">${c.toUpperCase()}</span>`;
+  }).join('');
+});
+// Onglets de chaque scène
+document.querySelectorAll('.scene').forEach(sc=>{
+  const o=[...sc.querySelectorAll('.onglet')],p=[...sc.querySelectorAll('.page-onglet')];
+  o.forEach((b,k)=>b.addEventListener('click',()=>{o.forEach((x,j)=>x.setAttribute('aria-selected',j===k));p.forEach((x,j)=>x.classList.toggle('active',j===k));}));
+});
+</script>
+</body>
+</html>
