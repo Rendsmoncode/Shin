@@ -56,10 +56,11 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6.5.0/turf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/d3-delaunay@6.0.4/dist/d3-delaunay.min.js"></script>
 <script src="batiments.js"></script>
+<script src="relief.js"></script>
 <script>
 (async function(){
 const status=document.getElementById('status'),info=document.getElementById('info');
-if(!window.THREE||!window.turf||!window.d3||!window.ShinBat){status.textContent='Une bibliothèque n\'a pas pu se charger.';return;}
+if(!window.THREE||!window.turf||!window.d3||!window.ShinBat||!window.ShinRelief){status.textContent='Une bibliothèque n\'a pas pu se charger.';return;}
 const pause=()=>new Promise(r=>setTimeout(r,0));
 const say=async t=>{status.textContent=t;await pause();};
 
@@ -200,7 +201,7 @@ const tex=new THREE.CanvasTexture(cv);tex.encoding=THREE.sRGBEncoding;tex.anisot
 await say('Construction du relief…');
 // pas de la grille (m) et distance jusqu'à laquelle on l'utilise ; les deux premiers niveaux viennent des images fines (2 m)
 const LV=[{pas:2,d:650},{pas:4,d:1500},{pas:10,d:3600},{pas:20,d:8000},{pas:50,d:1e9}];
-let arbresIP=null,arbresAttr=null,arbresSales=false;
+let arbresIP=null,arbresAttr=null,arbresSales=false,arbresMin=1e9,arbresMax=0;
 // ---------- photos aériennes IGN (Géoplateforme, WMTS ORTHOIMAGERY.ORTHOPHOTOS) ----------
 // Une photo de toute la zone (environ 3,7 m par point) puis, carré par carré selon la distance, des photos plus fines.
 // Elles sont projetées d'en haut sur le sol, les routes, les rivières, les ponts et les toits.
@@ -476,7 +477,6 @@ function getter(T,L){
   const s=k/GP,o=T.j*GT*GNX+T.i*GT;return (c,r)=>HG[o+r*s*GNX+c*s];
 }
 // altitude du relief tel qu'il est affiché dans ce carré (les routes et les murs s'y posent exactement)
-function hT(T,L,x,z){const k=LV[L].pas,n=TU/k;return tri(getter(T,L),(x-T.x0)/k,(z-T.z0)/k,n,n);}
 const rockOf=ny=>{const t=Math.min(1,Math.max(0,(.8-ny)/.18));return t*t*(3-2*t);};
 const IDX={};
 function indexOf(n){
@@ -489,7 +489,16 @@ function indexOf(n){
   for(let k=0;k<m;k++){const a=ring[k],b=ring[(k+1)%m],a2=base+k,b2=base+(k+1)%m;idx.push(a,a2,b,b,a2,b2,a,b,a2,b,b2,a2);}
   return IDX[n]={ring,arr:base+m>65535?new Uint32Array(idx):new Uint16Array(idx)};
 }
+function geoDepuis(d,arr){
+  const geo=new THREE.BufferGeometry();
+  geo.setAttribute('position',new THREE.BufferAttribute(d.pos,3));geo.setAttribute('normal',new THREE.BufferAttribute(d.nor,3));
+  geo.setAttribute('uv',new THREE.BufferAttribute(d.uv,2));geo.setAttribute('rock',new THREE.BufferAttribute(d.rk,1));
+  geo.setIndex(new THREE.BufferAttribute(arr,1));geo.computeBoundingSphere();
+  return geo;
+}
 function tileGeo(T,L){
+  // niveaux fins (2 et 4 m) : préparés en arrière-plan (relief.js) ; sinon calculés ici
+  if(L<=1)return geoDepuis((T.fd&&T.fd.g[L])||ShinRelief.geoFin(T.fine,T.x0,T.z0,LV[L].pas),indexOf(TU/LV[L].pas).arr);
   const k=LV[L].pas,n=TU/k,N1=n+1,{ring,arr}=indexOf(n),nv=N1*N1+ring.length,get=getter(T,L);
   const pos=new Float32Array(nv*3),nor=new Float32Array(nv*3),uv=new Float32Array(nv*2),rk=new Float32Array(nv);
   const F=T.fine,fs=k/2,gs=k/GP;
@@ -577,25 +586,39 @@ const stoneMat=(()=>{
   const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.encoding=THREE.sRGBEncoding;t.anisotropy=8;
   return new THREE.MeshLambertMaterial({map:t,side:THREE.DoubleSide});
 })();
-// murs de soutènement : en pierre, du pied à la tête du ressaut mesuré sur le relief de part et d'autre (3 m)
-function mursDe(T,L){
-  const out={pos:[],nor:[],uv:[],idx:[]},k=Math.min(LV[L].pas,2);
-  for(const f of T.murs){const P=dens(f,k),m=P.length/2,YH=[],YB=[];
-    for(let i=0;i<m;i++){const x=P[2*i],z=P[2*i+1],[nx,nz]=perp(P,i),a=hT(T,L,x+nx*3,z+nz*3),b=hT(T,L,x-nx*3,z-nz*3),c=hT(T,L,x,z);
-      YH.push(Math.max(a,b,c)+.35);YB.push(Math.min(a,b,c)-.6);}
-    boite(P,.3,YH,YB,true,false,out);}
-  return out.idx.length?meshBoite(out,stoneMat):null;
-}
+// routes, rivières et murs de soutènement d'un carré : préparés en arrière-plan (relief.js) ; sinon calculés ici
 function construireExtra(T,L){
   enleverExtra(T);
-  const grp=new THREE.Group(),k=LV[L].pas,out={pos:[],col:[],idx:[]};
-  for(const [w,f] of T.rivieres)ruban(dens(f,k),w,(i,x,z)=>hT(T,L,x,z)+.3,EAU,out);
-  for(const [ci,f] of T.routes){const cl=CL[ci],w=LARG[cl],yo=YOFF[cl];
-    ruban(dens(f,k),w,(i,x,z,nx,nz)=>{let h=Math.max(hT(T,L,x,z),hT(T,L,x+nx,z+nz),hT(T,L,x-nx,z-nz));if(w>8)h=Math.max(h,hT(T,L,x+nx/2,z+nz/2),hT(T,L,x-nx/2,z-nz/2));return h+yo;},COLS[cl],out);}
-  if(out.idx.length)grp.add(meshRubans(out,matR(T)));
-  const mu=mursDe(T,L);if(mu)grp.add(mu);
+  const e=(T.fd&&T.fd.ex[L])||ShinRelief.extras(T.fine,T.x0,T.z0,LV[L].pas,T.routes,T.rivieres,T.murs),grp=new THREE.Group();
+  if(e.rub.idx.length){const geo=new THREE.BufferGeometry(),nor=new Float32Array(e.rub.pos.length);for(let i=1;i<nor.length;i+=3)nor[i]=1;
+    geo.setAttribute('position',new THREE.BufferAttribute(e.rub.pos,3));geo.setAttribute('color',new THREE.BufferAttribute(e.rub.col,3));geo.setAttribute('normal',new THREE.BufferAttribute(nor,3));
+    geo.setIndex(new THREE.BufferAttribute(e.rub.idx,1));const m=new THREE.Mesh(geo,matR(T));m.receiveShadow=true;grp.add(m);}
+  if(e.mur.idx.length){const geo=new THREE.BufferGeometry();
+    geo.setAttribute('position',new THREE.BufferAttribute(e.mur.pos,3));geo.setAttribute('normal',new THREE.BufferAttribute(e.mur.nor,3));geo.setAttribute('uv',new THREE.BufferAttribute(e.mur.uv,2));
+    geo.setIndex(new THREE.BufferAttribute(e.mur.idx,1));grp.add(new THREE.Mesh(geo,stoneMat));}
   T.extra=grp;T.extraLvl=L;scene.add(grp);
 }
+// ---------- relief fin en arrière-plan ----------
+ShinRelief.config({TU,FN,pas:[LV[0].pas,LV[1].pas],X0,Z0,GW,GD,CL,LARG,YOFF,EAU:[EAU.r,EAU.g,EAU.b],
+  COLS:Object.fromEntries(CL.map(cl=>[cl,[COLS[cl].r,COLS[cl].g,COLS[cl].b]]))});
+let rw=null,fdVol=0;const fileFd=[];
+function demanderFd(T){if(!rw||T.fdEtat||!T.fine)return;T.fdEtat=1;fileFd.push(T);}
+function pomperFd(){
+  if(!rw||!fileFd.length)return;fileFd.sort((a,b)=>a.d-b.d);
+  while(fdVol<2&&fileFd.length){const T=fileFd.shift();
+    if(T.d>LV[1].d*1.3||!T.fine){T.fdEtat=0;continue;}
+    T.fdSeq=(T.fdSeq||0)+1;fdVol++;
+    rw.postMessage({type:'carre',id:T.j*NTX+T.i,seq:T.fdSeq,F:T.fine,x0:T.x0,z0:T.z0,routes:T.routes,rivieres:T.rivieres,murs:T.murs});}
+}
+try{
+  rw=new Worker('relief.js');
+  rw.onmessage=e=>{const m=e.data;if(!m||m.type!=='carre')return;fdVol=Math.max(0,fdVol-1);const T=tiles[m.id];
+    if(!T||m.seq!==T.fdSeq||T.fdEtat!==1)return;T.fd={g:m.g,ex:m.ex};T.fdEtat=2;};
+  // si l'arrière-plan ne marche pas : tout se calcule ici, comme avant
+  rw.onerror=()=>{if(!rw)return;rw.terminate();rw=null;fdVol=0;fileFd.length=0;for(const T of tiles)if(T.fdEtat===1)T.fdEtat=0;};
+  rw.postMessage({type:'config',cfg:{TU,FN,pas:[LV[0].pas,LV[1].pas],X0,Z0,GW,GD,CL,LARG,YOFF,EAU:[EAU.r,EAU.g,EAU.b],
+    COLS:Object.fromEntries(CL.map(cl=>[cl,[COLS[cl].r,COLS[cl].g,COLS[cl].b]]))}});
+}catch(e){rw=null;}
 function enleverExtra(T){if(!T.extra)return;T.extra.traverse(o=>{if(o.geometry)o.geometry.dispose();});scene.remove(T.extra);T.extra=null;T.extraLvl=-1;}
 // ponts : à plat d'une culée à l'autre (altitudes des deux bouts calculées sur le relief fin), avec un tablier
 {const decks=new Map(),flancs={pos:[],nor:[],uv:[],idx:[]};
@@ -628,6 +651,7 @@ function majTuiles(budgetFin,budgetGros){
     let w=0;while(T.d>=LV[w].d)w++;
     if(T.lvl>=0&&w>T.lvl&&T.d<LV[T.lvl].d*1.12)w=T.lvl;   // pas de clignotement à la limite
     if(w<=1&&!T.fine){demanderFin(T);w=2;}               // en attendant le relief fin
+    else if(w<=1&&rw&&!T.fd){demanderFd(T);w=2;}         // en attendant qu'il soit préparé en arrière-plan
     T.want=w;
     majPhotos(T);
   }
@@ -641,13 +665,16 @@ function majTuiles(budgetFin,budgetGros){
     if(L<=1){if(T.extraLvl!==L&&budgetFin>0&&!tropTard()){construireExtra(T,L);budgetFin--;ombreSale=true;}}
     else enleverExtra(T);
   }
-  pomperFin();pomperPhotos();
+  pomperFin();pomperFd();pomperPhotos();
 }
 function liberer(){   // mémoire : on ne garde le détail que des carrés proches
   let n=tiles.filter(T=>T.fine).length;
-  for(const T of tiles.filter(T=>T.fine&&T.lvl>1).sort((a,b)=>b.d-a.d)){if(n<=160)break;T.fine=null;T.etat=0;for(const L of [0,1])if(T.geos[L]){T.geos[L].dispose();T.geos[L]=null;}n--;}
+  for(const T of tiles.filter(T=>T.fine&&T.lvl>1).sort((a,b)=>b.d-a.d)){if(n<=160)break;T.fine=null;T.etat=0;T.fd=null;T.fdEtat=0;for(const L of [0,1])if(T.geos[L]){T.geos[L].dispose();T.geos[L]=null;}n--;}
   for(const [L,lim] of [[0,40],[1,100]]){let c=tiles.filter(T=>T.geos[L]).length;
     for(const T of tiles.filter(T=>T.geos[L]&&T.lvl!==L).sort((a,b)=>b.d-a.d)){if(c<=lim)break;T.geos[L].dispose();T.geos[L]=null;c--;}}
+  // relief préparé en arrière-plan : on garde celui des 40 carrés les plus proches
+  {let c=tiles.filter(T=>T.fd).length;
+   for(const T of tiles.filter(T=>T.fd&&T.lvl>1).sort((a,b)=>b.d-a.d)){if(c<=40)break;T.fd=null;T.fdEtat=0;for(const L of [0,1])if(T.geos[L]){T.geos[L].dispose();T.geos[L]=null;}c--;}}
   // photos fines : on garde les plus proches
   PH.forEach((P,q)=>{let c=tiles.filter(T=>T.ph[q]).length;
     for(const T of tiles.filter(T=>T.ph[q]&&T.d>LV[q].d*1.3).sort((a,b)=>b.d-a.d)){if(c<=P.lim)break;T.ph[q].tex.dispose();T.ph[q]=null;T.phEtat[q]=0;c--;choisirPhoto(T);}});
@@ -655,7 +682,7 @@ function liberer(){   // mémoire : on ne garde le détail que des carrés proch
 function affinerArbres(T){
   if(!arbresIP||!T.arbres||!T.fine)return;const get=getter(T,0),n=TU/2;
   for(let i=T.arbres[0];i<T.arbres[1];i++)arbresIP[i*3+1]=tri(get,(arbresIP[i*3]-T.x0)/2,(arbresIP[i*3+2]-T.z0)/2,n,n);
-  arbresSales=true;
+  arbresSales=true;arbresMin=Math.min(arbresMin,T.arbres[0]);arbresMax=Math.max(arbresMax,T.arbres[1]);
 }
 
 // ---------- bâtiments ----------
@@ -898,12 +925,12 @@ function loop(now){
   controls.maxPolarAngle=1.02+.3*Math.min(1,Math.max(0,(dist-dMin)/900));
   UG.pxK.value=2*Math.tan(camera.fov*Math.PI/360)/Math.max(1,renderer.domElement.height);
   majTuiles(3,40);batirProches(frame<3?40:7);poserPhotos();if(frame%30===0)infoPhotos();if(++frame%60===0)liberer();
-  // si l'ordinateur peine (moins de 35 images par seconde), on affiche un peu moins de points, puis on remonte dès que possible
+  // si l'ordinateur peine (moins de 52 images par seconde), on affiche un peu moins de points, puis on remonte dès que possible
   if(last){const dt=now-last;cumul+=dt;nb++;}last=now;
   if(nb>=45){const moy=cumul/nb;cumul=nb=0;
-    if(now>3000){let pr=prAct;if(moy>28&&prAct>1)pr=Math.max(1,prAct-.25);else if(moy<19&&prAct<prMax)pr=Math.min(prMax,prAct+.25);
+    if(now>3000){let pr=prAct;if(moy>19&&prAct>1)pr=Math.max(1,prAct-.25);else if(moy<12.5&&prAct<prMax)pr=Math.min(prMax,prAct+.25);
       if(pr!==prAct){prAct=pr;renderer.setPixelRatio(pr);resize();}}}
-  if(arbresSales&&arbresAttr){arbresAttr.needsUpdate=true;arbresSales=false;}
+  if(arbresSales&&arbresAttr){if(arbresMax>arbresMin){arbresAttr.updateRange.offset=arbresMin*3;arbresAttr.updateRange.count=(arbresMax-arbresMin)*3;}arbresAttr.needsUpdate=true;arbresSales=false;arbresMin=1e9;arbresMax=0;}
   renderer.render(scene,camera);requestAnimationFrame(loop);
 }
 let frame=0,last=0,cumul=0,nb=0;const prMax=Math.min(2,window.devicePixelRatio||1);let prAct=prMax;
