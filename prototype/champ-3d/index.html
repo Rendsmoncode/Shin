@@ -14,6 +14,9 @@ body{margin:0;overflow:hidden;font-family:var(--ui)}
 #scene canvas{display:block;width:100%;height:100%}
 .panel{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));left:max(12px,env(safe-area-inset-left,0px));max-width:min(340px,calc(100vw - 24px));max-height:calc(100vh - 24px);overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px 14px;display:grid;gap:8px;font-size:15px;line-height:1.35}
 .panel h1{margin:0;font-size:20px;letter-spacing:.05em;text-transform:uppercase}
+.panel .head{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.panel .head button{padding:2px 9px;font-size:14px}
+#aide[hidden]{display:none}
 .panel p{margin:0;color:var(--muted)}
 .row{display:flex;flex-wrap:wrap;gap:6px}
 button{font:inherit;font-weight:600;letter-spacing:.04em;color:var(--fg);background:#26332a;border:1px solid var(--line);padding:5px 10px;border-radius:3px;cursor:pointer}
@@ -30,10 +33,19 @@ kbd{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:3px;p
 #toast{position:fixed;left:50%;bottom:calc(72px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);max-width:calc(100vw - 32px);background:rgba(90,26,22,.92);border:1px solid #b24a3e;color:#fff;padding:8px 16px;border-radius:4px;font-size:18px;font-weight:600;letter-spacing:.03em;opacity:0;transition:opacity .3s;pointer-events:none;text-align:center}
 #toast.on{opacity:1}
 /* mini-carte : coin bas droit, même habillage que le panneau */
-#mm{position:fixed;right:max(12px,env(safe-area-inset-right,0px));bottom:calc(12px + env(safe-area-inset-bottom,0px));width:min(330px,45vw);aspect-ratio:3/2;display:block;background:var(--panel);border:1px solid var(--line);border-radius:6px;box-shadow:0 4px 18px rgba(0,0,0,.45);cursor:crosshair;touch-action:none}
+#mmwrap{position:fixed;right:max(12px,env(safe-area-inset-right,0px));bottom:calc(12px + env(safe-area-inset-bottom,0px));width:min(var(--mmw,260px),60vw);display:grid;gap:4px}
+#mmwrap.left,#mm-show.left{right:auto;left:max(12px,env(safe-area-inset-left,0px))}
+#mmwrap[hidden]{display:none}
+#mmbar{display:flex;justify-content:flex-end;gap:4px;opacity:.8}
+#mmwrap.left #mmbar{justify-content:flex-start}
+#mmwrap:hover #mmbar{opacity:1}
+#mmbar button,#mm-show{padding:1px 9px;font-size:15px;line-height:1.2}
+#mm-show{position:fixed;right:max(12px,env(safe-area-inset-right,0px));bottom:calc(12px + env(safe-area-inset-bottom,0px))}
+#mm-show[hidden]{display:none}
+#mm{width:100%;aspect-ratio:3/2;display:block;background:var(--panel);border:1px solid var(--line);border-radius:6px;box-shadow:0 4px 18px rgba(0,0,0,.45);cursor:crosshair;touch-action:none}
 #mm:hover{border-color:var(--gold)}
 /* panneau des réglages du combat (coin haut droit) */
-#reglages{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));right:max(12px,env(safe-area-inset-right,0px));width:min(350px,calc(100vw - 24px));max-height:calc(100vh - 36px - min(330px,45vw)/1.5);overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px 14px;display:grid;gap:10px;font-size:15px;line-height:1.3;box-sizing:border-box}
+#reglages{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));right:max(12px,env(safe-area-inset-right,0px));width:min(350px,calc(100vw - 24px));max-height:calc(100vh - 36px - var(--mmh,0px));overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px 14px;display:grid;gap:10px;font-size:15px;line-height:1.3;box-sizing:border-box}
 #reglages[hidden]{display:none}
 #reglages h2{margin:0;font-size:18px;letter-spacing:.05em;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center}
 #reglages p{margin:0;color:var(--muted)}
@@ -64,8 +76,8 @@ kbd{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:3px;p
 
 <div id="scene" aria-label="Champ de bataille en 3D avec relief, rivière, forêts et deux armées. Les armées bleues se commandent à la souris."></div>
 <div class="panel">
-  <h1>Champ de bataille 3D</h1>
-  <p><b>Clic gauche</b> sur une armée bleue pour la choisir (<kbd>Maj</kbd> pour en ajouter, touches <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd>). <b>Clic droit</b> sur le terrain pour l'y envoyer, sur une armée rouge pour marcher sur elle. Glisser pour se déplacer, molette pour zoomer, glisser avec le clic droit pour pivoter. <kbd>Espace</kbd> centre la vue, <kbd>Échap</kbd> désélectionne. <b>Mini-carte</b> (en bas à droite) : clic ou glisser pour y aller, clic droit pour y envoyer les armées choisies. <b>Combat</b> : une armée qui entre au contact d'une armée ennemie se bat ; lui donner un ordre de marche dans l'autre sens la fait se replier. <b>Tour par tour</b> : pendant la minute du tour, donne tes ordres (1 par armée, 5 au plus), puis <b>Fin du tour</b> (ou <kbd>Entrée</kbd>) : toutes les armées bougent et se battent en même temps. Une marche longue continue seule aux tours suivants, sans coûter d'action.</p>
+  <div class="head"><h1>Champ de bataille 3D</h1><button type="button" id="b-help" aria-expanded="true" aria-controls="aide">Masquer l'aide</button></div>
+  <p id="aide"><b>Clic gauche</b> sur une armée bleue pour la choisir (<kbd>Maj</kbd> pour en ajouter, touches <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd>). <b>Clic droit</b> sur le terrain pour l'y envoyer, sur une armée rouge pour marcher sur elle. Glisser pour se déplacer, molette pour zoomer, glisser avec le clic droit pour pivoter. <kbd>Espace</kbd> centre la vue, <kbd>Échap</kbd> désélectionne. <b>Mini-carte</b> : clic ou glisser pour y aller, clic droit pour y envoyer les armées choisies ; ses boutons la réduisent, l'agrandissent, la changent de côté ou la masquent. <b>Combat</b> : une armée qui entre au contact d'une armée ennemie se bat ; lui donner un ordre de marche dans l'autre sens la fait se replier. <b>Tour par tour</b> : pendant la minute du tour, donne tes ordres (1 par armée, 5 au plus), puis <b>Fin du tour</b> (ou <kbd>Entrée</kbd>) : toutes les armées bougent et se battent en même temps. Une marche longue continue seule aux tours suivants, sans coûter d'action.</p>
   <div class="row">
     <button type="button" id="b-fog" aria-pressed="true">Brouillard : oui</button>
     <button type="button" id="b-ai" aria-pressed="true">Rouges : en patrouille</button>
@@ -83,7 +95,9 @@ kbd{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:3px;p
 <div id="reglages" hidden></div>
 <div id="hits" aria-hidden="true"></div>
 <div id="fin" role="status" hidden><b id="fin-t"></b><span id="fin-s"></span><button type="button" id="fin-b">Recommencer la bataille</button></div>
-<canvas id="mm" role="img" title="Mini-carte : clic pour y aller, clic droit pour y envoyer les armées choisies" aria-label="Mini-carte du champ de bataille : relief, rivière, forêts, armées visibles et cadre de la vue. Clic pour y déplacer la vue, clic droit pour y envoyer les armées choisies."></canvas>
+<div id="mmwrap"><div id="mmbar"><button type="button" id="mm-minus" title="Réduire la mini-carte" aria-label="Réduire la mini-carte">−</button><button type="button" id="mm-plus" title="Agrandir la mini-carte" aria-label="Agrandir la mini-carte">+</button><button type="button" id="mm-side" title="Changer la mini-carte de côté" aria-label="Changer la mini-carte de côté">⇄</button><button type="button" id="mm-hide" title="Masquer la mini-carte" aria-label="Masquer la mini-carte">×</button></div>
+<canvas id="mm" role="img" title="Mini-carte : clic pour y aller, clic droit pour y envoyer les armées choisies" aria-label="Mini-carte du champ de bataille : relief, rivière, forêts, armées visibles et cadre de la vue. Clic pour y déplacer la vue, clic droit pour y envoyer les armées choisies."></canvas></div>
+<button type="button" id="mm-show" hidden>Mini-carte</button>
 
 <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/controls/OrbitControls.js"></script>
@@ -823,7 +837,7 @@ for(let i=0;i<FW*FD;i++){mmFogImg.data[i*4]=10;mmFogImg.data[i*4+1]=14;mmFogImg.
 function mmFogUpdate(){for(let i=0;i<FW*FD;i++)mmFogImg.data[i*4+3]=(1-disp[i])*150;mmFogCtx.putImageData(mmFogImg,0,0);}
 const mmRay=new THREE.Raycaster(),mmNdc=new THREE.Vector2();
 function drawMini(){
-  const cw=mm.width,ch=mm.height;if(!cw)return;
+  const cw=mm.width,ch=mm.height;if(!cw||mmWrap.hidden)return;
   const u=cw/Math.max(1,mm.clientWidth),kx=cw/W,kz=ch/D,X=x=>(x+W/2)*kx,Z=z=>(z+D/2)*kz;
   mmx.imageSmoothingEnabled=true;mmx.drawImage(mmBase,0,0,cw,ch);
   if(fogOn)mmx.drawImage(mmFog,0,0,cw,ch);
@@ -896,9 +910,38 @@ function done(){if(++loaded===toLoad)build();}
 // ---------- boucle ----------
 const walkAnim=!window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 let last=performance.now(),acc=0;
-function resize(){const w=window.innerWidth,h=window.innerHeight;renderer.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix();
-  const r=mm.getBoundingClientRect(),k=Math.min(2,window.devicePixelRatio||1);mm.width=Math.round(r.width*k);mm.height=Math.round(r.height*k);}
-window.addEventListener('resize',resize);resize();
+function resize(){const w=window.innerWidth,h=window.innerHeight;renderer.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix();sizeMini();}
+// mini-carte : taille, côté et affichage choisis par le joueur (gardés dans le navigateur)
+const MM_SIZES=[160,220,280,360,460],mmWrap=document.getElementById('mmwrap'),mmShow=document.getElementById('mm-show');
+const mmPref={size:1,left:false,hidden:false};
+try{Object.assign(mmPref,JSON.parse(localStorage.getItem('shin-minicarte')||'{}'));}catch(e){}
+function sizeMini(){
+  const r=mm.getBoundingClientRect(),k=Math.min(2,window.devicePixelRatio||1);
+  if(r.width){mm.width=Math.round(r.width*k);mm.height=Math.round(r.height*k);}
+  const wr=mmWrap.getBoundingClientRect();
+  document.documentElement.style.setProperty('--mmh',(!mmPref.hidden&&!mmPref.left?wr.height+12:0)+'px');   // le panneau des réglages laisse la place
+}
+function applyMini(){
+  mmPref.size=Math.max(0,Math.min(MM_SIZES.length-1,mmPref.size|0));
+  document.documentElement.style.setProperty('--mmw',MM_SIZES[mmPref.size]+'px');
+  mmWrap.hidden=!!mmPref.hidden;mmShow.hidden=!mmPref.hidden;
+  mmWrap.classList.toggle('left',!!mmPref.left);mmShow.classList.toggle('left',!!mmPref.left);
+  document.getElementById('mm-minus').disabled=mmPref.size===0;document.getElementById('mm-plus').disabled=mmPref.size===MM_SIZES.length-1;
+  try{localStorage.setItem('shin-minicarte',JSON.stringify(mmPref));}catch(e){}
+  sizeMini();
+}
+document.getElementById('mm-minus').addEventListener('click',()=>{mmPref.size--;applyMini();});
+document.getElementById('mm-plus').addEventListener('click',()=>{mmPref.size++;applyMini();});
+document.getElementById('mm-side').addEventListener('click',()=>{mmPref.left=!mmPref.left;applyMini();});
+document.getElementById('mm-hide').addEventListener('click',()=>{mmPref.hidden=true;applyMini();});
+mmShow.addEventListener('click',()=>{mmPref.hidden=false;applyMini();});
+// aide du panneau : masquable, choix gardé
+const aideEl=document.getElementById('aide'),bHelp=document.getElementById('b-help');
+function applyAide(hide){aideEl.hidden=hide;bHelp.textContent=hide?'Aide':'Masquer l\'aide';bHelp.setAttribute('aria-expanded',!hide);try{localStorage.setItem('shin-aide-masquee',hide?'1':'0');}catch(e){}}
+bHelp.addEventListener('click',()=>applyAide(!aideEl.hidden));
+let aideMasquee=false;try{aideMasquee=localStorage.getItem('shin-aide-masquee')==='1';}catch(e){}
+applyAide(aideMasquee);
+window.addEventListener('resize',resize);applyMini();resize();
 function loop(now){const dt=Math.min(.1,(now-last)/1000),t=now/1000;last=now;
   if(ready)try{
     if(ended){for(const g of regs)if(g.contact)place(g,t);}
