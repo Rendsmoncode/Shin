@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cinq styles demandés</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital@0;1&family=Caveat:wght@500&family=Chakra+Petch:wght@400;500&family=Cinzel:wght@400;600&family=Crimson+Pro:ital@0;1&family=DM+Mono&family=Gloock&family=IBM+Plex+Mono:wght@400;500&family=IM+Fell+English:ital@0;1&family=Libre+Caslon+Text:ital@0;1&family=Playfair+Display:ital,wght@0,400;0,900;1,400&family=Share+Tech+Mono&family=Space+Mono&family=Spectral:ital@0;1&family=Stardos+Stencil:wght@400;700&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+<style>
+/* Essai 6 : journal, cuir, cheval, pirate, hier moderne, chacun avec ses onglets et sa touche moderne. Thèmes volontairement fixes. */
+:root{
+  --grain:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .22 0 0 0 0 .13 0 0 0 0 .05 0 0 0 .30 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#17100a var(--grain);color:#eadbbb;font-family:"Spectral",Georgia,serif;font-size:17px;line-height:1.5}
+.page{max-width:1160px;margin:0 auto;padding:36px 16px 56px;display:grid;gap:36px}
+.intro{display:grid;gap:10px;max-width:760px}
+.intro small{font-family:"DM Mono",monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#c9a35e}
+.intro h1{margin:0;font-family:"Bodoni Moda",serif;font-style:italic;font-weight:400;font-size:clamp(34px,6vw,54px);line-height:1.05}
+.intro p{margin:0;color:#b9a07c}
+.sommaire{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.sommaire a{color:#eadbbb;text-decoration:none;border:1px solid #4a3523;padding:4px 10px;font-size:15px}
+.sommaire a:hover{border-color:#c9a35e}
+
+/* ---------- Gabarit commun ---------- */
+.piste{background:var(--grain),var(--couv);color:var(--couv-fg);border:1px solid rgba(0,0,0,.5)}
+.tete{padding:28px 24px 6px;display:grid;gap:8px;max-width:860px}
+.tete .numero{font-family:var(--f-chiffre);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--vif-couv)}
+.tete h2{margin:0;font-family:var(--f-titre);font-weight:400;font-size:clamp(30px,5vw,46px);line-height:1.08}
+.tete p{margin:0;color:var(--couv-muted);font-family:var(--f-texte)}
+.tete dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px 24px;margin:8px 0 0}
+.tete dt{font-family:var(--f-chiffre);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--vif-couv)}
+.tete dd{margin:2px 0 0;font-family:var(--f-texte);color:var(--couv-fg);font-size:16px}
+.demo{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:24px;padding:18px 24px 28px;align-items:start}
+.maquette{border:1px solid rgba(0,0,0,.5);background:rgba(0,0,0,.22)}
+.ressources{display:flex;flex-wrap:wrap;gap:4px 20px;align-items:center;padding:10px 16px;border-bottom:1px solid rgba(0,0,0,.45);font-family:var(--f-texte)}
+.ressources .jeu{font-family:var(--f-titre);font-size:20px;margin-right:auto}
+.res small{display:block;font-size:12px;color:var(--couv-muted);letter-spacing:.05em;line-height:1.2}
+.res b{font-family:var(--f-chiffre);font-weight:400;font-size:15px}
+.res em{font-family:var(--f-chiffre);font-style:normal;font-size:11px;color:var(--vif-couv);margin-left:5px}
+.heure{font-family:var(--f-chiffre);font-size:12px;color:var(--vif-couv);letter-spacing:.06em}
+.cadran{display:none}
+.livre{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;padding:20px 0 24px 18px;min-height:480px}
+.feuilles{position:relative;z-index:2}
+.feuille{display:none;position:relative;background:var(--page);color:var(--encre);padding:24px 28px 30px;min-height:440px;font-family:var(--f-texte);font-size:var(--t-texte,17px)}
+.feuille.active{display:block;animation:apparait .35s ease-out}
+@keyframes apparait{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:none}}
+.entete{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-family:var(--f-chiffre);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--encre-2);margin-bottom:14px}
+.entete .live{color:var(--vif)}
+.feuille h3{font-family:var(--f-titre);font-weight:400;font-size:var(--t-titre,36px);line-height:1.1;margin:0 0 4px}
+.chapeau{font-style:italic;color:var(--encre-2);margin:0 0 14px}
+.texte{margin:0 0 14px}
+.liste{list-style:none;padding:0;margin:0 0 12px}
+.liste li{display:flex;justify-content:space-between;gap:12px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.13)}
+.liste small{display:block;font-size:.8em;color:var(--encre-2);font-style:italic}
+.num{font-family:var(--f-chiffre);color:var(--vif);white-space:nowrap;font-size:.92em}
+.note{font-family:var(--f-main);font-size:var(--t-main,24px);color:var(--accent);margin:4px 0 0;line-height:1.15}
+.actions{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:16px}
+.btn{cursor:pointer;font-family:var(--f-titre);font-size:16px;padding:8px 16px;border:0;background:var(--accent);color:var(--page)}
+.lien{cursor:pointer;background:none;border:0;padding:2px 0;font-family:var(--f-texte);font-style:italic;font-size:16px;color:var(--encre);text-decoration:underline;text-underline-offset:3px}
+.tampon,.censure,.o-i,.o-r,.o-n{display:none}
+mark{background:none;color:inherit}
+.onglets{display:flex;flex-direction:column;gap:3px;padding-top:24px}
+.onglet{cursor:pointer;border:0;font:inherit;color:inherit;background:none;padding:0;position:relative;z-index:1}
+.onglet[aria-selected="true"]{z-index:3}
+.onglet:focus-visible{outline:2px solid var(--vif-couv);outline-offset:2px}
+
+.charte{display:grid;gap:20px}
+.charte h4{font-family:var(--f-chiffre);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--couv-muted);margin:0 0 6px;font-weight:400}
+.sw{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:10px;align-items:center;font-size:14px;padding:3px 0;font-family:var(--f-texte)}
+.sw i{height:26px;border:1px solid rgba(255,255,255,.18)}
+.sw span small{display:block;color:var(--couv-muted);font-size:12px;line-height:1.2}
+.sw code{font-family:var(--f-chiffre);font-size:11px;color:var(--couv-muted)}
+.pol{padding:7px 0;border-bottom:1px solid rgba(255,255,255,.09)}
+.pol .ex{display:block;line-height:1.15;color:var(--couv-fg);overflow-wrap:anywhere}
+.pol small{font-family:var(--f-chiffre);font-size:11px;color:var(--couv-muted)}
+
+.fin{border:1px solid #4a3523;padding:20px 24px;display:grid;gap:8px;background:#1f160e}
+.fin h2{margin:0;font-family:"Bodoni Moda",serif;font-style:italic;font-weight:400;font-size:28px}
+.fin ul{margin:0;padding-left:20px;color:#b9a07c}
+
+@media (max-width:860px){
+  .demo{grid-template-columns:1fr;padding:14px 12px 22px}
+  .tete{padding:22px 16px 4px}
+  .livre{padding:16px 0 20px 10px}
+  .feuille{padding:20px 18px 26px}
+}
+@media (prefers-reduced-motion:reduce){.feuille.active{animation:none}}
+
+.bandeau{display:none}
+.radar,.arc{display:none}
+@keyframes tour{to{transform:rotate(360deg)}}
+
+/* =========================================================
+   A · LA GAZETTE — vieux journal imprimé, colonnes, bandeau en direct
+   ========================================================= */
+#gazette{--couv:#1f1a15;--couv-fg:#ece4d2;--couv-muted:#a89c88;--page:#ece4d2;--encre:#1b1611;--encre-2:#5f554a;--accent:#1b1611;--vif:#c0261b;--vif-couv:#ff5a4a;
+  --f-titre:"Playfair Display",serif;--f-texte:"Libre Caslon Text",serif;--f-chiffre:"IBM Plex Mono",monospace;--f-main:"Playfair Display",serif;--t-texte:14.5px;--t-titre:40px;--t-main:17px}
+#gazette .bandeau{display:block;overflow:hidden;white-space:nowrap;background:#1b1611;color:#ece4d2;font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.06em;padding:6px 0;border-bottom:1px solid #000}
+#gazette .bandeau span{display:inline-block;padding-left:100%;animation:defile 30s linear infinite}
+#gazette .bandeau b{color:#ff5a4a;font-weight:500}
+@keyframes defile{to{transform:translateX(-100%)}}
+#gazette .livre{grid-template-columns:minmax(0,1fr);background:var(--grain),var(--page);padding:14px 22px 24px;color:var(--encre)}
+#gazette .livre::before{content:"La Gazette du Royaume";order:-2;text-align:center;font-family:"UnifrakturMaguntia",serif;font-size:clamp(28px,5vw,42px);line-height:1.1;padding-bottom:6px}
+#gazette .onglets{flex-direction:row;order:-1;flex-wrap:wrap;justify-content:center;gap:0;padding:0;border-top:1px solid var(--encre);border-bottom:3px double var(--encre)}
+#gazette .onglet{padding:7px 14px;font-family:"Playfair Display",serif;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--encre)}
+#gazette .onglet+.onglet{border-left:1px solid rgba(27,22,17,.35)}
+#gazette .onglet[aria-selected="true"]{background:var(--encre);color:var(--page)}
+#gazette .feuille{background:none;padding:16px 4px 6px;min-height:0}
+#gazette .entete{border-bottom:1px solid var(--encre);padding-bottom:6px}
+#gazette .live{color:var(--vif)}
+#gazette .live::before{content:"● ";animation:clign 1.2s steps(1) infinite}
+@keyframes clign{50%{opacity:0}}
+#gazette h3{font-weight:900;line-height:1}
+#gazette .chapeau{border-bottom:1px solid rgba(27,22,17,.3);padding-bottom:10px}
+#gazette .texte{column-count:2;column-gap:22px;column-rule:1px solid rgba(27,22,17,.35);text-align:justify;hyphens:auto}
+#gazette .texte::first-letter{float:left;font-family:"Playfair Display",serif;font-weight:900;font-size:50px;line-height:.8;padding:4px 6px 0 0}
+#gazette .liste li{border-bottom:1px dotted var(--encre)}
+#gazette .note{font-style:italic;color:var(--encre-2)}
+#gazette .btn{font-family:"Playfair Display",serif;font-weight:900;font-size:14px;letter-spacing:.12em;text-transform:uppercase;padding:9px 16px;background:var(--encre);color:var(--page)}
+@media (max-width:860px){#gazette .texte{column-count:1}}
+
+/* =========================================================
+   B · LE CUIR — cuir tanné cognac, coutures, dorure à chaud
+   ========================================================= */
+#cuir{--couv:#1e100a;--couv-fg:#f0dcc0;--couv-muted:#b08e6c;--page:#6e3b1f;--encre:#f3e2c4;--encre-2:#dcbd93;--accent:#d9a441;--vif:#f2c85b;--vif-couv:#f2c85b;
+  --f-titre:"Cinzel",serif;--f-texte:"Spectral",serif;--f-chiffre:"DM Mono",monospace;--f-main:"Spectral",serif;--t-texte:16.5px;--t-titre:34px;--t-main:18px;
+  --or:linear-gradient(180deg,#fbe39a 0%,#c8923a 52%,#f4d27c 100%)}
+#cuir .livre{background:var(--grain),radial-gradient(ellipse at 50% 30%,#2e180d,#1e100a)}
+#cuir .feuille{border-radius:4px;padding:32px 36px;outline:2px dashed rgba(244,214,160,.5);outline-offset:-12px;
+  background:radial-gradient(ellipse at 35% 18%,rgba(255,200,140,.18),transparent 55%),var(--grain),var(--grain),linear-gradient(160deg,#7a4424,#5e3119);
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.6),inset 0 0 36px rgba(0,0,0,.55),3px 4px 8px rgba(0,0,0,.5)}
+#cuir h3{background:var(--or);-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:.06em;filter:drop-shadow(0 1px 0 rgba(0,0,0,.65))}
+#cuir .texte::first-letter{float:left;font-family:"Cinzel",serif;font-size:50px;line-height:.9;padding:4px 8px 0 0;color:var(--vif);text-shadow:0 1px 0 rgba(0,0,0,.6)}
+#cuir .liste li{border-bottom:1px solid rgba(0,0,0,.35);box-shadow:0 1px 0 rgba(255,220,170,.08)}
+#cuir .note{font-style:italic;color:var(--vif)}
+#cuir .lien{color:var(--encre)}
+#cuir .btn{font-family:"Cinzel",serif;font-size:15px;letter-spacing:.1em;padding:9px 18px;border-radius:3px;background:var(--or);color:#3a1d0c;box-shadow:inset 0 0 0 1px rgba(0,0,0,.4),0 2px 3px rgba(0,0,0,.5)}
+#cuir .onglets{padding-top:24px;gap:6px}
+#cuir .onglet{width:44px;min-height:104px;margin-left:-3px;padding:14px 0;writing-mode:vertical-rl;font-family:"Cinzel",serif;font-size:13px;letter-spacing:.1em;color:var(--vif);
+  background:var(--grain),linear-gradient(90deg,#3a1d0e,#52301a);border-radius:0 16px 16px 0;outline:1px dashed rgba(244,214,160,.35);outline-offset:-5px;box-shadow:inset 0 0 10px rgba(0,0,0,.7),2px 2px 4px rgba(0,0,0,.5)}
+#cuir .onglet[aria-selected="true"]{background:var(--grain),linear-gradient(90deg,#5e3119,#7a4424);color:#fbe39a}
+
+/* =========================================================
+   C · LE CHEVAL — haras et cavalerie : tweed, papier à en-tête, rosettes de concours, chronomètre
+   ========================================================= */
+#cheval{--couv:#1f3326;--couv-fg:#efe6d2;--couv-muted:#aab49d;--page:#f3ead6;--encre:#22201a;--encre-2:#6c5f4b;--accent:#7a2a1c;--vif:#2f6b3a;--vif-couv:#a6e07e;
+  --f-titre:"Gloock",serif;--f-texte:"Crimson Pro",serif;--f-chiffre:"IBM Plex Mono",monospace;--f-main:"Crimson Pro",serif;--t-texte:18px;--t-titre:38px;--t-main:19px}
+#cheval.piste{background:repeating-linear-gradient(45deg,rgba(255,255,255,.03) 0 2px,transparent 2px 5px),repeating-linear-gradient(-45deg,rgba(0,0,0,.1) 0 2px,transparent 2px 5px),var(--grain),var(--couv)}
+#cheval .livre{grid-template-columns:minmax(0,1fr);padding:0 20px 26px}
+#cheval .feuilles{margin-top:32px}
+#cheval .feuille{padding:46px 36px 34px;background:var(--grain),var(--page);box-shadow:inset 0 0 0 1px #c9a87a,inset 0 0 0 6px var(--page),inset 0 0 0 7px #c9a87a,3px 4px 10px rgba(0,0,0,.35)}
+#cheval .feuille::before{content:"";position:absolute;top:14px;left:36px;width:24px;height:24px;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'><path d='M6 25 C 1 14, 5 3, 14 3 S 27 14, 22 25' fill='none' stroke='%238a6a36' stroke-width='4'/><g fill='%23f3ead6'><circle cx='5.3' cy='18' r='.9'/><circle cx='6' cy='11' r='.9'/><circle cx='22.7' cy='18' r='.9'/><circle cx='22' cy='11' r='.9'/></g></svg>") center/contain no-repeat}
+#cheval .entete,#cheval h3,#cheval .chapeau{margin-right:190px}
+#cheval .texte::first-letter{float:left;font-family:"Gloock",serif;font-size:56px;line-height:.85;padding:5px 8px 0 0;color:var(--accent)}
+#cheval .liste li{border-bottom:1px solid rgba(201,168,122,.6)}
+#cheval .note{font-style:italic}
+#cheval .btn{font-family:"Gloock",serif;font-size:16px;padding:9px 18px;border-radius:2px;background:var(--accent);color:var(--page);box-shadow:inset 0 0 0 3px var(--accent),inset 0 0 0 4px rgba(243,234,214,.55)}
+#cheval .onglets{position:absolute;top:0;right:24px;flex-direction:row;gap:8px;padding:0;z-index:4}
+#cheval .onglet{--ruban:#7a2a1c;width:40px;height:112px;padding-top:50px;writing-mode:vertical-rl;font-family:"Gloock",serif;font-size:13px;letter-spacing:.04em;color:#f3ead6;isolation:isolate;transition:height .2s;text-align:start}
+#cheval .onglet:nth-child(2){--ruban:#2f4f74}#cheval .onglet:nth-child(3){--ruban:#2f6b3a}#cheval .onglet:nth-child(4){--ruban:#a07c30}
+#cheval .onglet::before{content:"";position:absolute;inset:16px 6px 0;background:var(--ruban);clip-path:polygon(0 0,100% 0,100% 100%,50% 88%,0 100%);z-index:-1}
+#cheval .onglet::after{content:"";position:absolute;top:0;left:50%;width:38px;height:38px;margin-left:-19px;border-radius:50%;z-index:-1;
+  background:radial-gradient(circle,var(--ruban) 0 40%,#f3ead6 41% 44%,transparent 45%),repeating-conic-gradient(var(--ruban) 0 7deg,color-mix(in srgb,var(--ruban) 65%,#000) 7deg 14deg);box-shadow:0 2px 3px rgba(0,0,0,.4)}
+#cheval .onglet .o-i{display:block;position:absolute;top:10px;left:50%;transform:translateX(-50%);writing-mode:horizontal-tb;font-size:15px;line-height:1}
+#cheval .onglet[aria-selected="true"]{height:154px}
+#cheval .chrono{min-width:74px}
+@media (max-width:860px){#cheval .onglets{right:12px;gap:4px}#cheval .onglet{width:34px;font-size:12px}#cheval .entete,#cheval h3,#cheval .chapeau{margin-right:150px}#cheval .feuille{padding:46px 20px 30px}}
+
+/* =========================================================
+   D · LA VOILE — pirate : toile de voile, cordage, étiquettes en bois, marquages au pochoir, sonar
+   ========================================================= */
+#voile{--couv:#141210;--couv-fg:#ece2cc;--couv-muted:#9a8f7c;--page:#d9cfb6;--encre:#191512;--encre-2:#5a5043;--accent:#8c2a17;--vif:#1f7a4d;--vif-couv:#53e39a;
+  --f-titre:"Stardos Stencil",sans-serif;--f-texte:"IM Fell English",serif;--f-chiffre:"Space Mono",monospace;--f-main:"Caveat",cursive;--t-texte:17px;--t-titre:38px;--t-main:24px}
+#voile .livre{grid-template-columns:minmax(0,1fr);padding:0 20px 26px;background:repeating-linear-gradient(90deg,#1c1815 0 58px,#0f0d0b 58px 60px),var(--grain)}
+#voile .livre::before{content:"";position:absolute;left:0;right:0;top:14px;height:7px;background:repeating-linear-gradient(60deg,#b8925c 0 4px,#6e5332 4px 7px);border-radius:4px;box-shadow:0 2px 2px rgba(0,0,0,.5);z-index:3}
+#voile .onglets{position:absolute;top:18px;left:30px;flex-direction:row;flex-wrap:wrap;gap:14px;padding:0;z-index:4}
+#voile .onglet{margin-top:6px;padding:14px 12px 10px;font-family:"Stardos Stencil",sans-serif;font-weight:700;font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:#f0e3c4;
+  background:var(--grain),linear-gradient(180deg,#6b4a2c,#4a321d);box-shadow:0 3px 4px rgba(0,0,0,.6),inset 0 0 0 1px rgba(0,0,0,.4);transform:rotate(-3deg);transform-origin:top center;transition:transform .2s}
+#voile .onglet:nth-child(2n){transform:rotate(2.5deg)}
+#voile .onglet::before{content:"";position:absolute;top:-10px;left:50%;width:2px;height:12px;background:#b8925c}
+#voile .onglet[aria-selected="true"]{transform:translateY(8px);background:var(--grain),linear-gradient(180deg,#9a6e3e,#6f4c28);color:#fff3d6}
+#voile .feuilles{margin-top:82px}
+#voile .feuille{background:
+  radial-gradient(circle at 14px 14px,#2a241e 0 3.5px,#b8925c 3.5px 6.5px,transparent 7px),radial-gradient(circle at calc(100% - 14px) 14px,#2a241e 0 3.5px,#b8925c 3.5px 6.5px,transparent 7px),
+  radial-gradient(circle at 14px calc(100% - 14px),#2a241e 0 3.5px,#b8925c 3.5px 6.5px,transparent 7px),radial-gradient(circle at calc(100% - 14px) calc(100% - 14px),#2a241e 0 3.5px,#b8925c 3.5px 6.5px,transparent 7px),
+  repeating-linear-gradient(0deg,rgba(40,30,20,.07) 0 1px,transparent 1px 3px),repeating-linear-gradient(90deg,rgba(40,30,20,.07) 0 1px,transparent 1px 3px),var(--grain),var(--page);
+  box-shadow:inset 0 0 30px rgba(40,25,10,.4);padding:32px 34px}
+#voile .entete{margin-right:120px}
+#voile h3{font-weight:700;text-transform:uppercase;letter-spacing:.03em}
+#voile .texte::first-letter{float:left;font-family:"Stardos Stencil",sans-serif;font-weight:700;font-size:52px;line-height:.85;padding:5px 8px 0 0;color:var(--accent)}
+#voile .tampon{display:block;position:absolute;right:24px;top:26px;font-family:"Stardos Stencil",sans-serif;font-weight:700;font-size:15px;text-transform:uppercase;color:rgba(140,42,23,.75);border:2px dashed rgba(140,42,23,.7);padding:2px 8px;transform:rotate(-4deg);pointer-events:none}
+#voile .live::before{content:"◉ "}
+#voile .liste li{border-bottom:1px solid rgba(25,21,18,.2)}
+#voile .note{transform:rotate(-2deg);display:inline-block}
+#voile .btn{font-family:"Stardos Stencil",sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:9px 16px;box-shadow:inset 0 0 0 2px rgba(0,0,0,.25)}
+#voile .radar{display:inline-block;position:relative;width:34px;height:34px;border-radius:50%;border:1px solid var(--vif-couv);
+  background:radial-gradient(circle,transparent 0 30%,rgba(83,227,154,.3) 31% 33%,transparent 34% 62%,rgba(83,227,154,.3) 63% 65%,transparent 66%)}
+#voile .radar::before{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,rgba(83,227,154,.65),transparent 28%);animation:tour 3s linear infinite}
+#voile .radar::after{content:"";position:absolute;top:8px;left:20px;width:4px;height:4px;border-radius:50%;background:var(--vif-couv);box-shadow:0 0 6px var(--vif-couv);animation:clign 1.5s steps(1) infinite}
+@media (max-width:860px){#voile .onglets{left:14px;gap:8px}#voile .onglet{font-size:13px;padding:12px 9px 8px}#voile .feuilles{margin-top:96px}#voile .feuille{padding:30px 20px}}
+
+/* =========================================================
+   E · HIER MODERNE — un Jarvis d'autrefois : hologrammes ambrés, anneaux, coins coupés
+   ========================================================= */
+#jarvis{--couv:#0d0906;--couv-fg:#f3d9a8;--couv-muted:#9c8058;--page:#140e09;--encre:#f3d9a8;--encre-2:#b8925f;--accent:#ffb547;--vif:#ffb547;--vif-couv:#ffb547;--alerte:#ff6b3d;
+  --f-titre:"Cinzel",serif;--f-texte:"Chakra Petch",sans-serif;--f-chiffre:"Share Tech Mono",monospace;--f-main:"Chakra Petch",sans-serif;--t-texte:15.5px;--t-titre:30px;--t-main:15px}
+#jarvis.piste{background:radial-gradient(ellipse at 50% 0%,rgba(255,181,71,.10),transparent 60%),var(--couv)}
+#jarvis .ressources b{color:#ffd796}
+#jarvis .ressources small{font-family:"Share Tech Mono",monospace;text-transform:uppercase;letter-spacing:.12em;font-size:11px}
+#jarvis .livre{background:repeating-linear-gradient(0deg,transparent 0 31px,rgba(255,181,71,.05) 31px 32px),repeating-linear-gradient(90deg,transparent 0 31px,rgba(255,181,71,.05) 31px 32px)}
+#jarvis .livre::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:5;background:repeating-linear-gradient(0deg,rgba(0,0,0,.22) 0 1px,transparent 1px 3px)}
+#jarvis .feuille{border:1px solid rgba(255,181,71,.55);background:linear-gradient(180deg,rgba(255,181,71,.07),rgba(255,181,71,.02));box-shadow:inset 0 0 30px rgba(255,181,71,.08);
+  clip-path:polygon(18px 0,100% 0,100% calc(100% - 18px),calc(100% - 18px) 100%,0 100%,0 18px)}
+#jarvis .feuille::after{content:"";position:absolute;top:18px;right:18px;width:60px;height:60px;border-radius:50%;border:1px dashed rgba(255,181,71,.7);outline:1px solid rgba(255,181,71,.25);outline-offset:6px;
+  background:radial-gradient(circle,rgba(255,181,71,.5) 0 3px,transparent 4px);animation:tour 14s linear infinite;pointer-events:none}
+#jarvis .entete{margin-right:96px;font-family:"Share Tech Mono",monospace}
+#jarvis .entete .live{color:var(--alerte);text-shadow:0 0 8px rgba(255,107,61,.7)}
+#jarvis .entete .live::before{content:"▲ "}
+#jarvis h3{letter-spacing:.16em;text-transform:uppercase;color:#ffd796;text-shadow:0 0 12px rgba(255,181,71,.55);margin-right:96px}
+#jarvis .chapeau{font-style:normal;letter-spacing:.03em}
+#jarvis .liste li{border-bottom:1px solid rgba(255,181,71,.16);padding:7px 0}
+#jarvis .liste small{font-style:normal}
+#jarvis .num{text-shadow:0 0 8px rgba(255,181,71,.6)}
+#jarvis mark{color:#ffd796;border-bottom:1px solid var(--accent)}
+#jarvis .note{color:var(--encre-2)}
+#jarvis .note::before{content:"// "}
+#jarvis .btn{font-family:"Share Tech Mono",monospace;font-size:13px;text-transform:uppercase;letter-spacing:.2em;padding:10px 20px;background:rgba(255,181,71,.12);color:#ffd796;border:1px solid var(--accent);
+  clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px)}
+#jarvis .btn:hover{background:rgba(255,181,71,.25)}
+#jarvis .lien{font-family:"Share Tech Mono",monospace;font-style:normal;font-size:13px;text-transform:uppercase;letter-spacing:.14em;color:var(--encre-2)}
+#jarvis .onglets{padding-top:20px;gap:6px}
+#jarvis .onglet{width:40px;min-height:100px;margin-left:8px;padding:10px 0;writing-mode:vertical-rl;font-family:"Share Tech Mono",monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--couv-muted);
+  border:1px solid rgba(255,181,71,.3);background:rgba(255,181,71,.03);clip-path:polygon(0 0,100% 8px,100% calc(100% - 8px),0 100%)}
+#jarvis .onglet .o-n{display:inline;opacity:.6;margin-bottom:8px}
+#jarvis .onglet[aria-selected="true"]{color:#ffd796;background:rgba(255,181,71,.16);border-color:var(--accent);text-shadow:0 0 8px rgba(255,181,71,.8)}
+#jarvis .arc{display:block;width:40px;height:40px}
+#jarvis .arc .r1{transform-origin:20px 20px;animation:tour 6s linear infinite}
+#jarvis .arc .r2{transform-origin:20px 20px;animation:tour 4s linear infinite reverse}
+@media (prefers-reduced-motion:reduce){#gazette .bandeau span{animation:none;padding-left:12px}#jarvis .feuille::after,#jarvis .arc *,#voile .radar::before{animation:none}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<section class="intro">
+  <small>Identité visuelle · essai n° 6</small>
+  <h1>Journal, cuir, cheval, pirate, et un Jarvis d'autrefois</h1>
+  <p>Les cinq styles que tu as demandés, avec la même règle : l'ancien pour ce qui raconte, une touche moderne pour ce qui vit. Clique sur les onglets de chaque maquette.</p>
+  <nav class="sommaire">
+    <a href="#gazette">A · Journal</a><a href="#cuir">B · Cuir</a><a href="#cheval">C · Cheval</a><a href="#voile">D · Pirate</a><a href="#jarvis">E · Hier moderne</a>
+  </nav>
+</section>
+
+<section class="piste" id="gazette">
+  <div class="tete">
+    <div class="numero">Piste A · style journal</div>
+    <h2>La gazette</h2>
+    <p>L'interface est un vieux journal imprimé : grand titre en lettres gothiques, rubriques séparées par des filets, texte en colonnes, gros titres très gras. Chaque onglet est une rubrique du journal.</p>
+    <dl><div><dt>Authentique</dt><dd>Mise en page des journaux du XIXᵉ siècle, filets doubles, lettrines grasses.</dd></div>
+        <div><dt>Moderne</dt><dd>Un bandeau d'infos en direct qui défile en haut, comme sur une chaîne d'info, avec un point rouge qui clignote.</dd></div></dl>
+  </div>
+  <div class="demo"><div class="maquette"></div><div class="charte"></div></div>
+</section>
+
+<section class="piste" id="cuir">
+  <div class="tete">
+    <div class="numero">Piste B · style cuir</div>
+    <h2>Le cuir</h2>
+    <p>Un cuir cognac tanné à l'ancienne, plus chic que la sellerie de l'essai 5 : coutures sellier, onglets en languettes de cuir arrondies, titres en dorure à chaud.</p>
+    <dl><div><dt>Authentique</dt><dd>Cuir patiné, coutures, lettres romaines dorées au fer.</dd></div>
+        <div><dt>Moderne</dt><dd>La dorure sert aussi aux chiffres en temps réel, avec des lettres de machine très fines, comme un numéro de série gravé.</dd></div></dl>
+  </div>
+  <div class="demo"><div class="maquette"></div><div class="charte"></div></div>
+</section>
+
+<section class="piste" id="cheval">
+  <div class="tete">
+    <div class="numero">Piste C · style cheval</div>
+    <h2>Le haras</h2>
+    <p>L'univers de la cavalerie et des haras : tweed vert anglais, papier à en-tête avec un fer à cheval, et des onglets en rosettes de concours hippique, avec leurs rubans.</p>
+    <dl><div><dt>Authentique</dt><dd>Rosettes, tweed, fer à cheval, belles lettres anglaises.</dd></div>
+        <div><dt>Moderne</dt><dd>Un chronomètre de course au centième de seconde dans la barre du haut, en vert vif.</dd></div></dl>
+  </div>
+  <div class="demo"><div class="maquette"></div><div class="charte"></div></div>
+</section>
+
+<section class="piste" id="voile">
+  <div class="tete">
+    <div class="numero">Piste D · style pirate</div>
+    <h2>La voile</h2>
+    <p>Un pirate plus franc que l'essai 4 : pont en planches, page en toile de voile avec ses œillets de laiton, onglets en étiquettes de bois pendues à une corde, marquages au pochoir comme sur les caisses de cargaison.</p>
+    <dl><div><dt>Authentique</dt><dd>Toile, corde, bois, pochoir de cargaison.</dd></div>
+        <div><dt>Moderne</dt><dd>Un sonar vert qui tourne dans la barre du haut, et le vert lumineux pour ce qui est en direct.</dd></div></dl>
+  </div>
+  <div class="demo"><div class="maquette"></div><div class="charte"></div></div>
+</section>
+
+<section class="piste" id="jarvis">
+  <div class="tete">
+    <div class="numero">Piste E · style « hier moderne »</div>
+    <h2>Le Jarvis d'autrefois</h2>
+    <p>Comme si Jarvis avait été inventé il y a cent ans : écran d'hologrammes ambrés sur fond brun-noir, anneaux qui tournent, coins coupés, lignes de balayage, mais des titres en lettres romaines anciennes.</p>
+    <dl><div><dt>Authentique</dt><dd>Lettres romaines gravées, ambre et cuivre, couleur des vieux écrans.</dd></div>
+        <div><dt>Moderne</dt><dd>Tout le reste : interface holographique, anneaux animés, chiffres lumineux, alertes en orange.</dd></div></dl>
+  </div>
+  <div class="demo"><div class="maquette"></div><div class="charte"></div></div>
+</section>
+
+<section class="fin">
+  <h2>Et maintenant ?</h2>
+  <ul>
+    <li>Dis-moi laquelle te parle, ou quoi prendre dans chacune (par exemple le bandeau en direct de la gazette avec le cuir).</li>
+    <li>Une image de référence reste le meilleur moyen de tomber juste.</li>
+  </ul>
+</section>
+</div>
+
+<script>
+const PAGES=[
+ {tab:'Monde',i:'M',r:'I',titre:'Le Monde',chapeau:"Aubagne et La Valentine, quartier par quartier.",
+  texte:"Douze quartiers se partagent la vallée de l'Huveaune. <mark>Trois ont prêté serment</mark> à ta bannière<span class=\"censure\"> — et l'un d'eux prépare déjà sa trahison</span>.",
+  liste:[['Pin Vert','Hôtel de ville','640 h.'],['Le Charrel','Pris il y a 6 jours','210 h.'],['Les Passons','Neutre','—']],
+  note:'→ fortifier Le Charrel !',live:'Jour 214',bouton:'Ouvrir la carte',lien:'Voir les routes',tampon:'Visé'},
+ {tab:'Armées',i:'A',r:'II',titre:'Armée du Pin Vert',chapeau:"En route vers Les Passons, par la vieille route d'Aix.",
+  texte:"Neuf cents hommes à pied, <mark>deux cents cavaliers</mark>, et un moral qui tient encore.",
+  liste:[['Fantassins','Lances et boucliers','900'],['Archers','Arcs courts','350'],['Cavaliers','Chevaux légers','200']],
+  note:'attendre les archers ?',live:'En marche · 00:18:40',bouton:'Attaquer',lien:'Changer de formation',tampon:'En marche'},
+ {tab:'Diplomatie',i:'D',r:'III',titre:'Pacte de non-agression',chapeau:"Proposé par Mathieu, seigneur de La Valentine.",
+  texte:"Les deux parties s'engagent à ne pas lever d'armée l'une contre l'autre pendant <mark>sept jours</mark>.<span class=\"censure\"> Clause secrète : partage du Charrel.</span>",
+  liste:[['Durée','','7 jours'],['Garantie','Versée par Mathieu','500 or'],['En cas de rupture','Connue de tous','traître']],
+  note:'méfiance…',live:'Expire dans 47:12:00',bouton:'Sceller le pacte',lien:'Refuser',tampon:'Proposé'},
+ {tab:'Journal',i:'J',r:'IV',titre:'Journal',chapeau:"Ce qui s'est passé pendant ton absence.",
+  texte:"Le vent a tourné sur la vallée. <mark>Une armée</mark> a été vue au sud.",
+  liste:[['Armée repérée','Près de La Valentine','14:32'],['Marché du Pin Vert','+420 pièces d’or','11:05'],['Raid repoussé','Au Charrel','08:47']],
+  note:'',live:"Aujourd'hui",bouton:'Tout marquer lu',lien:'Archives',tampon:'Lu'}
+];
+const CHARTES={
+ gazette:{c:[['Papier journal','#ECE4D2','Pages'],['Encre d’imprimerie','#1B1611','Texte, titres'],['Gris d’encre','#5F554A','Légendes'],['Rouge direct','#C0261B','Le présent']],
+  p:[['UnifrakturMaguntia','Nom du journal · 42 px','font-family:UnifrakturMaguntia;font-size:30px'],['Playfair Display','Gros titres · 40 px, très gras','font-family:Playfair Display;font-weight:900;font-size:28px'],['Libre Caslon Text','Texte en colonnes · 14,5 px','font-family:Libre Caslon Text;font-size:14px'],['IBM Plex Mono','Bandeau, chiffres · 12 px','font-family:IBM Plex Mono;font-size:13px']]},
+ cuir:{c:[['Cuir sombre','#1E100A','Fond'],['Cognac','#6E3B1F','Pages'],['Languette','#3A1D0E','Onglets'],['Crème','#F3E2C4','Texte'],['Dorure','#D9A441','Titres, boutons'],['Or vif','#F2C85B','Le présent']],
+  p:[['Cinzel','Titres dorés · 34 px','font-family:Cinzel;font-size:26px'],['Spectral','Texte · 16,5 px','font-family:Spectral;font-size:16px'],['DM Mono','Chiffres · 14 px','font-family:DM Mono;font-size:14px']]},
+ cheval:{c:[['Tweed vert anglais','#1F3326','Fond'],['Papier à en-tête','#F3EAD6','Pages'],['Fauve','#C9A87A','Filets, fer'],['Encre','#22201A','Texte'],['Rouge rosette','#7A2A1C','Actions'],['Vert course','#2F6B3A','Le présent']],
+  p:[['Gloock','Titres, rosettes · 13 à 38 px','font-family:Gloock;font-size:28px'],['Crimson Pro','Texte · 18 px','font-family:Crimson Pro;font-size:18px'],['IBM Plex Mono','Chrono, chiffres · 14 px','font-family:IBM Plex Mono;font-size:14px']]},
+ voile:{c:[['Pont goudronné','#141210','Fond'],['Toile de voile','#D9CFB6','Pages'],['Bois des étiquettes','#6B4A2C','Onglets'],['Cordage','#B8925C','Corde, œillets'],['Rouille','#8C2A17','Pochoir, actions'],['Vert sonar','#1F7A4D','Le présent']],
+  p:[['Stardos Stencil','Titres, onglets · 15 à 38 px','font-family:Stardos Stencil;font-weight:700;font-size:28px'],['IM Fell English','Texte · 17 px','font-family:IM Fell English;font-size:17px'],['Space Mono','Chiffres · 14 px','font-family:Space Mono;font-size:14px'],['Caveat','Notes · 24 px','font-family:Caveat;font-size:24px']]},
+ jarvis:{c:[['Brun-noir','#0D0906','Fond'],['Panneau','#140E09','Pages'],['Ambre','#FFB547','Traits, chiffres'],['Ambre clair','#FFD796','Titres'],['Sépia','#B8925F','Légendes'],['Orange alerte','#FF6B3D','Alertes']],
+  p:[['Cinzel','Titres · 30 px, espacés','font-family:Cinzel;font-size:24px;letter-spacing:.14em'],['Chakra Petch','Texte · 15,5 px','font-family:Chakra Petch;font-size:15px'],['Share Tech Mono','Onglets, chiffres, boutons · 12 à 14 px','font-family:Share Tech Mono;font-size:14px']]}
+};
+const cadran=`<span class="radar" aria-hidden="true"></span><svg class="arc" viewBox="0 0 40 40" aria-hidden="true"><circle class="r1" cx="20" cy="20" r="17" fill="none" stroke="#ffb547" stroke-width="1.5" stroke-dasharray="40 6 16 6 10 6"/><circle class="r2" cx="20" cy="20" r="12" fill="none" stroke="#ffb547" stroke-width="1" stroke-dasharray="3 3" opacity=".8"/><circle cx="20" cy="20" r="6" fill="#ffb547" opacity=".35"/><circle cx="20" cy="20" r="2.5" fill="#ffd796"/></svg>`;
+document.querySelectorAll('.piste').forEach(piste=>{
+  const id=piste.id,ch=CHARTES[id];
+  piste.querySelector('.maquette').innerHTML=`
+   <div class="ressources">${cadran}<span class="jeu">Nom du jeu</span>
+     <span class="res"><small>Or</small><b>12 400</b><em>+320/h</em></span>
+     <span class="res"><small>Vivres</small><b>3 210</b><em>+85/h</em></span>
+     <span class="res"><small>Matériaux</small><b>860</b><em>+40/h</em></span>
+     <span class="res"><small>Hommes</small><b>1 450</b><em>/2 000</em></span>
+     <span class="heure${id==='cheval'?' chrono':''}">--:--:--</span></div>
+   <div class="bandeau" aria-hidden="true"><span><b>EN DIRECT</b> · Une armée ennemie marche sur le Pin Vert · Le marché de La Valentine double ses prix · Mathieu propose un pacte de sept jours · Le Charrel renforce ses murailles · </span></div>
+   <div class="livre">
+     <div class="feuilles">${PAGES.map((p,k)=>`
+       <article class="feuille${k?'':' active'}" role="tabpanel" aria-label="${p.tab}">
+         <div class="entete"><span>Folio ${p.r} · ${p.tab}</span><span class="live">${p.live}</span></div>
+         <h3>${p.titre}</h3><p class="chapeau">${p.chapeau}</p>
+         <p class="texte">${p.texte}</p>
+         <ul class="liste">${p.liste.map(l=>`<li><span>${l[0]}${l[1]?`<small>${l[1]}</small>`:''}</span><span class="num">${l[2]}</span></li>`).join('')}</ul>
+         ${p.note?`<p class="note">${p.note}</p>`:''}
+         <div class="actions"><button class="btn" type="button">${p.bouton}</button><button class="lien" type="button">${p.lien}</button></div>
+         <div class="tampon" aria-hidden="true">${p.tampon}</div>
+       </article>`).join('')}</div>
+     <nav class="onglets" role="tablist" aria-label="Sections du livre">${PAGES.map((p,k)=>`
+       <button class="onglet" role="tab" type="button" aria-selected="${!k}" aria-label="${p.tab}"><i class="o-n">N°0${k+1}</i><b class="o-i">${p.i}</b><b class="o-r">${p.r}</b><span>${p.tab}</span></button>`).join('')}</nav>
+   </div>`;
+  piste.querySelector('.charte').innerHTML=`
+   <div><h4>Couleurs</h4>${ch.c.map(c=>`<div class="sw"><i style="background:${c[1]}"></i><span>${c[0]}<small>${c[2]}</small></span><code>${c[1]}</code></div>`).join('')}</div>
+   <div><h4>Polices et tailles</h4>${ch.p.map(p=>`<div class="pol"><span class="ex" style="${p[2]}">${p[0]}</span><small>${p[1]}</small></div>`).join('')}</div>`;
+  const ong=[...piste.querySelectorAll('.onglet')],fe=[...piste.querySelectorAll('.feuille')];
+  ong.forEach((o,k)=>o.addEventListener('click',()=>{ong.forEach((x,j)=>x.setAttribute('aria-selected',j===k));fe.forEach((f,j)=>f.classList.toggle('active',j===k));}));
+});
+const deux=n=>String(n).padStart(2,'0');const depart=performance.now();
+function tic(){const d=new Date();const h=deux(d.getHours())+':'+deux(d.getMinutes())+':'+deux(d.getSeconds());
+  document.querySelectorAll('.heure:not(.chrono)').forEach(e=>e.textContent=h);}
+function chrono(){const ms=performance.now()-depart;const m=Math.floor(ms/60000),s=Math.floor(ms/1000)%60,c=Math.floor(ms/10)%100;
+  document.querySelectorAll('.chrono').forEach(e=>e.textContent=deux(m)+':'+deux(s)+'.'+deux(c));requestAnimationFrame(chrono);}
+tic();setInterval(tic,1000);requestAnimationFrame(chrono);
+</script>
+</body>
+</html>
