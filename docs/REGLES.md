@@ -222,6 +222,7 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
   - l'infanterie monte de niveau pour obtenir de meilleurs équipements.
 - ✅ **Structure d'une armée** : le général est le cœur de l'armée. Il a des sous-généraux, qui dirigent chacun un certain nombre d'hommes.
 - ✅ **Points de vie de l'armée** : le général vaut 3 points, chaque sous-général vaut 1 point. Un joueur qui tombe à 0 point perd la bataille.
+  - ✅ **Une armée détruite** (écrasée ou dispersée) **= son sous-général tombé** : le joueur perd 1 point (choix de Mathieu, 9/11/2026). Le général, lui, ne tombe que si son quartier général est pris (garde, puis 3 gardes rapprochés, puis ses PV).
 - ✅ **Quartier général** : le général a un quartier général, invisible pour l'adversaire. Pour le voir, il faut envoyer des éclaireurs, ou avoir des soldats assez proches. Le quartier général peut se déplacer, mais lentement.
 - ✅ **Le général reste dans son quartier général.** Certains généraux ont une aptitude qui leur permet d'en sortir (par exemple Kanki pour la ruse, ou Souvorov pour rejoindre la bataille).
 - ✅ **Défense du quartier général** : le général a une barre de vie bien plus grande que les autres, et des soldats restent forcément au quartier général pour le protéger. Il peut résister un temps à une attaque trop nombreuse, mais pas longtemps.
