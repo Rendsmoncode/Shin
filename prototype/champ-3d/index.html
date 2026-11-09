@@ -163,6 +163,9 @@ const REGLAGES_DEFAUT={
   gue:.8,              // toute armée qui se bat dans la rivière (proposition, pas dans les règles)
   contact:15,          // mètres entre les deux blocs à partir desquels deux armées ennemies se battent
   charge:1,            // bonus de l'armée qui attaque, à la première manche seulement (1 = pas de bonus)
+  flanc:1.3,           // attaquer une armée par le côté multiplie la puissance (proposition, pas dans les règles)
+  dos:1.6,             // attaquer une armée par derrière multiplie la puissance (proposition)
+  retournement:2,      // manches au contact avant que l'armée attaquée se retourne face à son principal assaillant
   hasard:10,           // ± % de hasard sur la puissance à chaque manche (règles : ±10 %)
   pertes:7,            // % de son effectif qu'une armée perd par manche quand les puissances sont égales
   courbe:1.5,          // plus c'est grand, plus un écart de puissance rend les pertes inégales
@@ -197,6 +200,9 @@ const REGLAGES_INFO=[
   ['Pertes',[
     ['contact','Distance de contact','mètres',1,100,1,'Écart entre les blocs de deux armées ennemies à partir duquel elles se battent.'],
     ['charge','Bonus de charge','× (1re manche)',.5,3,.05,'Bonus de l\'armée qui attaque, à la première manche seulement. 1 = pas de bonus.'],
+    ['flanc','Attaque de flanc','×',1,5,.05,'Puissance d\'une armée qui frappe l\'ennemi par le côté.'],
+    ['dos','Attaque de dos','×',1,5,.05,'Puissance d\'une armée qui frappe l\'ennemi par derrière.'],
+    ['retournement','Se retourne après','manches',0,20,1,'Nombre de manches au contact avant que l\'armée attaquée se retourne face à son principal assaillant (le bonus de flanc ou de dos disparaît alors pour lui).'],
     ['hasard','Hasard','± %',0,50,1,'Variation au hasard de la puissance de chaque armée, à chaque manche.'],
     ['pertes','Pertes à égalité','% par manche',.5,50,.5,'Part de son effectif qu\'une armée perd par manche quand les deux puissances sont égales.'],
     ['courbe','Courbe','',.5,5,.1,'Plus c\'est grand, plus un écart de puissance rend les pertes inégales (le plus fort perd moins, le plus faible beaucoup plus).'],
@@ -447,11 +453,20 @@ function puissanceBase(a){return(a.kind==='qg'?forceQG(a):a.men)*(a.kind==='cav'
 // une manche : chaque armée partage sa puissance entre les ennemis qu'elle touche ;
 // chacune perd « pertes % » de son effectif × (puissance reçue / sa puissance) ^ courbe ;
 // l'écrasement n'est possible qu'à l'arrivée d'une attaque (armée « nouveau » au contact), sinon le combat se règle par les pertes
+// angle sous lequel « att » frappe « def » : selon où se trouve l'attaquant par rapport à l'avant de la cible
+// (simulateur : angle imposé par att.angleSim)
+function angleOf(att,def){
+  if(att.angleSim)return att.angleSim;if(def.heading===undefined||att.x===undefined)return'face';
+  const fx=Math.sin(def.heading),fz=-Math.cos(def.heading),dx=att.x-def.x,dz=att.z-def.z,d=Math.hypot(dx,dz)||1,c=(fx*dx+fz*dz)/d;
+  return c>.7071?'face':c<-.7071?'dos':'flanc';
+}
+const angleMult=(att,def)=>{const a=angleOf(att,def);return a==='dos'?REGLAGES.dos:a==='flanc'?REGLAGES.flanc:1;};
+const ANGLE_MOT={face:'de face',flanc:'de flanc',dos:'de dos'};
 function resoudreManche(list){
   const r=REGLAGES,P=new Map(),loss=new Map(),inc=new Map();
   for(const a of list)P.set(a,Math.max(1e-6,puissanceBase(a)*(1+(Math.random()*2-1)*r.hasard/100)));
   for(const a of list){if(!a.foes.length)continue;const share=P.get(a)/a.foes.length;
-    for(const e of a.foes){loss.set(e,(loss.get(e)||0)+r.pertes/100*e.men*Math.pow(share/P.get(e),r.courbe));inc.set(e,(inc.get(e)||0)+share);}}
+    for(const e of a.foes){const sh=share*angleMult(a,e);loss.set(e,(loss.get(e)||0)+r.pertes/100*e.men*Math.pow(sh/P.get(e),r.courbe));inc.set(e,(inc.get(e)||0)+sh);}}
   return list.filter(a=>a.foes.length).map(a=>{
     const ratio=(inc.get(a)||0)/P.get(a),crushed=a.kind!=='qg'&&ratio>=r.ecrasement&&(a.nouveau||a.foes.some(e=>e.nouveau));   // un QG résiste : jamais écrasé d'un coup
     let l=crushed?a.men:Math.min(a.men,Math.max(1,Math.round(loss.get(a)||0)));
@@ -464,8 +479,8 @@ function rapportMot(x){const e=REGLAGES.ecrasement;return x>=e?'écrasant':x>=1.
 function simuler(A,B,n){
   let winA=0,winB=0,crush=0,rounds=0,lossA=0,lossB=0;
   for(let k=0;k<n;k++){
-    const a={...A,charge:true,nouveau:true,foes:[]},b={...B,charge:false,nouveau:true,foes:[]};a.foes=[b];b.foes=[a];let t=0,cr=false;
-    while(a.men>0&&b.men>0&&t<1000){t++;for(const x of resoudreManche([a,b])){x.a.men-=x.loss;if(x.crushed)cr=true;}a.charge=a.nouveau=b.nouveau=false;}
+    const a={...A,charge:true,nouveau:true,foes:[],angleSim:A.angle&&A.angle!=='face'?A.angle:null},b={...B,charge:false,nouveau:true,foes:[]};a.foes=[b];b.foes=[a];let t=0,cr=false;
+    while(a.men>0&&b.men>0&&t<1000){t++;for(const x of resoudreManche([a,b])){x.a.men-=x.loss;if(x.crushed)cr=true;}a.charge=a.nouveau=b.nouveau=false;if(t>=REGLAGES.retournement)a.angleSim=null;}
     if(cr)crush++;rounds+=t;lossA+=A.men-a.men;lossB+=B.men-b.men;
     if(b.men<=0&&a.men>0)winA++;else if(a.men<=0&&b.men>0)winB++;
   }
@@ -609,7 +624,7 @@ function step(g,dt){
   const was=g.contact;
   g.contact=regs.find(e=>e.side!==g.side&&contactDist(g,e))||null;
   if(g.contact&&!was)g.nouveau=true;
-  if(!g.contact){g.charge=g.nouveau=false;g.lastLoss=null;}
+  if(!g.contact){g.charge=g.nouveau=false;g.lastLoss=null;g.engaged=0;}
   // entrer au contact arrête la marche et lance le combat ; marcher dans l'autre sens, c'est se replier
   else if(g.tx!==null){const toward=(g.tx-g.x)*(g.contact.x-g.x)+(g.tz-g.z)*(g.contact.z-g.z)>0;
     if(toward||g.side==='rouge'){if(!was)g.charge=true;g.tx=null;g.chase=null;}}
@@ -749,7 +764,8 @@ function renderSel(force){
   let h='';
   if(selected.length===1){const g=selected[0],t=terrainName(g.x,g.z),ux=g.tx!==null?Math.sin(g.heading):0,uz=g.tx!==null?-Math.cos(g.heading):0;
     const foes=regs.filter(e=>e.side!==g.side&&contactDist(g,e)),rf=foes.length?rapport(g,foes):0;
-    const etat=foes.length?`<span class="warn">Au combat contre ${foes.map(e=>e.name).join(' et ')}</span><span><span class="k">Rapport de force :</span> ${rapportMot(rf)} (×${rf.toFixed(2).replace('.',',')})</span>${g.lastLoss!=null?`<span><span class="k">${turnMode?'Dernier tour':'Dernière manche'} :</span> −${fmtMen(g.lastLoss)} hommes (ennemi : −${fmtMen(foes.reduce((s,e)=>s+(e.lastLoss||0),0))})</span>`:''}`:g.chase?`Marche sur ${g.chase.name}`:g.tx!==null?'En marche':'À l\'arrêt';
+    const angs=foes.map(e=>{const mine=angleOf(g,e),theirs=angleOf(e,g);return(mine!=='face'?`<span class="hid">Tu frappes ${e.name} ${ANGLE_MOT[mine]} (×${String(angleMult(g,e)).replace('.',',')})</span>`:'')+(theirs!=='face'?`<span class="warn">${e.name} te frappe ${ANGLE_MOT[theirs]} (×${String(angleMult(e,g)).replace('.',',')})</span>`:'');}).join('');
+    const etat=foes.length?`<span class="warn">Au combat contre ${foes.map(e=>e.name).join(' et ')}</span>${angs}<span><span class="k">Rapport de force :</span> ${rapportMot(rf)} (×${rf.toFixed(2).replace('.',',')})</span>${g.lastLoss!=null?`<span><span class="k">${turnMode?'Dernier tour':'Dernière manche'} :</span> −${fmtMen(g.lastLoss)} hommes (ennemi : −${fmtMen(foes.reduce((s,e)=>s+(e.lastLoss||0),0))})</span>`:''}`:g.chase?`Marche sur ${g.chase.name}`:g.tx!==null?'En marche':'À l\'arrêt';
     const near=foes.length?null:regs.filter(e=>e.side!==g.side&&e.shown).map(e=>[e,gap(g,e)]).sort((a,b)=>a[1]-b[1])[0];
     const nearInfo=near&&near[1]<120?`<span class="warn">${near[0].name} à ${Math.round(near[1])} m : envoie l'armée sur lui (clic droit sur son armée) pour attaquer</span>`:'';
     const dist=g.tx!==null?Math.hypot(g.tx-g.x,g.tz-g.z):0;
@@ -773,8 +789,8 @@ function renderStatus(){
 
 // ---------- combat dans la scène ----------
 const combatObj=g=>({men:g.men,kind:g.kind,terrain:terrainCombat(g.x,g.z),charge:false});
-function rapport(g,foes){const mine=puissanceBase(combatObj(g));
-  const theirs=foes.reduce((s,e)=>s+puissanceBase(combatObj(e))/Math.max(1,regs.filter(f=>f.side!==e.side&&contactDist(e,f)).length),0);
+function rapport(g,foes){const mine=puissanceBase(combatObj(g))*foes.reduce((s,e)=>s+angleMult(g,e),0)/foes.length;
+  const theirs=foes.reduce((s,e)=>s+puissanceBase(combatObj(e))*angleMult(e,g)/Math.max(1,regs.filter(f=>f.side!==e.side&&contactDist(e,f)).length),0);
   return theirs>0?mine/theirs:99;}
 function trimSoldiers(g){const want=Math.ceil((g.kind==='qg'?qgParts(g).garnison:g.men)/HPS);while(g.soldiers.length>want){const s=g.soldiers.pop();scene.remove(s.sp);}g.shadows.count=g.soldiers.length;}
 function removeReg(g){
@@ -803,8 +819,14 @@ function combatRound(n){
     const fighting=regs.filter(g=>(g.foes=regs.filter(e=>e.side!==g.side&&contactDist(g,e))).length);
     if(!fighting.length)break;
     fighting.forEach(g=>g.terrain=terrainCombat(g.x,g.z));
+    // annonce des attaques de flanc et de dos au début d'un affrontement
+    for(const a of fighting)if(a.nouveau)for(const e of a.foes){const an=angleOf(a,e);if(an!=='face')msgs.push(`${a.name} attaque ${e.name} ${ANGLE_MOT[an]} ! (×${String(angleMult(a,e)).replace('.',',')})`);}
     const res=resoudreManche(fighting);
-    fighting.forEach(g=>g.charge=g.nouveau=false);
+    fighting.forEach(g=>{g.charge=g.nouveau=false;g.engaged=(g.engaged||0)+1;});
+    // au bout de quelques manches, une armée attaquée se retourne face à son principal assaillant (sauf si elle se replie)
+    for(const g of fighting){if(g.dead||g.tx!==null||g.engaged<REGLAGES.retournement)continue;
+      const main=g.foes.filter(e=>!e.dead).sort((x,y)=>puissanceBase(y)-puissanceBase(x))[0];
+      if(main&&angleOf(main,g)!=='face'){g.heading=Math.atan2(main.x-g.x,-(main.z-g.z));place(g,performance.now()/1000);msgs.push(`${g.name} se retourne face à ${main.name}`);}}
     for(const {a,loss,crushed,out} of res){
       tot.set(a,(tot.get(a)||0)+loss);
       if(out){const by=a.foes.map(e=>e.name).join(' et ');msgs.push(a.kind==='qg'?`Le général ${a.general} est tombé, son quartier général est pris ! (−3 points)`:crushed?`${a.name} est écrasé par ${by} ! (−1 point)`:`${a.name} est dispersé, ses derniers hommes quittent le champ de bataille (−1 point)`);if(a.side==='bleu')bad=true;removeReg(a);}
@@ -968,6 +990,10 @@ function renderLivret(){
     `<b>Écrasement</b> : si une attaque arrive ${v('ecrasement')} fois plus puissante, l'armée attaquée est détruite d'un coup. Sinon le combat dure.`,
     `Une armée qui tombe sous ${v('deroute')} hommes est <b>dispersée</b> et quitte le champ de bataille.`,
     '<b>Se replier</b> : donner un ordre de marche dans l\'autre sens. On subit des pertes tant qu\'on est au contact.'])}
+  ${sec('Angle d\'attaque',[
+    `Frapper une armée <b>de flanc</b> (par le côté) multiplie la puissance par ${v('flanc')}, <b>de dos</b> par ${v('dos')}. De face : pas de bonus.`,
+    'L\'angle dépend de l\'endroit d\'où vient l\'attaquant par rapport à l\'avant de sa cible (la petite flèche du contour).',
+    `Après ${v('retournement')} manche(s) au contact, l\'armée attaquée <b>se retourne</b> face à son principal assaillant : le bonus disparaît pour lui, mais une deuxième armée qui la prend à revers le garde.`])}
   ${sec('Le quartier général',[
     `Le général y est gardé par ${v('garnisonQG')} hommes et 3 gardes rapprochés (${v('pvGarde')} PV chacun). Il a ${v('pvGeneral')} PV.`,
     `Attaqué, le QG se défend ×${v('defenseQG')} ; le général se bat comme ${v('forceGeneral')} hommes. Il n'est <b>jamais écrasé d'un coup</b> : il résiste un temps.`,
@@ -982,7 +1008,7 @@ function renderLivret(){
     '1 soldat affiché = 2 hommes (4 à partir de 3 000 hommes). La bannière montre toujours l\'effectif réel.',
     'En dessous de 300 hommes, pas de bataille rangée : le combat se règle automatiquement.'])}
   ${sec('Pas encore dans le prototype',[
-    'Angle d\'attaque (flanc, dos), formations, archers.',
+    'Formations, archers.',
     'Effets des généraux, attaques spéciales, éclaireurs et espions.',
     'Placement de départ en 59 secondes, nombre maximum de tours, bataille à deux joueurs en ligne.'])}
   </div>`;
@@ -1002,6 +1028,7 @@ function buildReglages(){
     for(const [k,lab,unit,min,max,st,help] of items)h+=`<label title="${help.replace(/"/g,'&quot;')}"><span>${lab}</span><input type="number" data-k="${k}" min="${min}" max="${max}" step="${st}" value="${REGLAGES[k]}"${REGLAGES[k]!==REGLAGES_DEFAUT[k]?' class="mod"':''}><i>${unit}</i></label>`;
     h+='</fieldset>';}
   h+=`<fieldset><legend>Simulateur : A attaque B, 1 000 combats</legend>${simRow('A','inf',500)}${simRow('B','cav',168)}
+    <label title="Angle sous lequel A frappe B au début du combat (B se retourne ensuite)."><span>A attaque B</span><select id="sA-a" style="grid-column:span 2"><option value="face">de face</option><option value="flanc">de flanc</option><option value="dos">de dos</option></select></label>
     <div class="row"><button type="button" id="sim-go">Lancer la simulation</button></div><div id="sim-out" aria-live="polite"></div></fieldset>
     <div class="row"><button type="button" id="r-restart">Recommencer la bataille</button><button type="button" id="r-copy">Copier les valeurs</button><button type="button" id="r-reset">Valeurs de départ</button></div>`;
   RP.innerHTML=h;
@@ -1017,7 +1044,7 @@ function buildReglages(){
 function runSim(){
   const army=id=>{const kind=document.getElementById(`s${id}-k`).value,n=Math.max(0,Math.round(+document.getElementById(`s${id}-n`).value||0));
     return{kind,men:kind==='qg'?n+3*REGLAGES.pvGarde+REGLAGES.pvGeneral:Math.max(1,n),terrain:document.getElementById(`s${id}-t`).value};};
-  const A=army('A'),B=army('B'),r=simuler(A,B,1000),pc=x=>Math.round(x*100)+' %',f1=x=>x.toFixed(1).replace('.',',');
+  const A={...army('A'),angle:document.getElementById('sA-a').value},B=army('B'),r=simuler(A,B,1000),pc=x=>Math.round(x*100)+' %',f1=x=>x.toFixed(1).replace('.',',');
   const rf=puissanceBase({...A,charge:false})/puissanceBase({...B,charge:false});
   document.getElementById('sim-out').innerHTML=`<span><span class="k">Rapport de force :</span> ×${rf.toFixed(2).replace('.',',')} (${rapportMot(rf)} pour A)</span>
     <span><span class="k">Victoires :</span> A ${pc(r.winA)} · B ${pc(r.winB)}</span>
