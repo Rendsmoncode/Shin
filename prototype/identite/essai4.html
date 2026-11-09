@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Journal de bord</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&family=Cormorant+Garamond:ital@0;1&family=DM+Mono&family=IM+Fell+DW+Pica:ital@0;1&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=Pirata+One&family=Space+Mono&family=Spectral:ital@0;1&display=swap" rel="stylesheet">
+<style>
+/* Essai 4 : variantes pirates de l'almanach de l'horloger, chacun avec ses onglets et sa touche moderne. Thèmes volontairement fixes. */
+:root{
+  --grain:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .22 0 0 0 0 .13 0 0 0 0 .05 0 0 0 .30 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#17100a var(--grain);color:#eadbbb;font-family:"Spectral",Georgia,serif;font-size:17px;line-height:1.5}
+.page{max-width:1160px;margin:0 auto;padding:36px 16px 56px;display:grid;gap:36px}
+.intro{display:grid;gap:10px;max-width:760px}
+.intro small{font-family:"DM Mono",monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#c9a35e}
+.intro h1{margin:0;font-family:"Bodoni Moda",serif;font-style:italic;font-weight:400;font-size:clamp(34px,6vw,54px);line-height:1.05}
+.intro p{margin:0;color:#b9a07c}
+.sommaire{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.sommaire a{color:#eadbbb;text-decoration:none;border:1px solid #4a3523;padding:4px 10px;font-size:15px}
+.sommaire a:hover{border-color:#c9a35e}
+
+/* ---------- Gabarit commun ---------- */
+.piste{background:var(--grain),var(--couv);color:var(--couv-fg);border:1px solid rgba(0,0,0,.5)}
+.tete{padding:28px 24px 6px;display:grid;gap:8px;max-width:860px}
+.tete .numero{font-family:var(--f-chiffre);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--vif-couv)}
+.tete h2{margin:0;font-family:var(--f-titre);font-weight:400;font-size:clamp(30px,5vw,46px);line-height:1.08}
+.tete p{margin:0;color:var(--couv-muted);font-family:var(--f-texte)}
+.tete dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px 24px;margin:8px 0 0}
+.tete dt{font-family:var(--f-chiffre);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--vif-couv)}
+.tete dd{margin:2px 0 0;font-family:var(--f-texte);color:var(--couv-fg);font-size:16px}
+.demo{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:24px;padding:18px 24px 28px;align-items:start}
+.maquette{border:1px solid rgba(0,0,0,.5);background:rgba(0,0,0,.22)}
+.ressources{display:flex;flex-wrap:wrap;gap:4px 20px;align-items:center;padding:10px 16px;border-bottom:1px solid rgba(0,0,0,.45);font-family:var(--f-texte)}
+.ressources .jeu{font-family:var(--f-titre);font-size:20px;margin-right:auto}
+.res small{display:block;font-size:12px;color:var(--couv-muted);letter-spacing:.05em;line-height:1.2}
+.res b{font-family:var(--f-chiffre);font-weight:400;font-size:15px}
+.res em{font-family:var(--f-chiffre);font-style:normal;font-size:11px;color:var(--vif-couv);margin-left:5px}
+.heure{font-family:var(--f-chiffre);font-size:12px;color:var(--vif-couv);letter-spacing:.06em}
+.cadran{display:none}
+.livre{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;padding:20px 0 24px 18px;min-height:480px}
+.feuilles{position:relative;z-index:2}
+.feuille{display:none;position:relative;background:var(--page);color:var(--encre);padding:24px 28px 30px;min-height:440px;font-family:var(--f-texte);font-size:var(--t-texte,17px)}
+.feuille.active{display:block;animation:apparait .35s ease-out}
+@keyframes apparait{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:none}}
+.entete{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-family:var(--f-chiffre);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--encre-2);margin-bottom:14px}
+.entete .live{color:var(--vif)}
+.feuille h3{font-family:var(--f-titre);font-weight:400;font-size:var(--t-titre,36px);line-height:1.1;margin:0 0 4px}
+.chapeau{font-style:italic;color:var(--encre-2);margin:0 0 14px}
+.texte{margin:0 0 14px}
+.liste{list-style:none;padding:0;margin:0 0 12px}
+.liste li{display:flex;justify-content:space-between;gap:12px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.13)}
+.liste small{display:block;font-size:.8em;color:var(--encre-2);font-style:italic}
+.num{font-family:var(--f-chiffre);color:var(--vif);white-space:nowrap;font-size:.92em}
+.note{font-family:var(--f-main);font-size:var(--t-main,24px);color:var(--accent);margin:4px 0 0;line-height:1.15}
+.actions{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:16px}
+.btn{cursor:pointer;font-family:var(--f-titre);font-size:16px;padding:8px 16px;border:0;background:var(--accent);color:var(--page)}
+.lien{cursor:pointer;background:none;border:0;padding:2px 0;font-family:var(--f-texte);font-style:italic;font-size:16px;color:var(--encre);text-decoration:underline;text-underline-offset:3px}
+.tampon,.censure,.o-i,.o-r,.o-n{display:none}
+mark{background:none;color:inherit}
+.onglets{display:flex;flex-direction:column;gap:3px;padding-top:24px}
+.onglet{cursor:pointer;border:0;font:inherit;color:inherit;background:none;padding:0;position:relative;z-index:1}
+.onglet[aria-selected="true"]{z-index:3}
+.onglet:focus-visible{outline:2px solid var(--vif-couv);outline-offset:2px}
+
+.charte{display:grid;gap:20px}
+.charte h4{font-family:var(--f-chiffre);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--couv-muted);margin:0 0 6px;font-weight:400}
+.sw{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:10px;align-items:center;font-size:14px;padding:3px 0;font-family:var(--f-texte)}
+.sw i{height:26px;border:1px solid rgba(255,255,255,.18)}
+.sw span small{display:block;color:var(--couv-muted);font-size:12px;line-height:1.2}
+.sw code{font-family:var(--f-chiffre);font-size:11px;color:var(--couv-muted)}
+.pol{padding:7px 0;border-bottom:1px solid rgba(255,255,255,.09)}
+.pol .ex{display:block;line-height:1.15;color:var(--couv-fg);overflow-wrap:anywhere}
+.pol small{font-family:var(--f-chiffre);font-size:11px;color:var(--couv-muted)}
+
+.fin{border:1px solid #4a3523;padding:20px 24px;display:grid;gap:8px;background:#1f160e}
+.fin h2{margin:0;font-family:"Bodoni Moda",serif;font-style:italic;font-weight:400;font-size:28px}
+.fin ul{margin:0;padding-left:20px;color:#b9a07c}
+
+@media (max-width:860px){
+  .demo{grid-template-columns:1fr;padding:14px 12px 22px}
+  .tete{padding:22px 16px 4px}
+  .livre{padding:16px 0 20px 10px}
+  .feuille{padding:20px 18px 26px}
+}
+@media (prefers-reduced-motion:reduce){.feuille.active{animation:none}}
+
+/* =========================================================
+   A · LE JOURNAL DE BORD — l'horloger parti en mer : laiton, cordage, taches d'eau, boussole affolée
+   ========================================================= */
+#bord{--couv:#14100c;--couv-fg:#e9d6ad;--couv-muted:#a08a66;--page:#dcc69a;--encre:#1f150b;--encre-2:#66502f;--accent:#6b2414;--vif:#2f7a68;--vif-couv:#73c2ad;
+  --f-titre:"IM Fell DW Pica",serif;--f-texte:"Spectral",serif;--f-chiffre:"DM Mono",monospace;--f-main:"Spectral",serif;--t-texte:16.5px;--t-titre:38px;--t-main:18px}
+#bord .livre{background:repeating-linear-gradient(90deg,rgba(0,0,0,.45) 0 2px,transparent 2px 70px),var(--grain),linear-gradient(90deg,#1d150e,#2c1e12 50%,#1d150e)}
+#bord .livre::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.9;background:
+  radial-gradient(circle at 0 0,#c39a4b 0 20px,transparent 21px),radial-gradient(circle at 0 100%,#c39a4b 0 20px,transparent 21px),
+  radial-gradient(circle at 100% 0,#c39a4b 0 20px,transparent 21px),radial-gradient(circle at 100% 100%,#c39a4b 0 20px,transparent 21px)}
+#bord .feuille{background:
+  radial-gradient(circle at 80% 74%,transparent 38px,rgba(110,70,30,.25) 40px,rgba(110,70,30,.08) 45px,transparent 48px),
+  radial-gradient(circle at 12% 88%,transparent 26px,rgba(110,70,30,.18) 28px,transparent 32px),
+  radial-gradient(ellipse at 18% 18%,rgba(120,90,50,.20),transparent 35%),
+  var(--grain),radial-gradient(ellipse at 50% 40%,#e6d2a6 30%,#c9a670 85%,#9c7845 100%);box-shadow:inset 0 0 30px rgba(60,35,10,.5)}
+#bord h3{font-style:italic}
+#bord .texte::first-letter{float:left;font-family:"IM Fell DW Pica",serif;font-size:60px;line-height:.85;padding:5px 8px 0 0;color:var(--accent)}
+#bord .note{font-style:italic}
+#bord .liste li{border-bottom:1px solid rgba(31,21,11,.18)}
+#bord .btn{font-family:"Spectral",serif;text-transform:uppercase;letter-spacing:.16em;font-size:13px;padding:9px 16px;border-radius:3px;color:#2a1a0c;background:linear-gradient(135deg,#e7c97f,#a87d32 45%,#e9cf8d 55%,#8a6526);box-shadow:inset 0 0 0 1px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.4)}
+#bord .onglets{padding-top:28px;gap:6px}
+#bord .onglet{width:52px;min-height:92px;margin-left:-1px;display:flex;flex-direction:column;align-items:center;gap:6px;padding:13px 0 13px 6px;border-radius:0 6px 6px 0;color:#2a1a0c;
+  background:repeating-linear-gradient(45deg,#c49a62 0 3px,#6f5130 3px 6px) left/8px 100% no-repeat,linear-gradient(135deg,#e7c97f,#a87d32 45%,#e9cf8d 55%,#8a6526);
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.45),2px 2px 5px rgba(0,0,0,.55);filter:saturate(.45) brightness(.65) sepia(.2)}
+#bord .onglet::before,#bord .onglet::after{content:"";position:absolute;left:calc(50% + 3px);width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:#5a3e16;box-shadow:inset 1px 1px 0 rgba(255,255,255,.35)}
+#bord .onglet::before{top:4px}#bord .onglet::after{bottom:4px}
+#bord .onglet .o-r{display:block;font-family:"IM Fell DW Pica",serif;font-size:16px;line-height:1}
+#bord .onglet span{writing-mode:vertical-rl;font-family:"Spectral",serif;font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+#bord .onglet[aria-selected="true"]{filter:none}
+#bord .cadran{display:block;width:38px;height:38px}
+
+/* =========================================================
+   B · LA CARTE AU TRÉSOR — parchemin brûlé, fragments de carte cachetés de cire noire, route et coordonnées
+   ========================================================= */
+#tresor{--couv:#4a3220;--couv-fg:#f1e2c0;--couv-muted:#cfb08a;--page:#e9d5a6;--encre:#2b1a0d;--encre-2:#6e5233;--accent:#a52c1c;--vif:#a52c1c;--vif-couv:#ff8a6b;
+  --f-titre:"IM Fell English SC",serif;--f-texte:"IM Fell English",serif;--f-chiffre:"Space Mono",monospace;--f-main:"Caveat",cursive;--t-texte:17px;--t-titre:36px;--t-main:26px}
+#tresor .livre{grid-template-columns:minmax(0,1fr);grid-template-rows:auto 1fr;padding:14px 22px 28px;background:var(--grain),repeating-linear-gradient(0deg,#4a3220 0 34px,#3e2918 34px 35px)}
+#tresor .onglets{flex-direction:row;order:-1;padding:0 0 0 12px;gap:12px;margin-bottom:-14px;flex-wrap:wrap}
+#tresor .onglet{padding:26px 16px 26px;font-family:"IM Fell English SC",serif;font-size:17px;line-height:1;color:var(--encre);background:var(--grain),#d6bb86;
+  clip-path:polygon(0 6%,14% 0,31% 5%,52% 1%,73% 6%,88% 0,100% 4%,100% 100%,0 100%);transform:rotate(-1.5deg)}
+#tresor .onglet:nth-child(2n){transform:rotate(1.5deg);background:var(--grain),#cdb07a}
+#tresor .onglet::before{content:"";position:absolute;top:7px;left:50%;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#55504a,#0e0c0b 70%)}
+#tresor .onglet[aria-selected="true"]{background:var(--grain),var(--page)}
+#tresor .onglet[aria-selected="true"]::before{background:radial-gradient(circle at 35% 35%,#d0503a,#7e1b10 70%)}
+#tresor .feuille{background:var(--grain),radial-gradient(ellipse at 50% 45%,#f0ddb0 40%,#d9ba7f 78%,#93612f 100%);box-shadow:inset 0 0 20px rgba(60,25,5,.75);
+  clip-path:polygon(0 2%,6% 0,20% 1.4%,38% 0,55% 1%,72% 0,88% 1.5%,100% 0,99.2% 20%,100% 45%,98.8% 70%,100% 100%,80% 98.6%,60% 100%,40% 98.2%,20% 100%,0 99%,1.2% 70%,0 45%,.8% 20%)}
+#tresor .feuille::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.4;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><path d='M6 14 C 24 30, 12 52, 34 58 S 62 52, 70 70 S 84 86, 90 88' fill='none' stroke='%23a52c1c' stroke-width='1.6' stroke-dasharray='1.5 3' vector-effect='non-scaling-stroke'/><path d='M87 85 L93 91 M93 85 L87 91' stroke='%23a52c1c' stroke-width='2.5' vector-effect='non-scaling-stroke'/></svg>") center/100% 100% no-repeat}
+#tresor .feuille::before{content:"43°17′32″ N · 5°34′12″ E";position:absolute;left:18px;bottom:12px;font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.08em;color:var(--vif)}
+#tresor .texte::first-letter{float:left;font-family:"IM Fell English",serif;font-size:58px;line-height:.85;padding:5px 8px 0 0;color:var(--accent)}
+#tresor .live{border:1px solid var(--vif);padding:1px 6px}
+#tresor .liste li{border-bottom:1px dotted rgba(43,26,13,.4)}
+#tresor .note{transform:rotate(-2deg);display:inline-block}
+#tresor .btn{font-family:"IM Fell English SC",serif;font-size:17px;background:#2b1a0d;color:var(--page);padding:8px 18px;box-shadow:inset 0 0 0 1px #e9d5a6,inset 0 0 0 3px #2b1a0d}
+#tresor .tampon{display:grid;place-items:center;position:absolute;right:24px;top:52px;width:66px;height:66px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#c9452e,#7e1b10 70%);color:#f1d9b8;font-family:"IM Fell English SC",serif;font-size:11px;letter-spacing:.06em;text-transform:uppercase;text-align:center;line-height:1.05;box-shadow:0 2px 3px rgba(0,0,0,.4),inset 0 0 0 5px rgba(0,0,0,.15);transform:rotate(-8deg);pointer-events:none}
+@media (max-width:860px){#tresor .tampon{transform:rotate(-8deg) scale(.75);right:8px;top:36px}}
+
+/* =========================================================
+   C · LE PAVILLON NOIR — noir goudron, os, sang ; fanions déchirés ; rouge néon
+   ========================================================= */
+#pavillon{--couv:#0e0d0c;--couv-fg:#e8e0cf;--couv-muted:#948b7d;--page:#d6c9ad;--encre:#14110e;--encre-2:#5c5245;--accent:#8e1b14;--vif:#8e1b14;--vif-couv:#ff3b30;
+  --f-titre:"Pirata One",serif;--f-texte:"Cormorant Garamond",serif;--f-chiffre:"Space Mono",monospace;--f-main:"Caveat",cursive;--t-texte:18.5px;--t-titre:46px;--t-main:24px}
+#pavillon .livre{grid-template-columns:minmax(0,1fr);padding:0 20px 28px;background:repeating-linear-gradient(115deg,transparent 0 40px,rgba(255,255,255,.03) 40px 41px),var(--grain),#0e0d0c}
+#pavillon .feuilles{margin-top:28px}
+#pavillon .feuille{padding-bottom:40px;background:var(--grain),radial-gradient(ellipse at 28% 18%,rgba(0,0,0,.13),transparent 40%),radial-gradient(ellipse at 82% 92%,rgba(70,20,10,.2),transparent 45%),linear-gradient(#ddd0b4,#c8b894);box-shadow:inset 0 0 40px rgba(20,10,5,.55);
+  clip-path:polygon(0 0,100% 0,100% 97%,92% 99.5%,80% 97.5%,66% 100%,50% 97.8%,34% 99.6%,18% 97.4%,6% 99.4%,0 97.6%)}
+#pavillon .entete,#pavillon h3,#pavillon .chapeau{margin-right:206px}
+#pavillon h3{line-height:1}
+#pavillon .texte::first-letter{float:left;font-family:"Pirata One",serif;font-size:66px;line-height:.8;padding:6px 8px 0 0;color:var(--accent)}
+#pavillon .live{background:#14110e;color:#ff3b30;padding:2px 7px;text-shadow:0 0 6px rgba(255,59,48,.75)}
+#pavillon .num{color:var(--encre)}
+#pavillon .liste li{border-bottom:1px solid rgba(20,17,14,.22)}
+#pavillon .btn{font-family:"Pirata One",serif;font-size:21px;letter-spacing:.03em;padding:5px 18px;background:#14110e;color:#e8e0cf;transition:box-shadow .2s}
+#pavillon .btn:hover{box-shadow:0 0 0 1px #ff3b30,0 0 14px rgba(255,59,48,.55)}
+#pavillon .tampon{display:block;position:absolute;right:26px;bottom:30px;font-family:"Pirata One",serif;font-size:22px;color:rgba(142,27,20,.6);border:2px solid rgba(142,27,20,.6);padding:0 10px;transform:rotate(-6deg);pointer-events:none}
+#pavillon .onglets{position:absolute;top:0;right:26px;flex-direction:row;gap:10px;padding:0;z-index:4}
+#pavillon .onglet{width:40px;height:112px;padding:18px 0 32px;writing-mode:vertical-rl;font-family:"Pirata One",serif;font-size:18px;color:#e8e0cf;background:var(--grain),#24211d;clip-path:polygon(0 0,100% 0,100% 100%,50% 80%,0 100%);transition:height .2s;text-align:start}
+#pavillon .onglet[aria-selected="true"]{background:var(--grain),#8e1b14;height:156px;text-shadow:0 0 8px rgba(255,90,70,.8)}
+@media (max-width:860px){#pavillon .onglets{right:16px;gap:6px}#pavillon .onglet{width:31px;font-size:15px}#pavillon .entete,#pavillon h3,#pavillon .chapeau{margin-right:150px}#pavillon{--t-titre:36px}#pavillon .tampon{display:none}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<section class="intro">
+  <small>Identité visuelle · essai n° 4</small>
+  <h1>L'horloger prend la mer</h1>
+  <p>Trois variantes pirates, de la plus proche de l'almanach de l'horloger à la plus brute. Clique sur les onglets de chaque livre pour tourner les pages.</p>
+  <nav class="sommaire">
+    <a href="#bord">A · Le journal de bord</a><a href="#tresor">B · La carte au trésor</a><a href="#pavillon">C · Le pavillon noir</a>
+  </nav>
+</section>
+
+<section class="piste" id="bord">
+  <div class="tete">
+    <div class="numero">Piste A · la plus proche de l'horloger</div>
+    <h2>Le journal de bord</h2>
+    <p>Le livre de bord d'un capitaine : couverture en planches goudronnées, coins de laiton, pages gondolées avec des traces de verre et d'eau de mer. Les plaques de laiton de l'horloger restent, mais elles sont patinées et liées par un cordage.</p>
+    <dl><div><dt>Authentique</dt><dd>Laiton terni, cordage, taches d'eau, lettres d'imprimerie du XVIIᵉ siècle, chiffres romains.</dd></div>
+        <div><dt>Moderne</dt><dd>Le vert-de-gris pour tout ce qui vit, et une boussole affolée dans la barre du haut, dont l'aiguille ne trouve jamais le nord.</dd></div></dl>
+  </div>
+  <div class="demo"><div class="maquette"></div><div class="charte"></div></div>
+</section>
+
+<section class="piste" id="tresor">
+  <div class="tete">
+    <div class="numero">Piste B · l'aventure</div>
+    <h2>La carte au trésor</h2>
+    <p>Des fragments de carte arrachés, posés sur une table en bois, chacun fermé par un cachet de cire noire (rouge quand l'onglet est ouvert). La page a les bords brûlés, un chemin en pointillés et un X.</p>
+    <dl><div><dt>Authentique</dt><dd>Parchemin brûlé, cire, bords déchirés, lettres anciennes des cartes.</dd></div>
+        <div><dt>Moderne</dt><dd>Des coordonnées précises au degré près, comme un GPS, et un rouge vif « balise » pour ce qui se passe maintenant.</dd></div></dl>
+  </div>
+  <div class="demo"><div class="maquette"></div><div class="charte"></div></div>
+</section>
+
+<section class="piste" id="pavillon">
+  <div class="tete">
+    <div class="numero">Piste C · la plus brute</div>
+    <h2>Le pavillon noir</h2>
+    <p>Noir goudron, couleur d'os et rouge sang. Les onglets sont des fanions déchirés qui pendent en haut du livre, l'ouvert devient rouge. Des titres en lettres de pirates, et un bas de page arraché.</p>
+    <dl><div><dt>Authentique</dt><dd>Tissu noir, papier sale, lettres gothiques de pavillon, tampons usés.</dd></div>
+        <div><dt>Moderne</dt><dd>Un rouge néon qui brille : chiffres en temps réel, survol des boutons, fanion ouvert.</dd></div></dl>
+  </div>
+  <div class="demo"><div class="maquette"></div><div class="charte"></div></div>
+</section>
+
+<section class="fin">
+  <h2>À toi de jouer</h2>
+  <ul>
+    <li>Dis-moi laquelle est la plus proche de ce que tu imagines, et ce qui manque encore.</li>
+    <li>On peut mélanger : par exemple les plaques de laiton de A avec les bords brûlés de B, ou les fanions de C.</li>
+  </ul>
+</section>
+</div>
+
+<script>
+const PAGES=[
+ {tab:'Monde',i:'M',r:'I',titre:'Le Monde',chapeau:"Aubagne et La Valentine, quartier par quartier.",
+  texte:"Douze quartiers se partagent la vallée de l'Huveaune. <mark>Trois ont prêté serment</mark> à ta bannière<span class=\"censure\"> — et l'un d'eux prépare déjà sa trahison</span>.",
+  liste:[['Pin Vert','Hôtel de ville','640 h.'],['Le Charrel','Pris il y a 6 jours','210 h.'],['Les Passons','Neutre','—']],
+  note:'→ fortifier Le Charrel !',live:'Jour 214',bouton:'Ouvrir la carte',lien:'Voir les routes',tampon:'Visé'},
+ {tab:'Armées',i:'A',r:'II',titre:'Armée du Pin Vert',chapeau:"En route vers Les Passons, par la vieille route d'Aix.",
+  texte:"Neuf cents hommes à pied, <mark>deux cents cavaliers</mark>, et un moral qui tient encore.",
+  liste:[['Fantassins','Lances et boucliers','900'],['Archers','Arcs courts','350'],['Cavaliers','Chevaux légers','200']],
+  note:'attendre les archers ?',live:'En marche · 00:18:40',bouton:'Attaquer',lien:'Changer de formation',tampon:'En marche'},
+ {tab:'Diplomatie',i:'D',r:'III',titre:'Pacte de non-agression',chapeau:"Proposé par Mathieu, seigneur de La Valentine.",
+  texte:"Les deux parties s'engagent à ne pas lever d'armée l'une contre l'autre pendant <mark>sept jours</mark>.<span class=\"censure\"> Clause secrète : partage du Charrel.</span>",
+  liste:[['Durée','','7 jours'],['Garantie','Versée par Mathieu','500 or'],['En cas de rupture','Connue de tous','traître']],
+  note:'méfiance…',live:'Expire dans 47:12:00',bouton:'Sceller le pacte',lien:'Refuser',tampon:'Proposé'},
+ {tab:'Journal',i:'J',r:'IV',titre:'Journal',chapeau:"Ce qui s'est passé pendant ton absence.",
+  texte:"Le vent a tourné sur la vallée. <mark>Une armée</mark> a été vue au sud.",
+  liste:[['Armée repérée','Près de La Valentine','14:32'],['Marché du Pin Vert','+420 pièces d’or','11:05'],['Raid repoussé','Au Charrel','08:47']],
+  note:'',live:"Aujourd'hui",bouton:'Tout marquer lu',lien:'Archives',tampon:'Lu'}
+];
+const CHARTES={
+ bord:{c:[['Bois goudronné','#14100C','Couverture'],['Papier gondolé','#DCC69A','Pages'],['Encre','#1F150B','Texte'],['Laiton','#C39A4B','Onglets, boutons'],['Cordage','#C49A62','Liens'],['Vert-de-gris','#2F7A68','Le présent']],
+  p:[['IM Fell DW Pica','Titres · 38 px','font-family:IM Fell DW Pica;font-style:italic;font-size:30px'],['Spectral','Texte · 16,5 px','font-family:Spectral;font-size:16px'],['DM Mono','Chiffres · 14 px','font-family:DM Mono;font-size:14px']]},
+ tresor:{c:[['Table en chêne','#4A3220','Fond'],['Parchemin','#E9D5A6','Pages'],['Brûlure','#93612F','Bords'],['Encre','#2B1A0D','Texte, boutons'],['Cire noire','#0E0C0B','Cachets'],['Rouge balise','#A52C1C','Le présent']],
+  p:[['IM Fell English SC','Titres, onglets · 17 à 36 px','font-family:IM Fell English SC;font-size:28px'],['IM Fell English','Texte · 17 px','font-family:IM Fell English;font-size:17px'],['Space Mono','Coordonnées, chiffres · 10 à 14 px','font-family:Space Mono;font-size:14px'],['Caveat','Notes · 26 px','font-family:Caveat;font-size:26px']]},
+ pavillon:{c:[['Goudron','#0E0D0C','Fond'],['Os','#D6C9AD','Pages'],['Fanion','#24211D','Onglets'],['Encre','#14110E','Texte'],['Sang','#8E1B14','Actions, fanion ouvert'],['Rouge néon','#FF3B30','Le présent']],
+  p:[['Pirata One','Titres, onglets · 18 à 46 px','font-family:Pirata One;font-size:34px'],['Cormorant Garamond','Texte · 18,5 px','font-family:Cormorant Garamond;font-size:18px'],['Space Mono','Chiffres · 14 px','font-family:Space Mono;font-size:14px'],['Caveat','Notes · 24 px','font-family:Caveat;font-size:24px']]}
+};
+const cadran=`<svg class="cadran" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18" fill="#2a1a0c" stroke="#c39a4b" stroke-width="2"/><circle cx="20" cy="20" r="13" fill="none" stroke="#c39a4b" stroke-width=".6" stroke-dasharray="1 2"/>${[...Array(8)].map((_,k)=>`<line x1="20" y1="3.5" x2="20" y2="${k%2?5.5:7}" stroke="#c39a4b" stroke-width="1.1" transform="rotate(${k*45} 20 20)"/>`).join('')}<text x="20" y="12.5" text-anchor="middle" font-size="5" fill="#ecd9b0" font-family="serif">N</text><g class="aiguille"><path d="M20 7 L22.4 20 L20 33 L17.6 20 Z" fill="#ecd9b0"/><path d="M20 7 L22.4 20 L17.6 20 Z" fill="#a52c1c"/></g><line class="h-v" x1="20" y1="23" x2="20" y2="5" stroke="#73c2ad" stroke-width=".9"/><circle cx="20" cy="20" r="1.8" fill="#c39a4b"/></svg>`;
+document.querySelectorAll('.piste').forEach(piste=>{
+  const id=piste.id,ch=CHARTES[id];
+  piste.querySelector('.maquette').innerHTML=`
+   <div class="ressources">${cadran}<span class="jeu">Nom du jeu</span>
+     <span class="res"><small>Or</small><b>12 400</b><em>+320/h</em></span>
+     <span class="res"><small>Vivres</small><b>3 210</b><em>+85/h</em></span>
+     <span class="res"><small>Matériaux</small><b>860</b><em>+40/h</em></span>
+     <span class="res"><small>Hommes</small><b>1 450</b><em>/2 000</em></span>
+     <span class="heure${id==='registre'?' live-cur':''}">--:--:--</span></div>
+   <div class="livre">
+     <div class="feuilles">${PAGES.map((p,k)=>`
+       <article class="feuille${k?'':' active'}" role="tabpanel" aria-label="${p.tab}">
+         <div class="entete"><span>Folio ${p.r} · ${p.tab}</span><span class="live">${p.live}</span></div>
+         <h3>${p.titre}</h3><p class="chapeau">${p.chapeau}</p>
+         <p class="texte">${p.texte}</p>
+         <ul class="liste">${p.liste.map(l=>`<li><span>${l[0]}${l[1]?`<small>${l[1]}</small>`:''}</span><span class="num">${l[2]}</span></li>`).join('')}</ul>
+         ${p.note?`<p class="note">${p.note}</p>`:''}
+         <div class="actions"><button class="btn" type="button">${p.bouton}</button><button class="lien" type="button">${p.lien}</button></div>
+         <div class="tampon" aria-hidden="true">${p.tampon}</div>
+       </article>`).join('')}</div>
+     <nav class="onglets" role="tablist" aria-label="Sections du livre">${PAGES.map((p,k)=>`
+       <button class="onglet" role="tab" type="button" aria-selected="${!k}" aria-label="${p.tab}"><i class="o-n">N°0${k+1}</i><b class="o-i">${p.i}</b><b class="o-r">${p.r}</b><span>${p.tab}</span></button>`).join('')}</nav>
+   </div>`;
+  piste.querySelector('.charte').innerHTML=`
+   <div><h4>Couleurs</h4>${ch.c.map(c=>`<div class="sw"><i style="background:${c[1]}"></i><span>${c[0]}<small>${c[2]}</small></span><code>${c[1]}</code></div>`).join('')}</div>
+   <div><h4>Polices et tailles</h4>${ch.p.map(p=>`<div class="pol"><span class="ex" style="${p[2]}">${p[0]}</span><small>${p[1]}</small></div>`).join('')}</div>`;
+  const ong=[...piste.querySelectorAll('.onglet')],fe=[...piste.querySelectorAll('.feuille')];
+  ong.forEach((o,k)=>o.addEventListener('click',()=>{ong.forEach((x,j)=>x.setAttribute('aria-selected',j===k));fe.forEach((f,j)=>f.classList.toggle('active',j===k));}));
+});
+const deux=n=>String(n).padStart(2,'0');let t=0,derive=0;
+function tic(){const d=new Date();const h=deux(d.getHours())+':'+deux(d.getMinutes())+':'+deux(d.getSeconds());
+  document.querySelectorAll('.heure').forEach(e=>e.textContent=h);}
+function boussole(){t+=0.05;derive+=0.4;
+  const a=derive+38*Math.sin(t*1.3)+14*Math.sin(t*3.1);
+  document.querySelectorAll('.cadran').forEach(s=>{s.querySelector('.aiguille').setAttribute('transform',`rotate(${a.toFixed(1)} 20 20)`);
+    s.querySelector('.h-v').setAttribute('transform',`rotate(${(-t*40).toFixed(1)} 20 20)`);});
+  requestAnimationFrame(boussole);}
+tic();setInterval(tic,1000);
+if(!matchMedia('(prefers-reduced-motion: reduce)').matches)requestAnimationFrame(boussole);
+</script>
+</body>
+</html>
