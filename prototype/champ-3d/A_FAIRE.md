@@ -8,7 +8,8 @@ Retours de l'utilisateur (validé : le rendu des armées, le mode marche et les 
 - [x] Agrandir la carte à 3 km × 2 km.
 - [x] Rendre le prototype jouable : sélectionner une armée, la déplacer, brouillard de guerre.
   - Fait : sélection (clic, Maj+clic, touches 1-2-3), ordre de marche au clic droit, vitesse selon le terrain (forêt, pente, gué, falaise infranchissable), brouillard avec lignes de vue (relief, arbres, colline +50 %, caché en forêt sauf à moins de 50 m), rouges en patrouille.
-- [ ] Le combat au contact (calcul de puissance, pertes, retrait des blocs).
+- [x] Le combat au contact (calcul de puissance, pertes, retrait des blocs).
+  - Fait : manches de combat (3 s, deviendront des tours), puissance = hommes × valeur × terrain × charge ± hasard, pertes selon le rapport de force, écrasement seulement à l'arrivée d'une attaque très déséquilibrée, dispersion sous 10 hommes, repli en marchant dans l'autre sens, soldats retirés et bannière mise à jour, chiffres de pertes, victoire / défaite. Panneau « Réglages du combat » (valeurs modifiables, gardées dans le navigateur, copiables) avec simulateur de 1 000 combats. Les valeurs sont en haut du code (REGLAGES_DEFAUT).
 - [x] Une mini-carte pour se repérer et s'y rendre en un clic.
   - Fait : coin bas droit, relief, rivière, forêts, brouillard, armées visibles (bloc orienté, or si choisie), trajets, cadre de la vue ; clic ou glisser pour y aller, clic droit pour y envoyer les armées choisies (ou marcher sur une armée rouge).
 - [ ] Le mode tour par tour (5 actions par tour, chrono d'une minute).
