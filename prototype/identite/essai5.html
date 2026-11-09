@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cinq styles marqués</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Almendra:ital@0;1&family=Almendra+SC&family=Bodoni+Moda:ital@0;1&family=Cormorant+Garamond:ital@0;1&family=Cormorant+SC&family=DM+Mono&family=EB+Garamond:ital@0;1&family=Forum&family=Grenze:ital@0;1&family=Grenze+Gotisch&family=IBM+Plex+Mono&family=JetBrains+Mono&family=Shippori+Mincho&family=Space+Mono&family=Spectral:ital@0;1&family=Zen+Antique&display=swap" rel="stylesheet">
+<style>
+/* Essai 5 : cinq styles plus épurés et marqués, chacun avec ses onglets et sa touche moderne. Thèmes volontairement fixes. */
+:root{
+  --grain:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .22 0 0 0 0 .13 0 0 0 0 .05 0 0 0 .30 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#17100a var(--grain);color:#eadbbb;font-family:"Spectral",Georgia,serif;font-size:17px;line-height:1.5}
+.page{max-width:1160px;margin:0 auto;padding:36px 16px 56px;display:grid;gap:36px}
+.intro{display:grid;gap:10px;max-width:760px}
+.intro small{font-family:"DM Mono",monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#c9a35e}
+.intro h1{margin:0;font-family:"Bodoni Moda",serif;font-style:italic;font-weight:400;font-size:clamp(34px,6vw,54px);line-height:1.05}
+.intro p{margin:0;color:#b9a07c}
+.sommaire{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.sommaire a{color:#eadbbb;text-decoration:none;border:1px solid #4a3523;padding:4px 10px;font-size:15px}
+.sommaire a:hover{border-color:#c9a35e}
+
+/* ---------- Gabarit commun ---------- */
+.piste{background:var(--grain),var(--couv);color:var(--couv-fg);border:1px solid rgba(0,0,0,.5)}
+.tete{padding:28px 24px 6px;display:grid;gap:8px;max-width:860px}
+.tete .numero{font-family:var(--f-chiffre);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--vif-couv)}
+.tete h2{margin:0;font-family:var(--f-titre);font-weight:400;font-size:clamp(30px,5vw,46px);line-height:1.08}
+.tete p{margin:0;color:var(--couv-muted);font-family:var(--f-texte)}
+.tete dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px 24px;margin:8px 0 0}
+.tete dt{font-family:var(--f-chiffre);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--vif-couv)}
+.tete dd{margin:2px 0 0;font-family:var(--f-texte);color:var(--couv-fg);font-size:16px}
+.demo{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:24px;padding:18px 24px 28px;align-items:start}
+.maquette{border:1px solid rgba(0,0,0,.5);background:rgba(0,0,0,.22)}
+.ressources{display:flex;flex-wrap:wrap;gap:4px 20px;align-items:center;padding:10px 16px;border-bottom:1px solid rgba(0,0,0,.45);font-family:var(--f-texte)}
+.ressources .jeu{font-family:var(--f-titre);font-size:20px;margin-right:auto}
+.res small{display:block;font-size:12px;color:var(--couv-muted);letter-spacing:.05em;line-height:1.2}
+.res b{font-family:var(--f-chiffre);font-weight:400;font-size:15px}
+.res em{font-family:var(--f-chiffre);font-style:normal;font-size:11px;color:var(--vif-couv);margin-left:5px}
+.heure{font-family:var(--f-chiffre);font-size:12px;color:var(--vif-couv);letter-spacing:.06em}
+.cadran{display:none}
+.livre{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;padding:20px 0 24px 18px;min-height:480px}
+.feuilles{position:relative;z-index:2}
+.feuille{display:none;position:relative;background:var(--page);color:var(--encre);padding:24px 28px 30px;min-height:440px;font-family:var(--f-texte);font-size:var(--t-texte,17px)}
+.feuille.active{display:block;animation:apparait .35s ease-out}
+@keyframes apparait{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:none}}
+.entete{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-family:var(--f-chiffre);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--encre-2);margin-bottom:14px}
+.entete .live{color:var(--vif)}
+.feuille h3{font-family:var(--f-titre);font-weight:400;font-size:var(--t-titre,36px);line-height:1.1;margin:0 0 4px}
+.chapeau{font-style:italic;color:var(--encre-2);margin:0 0 14px}
+.texte{margin:0 0 14px}
+.liste{list-style:none;padding:0;margin:0 0 12px}
+.liste li{display:flex;justify-content:space-between;gap:12px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.13)}
+.liste small{display:block;font-size:.8em;color:var(--encre-2);font-style:italic}
+.num{font-family:var(--f-chiffre);color:var(--vif);white-space:nowrap;font-size:.92em}
+.note{font-family:var(--f-main);font-size:var(--t-main,24px);color:var(--accent);margin:4px 0 0;line-height:1.15}
+.actions{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:16px}
+.btn{cursor:pointer;font-family:var(--f-titre);font-size:16px;padding:8px 16px;border:0;background:var(--accent);color:var(--page)}
+.lien{cursor:pointer;background:none;border:0;padding:2px 0;font-family:var(--f-texte);font-style:italic;font-size:16px;color:var(--encre);text-decoration:underline;text-underline-offset:3px}
+.tampon,.censure,.o-i,.o-r,.o-n{display:none}
+mark{background:none;color:inherit}
+.onglets{display:flex;flex-direction:column;gap:3px;padding-top:24px}
+.onglet{cursor:pointer;border:0;font:inherit;color:inherit;background:none;padding:0;position:relative;z-index:1}
+.onglet[aria-selected="true"]{z-index:3}
+.onglet:focus-visible{outline:2px solid var(--vif-couv);outline-offset:2px}
+
+.charte{display:grid;gap:20px}
+.charte h4{font-family:var(--f-chiffre);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--couv-muted);margin:0 0 6px;font-weight:400}
+.sw{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:10px;align-items:center;font-size:14px;padding:3px 0;font-family:var(--f-texte)}
+.sw i{height:26px;border:1px solid rgba(255,255,255,.18)}
+.sw span small{display:block;color:var(--couv-muted);font-size:12px;line-height:1.2}
+.sw code{font-family:var(--f-chiffre);font-size:11px;color:var(--couv-muted)}
+.pol{padding:7px 0;border-bottom:1px solid rgba(255,255,255,.09)}
+.pol .ex{display:block;line-height:1.15;color:var(--couv-fg);overflow-wrap:anywhere}
+.pol small{font-family:var(--f-chiffre);font-size:11px;color:var(--couv-muted)}
+
+.fin{border:1px solid #4a3523;padding:20px 24px;display:grid;gap:8px;background:#1f160e}
+.fin h2{margin:0;font-family:"Bodoni Moda",serif;font-style:italic;font-weight:400;font-size:28px}
+.fin ul{margin:0;padding-left:20px;color:#b9a07c}
+
+@media (max-width:860px){
+  .demo{grid-template-columns:1fr;padding:14px 12px 22px}
+  .tete{padding:22px 16px 4px}
+  .livre{padding:16px 0 20px 10px}
+  .feuille{padding:20px 18px 26px}
+}
+@media (prefers-reduced-motion:reduce){.feuille.active{animation:none}}
+
+/* =========================================================
+   A · LA GRAVURE — gravure sur bois, deux encres, impression décalée
+   ========================================================= */
+#gravure{--couv:#1d140d;--couv-fg:#efe3c9;--couv-muted:#b29a78;--page:#efe3c9;--encre:#24170d;--encre-2:#5e4630;--accent:#a3291b;--vif:#a3291b;--vif-couv:#ff7b5a;
+  --f-titre:"Grenze Gotisch",serif;--f-texte:"Grenze",serif;--f-chiffre:"Space Mono",monospace;--f-main:"Grenze",serif;--t-texte:17px;--t-titre:46px;--t-main:19px}
+#gravure .feuille{background:var(--grain),var(--page);box-shadow:inset 0 0 0 3px var(--encre),inset 0 0 0 8px var(--page),inset 0 0 0 9px var(--encre);padding:30px 34px 34px}
+#gravure .entete{padding-bottom:14px;background:repeating-linear-gradient(135deg,var(--encre) 0 1px,transparent 1px 4px) bottom/100% 6px no-repeat}
+#gravure h3{text-shadow:2px 2px 0 rgba(163,41,27,.45)}
+#gravure .texte::first-letter{float:left;font-family:"Grenze Gotisch",serif;font-size:50px;line-height:1;padding:2px 10px 4px;margin:4px 10px 0 0;background:var(--encre);color:var(--page)}
+#gravure .note{font-style:italic}
+#gravure .liste li{border-bottom:2px solid var(--encre)}
+#gravure .live{background:var(--accent);color:var(--page);padding:1px 6px}
+#gravure .btn{font-family:"Grenze Gotisch",serif;font-size:21px;padding:5px 18px;background:var(--encre);color:var(--page);box-shadow:4px 4px 0 var(--accent)}
+#gravure .btn:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--accent)}
+#gravure .onglets{padding-top:22px;gap:4px}
+#gravure .onglet{width:46px;min-height:96px;margin-left:-3px;padding:12px 0;writing-mode:vertical-rl;font-family:"Grenze Gotisch",serif;font-size:19px;background:#3a2a1c;color:var(--page);box-shadow:inset 6px 0 0 var(--encre)}
+#gravure .onglet[aria-selected="true"]{background:var(--page);color:var(--encre);box-shadow:inset -3px 0 0 var(--encre),inset 0 3px 0 var(--encre),inset 0 -3px 0 var(--encre),3px 3px 0 var(--accent)}
+
+/* =========================================================
+   B · L'ATLAS — très épuré : grandes marges, traits fins, beaucoup de vide
+   ========================================================= */
+#atlas{--couv:#2b2219;--couv-fg:#ece2cf;--couv-muted:#a5967f;--page:#f1ebde;--encre:#2d2419;--encre-2:#7b6b57;--accent:#7a3b24;--vif:#2e5d7a;--vif-couv:#8fc1e0;
+  --f-titre:"Cormorant SC",serif;--f-texte:"Cormorant Garamond",serif;--f-chiffre:"JetBrains Mono",monospace;--f-main:"Cormorant Garamond",serif;--t-texte:19px;--t-titre:40px;--t-main:20px}
+#atlas .feuille{padding:40px 56px 44px;background:linear-gradient(90deg,transparent 30px,rgba(46,93,122,.25) 30px 31px,transparent 31px),var(--page)}
+#atlas .entete{border-top:1px solid var(--encre);padding-top:8px;font-size:10px;letter-spacing:.24em}
+#atlas h3{letter-spacing:.08em;margin-top:20px}
+#atlas .chapeau{margin-bottom:26px}
+#atlas .liste li{border-bottom:1px solid rgba(45,36,25,.15);padding:8px 0}
+#atlas .liste small{font-style:normal;letter-spacing:.04em}
+#atlas .note{font-style:italic;color:var(--encre-2)}
+#atlas .btn{font-family:"Cormorant SC",serif;font-size:17px;letter-spacing:.14em;background:transparent;color:var(--encre);border:1px solid var(--encre);padding:7px 20px;transition:background .2s,color .2s}
+#atlas .btn:hover{background:var(--encre);color:var(--page)}
+#atlas .onglets{padding:30px 0 0 10px;gap:14px}
+#atlas .onglet{width:30px;padding:6px 0 6px 8px;writing-mode:vertical-rl;font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--couv-muted);border-left:1px solid transparent}
+#atlas .onglet .o-n{display:inline;margin-bottom:8px;opacity:.6}
+#atlas .onglet[aria-selected="true"]{color:var(--couv-fg);border-left-color:var(--vif-couv)}
+@media (max-width:860px){#atlas .feuille{padding:30px 22px 34px 40px}}
+
+/* =========================================================
+   C · L'ENCRE ET LA ROUILLE — le plus proche de Kingdom : papier de riz, coups de pinceau, sceau
+   ========================================================= */
+#pinceau{--couv:#1a120c;--couv-fg:#ece0c8;--couv-muted:#a8916f;--page:#e9dcc0;--encre:#1c140e;--encre-2:#6a5642;--accent:#9c3a1e;--vif:#9c3a1e;--vif-couv:#e8865a;
+  --f-titre:"Zen Antique",serif;--f-texte:"Shippori Mincho",serif;--f-chiffre:"IBM Plex Mono",monospace;--f-main:"Shippori Mincho",serif;--t-texte:16.5px;--t-titre:40px;--t-main:18px;
+  --trait:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 16' preserveAspectRatio='none'><path d='M1 9 C 18 3, 55 2, 97 5 C 100 7, 98 11, 94 12 C 62 14, 28 15, 4 14 C 0 13, 0 11, 1 9 Z' fill='%231c140e'/></svg>");
+  --trait-r:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 16' preserveAspectRatio='none'><path d='M1 9 C 18 3, 55 2, 97 5 C 100 7, 98 11, 94 12 C 62 14, 28 15, 4 14 C 0 13, 0 11, 1 9 Z' fill='%239c3a1e'/></svg>")}
+#pinceau .livre{grid-template-columns:minmax(0,1fr);grid-template-rows:auto 1fr;padding:14px 20px 26px}
+#pinceau .onglets{flex-direction:row;order:-1;flex-wrap:wrap;padding:0 0 12px;gap:6px}
+#pinceau .onglet{padding:10px 20px;font-family:"Zen Antique",serif;font-size:17px;color:var(--couv-fg);background:var(--trait) center/100% 100% no-repeat;filter:brightness(1.9) saturate(.6)}
+#pinceau .onglet[aria-selected="true"]{background-image:var(--trait-r);filter:none;color:var(--page)}
+#pinceau .feuille{background:var(--grain),var(--grain),linear-gradient(170deg,#efe4cb,#e3d3b2);padding:30px 34px 34px}
+#pinceau .entete{margin-right:74px}
+#pinceau h3::after{content:"";display:block;width:150px;height:12px;margin-top:8px;background:var(--trait-r) left/100% 100% no-repeat}
+#pinceau .chapeau{margin-top:12px}
+#pinceau .liste li{border-bottom:1px solid rgba(28,20,14,.15)}
+#pinceau .live{border:1px solid var(--vif);padding:0 6px}
+#pinceau .tampon{display:grid;place-items:center;position:absolute;top:22px;right:24px;width:54px;height:54px;background:#a3291b;color:var(--page);font-family:"Zen Antique",serif;font-size:13px;letter-spacing:.06em;text-align:center;line-height:1;border-radius:3px;box-shadow:inset 0 0 0 3px #a3291b,inset 0 0 0 5px rgba(233,220,192,.85);transform:rotate(3deg);pointer-events:none}
+#pinceau .btn{font-family:"Zen Antique",serif;font-size:17px;padding:10px 24px;background:var(--trait) center/100% 100% no-repeat;color:var(--page)}
+#pinceau .btn:hover{background-image:var(--trait-r)}
+
+/* =========================================================
+   D · LA SELLERIE — tout en cuir : coutures, lettres en relief, sangles à boucles
+   ========================================================= */
+#sellerie{--couv:#24160d;--couv-fg:#ead8b8;--couv-muted:#a88a68;--page:#5a3c26;--encre:#f0dfc0;--encre-2:#c9ac86;--accent:#d9a955;--vif:#ffb347;--vif-couv:#ffb347;
+  --f-titre:"Almendra SC",serif;--f-texte:"Spectral",serif;--f-chiffre:"DM Mono",monospace;--f-main:"Almendra",serif;--t-texte:16.5px;--t-titre:38px;--t-main:20px}
+#sellerie .feuille{background:radial-gradient(ellipse at 40% 25%,rgba(255,220,170,.12),transparent 55%),var(--grain),var(--grain),var(--page);outline:2px dashed rgba(240,223,192,.4);outline-offset:-11px;box-shadow:inset 0 0 40px rgba(0,0,0,.45);padding:30px 34px 34px}
+#sellerie h3{color:#ecd6ae;text-shadow:0 2px 0 rgba(0,0,0,.5),0 -1px 0 rgba(255,230,190,.15)}
+#sellerie .texte::first-letter{float:left;font-family:"Almendra SC",serif;font-size:56px;line-height:.85;padding:5px 8px 0 0;color:var(--accent);text-shadow:0 2px 0 rgba(0,0,0,.5)}
+#sellerie .liste li{border-bottom:1px dashed rgba(240,223,192,.25)}
+#sellerie .note{font-style:italic;color:var(--accent)}
+#sellerie .lien{color:var(--encre)}
+#sellerie .btn{font-family:"Almendra SC",serif;font-size:18px;padding:8px 18px;border-radius:3px;color:#2a1a0c;background:linear-gradient(135deg,#e7c97f,#a87d32 45%,#e9cf8d 55%,#8a6526);box-shadow:inset 0 0 0 1px rgba(0,0,0,.45),0 2px 0 rgba(0,0,0,.4)}
+#sellerie .onglets{padding-top:22px;gap:8px}
+#sellerie .onglet{width:46px;min-height:110px;margin-left:-2px;padding:36px 0 12px;writing-mode:vertical-rl;font-family:"Almendra SC",serif;font-size:16px;color:var(--couv-fg);background:var(--grain),#3a2516;outline:1px dashed rgba(240,223,192,.35);outline-offset:-5px;border-radius:0 4px 4px 0;box-shadow:2px 2px 4px rgba(0,0,0,.5)}
+#sellerie .onglet::before{content:"";position:absolute;top:9px;left:50%;width:20px;height:14px;margin-left:-10px;border:2.5px solid #8a6a36;border-radius:3px}
+#sellerie .onglet[aria-selected="true"]{background:var(--grain),var(--page)}
+#sellerie .onglet[aria-selected="true"]::before{border-color:#e2bd6e}
+
+/* =========================================================
+   E · LA FRESQUE — enduit à la chaux, ocre et rouge pompéien, frise grecque
+   ========================================================= */
+#fresque{--couv:#3b2a1e;--couv-fg:#f0e2cb;--couv-muted:#b89c7c;--page:#e3c9a0;--encre:#3a2414;--encre-2:#7a5a3e;--accent:#9e3b1f;--vif:#1f6e8c;--vif-couv:#6fc3dd;
+  --f-titre:"Forum",serif;--f-texte:"EB Garamond",serif;--f-chiffre:"IBM Plex Mono",monospace;--f-main:"EB Garamond",serif;--t-texte:17.5px;--t-titre:40px;--t-main:19px}
+#fresque .livre{grid-template-columns:minmax(0,1fr);grid-template-rows:auto 1fr;padding:16px 20px 26px}
+#fresque .onglets{flex-direction:row;order:-1;flex-wrap:wrap;padding:0 0 0 12px;gap:4px}
+#fresque .onglet{padding:14px 18px 8px;font-family:"Forum",serif;font-size:15px;text-transform:uppercase;letter-spacing:.14em;color:var(--encre);background:var(--grain),#c4a77b;border-radius:50% 50% 0 0/36% 36% 0 0}
+#fresque .onglet[aria-selected="true"]{background:var(--grain),var(--page)}
+#fresque .feuille{padding:40px 34px 34px;background:radial-gradient(ellipse at 20% 30%,rgba(255,245,220,.35),transparent 40%),radial-gradient(ellipse at 75% 70%,rgba(160,110,60,.22),transparent 45%),var(--grain),var(--page)}
+#fresque .feuille::before{content:"";position:absolute;left:0;right:0;top:12px;height:10px;opacity:.8;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='10'><path d='M0 9 H18 V1 H4 V6 H13 V4 H8' fill='none' stroke='%239e3b1f' stroke-width='1.3'/></svg>") repeat-x}
+#fresque h3{text-transform:uppercase;letter-spacing:.12em;text-shadow:0 1px 0 rgba(255,255,255,.35)}
+#fresque .texte::first-letter{float:left;font-family:"Forum",serif;font-size:58px;line-height:.85;padding:5px 8px 0 0;color:var(--accent)}
+#fresque .liste li{border-bottom:1px solid rgba(58,36,20,.2)}
+#fresque .note{font-style:italic}
+#fresque .btn{font-family:"Forum",serif;text-transform:uppercase;letter-spacing:.16em;font-size:15px;padding:9px 20px}
+</style>
+</head>
+<body>
+<div class="page">
+
+<section class="intro">
+  <small>Identité visuelle · essai n° 5</small>
+  <h1>Cinq styles plus épurés, plus marqués</h1>
+  <p>Moins d'objets « déguisés », plus de caractère dans le trait. Chaque piste garde la même règle : l'ancien pour ce qui raconte, une touche moderne pour ce qui vit. Clique sur les onglets de chaque livre.</p>
+  <nav class="sommaire">
+    <a href="#gravure">A · La gravure</a><a href="#atlas">B · L'atlas</a><a href="#pinceau">C · L'encre et la rouille</a><a href="#sellerie">D · La sellerie</a><a href="#fresque">E · La fresque</a>
+  </nav>
+</section>
+
+<section class="piste" id="gravure">
+  <div class="tete">
+    <div class="numero">Piste A</div>
+    <h2>La gravure</h2>
+    <p>Comme une gravure sur bois des vieux livres : deux encres seulement (brun-noir et rouge), des aplats francs, des cadres épais, des hachures. Peu de détails, mais un trait très fort.</p>
+    <dl><div><dt>Authentique</dt><dd>Gravure sur bois, lettres gothiques taillées, hachures.</dd></div>
+        <div><dt>Moderne</dt><dd>L'impression « décalée » : le rouge est légèrement à côté du noir, comme une affiche imprimée aujourd'hui.</dd></div></dl>
+  </div>
+  <div class="demo"><div class="maquette"></div><div class="charte"></div></div>
+</section>
+
+<section class="piste" id="atlas">
+  <div class="tete">
+    <div class="numero">Piste B</div>
+    <h2>L'atlas</h2>
+    <p>La plus minimaliste : un grand atlas ancien, très aéré, avec de grandes marges, des traits fins et de petites capitales élégantes. Les onglets ne sont presque rien : un numéro, un mot, un trait.</p>
+    <dl><div><dt>Authentique</dt><dd>Mise en page des atlas du XVIIIᵉ siècle, petites capitales, filets fins.</dd></div>
+        <div><dt>Moderne</dt><dd>Les chiffres et les onglets en lettres de machine, un fin trait bleu acier.</dd></div></dl>
+  </div>
+  <div class="demo"><div class="maquette"></div><div class="charte"></div></div>
+</section>
+
+<section class="piste" id="pinceau">
+  <div class="tete">
+    <div class="numero">Piste C · la plus proche de Kingdom</div>
+    <h2>L'encre et la rouille</h2>
+    <p>Papier de riz brun, encre noire posée au pinceau, rouge rouille. Les onglets et les boutons sont de vrais coups de pinceau, et chaque page porte un sceau rouge carré.</p>
+    <dl><div><dt>Authentique</dt><dd>Coups de pinceau, sceau, lettres anciennes d'Asie de l'Est (adaptées à notre alphabet).</dd></div>
+        <div><dt>Moderne</dt><dd>Les chiffres en lettres de machine et un cadre fin autour de ce qui est en direct.</dd></div></dl>
+  </div>
+  <div class="demo"><div class="maquette"></div><div class="charte"></div></div>
+</section>
+
+<section class="piste" id="sellerie">
+  <div class="tete">
+    <div class="numero">Piste D</div>
+    <h2>La sellerie</h2>
+    <p>Tout est en cuir, comme un équipement de cavalier ou un coffre de capitaine : coutures visibles, lettres en relief, onglets en sangles avec leur boucle. Une seule matière, beaucoup de présence.</p>
+    <dl><div><dt>Authentique</dt><dd>Cuir, coutures, laiton, lettres calligraphiées médiévales.</dd></div>
+        <div><dt>Moderne</dt><dd>Les chiffres en temps réel en ambre lumineux, comme un tableau de bord.</dd></div></dl>
+  </div>
+  <div class="demo"><div class="maquette"></div><div class="charte"></div></div>
+</section>
+
+<section class="piste" id="fresque">
+  <div class="tete">
+    <div class="numero">Piste E</div>
+    <h2>La fresque</h2>
+    <p>Un mur peint à la chaux, comme dans les villas antiques de Provence ou d'Italie : ocre, rouge pompéien, frise grecque, lettres romaines. Les onglets ont la forme d'arcades.</p>
+    <dl><div><dt>Authentique</dt><dd>Enduit à la chaux, frise, lettres gravées romaines.</dd></div>
+        <div><dt>Moderne</dt><dd>Le bleu des fresques égyptiennes, poussé en bleu vif pour les chiffres en direct.</dd></div></dl>
+  </div>
+  <div class="demo"><div class="maquette"></div><div class="charte"></div></div>
+</section>
+
+<section class="fin">
+  <h2>Pour viser juste la prochaine fois</h2>
+  <ul>
+    <li>Dis-moi ce qui ne t'a pas plu dans les essais précédents : trop chargé ? pas assez sombre ? les polices ? les onglets ?</li>
+    <li>Et si tu as une image en tête (un jeu, un film, une affiche, une photo), envoie-la moi : c'est le moyen le plus sûr de tomber juste.</li>
+  </ul>
+</section>
+</div>
+
+<script>
+const PAGES=[
+ {tab:'Monde',i:'M',r:'I',titre:'Le Monde',chapeau:"Aubagne et La Valentine, quartier par quartier.",
+  texte:"Douze quartiers se partagent la vallée de l'Huveaune. <mark>Trois ont prêté serment</mark> à ta bannière<span class=\"censure\"> — et l'un d'eux prépare déjà sa trahison</span>.",
+  liste:[['Pin Vert','Hôtel de ville','640 h.'],['Le Charrel','Pris il y a 6 jours','210 h.'],['Les Passons','Neutre','—']],
+  note:'→ fortifier Le Charrel !',live:'Jour 214',bouton:'Ouvrir la carte',lien:'Voir les routes',tampon:'Visé'},
+ {tab:'Armées',i:'A',r:'II',titre:'Armée du Pin Vert',chapeau:"En route vers Les Passons, par la vieille route d'Aix.",
+  texte:"Neuf cents hommes à pied, <mark>deux cents cavaliers</mark>, et un moral qui tient encore.",
+  liste:[['Fantassins','Lances et boucliers','900'],['Archers','Arcs courts','350'],['Cavaliers','Chevaux légers','200']],
+  note:'attendre les archers ?',live:'En marche · 00:18:40',bouton:'Attaquer',lien:'Changer de formation',tampon:'En marche'},
+ {tab:'Diplomatie',i:'D',r:'III',titre:'Pacte de non-agression',chapeau:"Proposé par Mathieu, seigneur de La Valentine.",
+  texte:"Les deux parties s'engagent à ne pas lever d'armée l'une contre l'autre pendant <mark>sept jours</mark>.<span class=\"censure\"> Clause secrète : partage du Charrel.</span>",
+  liste:[['Durée','','7 jours'],['Garantie','Versée par Mathieu','500 or'],['En cas de rupture','Connue de tous','traître']],
+  note:'méfiance…',live:'Expire dans 47:12:00',bouton:'Sceller le pacte',lien:'Refuser',tampon:'Proposé'},
+ {tab:'Journal',i:'J',r:'IV',titre:'Journal',chapeau:"Ce qui s'est passé pendant ton absence.",
+  texte:"Le vent a tourné sur la vallée. <mark>Une armée</mark> a été vue au sud.",
+  liste:[['Armée repérée','Près de La Valentine','14:32'],['Marché du Pin Vert','+420 pièces d’or','11:05'],['Raid repoussé','Au Charrel','08:47']],
+  note:'',live:"Aujourd'hui",bouton:'Tout marquer lu',lien:'Archives',tampon:'Lu'}
+];
+const CHARTES={
+ gravure:{c:[['Bois brûlé','#1D140D','Fond'],['Papier','#EFE3C9','Pages'],['Encre','#24170D','Texte, aplats'],['Rouge d’imprimeur','#A3291B','Le présent, décalage']],
+  p:[['Grenze Gotisch','Titres, onglets · 19 à 46 px','font-family:Grenze Gotisch;font-size:32px'],['Grenze','Texte · 17 px','font-family:Grenze;font-size:17px'],['Space Mono','Chiffres · 14 px','font-family:Space Mono;font-size:14px']]},
+ atlas:{c:[['Reliure','#2B2219','Fond'],['Papier d’atlas','#F1EBDE','Pages'],['Encre','#2D2419','Texte, filets'],['Gris-brun','#7B6B57','Légendes'],['Bleu acier','#2E5D7A','Le présent']],
+  p:[['Cormorant SC','Titres · 40 px','font-family:Cormorant SC;font-size:30px'],['Cormorant Garamond','Texte · 19 px','font-family:Cormorant Garamond;font-size:19px'],['JetBrains Mono','Onglets, chiffres · 11 à 14 px','font-family:JetBrains Mono;font-size:13px']]},
+ pinceau:{c:[['Laque','#1A120C','Fond'],['Papier de riz','#E9DCC0','Pages'],['Encre de Chine','#1C140E','Texte, pinceau'],['Rouille','#9C3A1E','Le présent, onglet ouvert'],['Sceau','#A3291B','Sceaux']],
+  p:[['Zen Antique','Titres, onglets · 17 à 40 px','font-family:Zen Antique;font-size:30px'],['Shippori Mincho','Texte · 16,5 px','font-family:Shippori Mincho;font-size:16px'],['IBM Plex Mono','Chiffres · 14 px','font-family:IBM Plex Mono;font-size:14px']]},
+ sellerie:{c:[['Cuir sombre','#24160D','Fond'],['Cuir','#5A3C26','Pages'],['Cuir des sangles','#3A2516','Onglets'],['Crème','#F0DFC0','Texte'],['Laiton','#D9A955','Boucles, boutons'],['Ambre','#FFB347','Le présent']],
+  p:[['Almendra SC','Titres, onglets · 16 à 38 px','font-family:Almendra SC;font-size:30px'],['Spectral','Texte · 16,5 px','font-family:Spectral;font-size:16px'],['DM Mono','Chiffres · 14 px','font-family:DM Mono;font-size:14px']]},
+ fresque:{c:[['Terre d’ombre','#3B2A1E','Fond'],['Enduit ocre','#E3C9A0','Pages'],['Pierre','#C4A77B','Onglets'],['Encre','#3A2414','Texte'],['Rouge pompéien','#9E3B1F','Frise, actions'],['Bleu égyptien','#1F6E8C','Le présent']],
+  p:[['Forum','Titres, onglets · 15 à 40 px','font-family:Forum;font-size:30px;letter-spacing:.1em'],['EB Garamond','Texte · 17,5 px','font-family:EB Garamond;font-size:17px'],['IBM Plex Mono','Chiffres · 14 px','font-family:IBM Plex Mono;font-size:14px']]}
+};
+const cadran='';
+document.querySelectorAll('.piste').forEach(piste=>{
+  const id=piste.id,ch=CHARTES[id];
+  piste.querySelector('.maquette').innerHTML=`
+   <div class="ressources">${cadran}<span class="jeu">Nom du jeu</span>
+     <span class="res"><small>Or</small><b>12 400</b><em>+320/h</em></span>
+     <span class="res"><small>Vivres</small><b>3 210</b><em>+85/h</em></span>
+     <span class="res"><small>Matériaux</small><b>860</b><em>+40/h</em></span>
+     <span class="res"><small>Hommes</small><b>1 450</b><em>/2 000</em></span>
+     <span class="heure${id==='registre'?' live-cur':''}">--:--:--</span></div>
+   <div class="livre">
+     <div class="feuilles">${PAGES.map((p,k)=>`
+       <article class="feuille${k?'':' active'}" role="tabpanel" aria-label="${p.tab}">
+         <div class="entete"><span>Folio ${p.r} · ${p.tab}</span><span class="live">${p.live}</span></div>
+         <h3>${p.titre}</h3><p class="chapeau">${p.chapeau}</p>
+         <p class="texte">${p.texte}</p>
+         <ul class="liste">${p.liste.map(l=>`<li><span>${l[0]}${l[1]?`<small>${l[1]}</small>`:''}</span><span class="num">${l[2]}</span></li>`).join('')}</ul>
+         ${p.note?`<p class="note">${p.note}</p>`:''}
+         <div class="actions"><button class="btn" type="button">${p.bouton}</button><button class="lien" type="button">${p.lien}</button></div>
+         <div class="tampon" aria-hidden="true">${p.tampon}</div>
+       </article>`).join('')}</div>
+     <nav class="onglets" role="tablist" aria-label="Sections du livre">${PAGES.map((p,k)=>`
+       <button class="onglet" role="tab" type="button" aria-selected="${!k}" aria-label="${p.tab}"><i class="o-n">N°0${k+1}</i><b class="o-i">${p.i}</b><b class="o-r">${p.r}</b><span>${p.tab}</span></button>`).join('')}</nav>
+   </div>`;
+  piste.querySelector('.charte').innerHTML=`
+   <div><h4>Couleurs</h4>${ch.c.map(c=>`<div class="sw"><i style="background:${c[1]}"></i><span>${c[0]}<small>${c[2]}</small></span><code>${c[1]}</code></div>`).join('')}</div>
+   <div><h4>Polices et tailles</h4>${ch.p.map(p=>`<div class="pol"><span class="ex" style="${p[2]}">${p[0]}</span><small>${p[1]}</small></div>`).join('')}</div>`;
+  const ong=[...piste.querySelectorAll('.onglet')],fe=[...piste.querySelectorAll('.feuille')];
+  ong.forEach((o,k)=>o.addEventListener('click',()=>{ong.forEach((x,j)=>x.setAttribute('aria-selected',j===k));fe.forEach((f,j)=>f.classList.toggle('active',j===k));}));
+});
+const deux=n=>String(n).padStart(2,'0');
+function tic(){const d=new Date();const h=deux(d.getHours())+':'+deux(d.getMinutes())+':'+deux(d.getSeconds());
+  document.querySelectorAll('.heure').forEach(e=>e.textContent=h);}
+tic();setInterval(tic,1000);
+</script>
+</body>
+</html>
