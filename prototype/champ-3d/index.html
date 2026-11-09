@@ -87,6 +87,14 @@ kbd{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:3px;p
 #fin{position:fixed;left:50%;top:38%;transform:translate(-50%,-50%);background:var(--panel);border:1px solid var(--gold);border-radius:6px;padding:18px 30px;text-align:center;display:grid;gap:10px;justify-items:center}
 #fin[hidden]{display:none}
 #fin b{font-size:44px;letter-spacing:.1em;text-transform:uppercase}
+#fin{max-width:calc(100vw - 24px);max-height:calc(100vh - 24px);overflow:auto;box-sizing:border-box}
+#fin-bilan{display:grid;gap:8px;text-align:left;width:min(620px,calc(100vw - 80px))}
+#fin-bilan table{border-collapse:collapse;width:100%;font-size:15px}
+#fin-bilan th,#fin-bilan td{padding:2px 8px;border-bottom:1px solid var(--line);text-align:left}
+#fin-bilan th{color:var(--gold);font-weight:600}
+#fin-bilan td.n{text-align:right;font-variant-numeric:tabular-nums}
+#fin-bilan .tombe{color:var(--red)}
+#fin-bilan p{margin:0;color:var(--muted)}
 /* barre du tour par tour */
 #tour{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);display:flex;align-items:center;gap:14px;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:7px 10px 7px 16px;font-size:19px;white-space:nowrap}
 #tour[hidden]{display:none}
@@ -122,7 +130,7 @@ kbd{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:3px;p
 <div id="tour" hidden><span id="tour-t"></span><span id="tour-c"></span><span id="tour-a"></span><span id="tour-p"></span><button type="button" id="b-end">Fin du tour</button></div>
 <div id="reglages" hidden></div>
 <div id="hits" aria-hidden="true"></div>
-<div id="fin" role="status" hidden><b id="fin-t"></b><span id="fin-s"></span><span class="row"><button type="button" id="fin-b">Recommencer la bataille</button><button type="button" id="fin-new">Nouvelle bataille</button></span></div>
+<div id="fin" role="status" hidden><b id="fin-t"></b><span id="fin-s"></span><div id="fin-bilan"></div><span class="row"><button type="button" id="fin-b">Recommencer la bataille</button><button type="button" id="fin-new">Nouvelle bataille</button></span></div>
 <div id="livret" hidden role="dialog" aria-modal="true" aria-labelledby="livret-t"><div class="box" id="livret-box"></div></div>
 <div id="setup" hidden role="dialog" aria-modal="true" aria-labelledby="setup-t"><div class="box" id="setup-box"></div></div>
 <div id="mmwrap"><div id="mmbar"><button type="button" id="mm-minus" title="Réduire la mini-carte" aria-label="Réduire la mini-carte">−</button><button type="button" id="mm-plus" title="Agrandir la mini-carte" aria-label="Agrandir la mini-carte">+</button><button type="button" id="mm-side" title="Changer la mini-carte de côté" aria-label="Changer la mini-carte de côté">⇄</button><button type="button" id="mm-hide" title="Masquer la mini-carte" aria-label="Masquer la mini-carte">×</button></div>
@@ -154,6 +162,7 @@ const REGLAGES_DEFAUT={
   actionsMax:5,        // actions par tour au maximum (règles : 5) ; une armée = un homme clé = 1 action
   manchesParTour:3,    // manches de combat calculées à chaque tour
   placement:59,        // secondes pour placer ses armées au début de la bataille (règles : 59 s) ; 0 = pas de placement
+  toursMax:30,         // au bout de ce nombre de tours, le camp qui a le plus de points gagne (règles : à fixer en simulant)
   manche:3,            // en temps réel seulement : secondes entre deux manches de combat
   valeurFantassin:1,   // puissance d'un fantassin
   valeurCavalier:2.5,  // puissance d'un cavalier
@@ -188,6 +197,7 @@ const REGLAGES_INFO=[
     ['marcheTour','Marche par tour','mètres',20,2000,10,'Distance parcourue en un tour par l\'infanterie sur terrain plat. La cavalerie va 2 fois plus loin ; forêt, pente et rivière ralentissent.'],
     ['actionsMax','Actions par tour','maximum',1,20,1,'Nombre d\'ordres qu\'on peut donner par tour. Une armée ne peut recevoir qu\'un ordre par tour.'],
     ['manchesParTour','Combat par tour','manches',1,20,1,'Nombre de manches de combat calculées à chaque tour pour les armées au contact.'],
+    ['toursMax','Tours au maximum','tours',1,500,1,'Au bout de ce nombre de tours, le camp qui a le plus de points gagne. Les règles le fixeront à la fin, en simulant des batailles.'],
     ['placement','Temps de placement','secondes',0,600,1,'Temps pour placer ses armées dans sa zone au début de la bataille (appliqué en recommençant). 0 = pas de placement.']]],
   ['Temps réel',[['manche','Durée d\'une manche','secondes',.5,30,.5,'Seulement quand le tour par tour est coupé : temps entre deux manches de combat.']]],
   ['Valeur d\'un homme',[
@@ -246,8 +256,9 @@ const BATAILLES={
 };
 function cleanArmy(list){if(!Array.isArray(list)||!list.length||list.length>8)return null;const out=[];
   for(const u of list){const men=Math.round(+(u&&u.men));if(!(men>=10&&men<=5000))return null;out.push({chef:String(u.chef||'?').slice(0,40),kind:u.kind==='cav'?'cav':'inf',men});}return out;}
-function loadBattle(){try{const c=JSON.parse(localStorage.getItem('shin-bataille')||'null');if(c){const b=cleanArmy(c.bleu),r=cleanArmy(c.rouge);if(b&&r)return{bleu:b,rouge:r};}}catch(e){}
-  return{bleu:BATAILLES.moyenne.bleu,rouge:BATAILLES.moyenne.rouge};}
+const cleanEnjeu=e=>({mise:!!(e&&e.mise),texte:String((e&&e.texte)||'').slice(0,80)});
+function loadBattle(){try{const c=JSON.parse(localStorage.getItem('shin-bataille')||'null');if(c){const b=cleanArmy(c.bleu),r=cleanArmy(c.rouge);if(b&&r)return{bleu:b,rouge:r,enjeu:cleanEnjeu(c.enjeu)};}}catch(e){}
+  return{bleu:BATAILLES.moyenne.bleu,rouge:BATAILLES.moyenne.rouge,enjeu:cleanEnjeu(null)};}
 const CONF=loadBattle();
 const effectifOf=army=>army.reduce((a,u)=>a+u.men,0)+Math.round(REGLAGES.garnisonQG);   // garde du QG comprise
 // règles (proposition, à ajuster) : 300 à 999 hommes → petite carte ; 1 000 à 2 999 → moyenne ; 3 000 et plus → grande. La plus grande armée choisit.
@@ -468,12 +479,13 @@ function resoudreManche(list){
   const r=REGLAGES,P=new Map(),loss=new Map(),inc=new Map();
   for(const a of list)P.set(a,Math.max(1e-6,puissanceBase(a)*(1+(Math.random()*2-1)*r.hasard/100)));
   for(const a of list){if(!a.foes.length)continue;const share=P.get(a)/a.foes.length;
-    for(const e of a.foes){const sh=share*angleMult(a,e);loss.set(e,(loss.get(e)||0)+r.pertes/100*e.men*Math.pow(sh/P.get(e),r.courbe));inc.set(e,(inc.get(e)||0)+sh);}}
+    for(const e of a.foes){const sh=share*angleMult(a,e),part=r.pertes/100*e.men*Math.pow(sh/P.get(e),r.courbe);if(!e.by)e.by=new Map();e.by.set(a,(e.by.get(a)||0)+part);loss.set(e,(loss.get(e)||0)+part);inc.set(e,(inc.get(e)||0)+sh);}}
   return list.filter(a=>a.foes.length).map(a=>{
     const ratio=(inc.get(a)||0)/P.get(a),crushed=a.kind!=='qg'&&ratio>=r.ecrasement&&(a.nouveau||a.foes.some(e=>e.nouveau));   // un QG résiste : jamais écrasé d'un coup
     let l=crushed?a.men:Math.min(a.men,Math.max(1,Math.round(loss.get(a)||0)));
     const out=a.kind==='qg'?a.men-l<=0:a.men-l<Math.max(1,r.deroute);if(out)l=a.men;
-    return{a,loss:l,crushed,out,ratio};});
+    const by=a.by||new Map(),tb=[...by.values()].reduce((x,y)=>x+y,0)||1;a.by=null;
+    return{a,loss:l,crushed,out,ratio,by:[...by].map(([att,v])=>[att,v/tb])};});
 }
 // rapport de force estimé (sans hasard), comme l'« aperçu avant l'attaque » des règles
 function rapportMot(x){const e=REGLAGES.ecrasement;return x>=e?'écrasant':x>=1.4?'avantage':x>1/1.4?'équilibré':x>1/e?'désavantage':'suicide';}
@@ -564,7 +576,7 @@ function makeTent(color){
 function regiment(o){
   const set=mats[o.kind==='cav'?'cav':'inf']; if(!set.length) return;
   const h=o.kind==='cav'?7:4.5;
-  const g={...o,men:o.men||o.cols*o.rows*HPS,soldiers:[],tx:null,tz:null,chase:null,contact:null,moving:false,foes:[],charge:false,nouveau:false,lastLoss:null,dead:false,wait:2+R()*6,shown:true,
+  const g={...o,men:o.men||o.cols*o.rows*HPS,soldiers:[],tx:null,tz:null,chase:null,contact:null,moving:false,foes:[],charge:false,nouveau:false,lastLoss:null,dead:false,kills:0,wait:2+R()*6,shown:true,
     hw:o.cols*o.dx/2,hd:o.rows*o.dz/2};
   for(let r=0;r<o.rows;r++)for(let k=0;k<o.cols;k++){
     const m=set[Math.floor(R()*set.length)];
@@ -586,7 +598,7 @@ function regiment(o){
     g.general=o.general;g.pvGen=REGLAGES.pvGeneral;g.pvGar=REGLAGES.pvGarde;g.men=Math.round(REGLAGES.garnisonQG)+3*g.pvGar+g.pvGen;
     g.tent=makeTent(PLAYERS[o.side].couleur);trimSoldiers(g);setMen(g,g.men);
   }
-  place(g,0);regs.push(g);
+  g.startMen=g.men;place(g,0);regs.push(g);allRegs.push(g);
 }
 const toWorld=(g,lx,lz)=>{const c=Math.cos(g.heading),s=Math.sin(g.heading);return[g.x+lx*c-lz*s,g.z+lx*s+lz*c];};
 function place(g,t){
@@ -832,8 +844,8 @@ function combatRound(n){
     for(const g of fighting){if(g.dead||g.tx!==null||g.engaged<REGLAGES.retournement)continue;
       const main=g.foes.filter(e=>!e.dead).sort((x,y)=>puissanceBase(y)-puissanceBase(x))[0];
       if(main&&angleOf(main,g)!=='face'){g.heading=Math.atan2(main.x-g.x,-(main.z-g.z));place(g,performance.now()/1000);msgs.push(`${g.name} se retourne face à ${main.name}`);}}
-    for(const {a,loss,crushed,out} of res){
-      tot.set(a,(tot.get(a)||0)+loss);
+    for(const {a,loss,crushed,out,by} of res){
+      tot.set(a,(tot.get(a)||0)+loss);for(const [att,f] of by)att.kills=(att.kills||0)+loss*f;
       if(out){const by=a.foes.map(e=>e.name).join(' et ');msgs.push(a.kind==='qg'?`Le général ${a.general} est tombé, son quartier général est pris ! (−3 points)`:crushed?`${a.name} est écrasé par ${by} ! (−1 point)`:`${a.name} est dispersé, ses derniers hommes quittent le champ de bataille (−1 point)`);if(a.side==='bleu')bad=true;removeReg(a);}
       else a.men-=loss;
     }
@@ -910,6 +922,7 @@ function startMove(){
 function endMove(t){
   for(const g of regs){if(g.moving){g.moving=false;place(g,t);}}
   combatRound(Math.max(1,Math.round(REGLAGES.manchesParTour)));
+  checkTurnLimit();
   if(ended){renderTour();return;}
   turn++;phase='ordres';phaseT=REGLAGES.dureeTour;
   drawReach();renderTour();renderSel(true);
@@ -920,7 +933,7 @@ function renderTour(){
   if(placing){const sec=Math.max(0,Math.ceil(phaseT));tourT.textContent='Placement';tourC.textContent=`${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`;tourC.classList.toggle('urgent',sec<=10);
     tourA.textContent='Clic droit dans ta zone · R pour tourner';document.getElementById('tour-p').textContent='';bEnd.textContent='Prêt';bEnd.disabled=false;return;}
   bEnd.textContent='Fin du tour';
-  tourT.textContent=`Tour ${turn}`;
+  tourT.textContent=`Tour ${turn} / ${Math.round(REGLAGES.toursMax)}`;
   document.getElementById('tour-p').textContent=`Points : ${pointsOf('bleu')} – ${pointsOf('rouge')}`;
   if(ended){tourC.textContent='Bataille terminée';tourC.classList.remove('urgent');tourA.textContent='';bEnd.disabled=true;return;}
   if(phase==='ordres'){const sec=Math.max(0,Math.ceil(phaseT));tourC.textContent=`Ordres · ${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`;tourC.classList.toggle('urgent',sec<=10);
@@ -939,17 +952,35 @@ document.getElementById('b-turn').addEventListener('click',e=>{
   drawReach();renderTour();renderSel(true);
 });
 const finEl=document.getElementById('fin');
+const allRegs=[];   // toutes les armées de la bataille, y compris celles tombées (pour le bilan)
 function checkEnd(){
   if(ended)return;const b=pointsOf('bleu')>0,r=pointsOf('rouge')>0;
-  if(b&&r)return;ended=true;
-  document.getElementById('fin-t').textContent=b?'Victoire':'Défaite';
-  document.getElementById('fin-s').textContent=b?`Le général ennemi et tous ses sous-généraux sont tombés. Il te reste ${pointsOf('bleu')} point(s).`:'Ton général et tous tes sous-généraux sont tombés.';
+  if(b&&r)return;
+  finish(b?'bleu':r?'rouge':null,b?`Le général ennemi et tous ses sous-généraux sont tombés. Il te reste ${pointsOf('bleu')} point(s).`:r?'Ton général et tous tes sous-généraux sont tombés.':'Les deux camps sont tombés en même temps.');
+}
+// nombre maximum de tours atteint : le camp qui a le plus de points gagne
+function checkTurnLimit(){
+  if(ended||turn<REGLAGES.toursMax)return;const pb=pointsOf('bleu'),pr=pointsOf('rouge');
+  finish(pb>pr?'bleu':pr>pb?'rouge':null,`Nombre maximum de tours atteint (${turn}) : ${pb} point(s) contre ${pr}.`);
+}
+function finish(winner,why){
+  ended=true;
+  document.getElementById('fin-t').textContent=winner==='bleu'?'Victoire':winner==='rouge'?'Défaite':'Égalité';
+  document.getElementById('fin-s').textContent=why;
+  const side=sd=>allRegs.filter(g=>g.side===sd),start=sd=>side(sd).reduce((a,g)=>a+(g.kind==='qg'?Math.round(g.startMen-3*g.pvGar-g.pvGen):g.startMen),0),
+    left=sd=>side(sd).filter(g=>!g.dead).reduce((a,g)=>a+(g.kind==='qg'?qgParts(g).garnison:g.men),0);
+  const row=g=>{const alive=!g.dead,men=g.kind==='qg'?(alive?qgParts(g).garnison:0):(alive?g.men:0);
+    return`<tr><td>${g.kind==='qg'?`${g.general} (général)`:g.name}</td><td>${g.side==='bleu'?'toi':'adversaire'}</td><td class="n">${fmtMen(men)}</td><td class="n">${fmtMen(Math.round(g.kills||0))}</td><td${alive?'':' class="tombe"'}>${alive?'en vie':'tombé'}</td></tr>`;};
+  const e=CONF.enjeu,enjeu=!e.mise?'Bataille amicale : pas d\'enjeu.':winner?`Mise${e.texte?` (${e.texte})`:''} remportée par ${winner==='bleu'?'toi':'l\'adversaire'}.`:`Égalité : la mise${e.texte?` (${e.texte})`:''} n'est remportée par personne.`;
+  document.getElementById('fin-bilan').innerHTML=`<p>Bataille en ${turn} tour(s). Toi : ${fmtMen(left('bleu'))} hommes sur ${fmtMen(start('bleu'))}. Adversaire : ${fmtMen(left('rouge'))} sur ${fmtMen(start('rouge'))}.</p>
+    <table><tr><th>Homme clé</th><th>Camp</th><th>Hommes restants</th><th>Ennemis mis hors de combat</th><th>État</th></tr>${allRegs.map(row).join('')}</table>
+    <p>${enjeu}</p><p>Tout le monde gagne de l'XP, même en bataille amicale (le calcul viendra avec les grades des généraux).</p>`;
   finEl.hidden=false;drawReach();renderTour();
 }
 // les armées de départ : composition choisie dans « Nouvelle bataille », placées par planSide()
 const ARMEES=PLAN;
 function deploy(){
-  select([]);regs.slice().forEach(removeReg);floats.forEach(f=>f.el.remove());floats.length=0;
+  select([]);regs.slice().forEach(removeReg);allRegs.length=0;floats.forEach(f=>f.el.remove());floats.length=0;
   ARMEES.forEach(o=>regiment(o.kind==='qg'?{...o,rows:Math.max(1,Math.ceil(REGLAGES.garnisonQG/HPS/o.cols))}:{...o}));known.clear();ended=false;finEl.hidden=true;combatAcc=0;
   turn=1;phase='ordres';phaseT=REGLAGES.dureeTour;startPlacement();
   updateFog();renderStatus();renderSel(true);renderTour();
@@ -959,7 +990,7 @@ function deploy(){
 const SETUP=document.getElementById('setup'),SB=document.getElementById('setup-box');
 let draft=null;
 const copyArmy=a=>a.map(u=>({...u}));
-function openSetup(){draft={bleu:copyArmy(CONF.bleu),rouge:copyArmy(CONF.rouge)};SETUP.hidden=false;renderSetup();}
+function openSetup(){draft={bleu:copyArmy(CONF.bleu),rouge:copyArmy(CONF.rouge),enjeu:{...CONF.enjeu}};SETUP.hidden=false;renderSetup();}
 function unitRow(side,u,i){
   const opts=CHEFS[side].concat(CHEFS[side].includes(u.chef)?[]:[u.chef]).map(c=>`<option${c===u.chef?' selected':''}>${c}</option>`).join('');
   return `<div class="unit" data-side="${side}" data-i="${i}"><select data-f="chef" aria-label="Chef de l'unité">${opts}</select>`+
@@ -980,15 +1011,21 @@ function renderSetup(){
     <div class="cols">${['bleu','rouge'].map(side=>`<div><h3>${side==='bleu'?'Ton armée':'Armée adverse'} · général ${GENERAUX[side]}</h3>${draft[side].map((u,i)=>unitRow(side,u,i)).join('')}
       <div class="row" style="margin-top:6px"><button type="button" data-add="${side}"${draft[side].length>=8?' disabled':''}>Ajouter une unité</button>${side==='rouge'?'<button type="button" data-copy="1">Copier mon armée</button>':''}</div>
       <p class="sum">${fmtMen(side==='bleu'?eb:er)} hommes, garde du QG comprise</p></div>`).join('')}</div>
+    <div class="row" style="align-items:center"><b style="color:var(--gold)">Enjeu</b>
+      <select data-enjeu="type" aria-label="Enjeu de la bataille"><option value="0"${draft.enjeu.mise?'':' selected'}>Bataille amicale (pas d'enjeu)</option><option value="1"${draft.enjeu.mise?' selected':''}>Avec une mise</option></select>
+      ${draft.enjeu.mise?`<input data-enjeu="texte" type="text" maxlength="80" placeholder="ex. 500 pièces d'or, le quartier des Passons" value="${draft.enjeu.texte.replace(/"/g,'&quot;')}" style="flex:1;min-width:200px" aria-label="Mise">`:''}</div>
     <p class="sum">Carte ${m.nom} (${km(m.W)} km × ${km(m.D)} km), choisie par la plus grande armée · 1 soldat affiché = ${hps} hommes</p>
     ${errs.map(e=>`<p class="warn">${e}</p>`).join('')}
     <div class="row"><button type="button" id="setup-go"${errs.length?' disabled':''}>Lancer la bataille</button><button type="button" id="setup-cancel">Annuler</button></div>`;
 }
-SB.addEventListener('change',e=>{const row=e.target.closest('.unit');if(!row)return;const u=draft[row.dataset.side][+row.dataset.i],f=e.target.dataset.f;
+SB.addEventListener('change',e=>{
+  if(e.target.dataset.enjeu==='type'){draft.enjeu.mise=e.target.value==='1';renderSetup();return;}
+  if(e.target.dataset.enjeu==='texte'){draft.enjeu.texte=e.target.value.slice(0,80);return;}
+  const row=e.target.closest('.unit');if(!row)return;const u=draft[row.dataset.side][+row.dataset.i],f=e.target.dataset.f;
   if(f==='chef')u.chef=e.target.value;else if(f==='kind')u.kind=e.target.value;else if(f==='men')u.men=Math.round(+e.target.value||0);
   renderSetup();});
 SB.addEventListener('click',e=>{const t=e.target.closest('button');if(!t)return;
-  if(t.dataset.preset){const b=BATAILLES[t.dataset.preset];draft={bleu:copyArmy(b.bleu),rouge:copyArmy(b.rouge)};}
+  if(t.dataset.preset){const b=BATAILLES[t.dataset.preset];draft={bleu:copyArmy(b.bleu),rouge:copyArmy(b.rouge),enjeu:draft.enjeu};}
   else if(t.dataset.add){const side=t.dataset.add,free=CHEFS[side].find(c=>!draft[side].some(u=>u.chef===c))||'?';draft[side].push({chef:free,kind:'inf',men:300});}
   else if(t.dataset.copy){draft.rouge=draft.bleu.map((u,i)=>({...u,chef:CHEFS.rouge[i]||u.chef}));}
   else if(t.dataset.f==='del'){const row=t.closest('.unit');draft[row.dataset.side].splice(+row.dataset.i,1);}
@@ -1049,7 +1086,10 @@ function renderLivret(){
   ${sec('Points et fin de la bataille',[
     'Une armée détruite (écrasée ou dispersée) = son homme clé tombé : <b>−1 point</b>.',
     'Le QG pris = le général tombé : <b>−3 points</b>.',
-    '<b>0 point = défaite.</b>'])}
+    '<b>0 point = défaite.</b>',
+    `Au bout de ${v('toursMax')} tours, le camp qui a le plus de points gagne (égalité s\'ils en ont autant). Le nombre définitif sera fixé en simulant des batailles.`,
+    'Le vainqueur remporte la <b>mise</b> choisie dans « Nouvelle bataille » ; une bataille amicale n\'a pas d\'enjeu. Pas de pillage en bataille rangée.',
+    'Tout le monde gagne de l\'XP, même en bataille amicale. Un bilan s\'affiche à la fin.'])}
   ${sec('Armées et cartes',[
     'Un <b>sous-général</b> dirige de 500 à 5 000 hommes ; en dessous de 500, c\'est un <b>chef d\'unité</b> (10 hommes au moins).',
     `La plus grande armée choisit la carte : jusqu'à 999 hommes, petite (${km(CARTES[0].W)} × ${km(CARTES[0].D)} km) ; jusqu'à 2 999, moyenne (${km(CARTES[1].W)} × ${km(CARTES[1].D)} km) ; au-delà, grande (${km(CARTES[2].W)} × ${km(CARTES[2].D)} km).`,
@@ -1062,7 +1102,7 @@ function renderLivret(){
   ${sec('Pas encore dans le prototype',[
     'Formations, archers.',
     'Effets des généraux, attaques spéciales, éclaireurs et espions.',
-    'Nombre maximum de tours, bataille à deux joueurs en ligne.'])}
+    'Bataille à deux joueurs en ligne, calcul de l\'XP.'])}
   </div>`;
   document.getElementById('livret-close').addEventListener('click',()=>{LIV.hidden=true;});
 }
