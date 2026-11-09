@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Menu principal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=IM+Fell+DW+Pica:ital@0;1&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&display=swap" rel="stylesheet">
+<style>
+/* Menu principal, disposition façon CK3 : personnage à gauche, infos en bas, boutons à droite,
+   la carte de Cassini (1778) d'Aubagne en fond. Matière : documents anciens du domaine public (matiere/). */
+:root{
+  --img-cassini:url("matiere/cassini.jpg");
+  --img-velin:url("matiere/velin.jpg");
+  --img-reliure:url("matiere/reliure.jpg");
+  --img-sceau:url("matiere/sceau.jpg");
+  --or:#e3c27a;--or-vif:#f6dfa0;--creme:#efe2c6;--encre:#2a1a0d;--sang:#7d1d14;--fer:#2a2622;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#0d0a07;color:var(--creme);font-family:"EB Garamond",Georgia,serif;font-size:17px}
+.page{max-width:1500px;margin:0 auto;padding:20px 16px 40px;display:grid;gap:14px}
+.page>header h1{margin:0;font-family:"IM Fell DW Pica",serif;font-style:italic;font-weight:400;font-size:clamp(28px,4vw,40px)}
+.page>header p{margin:4px 0 0;color:#b9a07c}
+
+.ecran{position:relative;overflow:hidden;aspect-ratio:16/9;min-height:620px;display:grid;
+  grid-template-columns:minmax(260px,24%) minmax(0,1fr) minmax(200px,16%);grid-template-rows:minmax(0,1fr) auto;
+  background:#cdb68a var(--img-cassini) center/cover;border:1px solid #000;isolation:isolate}
+.ecran::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 42%,transparent 30%,rgba(25,14,5,.55) 75%,rgba(10,6,3,.9) 100%),linear-gradient(rgba(60,35,10,.12),rgba(60,35,10,.12))}
+
+/* ----- Lieux sur la carte (exemples) ----- */
+.lieu{position:absolute;display:flex;align-items:center;gap:8px;font-family:"IM Fell English",serif;font-style:italic;font-size:20px;color:var(--encre);text-shadow:0 0 6px rgba(239,226,198,.9),0 0 2px rgba(239,226,198,.9);pointer-events:none}
+.lieu i{width:26px;height:26px;border-radius:50%;background:#7a1c12 var(--img-sceau) center/140%;box-shadow:0 3px 5px rgba(0,0,0,.6)}
+.lieu.neutre i{filter:grayscale(1) brightness(1.2);opacity:.85}
+
+/* ----- Bande gauche : le personnage ----- */
+.perso{grid-row:1;grid-column:1;position:relative;display:grid;grid-template-rows:auto minmax(0,1fr) auto;
+  background:linear-gradient(90deg,rgba(12,8,5,.96) 0%,rgba(12,8,5,.88) 70%,rgba(12,8,5,.0) 100%);padding:22px 26px 18px 22px}
+.blason{display:flex;gap:12px;align-items:center}
+.blason .ecu{width:46px;height:54px;background:linear-gradient(135deg,#7d1d14 50%,#e3c27a 50%);clip-path:polygon(0 0,100% 0,100% 55%,50% 100%,0 55%);box-shadow:inset 0 0 0 2px rgba(0,0,0,.4)}
+.blason b{display:block;font-family:"IM Fell DW Pica",serif;font-weight:400;font-size:26px;line-height:1.05;color:var(--or-vif)}
+.blason small{font-family:"IM Fell English",serif;font-style:italic;font-size:16px;color:#c9b08a}
+.socle{position:relative;display:grid;place-items:end center;margin:10px 0}
+.socle::before{content:"";position:absolute;left:10%;right:10%;bottom:0;height:40px;border-radius:50%;background:radial-gradient(ellipse,rgba(227,194,122,.28),transparent 70%)}
+.socle svg{width:min(78%,260px);height:auto;max-height:100%;fill:rgba(227,194,122,.13);stroke:rgba(227,194,122,.55);stroke-width:1.2}
+.socle .note3d{position:absolute;top:40%;left:50%;transform:translate(-50%,-50%);font-family:"IM Fell English SC",serif;font-size:14px;letter-spacing:.12em;color:rgba(239,226,198,.7);text-align:center;line-height:1.3}
+.fiche{background:#e3d2ae var(--img-velin) center/cover;color:var(--encre);padding:12px 14px;box-shadow:0 6px 14px rgba(0,0,0,.6),inset 0 0 18px rgba(90,50,15,.35)}
+.fiche .ligne{display:flex;justify-content:space-between;gap:8px;font-size:16px;padding:2px 0;border-bottom:1px solid rgba(42,26,13,.18)}
+.fiche .ligne:last-of-type{border-bottom:0}
+.fiche .ligne span{font-family:"IM Fell English SC",serif}
+.fiche .xp{height:6px;margin-top:8px;background:rgba(42,26,13,.2)}
+.fiche .xp i{display:block;height:100%;width:62%;background:var(--sang)}
+.traits{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.traits span{font-family:"IM Fell English SC",serif;font-size:13px;padding:1px 8px;border:1px solid rgba(42,26,13,.5)}
+
+/* ----- Bande droite : les boutons ----- */
+.boutons{grid-row:1;grid-column:3;display:flex;flex-direction:column;justify-content:center;gap:8px;padding:18px 14px 18px 18px;
+  background:linear-gradient(270deg,rgba(12,8,5,.95) 0%,rgba(12,8,5,.85) 70%,rgba(12,8,5,0) 100%)}
+.bouton{cursor:pointer;position:relative;display:flex;align-items:center;gap:12px;width:100%;padding:11px 14px 11px 12px;border:0;text-align:left;
+  font-family:"IM Fell English SC",serif;font-size:19px;letter-spacing:.03em;color:var(--or);
+  background:#3a2414 var(--img-reliure) center/420% auto;box-shadow:inset 0 0 0 1px rgba(0,0,0,.6),inset 0 0 14px rgba(0,0,0,.65),0 3px 6px rgba(0,0,0,.6);filter:brightness(.78);transition:filter .15s,transform .15s}
+.bouton:nth-child(2){background-position:20% 70%}.bouton:nth-child(3){background-position:80% 30%}.bouton:nth-child(4){background-position:30% 20%}
+.bouton:nth-child(5){background-position:70% 80%}.bouton:nth-child(6){background-position:50% 10%}.bouton:nth-child(7){background-position:10% 40%}
+.bouton:hover{filter:brightness(1);transform:translateX(-3px)}
+.bouton:focus-visible{outline:2px solid var(--or-vif);outline-offset:2px}
+.bouton svg{flex:0 0 22px;width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.bouton[aria-current="page"]{filter:none;color:var(--or-vif)}
+.bouton[aria-current="page"]::after{content:"";position:absolute;left:-14px;top:50%;width:30px;height:30px;margin-top:-15px;border-radius:50%;background:#7a1c12 var(--img-sceau) center/140%;box-shadow:0 2px 4px rgba(0,0,0,.7)}
+.bouton.petit{font-size:16px;padding:8px 12px;margin-top:10px}
+
+/* ----- Bande du bas : infos de base ----- */
+.infos{grid-row:2;grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:12px 22px;
+  background:linear-gradient(#3b3631,#1c1916);border-top:2px solid #0b0a09;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 -6px 18px rgba(0,0,0,.6)}
+.cartouche{display:grid;grid-template-columns:auto auto;column-gap:8px;align-items:baseline;padding:6px 14px;min-width:120px;
+  background:#e3d2ae var(--img-velin) center/cover;color:var(--encre);box-shadow:0 2px 4px rgba(0,0,0,.6),inset 0 0 10px rgba(90,50,15,.35)}
+.cartouche small{grid-column:1/-1;font-family:"IM Fell English SC",serif;font-size:13px;color:#6d543b;line-height:1.1}
+.cartouche b{font-family:"IM Fell DW Pica",serif;font-weight:400;font-size:24px;line-height:1.05}
+.cartouche em{font-style:italic;font-size:14px;color:#2f6b3a}
+.cartouche em.baisse{color:var(--sang)}
+.date{margin-left:auto;display:grid;text-align:right;line-height:1.15}
+.date b{font-family:"IM Fell DW Pica",serif;font-weight:400;font-size:22px;color:var(--or-vif)}
+.date small{font-family:"IM Fell English",serif;font-style:italic;font-size:15px;color:#c9b08a}
+.cloche{cursor:pointer;position:relative;width:46px;height:46px;border:0;border-radius:50%;background:radial-gradient(circle at 35% 30%,#5a524a,#1f1b18);color:var(--or);box-shadow:inset 0 0 0 2px rgba(227,194,122,.4),0 2px 4px rgba(0,0,0,.6)}
+.cloche svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.6}
+.cloche b{position:absolute;top:-4px;right:-4px;min-width:20px;height:20px;border-radius:10px;background:var(--sang);color:#fff;font:600 12px/20px "EB Garamond",serif}
+
+.notes{color:#b9a07c;font-size:16px;margin:0;padding-left:18px}
+.notes li{margin-bottom:4px}
+
+@media (max-width:900px){
+  .ecran{aspect-ratio:auto;min-height:0;grid-template-columns:1fr;grid-template-rows:260px auto auto auto}
+  .lieu{font-size:16px}
+  .perso{grid-row:2;grid-column:1;background:rgba(12,8,5,.94);grid-template-rows:auto 220px auto}
+  .boutons{grid-row:3;grid-column:1;display:grid;grid-template-columns:1fr 1fr;background:rgba(12,8,5,.94);padding:14px}
+  .bouton{font-size:16px}.bouton[aria-current="page"]::after{left:auto;right:-8px}
+  .infos{grid-row:4;padding:12px}
+  .cartouche{min-width:0;flex:1 1 40%}
+  .date{margin-left:0}
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <h1>Menu principal · essai 8</h1>
+    <p>Disposition façon CK3, sur la carte de Cassini d'Aubagne (1778) : ton personnage à gauche, les infos de base en bas, les boutons à droite. Le centre reste libre pour la carte.</p>
+  </header>
+
+  <div class="ecran">
+    <div class="lieu" style="left:44%;top:46%"><i></i>Pin Vert</div>
+    <div class="lieu" style="left:55%;top:30%"><i></i>Le Charrel</div>
+    <div class="lieu neutre" style="left:36%;top:66%"><i></i>Les Passons</div>
+
+    <aside class="perso" aria-label="Ton personnage">
+      <div class="blason"><div class="ecu" aria-hidden="true"></div><div><b>Ayoub</b><small>Seigneur du Pin Vert</small></div></div>
+      <div class="socle">
+        <svg viewBox="0 0 200 360" aria-hidden="true"><circle cx="100" cy="52" r="30"/><path d="M58 104 Q100 86 142 104 L156 200 L146 204 L138 150 L136 250 L124 352 L106 352 L100 262 L94 352 L76 352 L64 250 L62 150 L54 204 L44 200 Z"/><path d="M150 120 L178 40" stroke-width="3"/></svg>
+        <div class="note3d">Ton personnage<br>en 3D ici</div>
+      </div>
+      <div class="fiche">
+        <div class="ligne"><span>Niveau</span><b>12</b></div>
+        <div class="ligne"><span>Prestige</span><b>1 840</b></div>
+        <div class="ligne"><span>Quartiers</span><b>3</b></div>
+        <div class="xp" aria-label="Expérience : 62 %"><i></i></div>
+        <div class="traits"><span>Stratège</span><span>Ambitieux</span><span>Cavalier</span></div>
+      </div>
+    </aside>
+
+    <nav class="boutons" aria-label="Menu">
+      <button class="bouton" aria-current="page"><svg viewBox="0 0 24 24"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z M9 4v14 M15 6v14"/></svg>Le Monde</button>
+      <button class="bouton"><svg viewBox="0 0 24 24"><path d="M4 21V9l8-6 8 6v12 M9 21v-6h6v6"/></svg>Mon quartier</button>
+      <button class="bouton"><svg viewBox="0 0 24 24"><path d="M5 19L19 5 M15 5h4v4 M9 19H5v-4 M5 5l5 5 M19 19l-5-5"/></svg>Armées</button>
+      <button class="bouton"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c0-4 3-6 6-6s6 2 6 6 M15 15c3 0 6 1.5 6 5"/></svg>Personnages</button>
+      <button class="bouton"><svg viewBox="0 0 24 24"><path d="M4 12l4-4 4 3 4-3 4 4-8 8z M8 8l4 5"/></svg>Diplomatie</button>
+      <button class="bouton"><svg viewBox="0 0 24 24"><path d="M6 3h11l2 3v15H6z M9 8h7 M9 12h7 M9 16h5"/></svg>Journal</button>
+      <button class="bouton"><svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.5 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/></svg>Recrutement</button>
+      <button class="bouton petit"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3 M12 19v3 M2 12h3 M19 12h3 M4.9 4.9l2.1 2.1 M17 17l2.1 2.1 M4.9 19.1L7 17 M17 7l2.1-2.1"/></svg>Réglages</button>
+    </nav>
+
+    <footer class="infos" aria-label="Informations">
+      <div class="cartouche"><small>Or</small><b>12 400</b><em>+320/h</em></div>
+      <div class="cartouche"><small>Vivres</small><b>3 210</b><em>+85/h</em></div>
+      <div class="cartouche"><small>Matériaux</small><b>860</b><em class="baisse">−12/h</em></div>
+      <div class="cartouche"><small>Hommes</small><b>1 450</b><em>/ 2 000</em></div>
+      <div class="date"><b>Jour 214 de l'an I</b><small>Printemps · <span id="heure">--:--</span></small></div>
+      <button class="cloche" aria-label="3 nouvelles"><svg viewBox="0 0 24 24"><path d="M6 17V11a6 6 0 0 1 12 0v6l2 2H4z M10 21h4"/></svg><b>3</b></button>
+    </footer>
+  </div>
+
+  <ul class="notes">
+    <li>Les noms, chiffres et boutons sont des exemples. Les trois points sur la carte sont des sceaux de cire posés sur les quartiers (le gris = neutre).</li>
+    <li>La carte de Cassini existe en bien meilleure définition dans les archives (IGN, Gallica) : pour le jeu final, on prendra une version plus nette.</li>
+  </ul>
+</div>
+<script>
+const h=document.getElementById('heure');const t=()=>{const d=new Date();h.textContent=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');};t();setInterval(t,30000);
+document.querySelectorAll('.boutons .bouton:not(.petit)').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.boutons .bouton').forEach(x=>x.removeAttribute('aria-current'));b.setAttribute('aria-current','page');}));
+</script>
+</body>
+</html>
