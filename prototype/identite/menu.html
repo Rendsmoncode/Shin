@@ -8,153 +8,213 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=IM+Fell+DW+Pica:ital@0;1&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&display=swap" rel="stylesheet">
 <style>
-/* Menu principal d'après le croquis d'Ayoub : deux tentures pleine hauteur (personnage à gauche,
-   gros onglets à droite qui débordent sur la carte), bande d'infos en bas entre les deux,
-   carte de Cassini (1778) d'Aubagne en fond. Matière : documents anciens du domaine public (matiere/). */
+/* Menu principal modifiable : chaque élément se déplace et se redimensionne (mode « Modifier »).
+   Positions en % de l'écran 16:9 ; textes proportionnels à la largeur de l'écran (unités cqw).
+   Matière : documents anciens du domaine public (matiere/). */
 :root{
   --img-cassini:url("matiere/cassini.jpg");
-  --img-velin:url("matiere/velin.jpg");
-  --img-reliure:url("matiere/reliure.jpg");
+  --img-velin:url("matiere/velin_c.jpg");
+  --img-reliure:url("matiere/reliure_c.jpg");
   --img-sceau:url("matiere/sceau.jpg");
-  --or:#e3c27a;--or-vif:#f6dfa0;--creme:#efe2c6;--encre:#2a1a0d;--sang:#7d1d14;
+  --or:#e3c27a;--or-vif:#f6dfa0;--creme:#efe2c6;--encre:#2a1a0d;--sang:#7d1d14;--edit:#4fc3f7;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
-body{margin:0;background:#0d0a07;color:var(--creme);font-family:"EB Garamond",Georgia,serif;font-size:17px}
-.page{max-width:1500px;margin:0 auto;padding:20px 16px 40px;display:grid;gap:14px}
-.page>header h1{margin:0;font-family:"IM Fell DW Pica",serif;font-style:italic;font-weight:400;font-size:clamp(28px,4vw,40px)}
-.page>header p{margin:4px 0 0;color:#b9a07c}
+body{margin:0;background:#0d0a07;color:var(--creme);font-family:"EB Garamond",Georgia,serif;font-size:16px}
+.page{max-width:1500px;margin:0 auto;padding:16px 16px 40px;display:grid;gap:12px}
+h1{margin:0;font-family:"IM Fell DW Pica",serif;font-style:italic;font-weight:400;font-size:clamp(24px,3.4vw,36px)}
 
-.ecran{position:relative;overflow:hidden;aspect-ratio:16/9;min-height:620px;display:grid;
-  grid-template-columns:minmax(250px,23%) minmax(0,1fr) minmax(220px,19%);grid-template-rows:minmax(0,1fr) auto;
-  background:#cdb68a var(--img-cassini) center/cover;border:1px solid #000;isolation:isolate}
-.ecran::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+/* ----- Barre de l'éditeur ----- */
+.outils{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px;background:#1b140e;border:1px solid #3a2c1e;border-radius:8px;font-family:system-ui,sans-serif;font-size:14px}
+.outils button{font:inherit;cursor:pointer;border:1px solid #4a3a28;background:#2a2016;color:#efe2c6;border-radius:6px;padding:7px 11px;min-height:36px}
+.outils button:hover{border-color:var(--or)}
+.outils button[aria-pressed="true"]{background:var(--edit);color:#04222e;border-color:var(--edit);font-weight:600}
+.outils button.principal{background:#8a2e1c;border-color:#8a2e1c;font-weight:600}
+.outils .sep{width:1px;align-self:stretch;background:#3a2c1e}
+.outils .info{color:#b9a07c;min-width:180px}
+.outils .etat{color:#8fd19e}
+.outils .mode-edit{display:none}
+body.edition .outils .mode-edit{display:inline-flex}
+.aide{margin:0;color:#b9a07c;font-family:system-ui,sans-serif;font-size:14px}
+
+/* ----- L'écran ----- */
+.ecran{position:relative;overflow:hidden;width:min(100%,calc((100vh - 230px)*16/9));margin:0 auto;aspect-ratio:16/9;container-type:inline-size;
+  background:#cdb68a var(--img-cassini) center/cover;border:1px solid #000;isolation:isolate;user-select:none}
+.ecran::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
   background:radial-gradient(ellipse at 50% 45%,transparent 35%,rgba(25,14,5,.45) 80%,rgba(10,6,3,.8) 100%)}
+.el{position:absolute}
+.el.cache{display:none}
+body.edition .el.cache{display:block;opacity:.3}
 
-.lieu{position:absolute;display:flex;align-items:center;gap:8px;font-family:"IM Fell English",serif;font-style:italic;font-size:20px;color:var(--encre);text-shadow:0 0 6px rgba(239,226,198,.9),0 0 2px rgba(239,226,198,.9);pointer-events:none}
-.lieu i{width:26px;height:26px;border-radius:50%;background:#7a1c12 var(--img-sceau) center/140%;box-shadow:0 3px 5px rgba(0,0,0,.6)}
-.lieu.neutre i{filter:grayscale(1) brightness(1.2);opacity:.85}
+/* Tentures */
+.tenture{background:linear-gradient(rgba(14,9,5,.62),rgba(14,9,5,.8)),#3a2414 var(--img-reliure) center/cover;
+  box-shadow:0 0 0 1px rgba(0,0,0,.7),0 0 2cqw rgba(0,0,0,.75),inset 0 0 3cqw rgba(0,0,0,.7)}
+.tenture::before{content:"";position:absolute;inset:.5cqw;border:1px solid rgba(227,194,122,.35);pointer-events:none}
+.tenture::after{content:"";position:absolute;bottom:0;width:4.4cqw;height:4.4cqw;pointer-events:none;box-shadow:0 0 .8cqw rgba(0,0,0,.6)}
+.tenture.g::after{left:0;background:linear-gradient(45deg,#0d0a07 0 50%,#c9b08a 50%,#8a6f4c 70%,#3a2a1a 100%)}
+.tenture.d::after{right:0;background:linear-gradient(-45deg,#0d0a07 0 50%,#c9b08a 50%,#8a6f4c 70%,#3a2a1a 100%)}
 
-/* ----- Les deux tentures (pleine hauteur, coin du bas recourbé vers l'extérieur) ----- */
-.tenture{position:relative;grid-row:1/-1;z-index:2;
-  background:linear-gradient(rgba(14,9,5,.55),rgba(14,9,5,.75)),#3a2414 var(--img-reliure) center/260% auto;
-  box-shadow:0 0 0 1px rgba(0,0,0,.7),0 0 30px rgba(0,0,0,.75),inset 0 0 40px rgba(0,0,0,.7)}
-.tenture::before{content:"";position:absolute;inset:8px;border:1px solid rgba(227,194,122,.35);pointer-events:none}
-.tenture::after{content:"";position:absolute;bottom:0;width:70px;height:70px;pointer-events:none;
-  background:linear-gradient(var(--sens),#0d0a07 0 50%,#c9b08a 50%,#8a6f4c 70%,#3a2a1a 100%);box-shadow:0 0 12px rgba(0,0,0,.6)}
-.gauche{grid-column:1;--sens:45deg}
-.gauche::after{left:0}
-.droite{grid-column:3;--sens:-45deg}
-.droite::after{right:0}
+/* Personnage */
+.personnage{display:grid;place-items:end center}
+.personnage::before{content:"";position:absolute;left:10%;right:10%;bottom:0;height:8%;border-radius:50%;background:radial-gradient(ellipse,rgba(227,194,122,.3),transparent 70%)}
+.personnage svg{width:100%;height:100%;fill:rgba(227,194,122,.12);stroke:rgba(227,194,122,.6);stroke-width:1.3}
+.personnage span{position:absolute;top:28%;left:0;right:0;text-align:center;font-family:"IM Fell English SC",serif;font-size:1cqw;letter-spacing:.12em;color:rgba(239,226,198,.65);line-height:1.3}
 
-/* Personnage en pied + banderole du nom */
-.gauche{display:grid;place-items:end center;padding:20px 18px 90px}
-.gauche .silhouette{position:absolute;inset:26px 20px 70px;display:grid;place-items:end center}
-.gauche .silhouette::before{content:"";position:absolute;left:12%;right:12%;bottom:0;height:46px;border-radius:50%;background:radial-gradient(ellipse,rgba(227,194,122,.3),transparent 70%)}
-.gauche svg{height:100%;max-width:100%;fill:rgba(227,194,122,.12);stroke:rgba(227,194,122,.6);stroke-width:1.3}
-.gauche .note3d{position:absolute;top:30%;left:50%;transform:translateX(-50%);font-family:"IM Fell English SC",serif;font-size:14px;letter-spacing:.12em;color:rgba(239,226,198,.65);text-align:center;line-height:1.3}
-.banderole{position:absolute;left:-14px;right:-14px;top:57%;z-index:3;transform:rotate(-2deg);text-align:center;padding:10px 40px 12px;color:var(--encre);
-  background:#e3d2ae var(--img-velin) center/cover;box-shadow:0 8px 16px rgba(0,0,0,.65),inset 0 0 16px rgba(90,50,15,.4);
+/* Banderole du nom */
+.banderole{display:grid;place-content:center;text-align:center;color:var(--encre);
+  background:#e3d2ae var(--img-velin) center/cover;box-shadow:0 .6cqw 1cqw rgba(0,0,0,.65),inset 0 0 1cqw rgba(90,50,15,.4);
   clip-path:polygon(0 0,100% 0,94% 50%,100% 100%,0 100%,6% 50%)}
-.banderole b{display:block;font-family:"IM Fell DW Pica",serif;font-weight:400;font-size:clamp(26px,2.4vw,36px);line-height:1}
-.banderole small{font-family:"IM Fell English",serif;font-style:italic;font-size:16px;color:#6d543b}
+.banderole b{font-family:"IM Fell DW Pica",serif;font-weight:400;font-size:2.3cqw;line-height:1}
+.banderole small{font-family:"IM Fell English",serif;font-style:italic;font-size:1.05cqw;color:#6d543b}
 
-/* Gros onglets qui débordent sur la carte */
-.droite{display:flex;flex-direction:column;justify-content:center;gap:22px;padding:24px 18px 90px 0;overflow:visible}
-.onglet{cursor:pointer;position:relative;display:flex;align-items:center;gap:14px;margin-left:-38%;width:calc(138% - 4px);min-height:86px;padding:12px 20px 12px 26px;border:0;text-align:left;
-  font-family:"IM Fell English SC",serif;font-size:clamp(20px,1.8vw,27px);letter-spacing:.03em;color:var(--or);
-  background:#3a2414 var(--img-reliure) center/380% auto;box-shadow:inset 0 0 0 1px rgba(0,0,0,.6),inset 0 0 18px rgba(0,0,0,.6),0 8px 14px rgba(0,0,0,.65);
-  clip-path:polygon(1% 4%,99% 0,100% 92%,2% 100%);filter:brightness(.75);transition:filter .15s,transform .15s}
-.onglet:nth-child(2){background-position:20% 70%;clip-path:polygon(0 0,97% 3%,100% 100%,3% 96%)}
-.onglet:nth-child(3){background-position:80% 30%;clip-path:polygon(2% 2%,100% 0,98% 97%,0 100%)}
-.onglet:nth-child(4){background-position:30% 80%;clip-path:polygon(0 3%,98% 0,100% 98%,1% 100%)}
-.onglet:hover{filter:brightness(.95);transform:translateX(-6px)}
-.onglet:focus-visible{outline:2px solid var(--or-vif);outline-offset:3px}
-.onglet svg{flex:0 0 32px;width:32px;height:32px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
-.onglet small{display:block;font-family:"IM Fell English",serif;font-style:italic;font-size:15px;letter-spacing:0;color:#c9b08a;margin-top:2px}
-.onglet[aria-current="page"]{filter:none;color:var(--or-vif);transform:translateX(-14px)}
-.onglet[aria-current="page"]::after{content:"";position:absolute;right:14px;top:50%;width:42px;height:42px;margin-top:-21px;border-radius:50%;background:#7a1c12 var(--img-sceau) center/140%;box-shadow:0 3px 5px rgba(0,0,0,.7)}
-.petits{display:flex;justify-content:flex-end;gap:10px;padding-left:18px}
-.petits button{cursor:pointer;width:46px;height:46px;border:0;border-radius:50%;color:var(--or);background:radial-gradient(circle at 35% 30%,#5a4a3a,#1f1812);box-shadow:inset 0 0 0 2px rgba(227,194,122,.35),0 3px 6px rgba(0,0,0,.6)}
-.petits svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+/* Onglets */
+.onglet{cursor:pointer;display:flex;align-items:center;gap:1cqw;padding:0 1.4cqw;border:0;text-align:left;
+  font-family:"IM Fell English SC",serif;font-size:1.75cqw;letter-spacing:.03em;color:var(--or);
+  background:linear-gradient(rgba(22,13,6,.62),rgba(22,13,6,.62)),#3a2414 var(--img-reliure) var(--bp,center)/300% auto;text-shadow:0 1px 2px #000,0 0 6px rgba(0,0,0,.8);box-shadow:inset 0 0 0 1px rgba(0,0,0,.6),inset 0 0 1.2cqw rgba(0,0,0,.6);
+  clip-path:polygon(1% 4%,99% 0,100% 92%,2% 100%);filter:brightness(.78)}
+.onglet:nth-of-type(2n){clip-path:polygon(0 0,97% 3%,100% 100%,3% 96%)}
+.onglet:hover{filter:brightness(.95)}
+.onglet.actif{filter:none;color:var(--or-vif)}
+.onglet.actif::after{content:"";position:absolute;right:1cqw;top:50%;width:2.8cqw;height:2.8cqw;transform:translateY(-50%);border-radius:50%;background:#7a1c12 var(--img-sceau) center/140%;box-shadow:0 .2cqw .4cqw rgba(0,0,0,.7)}
+.ombre-onglet{filter:drop-shadow(0 .5cqw .8cqw rgba(0,0,0,.65))}
 
-/* ----- Bande d'infos, entre les deux tentures ----- */
-.infos{grid-row:2;grid-column:2;z-index:1;display:flex;flex-wrap:wrap;align-items:center;gap:8px 26px;padding:14px 28px 16px;color:var(--encre);
-  background:#e3d2ae var(--img-velin) center/cover;box-shadow:0 -8px 20px rgba(0,0,0,.55),inset 0 0 24px rgba(90,50,15,.4);border-top:3px double rgba(42,26,13,.55)}
+/* Infos */
+.infos{display:flex;align-items:center;gap:2cqw;padding:0 2cqw;color:var(--encre);overflow:hidden;
+  background:#e3d2ae var(--img-velin) center/cover;box-shadow:0 -.6cqw 1.4cqw rgba(0,0,0,.55),inset 0 0 1.6cqw rgba(90,50,15,.4);border-top:3px double rgba(42,26,13,.55)}
 .res{display:grid;line-height:1.05}
-.res small{font-family:"IM Fell English SC",serif;font-size:14px;color:#6d543b}
-.res b{font-family:"IM Fell DW Pica",serif;font-weight:400;font-size:26px}
-.res em{font-style:italic;font-size:14px;color:#2f6b3a}
-.res em.baisse{color:var(--sang)}
+.res small{font-family:"IM Fell English SC",serif;font-size:.95cqw;color:#6d543b}
+.res b{font-family:"IM Fell DW Pica",serif;font-weight:400;font-size:1.7cqw}
+.res em{font-style:italic;font-size:.9cqw;color:#2f6b3a}
 .date{margin-left:auto;text-align:right;line-height:1.15}
-.date b{display:block;font-family:"IM Fell DW Pica",serif;font-weight:400;font-size:22px}
-.date small{font-family:"IM Fell English",serif;font-style:italic;font-size:15px;color:#6d543b}
+.date b{display:block;font-family:"IM Fell DW Pica",serif;font-weight:400;font-size:1.4cqw}
+.date small{font-family:"IM Fell English",serif;font-style:italic;font-size:1cqw;color:#6d543b}
 
-.notes{color:#b9a07c;font-size:16px;margin:0;padding-left:18px}
-.notes li{margin-bottom:4px}
-
-@media (max-width:900px){
-  .ecran{aspect-ratio:auto;min-height:0;grid-template-columns:1fr;grid-template-rows:auto 240px auto auto}
-  .tenture{grid-row:auto}
-  .gauche{grid-row:1;grid-column:1;min-height:380px}
-  .lieu{font-size:16px}
-  .droite{grid-row:3;grid-column:1;padding:18px 14px 80px}
-  .onglet{margin-left:0;width:100%;min-height:64px}
-  .onglet[aria-current="page"]{transform:none}
-  .infos{grid-row:4;grid-column:1;padding:12px 16px}
-  .date{margin-left:0}
-}
+/* ----- Mode modification ----- */
+body.edition .el{cursor:move;outline:1px dashed rgba(79,195,247,.8);outline-offset:-1px}
+body.edition .el.choisi{outline:2px solid var(--edit);outline-offset:-2px;z-index:999!important}
+body.edition .el .etiq{display:block}
+.etiq{display:none;position:absolute;top:0;left:0;z-index:5;padding:1px 6px;background:var(--edit);color:#04222e;font:600 11px/1.4 system-ui,sans-serif;pointer-events:none;white-space:nowrap}
+.poignee{display:none;position:absolute;right:0;bottom:0;width:16px;height:16px;z-index:6;background:var(--edit);cursor:nwse-resize;clip-path:polygon(100% 0,100% 100%,0 100%)}
+body.edition .el.choisi .poignee{display:block}
+body.edition .onglet,body.edition .banderole{clip-path:none}
 </style>
 </head>
 <body>
 <div class="page">
-  <header>
-    <h1>Menu principal · essai 9, d'après ton croquis</h1>
-    <p>Deux tentures sur toute la hauteur : ton personnage en pied avec son nom en banderole à gauche, les gros onglets qui débordent sur la carte à droite. Les infos entre les deux, en bas. Le centre reste libre.</p>
-  </header>
+  <h1>Menu principal · à toi de le disposer</h1>
 
-  <div class="ecran">
-    <div class="lieu" style="left:44%;top:44%"><i></i>Pin Vert</div>
-    <div class="lieu" style="left:52%;top:26%"><i></i>Le Charrel</div>
-    <div class="lieu neutre" style="left:34%;top:60%"><i></i>Les Passons</div>
-
-    <aside class="tenture gauche" aria-label="Ton personnage">
-      <div class="silhouette">
-        <svg viewBox="0 0 200 400" aria-hidden="true"><circle cx="100" cy="50" r="30"/><path d="M56 100 Q100 82 144 100 L160 210 L148 214 L140 152 L138 270 L126 392 L106 392 L100 290 L94 392 L74 392 L62 270 L60 152 L52 214 L40 210 Z"/><path d="M152 118 L182 30" stroke-width="3"/><path d="M40 210 L34 260 L58 262 L52 214" /></svg>
-        <div class="note3d">Ton personnage<br>en 3D ici</div>
-      </div>
-      <div class="banderole"><b>Ayoub</b><small>Seigneur du Pin Vert</small></div>
-    </aside>
-
-    <nav class="tenture droite" aria-label="Menu">
-      <button class="onglet" aria-current="page"><svg viewBox="0 0 24 24"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z M9 4v14 M15 6v14"/></svg><span>Le Monde<small>La carte d'Aubagne</small></span></button>
-      <button class="onglet"><svg viewBox="0 0 24 24"><path d="M4 21V9l8-6 8 6v12 M9 21v-6h6v6"/></svg><span>Mon quartier<small>Bâtir, défendre</small></span></button>
-      <button class="onglet"><svg viewBox="0 0 24 24"><path d="M5 19L19 5 M15 5h4v4 M9 19H5v-4 M5 5l5 5 M19 19l-5-5"/></svg><span>Armées<small>Lever, déplacer</small></span></button>
-      <button class="onglet"><svg viewBox="0 0 24 24"><path d="M4 12l4-4 4 3 4-3 4 4-8 8z M8 8l4 5"/></svg><span>Diplomatie<small>Pactes, trahisons</small></span></button>
-      <div class="petits">
-        <button aria-label="Personnages"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c0-4 3-6 6-6s6 2 6 6 M15 15c3 0 6 1.5 6 5"/></svg></button>
-        <button aria-label="Journal"><svg viewBox="0 0 24 24"><path d="M6 3h11l2 3v15H6z M9 8h7 M9 12h7 M9 16h5"/></svg></button>
-        <button aria-label="Réglages"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3 M12 19v3 M2 12h3 M19 12h3 M4.9 4.9l2.1 2.1 M17 17l2.1 2.1 M4.9 19.1L7 17 M17 7l2.1-2.1"/></svg></button>
-      </div>
-    </nav>
-
-    <footer class="infos" aria-label="Informations">
-      <div class="res"><small>Or</small><b>12 400</b><em>+320/h</em></div>
-      <div class="res"><small>Vivres</small><b>3 210</b><em>+85/h</em></div>
-      <div class="res"><small>Matériaux</small><b>860</b><em class="baisse">−12/h</em></div>
-      <div class="res"><small>Hommes</small><b>1 450</b><em>/ 2 000</em></div>
-      <div class="date"><b>Jour 214 de l'an I</b><small>Printemps · <span id="heure">--:--</span></small></div>
-    </footer>
+  <div class="outils" role="toolbar" aria-label="Éditeur">
+    <button id="b-edit" aria-pressed="false">✋ Modifier la disposition</button>
+    <span class="mode-edit" style="gap:8px;align-items:center;flex-wrap:wrap">
+      <span class="sep"></span>
+      <button id="b-ajout">+ Onglet</button>
+      <button id="b-texte">Changer le texte</button>
+      <button id="b-avant">Devant</button>
+      <button id="b-arriere">Derrière</button>
+      <button id="b-cacher">Cacher / montrer</button>
+      <button id="b-suppr">Supprimer l'onglet</button>
+      <span class="sep"></span>
+      <button id="b-reset">Tout remettre</button>
+      <span class="info" id="info">Clique sur un élément</span>
+    </span>
+    <span class="sep"></span>
+    <button class="principal" id="b-envoyer">Envoyer à Claude</button>
+    <span class="etat" id="etat" role="status"></span>
   </div>
+  <p class="aide">Clique sur « Modifier la disposition », puis : glisse un élément pour le déplacer, tire le coin bleu en bas à droite pour changer sa taille. Les flèches du clavier déplacent l'élément choisi (Maj + flèches pour aller plus vite). Ta disposition est gardée dans ton navigateur ; « Envoyer à Claude » me la transmet.</p>
 
-  <ul class="notes">
-    <li>Les noms, chiffres et onglets sont des exemples. Les petits boutons ronds sous les onglets (personnages, journal, réglages) sont une proposition pour ne garder que 4 gros onglets.</li>
-    <li>La carte de Cassini existe en bien meilleure définition dans les archives (IGN, Gallica) : pour le jeu final, on prendra une version plus nette.</li>
-  </ul>
+  <div class="ecran" id="ecran"></div>
 </div>
+
 <script>
-const h=document.getElementById('heure');const t=()=>{const d=new Date();h.textContent=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');};t();setInterval(t,30000);
-document.querySelectorAll('.onglet').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.onglet').forEach(x=>x.removeAttribute('aria-current'));b.setAttribute('aria-current','page');}));
+const DEFAUT={
+  elements:[
+    {id:'tg',type:'tentureG',nom:'Tenture du personnage',x:0,y:0,w:23.75,h:100,z:1},
+    {id:'perso',type:'personnage',nom:'Personnage (3D)',x:3,y:4,w:18,h:78,z:2},
+    {id:'nom',type:'banderole',nom:'Banderole du nom',x:1.2,y:51,w:21,h:10,z:3,texte:'Ayoub',sous:'Seigneur du Pin Vert'},
+    {id:'td',type:'tentureD',nom:'Tenture des boutons',x:82.5,y:0,w:17.5,h:100,z:1},
+    {id:'o1',type:'onglet',nom:'Onglet',x:73.4,y:9,w:21.6,h:12.3,z:4,texte:'Le Monde',actif:true},
+    {id:'o2',type:'onglet',nom:'Onglet',x:73.6,y:26.2,w:20.8,h:12.8,z:4,texte:'Mon quartier'},
+    {id:'o3',type:'onglet',nom:'Onglet',x:73.5,y:45,w:20.3,h:15.6,z:4,texte:'Armées'},
+    {id:'infos',type:'infos',nom:"Bande d'infos",x:23.75,y:86,w:58.75,h:14,z:2}
+  ]};
+const ICONES={'Le Monde':'M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z M9 4v14 M15 6v14','Mon quartier':'M4 21V9l8-6 8 6v12 M9 21v-6h6v6','Armées':'M5 19L19 5 M15 5h4v4 M9 19H5v-4 M5 5l5 5 M19 19l-5-5','Diplomatie':'M4 12l4-4 4 3 4-3 4 4-8 8z M8 8l4 5'};
+const CLE='shin-menu-disposition-v1';
+let etat=charger(),choisi=null,edition=false;
+function charger(){try{const s=localStorage.getItem(CLE);if(s)return JSON.parse(s);}catch(e){}return JSON.parse(JSON.stringify(DEFAUT));}
+function garder(){try{localStorage.setItem(CLE,JSON.stringify(etat));}catch(e){}}
+const ecran=document.getElementById('ecran');
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function contenu(e){
+  switch(e.type){
+    case 'tentureG':return ['tenture g',''];
+    case 'tentureD':return ['tenture d',''];
+    case 'personnage':return ['personnage','<svg viewBox="0 0 200 400" preserveAspectRatio="xMidYMax meet" aria-hidden="true"><circle cx="100" cy="50" r="30"/><path d="M56 100 Q100 82 144 100 L160 210 L148 214 L140 152 L138 270 L126 392 L106 392 L100 290 L94 392 L74 392 L62 270 L60 152 L52 214 L40 210 Z"/><path d="M152 118 L182 30" stroke-width="3"/></svg><span>Ton personnage<br>en 3D ici</span>'];
+    case 'banderole':return ['banderole',`<b>${esc(e.texte||'')}</b><small>${esc(e.sous||'')}</small>`];
+    case 'onglet':{const p=ICONES[e.texte]||'M5 12h14 M12 5v14';return ['onglet'+(e.actif?' actif':''),`<svg viewBox="0 0 24 24" style="flex:0 0 2.2cqw;width:2.2cqw;height:2.2cqw;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><path d="${p}"/></svg><span>${esc(e.texte||'')}</span>`];}
+    case 'infos':return ['infos','<div class="res"><small>Or</small><b>12 400</b><em>+320/h</em></div><div class="res"><small>Vivres</small><b>3 210</b><em>+85/h</em></div><div class="res"><small>Matériaux</small><b>860</b><em>+40/h</em></div><div class="res"><small>Hommes</small><b>1 450</b><em>/ 2 000</em></div><div class="date"><b>Jour 214 de l\'an I</b><small>Printemps</small></div>'];
+  }
+}
+function rendre(){
+  ecran.querySelectorAll('.el').forEach(n=>n.remove());
+  etat.elements.forEach((e,i)=>{
+    const [cls,html]=contenu(e);const n=document.createElement(e.type==='onglet'?'button':'div');
+    n.className='el '+cls+(e.cache?' cache':'')+(choisi===e.id?' choisi':'');n.dataset.id=e.id;
+    if(e.type==='onglet'){n.type='button';n.style.setProperty('--bp',['20% 70%','80% 30%','30% 80%','60% 20%','10% 50%'][i%5]);}
+    Object.assign(n.style,{left:e.x+'%',top:e.y+'%',width:e.w+'%',height:e.h+'%',zIndex:e.z});
+    n.innerHTML=html+`<span class="etiq">${esc(e.type==='onglet'?'Onglet « '+(e.texte||'')+' »':e.nom)}</span><span class="poignee"></span>`;
+    ecran.appendChild(n);
+  });
+  afficherInfo();
+}
+function el(id){return etat.elements.find(e=>e.id===id);}
+function afficherInfo(){const e=choisi&&el(choisi);document.getElementById('info').textContent=e?`${e.type==='onglet'?'Onglet « '+e.texte+' »':e.nom} · x ${e.x.toFixed(1)} % · y ${e.y.toFixed(1)} % · ${e.w.toFixed(1)} × ${e.h.toFixed(1)} %`:'Clique sur un élément';}
+const arr=v=>Math.round(v*4)/4;
+// Glisser / redimensionner
+let geste=null;
+ecran.addEventListener('pointerdown',ev=>{
+  const n=ev.target.closest('.el');
+  if(!edition){if(n&&n.classList.contains('onglet')){etat.elements.forEach(e=>{if(e.type==='onglet')e.actif=e.id===n.dataset.id;});garder();rendre();}return;}
+  if(!n){choisi=null;rendre();return;}
+  ev.preventDefault();choisi=n.dataset.id;const e=el(choisi);const r=ecran.getBoundingClientRect();
+  geste={mode:ev.target.classList.contains('poignee')?'taille':'move',sx:ev.clientX,sy:ev.clientY,o:{...e},r};
+  rendre();ecran.setPointerCapture(ev.pointerId);
+});
+ecran.addEventListener('pointermove',ev=>{
+  if(!geste)return;const e=el(choisi);const dx=(ev.clientX-geste.sx)/geste.r.width*100,dy=(ev.clientY-geste.sy)/geste.r.height*100;
+  if(geste.mode==='move'){e.x=arr(geste.o.x+dx);e.y=arr(geste.o.y+dy);}else{e.w=Math.max(2,arr(geste.o.w+dx));e.h=Math.max(2,arr(geste.o.h+dy));}
+  const n=ecran.querySelector(`[data-id="${choisi}"]`);Object.assign(n.style,{left:e.x+'%',top:e.y+'%',width:e.w+'%',height:e.h+'%'});afficherInfo();
+});
+const fin=()=>{if(geste){geste=null;garder();}};
+ecran.addEventListener('pointerup',fin);ecran.addEventListener('pointercancel',fin);
+document.addEventListener('keydown',ev=>{
+  if(!edition||!choisi||!ev.key.startsWith('Arrow')||/INPUT|TEXTAREA/.test(document.activeElement.tagName))return;
+  ev.preventDefault();const e=el(choisi),p=ev.shiftKey?2:.25;
+  if(ev.key==='ArrowLeft')e.x-=p;if(ev.key==='ArrowRight')e.x+=p;if(ev.key==='ArrowUp')e.y-=p;if(ev.key==='ArrowDown')e.y+=p;garder();rendre();
+});
+// Boutons de l'éditeur
+const bEdit=document.getElementById('b-edit');
+bEdit.onclick=()=>{edition=!edition;document.body.classList.toggle('edition',edition);bEdit.setAttribute('aria-pressed',edition);bEdit.textContent=edition?'✓ Terminer':'✋ Modifier la disposition';if(!edition)choisi=null;rendre();};
+document.getElementById('b-ajout').onclick=()=>{const t=prompt("Texte du nouvel onglet :",'Diplomatie');if(!t)return;const ong=etat.elements.filter(e=>e.type==='onglet');const der=ong[ong.length-1]||{x:73,y:0,w:21,h:12};
+  const id='o'+Date.now();etat.elements.push({id,type:'onglet',nom:'Onglet',x:der.x,y:Math.min(85,der.y+der.h+4),w:der.w,h:der.h,z:4,texte:t});choisi=id;garder();rendre();};
+document.getElementById('b-texte').onclick=()=>{const e=choisi&&el(choisi);if(!e||!(e.type==='onglet'||e.type==='banderole'))return alert('Choisis d\'abord un onglet ou la banderole.');
+  const t=prompt('Texte :',e.texte||'');if(t===null)return;e.texte=t;if(e.type==='banderole'){const s=prompt('Titre sous le nom :',e.sous||'');if(s!==null)e.sous=s;}garder();rendre();};
+document.getElementById('b-avant').onclick=()=>{const e=choisi&&el(choisi);if(!e)return;e.z=Math.max(...etat.elements.map(x=>x.z))+1;garder();rendre();};
+document.getElementById('b-arriere').onclick=()=>{const e=choisi&&el(choisi);if(!e)return;e.z=Math.max(0,Math.min(...etat.elements.map(x=>x.z))-1);garder();rendre();};
+document.getElementById('b-cacher').onclick=()=>{const e=choisi&&el(choisi);if(!e)return;e.cache=!e.cache;garder();rendre();};
+document.getElementById('b-suppr').onclick=()=>{const e=choisi&&el(choisi);if(!e||e.type!=='onglet')return alert('Choisis d\'abord un onglet.');etat.elements=etat.elements.filter(x=>x!==e);choisi=null;garder();rendre();};
+document.getElementById('b-reset').onclick=()=>{if(!confirm('Revenir à la disposition de départ ?'))return;etat=JSON.parse(JSON.stringify(DEFAUT));choisi=null;garder();rendre();};
+// Envoi à Claude
+const etatTxt=document.getElementById('etat');let db=null;
+(async()=>{try{db=await window.claude?.use('db');}catch(e){}})();
+document.getElementById('b-envoyer').onclick=async function(){
+  if(!db){etatTxt.style.color='#e8a07a';etatTxt.textContent="L'envoi n'est possible que dans l'artefact sur claude.ai.";return;}
+  this.disabled=true;etatTxt.style.color='';etatTxt.textContent='Envoi…';
+  try{await db.collection('dispositions').add({quand:Date.now(),elements:etat.elements});etatTxt.textContent='Envoyé ! Dis-le-moi dans la conversation.';}
+  catch(e){etatTxt.style.color='#e8a07a';etatTxt.textContent="L'envoi a échoué ("+(e&&e.code||'erreur')+'), réessaie.';}
+  this.disabled=false;
+};
+rendre();
 </script>
 </body>
 </html>
