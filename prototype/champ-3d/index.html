@@ -90,6 +90,12 @@ kbd{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:3px;p
 <script>
 (function(){
 const status=document.getElementById('status');
+// en cas d'erreur, la montrer dans le panneau (pour pouvoir la signaler)
+let lastErr='';
+function showErr(err){const m=(err&&err.message)||String(err);if(m===lastErr)return;lastErr=m;
+  let el=document.getElementById('err');if(!el){el=document.createElement('p');el.id='err';el.style.color='#ff8a7a';status.after(el);}
+  el.textContent='Erreur (à signaler) : '+m+(err&&err.stack?' · '+String(err.stack).split('\n')[1].trim():'');}
+window.addEventListener('error',e=>showErr(e.error||e.message));
 if(!window.THREE){status.textContent='La bibliothèque 3D n\'a pas pu se charger.';return;}
 
 // =====================================================================================
@@ -111,6 +117,7 @@ const REGLAGES_DEFAUT={
   cavPente:.7,         // cavalerie sur une colline ou une pente (règles : ×0,7 en montagne)
   infForet:1.2,        // infanterie en forêt (règles : ×1,2)
   gue:.8,              // toute armée qui se bat dans la rivière (proposition, pas dans les règles)
+  contact:15,          // mètres entre les deux blocs à partir desquels deux armées ennemies se battent
   charge:1,            // bonus de l'armée qui attaque, à la première manche seulement (1 = pas de bonus)
   hasard:10,           // ± % de hasard sur la puissance à chaque manche (règles : ±10 %)
   pertes:7,            // % de son effectif qu'une armée perd par manche quand les puissances sont égales
@@ -137,6 +144,7 @@ const REGLAGES_INFO=[
     ['infForet','Infanterie en forêt','×',.1,3,.05,'Multiplicateur de l\'infanterie qui se bat en forêt.'],
     ['gue','Tous, dans la rivière','×',.1,3,.05,'Multiplicateur de toute armée qui se bat dans la rivière (gué).']]],
   ['Pertes',[
+    ['contact','Distance de contact','mètres',1,100,1,'Écart entre les blocs de deux armées ennemies à partir duquel elles se battent.'],
     ['charge','Bonus de charge','× (1re manche)',.5,3,.05,'Bonus de l\'armée qui attaque, à la première manche seulement. 1 = pas de bonus.'],
     ['hasard','Hasard','± %',0,50,1,'Variation au hasard de la puissance de chaque armée, à chaque manche.'],
     ['pertes','Pertes à égalité','% par manche',.5,50,.5,'Part de son effectif qu\'une armée perd par manche quand les deux puissances sont égales.'],
@@ -453,7 +461,13 @@ function drawOutline(g){
 function showReg(g,v){if(g.shown===v)return;g.shown=v;g.soldiers.forEach(s=>s.sp.visible=v);g.shadows.visible=v;g.banner.visible=v;}
 const corners=g=>[[g.x,g.z],toWorld(g,-g.hw,-g.hd),toWorld(g,g.hw,-g.hd),toWorld(g,g.hw,g.hd),toWorld(g,-g.hw,g.hd)];
 const isHidden=g=>corners(g).every(([x,z])=>inForest(x,z));
-const contactDist=(a,b)=>Math.hypot(a.x-b.x,a.z-b.z)<a.hd+b.hd+10;
+// écart en mètres entre un point et le bloc d'une armée (0 si le point est dedans)
+function gapPt(g,x,z){const c=Math.cos(-g.heading),s=Math.sin(-g.heading),lx=(x-g.x)*c-(z-g.z)*s,lz=(x-g.x)*s+(z-g.z)*c;
+  return Math.hypot(Math.max(0,Math.abs(lx)-g.hw),Math.max(0,Math.abs(lz)-g.hd));}
+const RECT_PTS=[[0,0],[-1,-1],[1,-1],[1,1],[-1,1],[0,-1],[1,0],[0,1],[-1,0]];
+// écart entre les blocs de deux armées, en tenant compte de leur largeur et de leur orientation
+function gap(a,b){let m=1e9;for(const [u,v] of RECT_PTS){const [x,z]=toWorld(a,u*a.hw,v*a.hd);m=Math.min(m,gapPt(b,x,z));const [x2,z2]=toWorld(b,u*b.hw,v*b.hd);m=Math.min(m,gapPt(a,x2,z2));}return m;}
+const contactDist=(a,b)=>Math.hypot(a.x-b.x,a.z-b.z)<a.hw+a.hd+b.hw+b.hd+REGLAGES.contact&&gap(a,b)<REGLAGES.contact;
 
 // ---------- marche ----------
 const TURN=.55;
@@ -602,9 +616,11 @@ function renderSel(force){
   if(selected.length===1){const g=selected[0],t=terrainName(g.x,g.z),ux=g.tx!==null?Math.sin(g.heading):0,uz=g.tx!==null?-Math.cos(g.heading):0;
     const foes=regs.filter(e=>e.side!==g.side&&contactDist(g,e)),rf=foes.length?rapport(g,foes):0;
     const etat=foes.length?`<span class="warn">Au combat contre ${foes.map(e=>e.name).join(' et ')}</span><span><span class="k">Rapport de force :</span> ${rapportMot(rf)} (×${rf.toFixed(2).replace('.',',')})</span>${g.lastLoss!=null?`<span><span class="k">${turnMode?'Dernier tour':'Dernière manche'} :</span> −${fmtMen(g.lastLoss)} hommes (ennemi : −${fmtMen(foes.reduce((s,e)=>s+(e.lastLoss||0),0))})</span>`:''}`:g.chase?`Marche sur ${g.chase.name}`:g.tx!==null?'En marche':'À l\'arrêt';
+    const near=foes.length?null:regs.filter(e=>e.side!==g.side&&e.shown).map(e=>[e,gap(g,e)]).sort((a,b)=>a[1]-b[1])[0];
+    const nearInfo=near&&near[1]<120?`<span class="warn">${near[0].name} à ${Math.round(near[1])} m : envoie l'armée sur lui (clic droit sur son armée) pour attaquer</span>`:'';
     const dist=g.tx!==null?Math.hypot(g.tx-g.x,g.tz-g.z):0;
     const tourInfo=!turnMode?'':`<span><span class="k">Ce tour :</span> ${g.acted===turn?'ordre donné':actionsLeft()>0?'peut recevoir un ordre':'plus d\'action disponible'}${dist>2?` · <span class="k">arrivée dans</span> ${Math.max(1,Math.ceil(dist/reachOf(g)))} tour(s) environ`:''}</span>`;
-    h=`<b>${g.name}</b><span>${g.kind==='cav'?'Cavalerie':'Infanterie'} · ${fmtMen(g.men)} hommes</span><span>${etat}</span>${tourInfo}
+    h=`<b>${g.name}</b><span>${g.kind==='cav'?'Cavalerie':'Infanterie'} · ${fmtMen(g.men)} hommes</span><span>${etat}</span>${nearInfo}${tourInfo}
       <span><span class="k">Terrain :</span> ${t}${g.tx!==null?` · <span class="k">vitesse</span> ×${(terrainMult(g.kind,g.x,g.z,ux,uz)).toFixed(2).replace('.',',')}`:''}</span>
       <span><span class="k">Vision :</span> ${fmt(g.range||VISION)} m${(g.range||0)>VISION?' (colline : +50 %)':''}</span>
       ${isHidden(g)?'<span class="hid">Caché dans la forêt : invisible à plus de 50 m</span>':''}`;
@@ -884,7 +900,7 @@ function resize(){const w=window.innerWidth,h=window.innerHeight;renderer.setSiz
   const r=mm.getBoundingClientRect(),k=Math.min(2,window.devicePixelRatio||1);mm.width=Math.round(r.width*k);mm.height=Math.round(r.height*k);}
 window.addEventListener('resize',resize);resize();
 function loop(now){const dt=Math.min(.1,(now-last)/1000),t=now/1000;last=now;
-  if(ready){
+  if(ready)try{
     if(ended){for(const g of regs)if(g.contact)place(g,t);}
     else if(turnMode)turnTick(dt,t);
     else{for(const g of regs){if(g.side==='rouge')ai(g,dt);const was=g.moving;step(g,dt);if(g.moving||was||g.contact)place(g,t);}combatTick(dt);}
@@ -892,7 +908,7 @@ function loop(now){const dt=Math.min(.1,(now-last)/1000),t=now/1000;last=now;
       for(const g of regs)if(g.path){const on=g.tx!==null;g.path.visible=g.mark.visible=on;
         if(on){const d=Math.hypot(g.tx-g.x,g.tz-g.z),n=Math.max(2,Math.ceil(d/10)),pts=[];for(let i=0;i<=n;i++)pts.push([g.x+(g.tx-g.x)*i/n,g.z+(g.tz-g.z)*i/n]);setLine(g.path,pts);
           g.mark.position.set(g.tx,Math.max(hAt(g.tx,g.tz),WATER)+1,g.tz);}}}
-  }
+  }catch(err){showErr(err);}
   controls.update();
   for(const g of regs){const k=Math.min(4,Math.max(.45,camera.position.distanceTo(g.banner.position)/650));g.banner.scale.set(BH*k*g.texN.userData.aspect,BH*k,1);}
   renderer.render(scene,camera);drawMini();drawFloats(now);requestAnimationFrame(loop);}
