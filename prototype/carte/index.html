@@ -217,7 +217,7 @@ const UG={photoG:{value:null},rectG:{value:new THREE.Vector4(X0,Z0,GW,GD)},hasG:
 const PHOTO_GLSL=`uniform sampler2D photoG,photoL,teinte;uniform vec4 rectG,rectL;uniform float hasG,hasL;varying vec2 vXZ;
 vec3 versLin(vec3 c){return mix(c/12.92,pow((c+.055)/1.055,vec3(2.4)),step(.04045,c));}
 vec4 photoA(vec2 p){vec2 a=(p-rectL.xy)/rectL.zw,b=(p-rectG.xy)/rectG.zw;
-  vec3 cl=texture2D(photoL,vec2(clamp(a.x,0.,1.),1.-clamp(a.y,0.,1.))).rgb,cg=texture2D(photoG,vec2(b.x,1.-b.y)).rgb;
+  vec3 cl=texture2D(photoL,vec2(clamp(a.x,0.,1.),clamp(a.y,0.,1.))).rgb,cg=texture2D(photoG,vec2(b.x,1.-b.y)).rgb;
   float k=hasL*step(0.,a.x)*step(a.x,1.)*step(0.,a.y)*step(a.y,1.);return vec4(versLin(mix(cg,cl,k)),max(k,hasG));}
 vec3 teinter(vec3 c,vec2 p){vec2 b=(p-rectG.xy)/rectG.zw;vec4 t=texture2D(teinte,vec2(b.x,1.-b.y));return mix(c,versLin(t.rgb),t.a);}`;
 // un matériau par carré (mêmes programmes pour tous) : chaque carré a sa propre photo fine
@@ -249,8 +249,8 @@ function matRoute(T){
   };
   return m;
 }
-function matBat(T){   // façades (fenêtres, volets, portes dessinés), toits de tuiles de près, photo de loin ; toits plats : la photo
-  const m=new THREE.MeshLambertMaterial({vertexColors:true,side:THREE.DoubleSide});
+function matBat(T,simple){   // façades (fenêtres, volets, portes dessinés), toits de tuiles de près, photo de loin ; toits plats : la photo
+  const m=new THREE.MeshLambertMaterial({vertexColors:true,side:simple?THREE.FrontSide:THREE.DoubleSide});
   m.onBeforeCompile=s=>{Object.assign(s.uniforms,UG,T.u);
     s.vertexShader=s.vertexShader.replace('#include <common>','#include <common>\nattribute float toit;\nattribute vec4 fa;\nattribute vec4 fb;\nvarying float vToit;\nvarying vec2 vXZ;\nvarying vec4 vFa;\nvarying vec4 vFb;\nvarying float vDist;')
       .replace('#include <begin_vertex>','#include <begin_vertex>\nvToit=toit;vXZ=position.xz;vFa=fa;vFb=fb;')
@@ -345,7 +345,7 @@ vec3 facade(vec3 mur,float flou){
   }
   return mix(mur*.93,res,loin);
 }`;
-const matR=T=>T.mR||(T.mR=matRoute(T)),matB=T=>T.mB||(T.mB=matBat(T));
+const matR=T=>T.mR||(T.mR=matRoute(T)),matB=T=>T.mB||(T.mB=matBat(T)),matBs=T=>T.mBs||(T.mBs=matBat(T,true));
 // chargement des tuiles WMTS (Web Mercator), recollées dans une image alignée sur la carte
 const merLat=(y,n)=>Math.atan(Math.sinh(Math.PI*(1-2*y/n)))*180/Math.PI;
 const tuileX=(lon,n)=>(lon+180)/360*n,tuileY=(lat,n)=>{const r=lat*Math.PI/180;return (1-Math.log(Math.tan(r)+1/Math.cos(r))/Math.PI)/2*n;};
@@ -426,7 +426,12 @@ function demanderPhoto(T,p){
       if(p===0&&J.ko>J.total*.5&&PH[0].z>18&&photoOk>20){PH[0].z=18;z19Ko++;}   // zoom 19 refusé : on passe au 18 tout de suite
       T.phEtat[p]=3;T.phRetry=performance.now()+(PH[0].z===18&&p===0?0:20000);return;
     }
-    aPoser.push({T,p,J});
+    // photo fine (zoom 18 ou 19) : l'arrière-plan y lira la couleur des murs et des toits de chaque bâtiment du carré
+    if(p<=1)photoPourBats(T,J.c,J.rect);
+    // l'image est préparée hors de l'affichage : son envoi à la carte graphique ne bloque presque plus
+    const e={T,p,J,im:null};
+    if(window.createImageBitmap)createImageBitmap(J.c).then(im=>{e.im=im;J.c=J.g=null;aPoser.push(e);},()=>aPoser.push(e));
+    else aPoser.push(e);
   });
 }
 const aPoser=[];
@@ -434,12 +439,11 @@ function poserPhotos(){
   // la plus proche d'abord, une seule par image affichée
   if(!aPoser.length)return;
   let k=0;for(let i=1;i<aPoser.length;i++)if(aPoser[i].T.d<aPoser[k].T.d)k=i;
-  const {T,p,J}=aPoser.splice(k,1)[0];
-  if(T.ph[p]||T.d>LV[p].d*1.3){T.phEtat[p]=0;return;}   // devenue inutile entre-temps
-  const t=texPhoto(J.c),W=J.W,H=J.H;
-  t.onUpdate=()=>{t.image={width:W,height:H};t.onUpdate=null;};   // l'image n'est plus utile une fois envoyée à la carte graphique
-  // photo fine (zoom 18 ou 19) : on y lit la couleur des murs et des toits de chaque bâtiment du carré, puis on le reconstruit
-  if(p<=1)photoPourBats(T,J.c,J.rect);
+  const e=aPoser.splice(k,1)[0],{T,p,J}=e,fermer=()=>{if(e.im&&e.im.close)e.im.close();e.im=null;};
+  if(T.ph[p]||T.d>LV[p].d*1.3){T.phEtat[p]=0;fermer();return;}   // devenue inutile entre-temps
+  const t=new THREE.Texture(e.im||J.c),W=J.W,H=J.H;
+  t.encoding=THREE.LinearEncoding;t.anisotropy=ANISO;t.flipY=false;t.needsUpdate=true;   // le nord en haut de l'image (voir photoA)
+  t.onUpdate=()=>{fermer();t.image={width:W,height:H};t.onUpdate=null;};   // l'image n'est plus utile une fois envoyée à la carte graphique
   J.c=J.g=null;
   T.ph[p]={tex:t,rect:J.rect};T.phEtat[p]=2;choisirPhoto(T);creditPhotos();
 }
@@ -644,7 +648,7 @@ function pomperFin(){
     lireRelief(`${RF.dossier}t_${T.i}_${T.j}.png`,FN,FN).then(F=>{T.fine=F;T.etat=2;affinerArbres(T);}).catch(()=>{T.etat=3;}).finally(()=>{enCours--;});}
 }
 function majTuiles(budgetFin,budgetGros){
-  const cp=camera.position,t0=performance.now(),tropTard=()=>budgetFin<3&&performance.now()-t0>4;
+  const cp=camera.position,t0=performance.now(),todo=[],tropTard=()=>budgetFin<3&&performance.now()-t0>4;
   for(const T of tiles){
     const dx=Math.max(T.x0-cp.x,0,cp.x-T.x0-TU),dz=Math.max(T.z0-cp.z,0,cp.z-T.z0-TU),dy=Math.max(T.ymin-cp.y,0,cp.y-T.ymax);
     T.d=Math.hypot(dx,dy,dz);
@@ -654,8 +658,14 @@ function majTuiles(budgetFin,budgetGros){
     else if(w<=1&&rw&&!T.fd){demanderFd(T);w=2;}         // en attendant qu'il soit préparé en arrière-plan
     T.want=w;
     majPhotos(T);
+    if(T.want!==T.lvl||(T.lvl<=1&&T.extraLvl!==T.lvl)||(T.lvl>1&&T.extra))todo.push(T);
+    // bâtiments détaillés seulement près de la caméra (comme les niveaux de détail de Google Earth)
+    if(T.batsListe){
+      if(T.d<dDetail){if(!T.dEtat){T.dEtat=1;T.dDepuis=t0;fileDetail.push(T);}}
+      else if(T.d>dDetail*1.3&&(T.dEtat||T.batMesh))retirerDetail(T);
+    }
   }
-  const todo=tiles.filter(T=>T.want!==T.lvl||(T.lvl<=1&&T.extraLvl!==T.lvl)||(T.lvl>1&&T.extra)).sort((a,b)=>a.d-b.d);
+  if(todo.length>1)todo.sort((a,b)=>a.d-b.d);
   for(const T of todo){
     const L=T.want,fin=L<=1;
     if(T.want!==T.lvl){
@@ -721,72 +731,88 @@ const pick=(a,r=R)=>a[(r()*a.length)|0];
   let nb=0;for(let i=0;i<d.length;i+=28){for(let k=0;k<3;k++)m[k]+=lin(d[i+k]);nb++;}
   UG.tuiles={value:tx};UG.tuileMoy={value:new THREE.Vector3(m[0]/nb,m[1]/nb,m[2]/nb)};
 }
-// ---------- construction des bâtiments : en arrière-plan (batiments.js), pour que la carte reste fluide ----------
-const aBatir=[];let batisFini=false,ombreSale=true;
+// ---------- bâtiments : construits en arrière-plan (batiments.js), en deux niveaux de détail ----------
+// De loin : des boîtes légères pour toute la ville. Près de la caméra seulement : toits en pente, tuiles, fenêtres.
+// La carte graphique n'a donc à dessiner en détail que quelques carrés, comme dans Google Earth.
+const aBatir=[],fileDetail=[];let ombreSale=true,dDetail=800;
 const cfgBat={genres:V.genres,champsBat:V.champsBat,couleursBat:V.couleursBat||[]};
 window.ShinBat.preparer(cfgBat);
 const parId=new Map();let bw=null,enVol=0;
 {
   const B=V.batiments,BH=V.champsBat.length;
-  // rangés par carré de 500 m : chaque carré projette sa propre photo sur ses toits
   const parCarre=new Map();
   for(const b of B){const n=(b.length-BH)/2;let cx=0,cz=0;for(let i=0;i<n;i++){cx+=b[BH+2*i];cz+=b[BH+1+2*i];}
     const T=tiles[tileIdx(cx/n,cz/n)];let l=parCarre.get(T);if(!l)parCarre.set(T,l=[]);l.push(b);}
   for(const [T,liste] of parCarre){T.batsListe=liste;T.batId=T.i+'_'+T.j;parId.set(T.batId,T);aBatir.push(T);}
 }
-function poserBats(T,r){
-  if(T.batMesh){scene.remove(T.batMesh);T.batMesh.geometry.dispose();T.batMesh=null;}
-  if(!r.idx.length)return;
+function meshBats(T,r,detail){
+  if(!r.idx.length)return null;
   // une fois envoyés à la carte graphique, les tableaux ne servent plus : on libère la mémoire
   const lib=function(){this.array=null;},at=(arr,k,nm)=>new THREE.BufferAttribute(arr,k,nm).onUpload(lib);
   const geo=new THREE.BufferGeometry();
   geo.setAttribute('position',at(r.pos,3));geo.setAttribute('normal',at(r.nor,3));
   geo.setAttribute('color',at(r.col,3,true));geo.setAttribute('toit',at(r.toit,1));
-  geo.setAttribute('fa',at(r.fa,4));geo.setAttribute('fb',at(r.fb,4));
+  if(r.fa){geo.setAttribute('fa',at(r.fa,4));geo.setAttribute('fb',at(r.fb,4));}
   geo.setIndex(at(r.idx,1));geo.computeBoundingSphere();
-  const mesh=new THREE.Mesh(geo,matB(T));mesh.castShadow=mesh.receiveShadow=true;scene.add(mesh);T.batMesh=mesh;
-  ombreSale=true;
+  const mesh=new THREE.Mesh(geo,detail?matB(T):matBs(T));scene.add(mesh);return mesh;
 }
-// sans arrière-plan possible : tout se fait ici, comme avant
-function batirIci(T){
-  const ph=T.photoAttente;T.photoAttente=null;
-  if(ph){try{let d,W,H;
-    if(ph.pixels){d=ph.pixels;W=ph.W;H=ph.H;}
-    else{const c=document.createElement('canvas');c.width=W=ph.photo.width;c.height=H=ph.photo.height;const g2=c.getContext('2d');g2.drawImage(ph.photo,0,0);d=g2.getImageData(0,0,W,H).data;if(ph.photo.close)ph.photo.close();}
-    T.batInfos=window.ShinBat.lirePhoto(T.batsListe,d,W,H,ph.rect);}catch(e){}}
-  poserBats(T,window.ShinBat.construire(T.batsListe,T.batInfos||null));
+const oterMesh=m=>{if(m){scene.remove(m);m.geometry.dispose();}};
+// niveau 0 : boîtes légères (toujours gardées) ; niveau 1 : détail (affiché à la place tant que la caméra est proche)
+function recevoirBats(T,r,niveau,seq){
+  if(niveau===0){T.sEtat=2;oterMesh(T.batS);T.batS=meshBats(T,r,false);if(T.batS)T.batS.visible=!T.batMesh;return;}
+  if(T.dEtat!==2||seq!==T.dSeq)return;   // plus voulu, ou déjà redemandé
+  oterMesh(T.batMesh);T.batMesh=meshBats(T,r,true);T.dEtat=3;if(T.batS)T.batS.visible=!T.batMesh;
 }
-function envoyerBats(T){
-  T.batSeq=(T.batSeq||0)+1;
-  if(!bw){batirIci(T);return;}
-  const ph=T.photoAttente;T.photoAttente=null;
-  const m={type:'bat',id:T.batId,seq:T.batSeq,liste:T.batsListe},tr=[];
-  if(ph){m.rect=ph.rect;if(ph.photo){m.photo=ph.photo;tr.push(ph.photo);}else{m.pixels=ph.pixels;m.W=ph.W;m.H=ph.H;tr.push(ph.pixels.buffer);}}
-  T.batEnVol=true;enVol++;bw.postMessage(m,tr);
+function retirerDetail(T){oterMesh(T.batMesh);T.batMesh=null;T.dEtat=0;T.dSeq=(T.dSeq||0)+1;if(T.batS)T.batS.visible=true;}
+function lancerBats(T,niveau){
+  if(niveau){T.dEtat=2;T.dSeq=(T.dSeq||0)+1;}else T.sEtat=1;
+  if(!bw){recevoirBats(T,niveau?ShinBat.construire(T.batsListe,T.batInfos||null):ShinBat.construireSimple(T.batsListe,T.batInfos||null),niveau,T.dSeq);return;}
+  const m={type:'bat',id:T.batId,niveau,seq:T.dSeq||0};
+  if(!T.listeEnvoyee){m.liste=T.batsListe;T.listeEnvoyee=true;}
+  enVol++;bw.postMessage(m);
 }
 try{
   bw=new Worker('batiments.js');
-  bw.onmessage=e=>{const m=e.data;if(!m||m.type!=='bat')return;enVol=Math.max(0,enVol-1);const T=parId.get(m.id);if(!T)return;T.batEnVol=false;if(m.seq===T.batSeq)poserBats(T,m);};
+  bw.onmessage=e=>{const m=e.data;if(!m)return;const T=parId.get(m.id);
+    if(m.type==='photo'){if(T&&T.photoFini){const f=T.photoFini;T.photoFini=null;f();}return;}
+    if(m.type!=='bat')return;enVol=Math.max(0,enVol-1);if(T)recevoirBats(T,m,m.niveau,m.seq);};
   // si l'arrière-plan ne marche pas (navigateur, réseau) : on reprend tout ici, sans rien perdre
-  bw.onerror=()=>{if(!bw)return;bw.terminate();bw=null;enVol=0;for(const T of tiles)if(T.batEnVol){T.batEnVol=false;if(!aBatir.includes(T))aBatir.unshift(T);}};
+  bw.onerror=()=>{if(!bw)return;bw.terminate();bw=null;enVol=0;
+    for(const T of tiles){if(!T.batsListe)continue;if(T.sEtat===1){T.sEtat=0;aBatir.push(T);}if(T.dEtat===2){T.dEtat=1;fileDetail.push(T);}T.infoOk=T.infoOk||!!T.photoDemandee;T.photoFini=null;}};
   bw.postMessage({type:'init',cfg:cfgBat});
 }catch(e){bw=null;}
-// photo fine arrivée pour un carré : ses bâtiments seront reconstruits avec les couleurs lues dessus
+// photo fine arrivée pour un carré : les couleurs des murs et des toits y sont lues (en arrière-plan), puis ses bâtiments refaits
 function photoPourBats(T,c,rect){
   if(T.photoDemandee||!T.batsListe)return;T.photoDemandee=true;
-  const pret=ph=>{T.photoAttente=ph;if(!aBatir.includes(T)){aBatir.push(T);aBatir.trie=false;}};
-  // la photo est copiée hors de l'affichage ; l'arrière-plan la lit sans ralentir la carte
-  if(bw&&window.createImageBitmap&&typeof OffscreenCanvas!=='undefined')createImageBitmap(c).then(im=>pret({photo:im,rect})).catch(()=>{});
-  else{try{const W=Math.min(1024,c.width),H=Math.min(1024,c.height),k=document.createElement('canvas');k.width=W;k.height=H;const g2=k.getContext('2d');g2.drawImage(c,0,0,W,H);pret({pixels:g2.getImageData(0,0,W,H).data,W,H,rect});}catch(e){}}
+  const fini=()=>{T.infoOk=true;
+    if(T.dEtat>=2||T.batMesh){T.dEtat=1;if(!fileDetail.includes(T))fileDetail.push(T);}
+    if(T.sEtat===2&&!aBatir.includes(T)){aBatir.push(T);aBatir.trie=false;}};
+  if(bw&&window.createImageBitmap&&typeof OffscreenCanvas!=='undefined'){
+    const env=im=>{if(!bw){fini();return;}const m={type:'photo',id:T.batId,photo:im,rect};if(!T.listeEnvoyee){m.liste=T.batsListe;T.listeEnvoyee=true;}T.photoFini=fini;bw.postMessage(m,[im]);};
+    const W=Math.min(1024,c.width),H=Math.min(1024,c.height);
+    let pr;try{pr=createImageBitmap(c,{resizeWidth:W,resizeHeight:H,resizeQuality:'low'});}catch(e){pr=Promise.reject(e);}
+    pr.catch(()=>createImageBitmap(c)).then(env).catch(()=>{T.infoOk=true;});
+  }else{
+    try{const W=Math.min(1024,c.width),H=Math.min(1024,c.height),k=document.createElement('canvas');k.width=W;k.height=H;const g2=k.getContext('2d',{willReadFrequently:true});g2.drawImage(c,0,0,W,H);
+      T.batInfos=ShinBat.lirePhoto(T.batsListe,g2.getImageData(0,0,W,H).data,W,H,rect);}catch(e){}
+    fini();
+  }
 }
 function batirProches(ms){
+  const t0=performance.now(),place=()=>bw?enVol<2:performance.now()-t0<ms;   // deux carrés à la fois en arrière-plan
+  // d'abord le détail des carrés proches ; on attend leur photo (2,5 s au plus) pour ne les construire qu'une fois, aux bonnes couleurs
+  if(fileDetail.length){
+    if(fileDetail.length>1)fileDetail.sort((a,b)=>a.d-b.d);
+    for(let i=0;i<fileDetail.length&&place();){const T=fileDetail[i];
+      if(T.dEtat!==1){fileDetail.splice(i,1);continue;}
+      if(!T.infoOk&&!photoOff&&t0-T.dDepuis<2500){i++;continue;}
+      fileDetail.splice(i,1);lancerBats(T,1);}
+  }
   if(!aBatir.length)return;
   if(frame%20===0||!aBatir.trie){aBatir.sort((a,b)=>a.d-b.d);aBatir.trie=true;}
-  if(bw){while(aBatir.length&&enVol<2)envoyerBats(aBatir.shift());return;}   // deux carrés à la fois en arrière-plan
-  const t0=performance.now();
-  while(aBatir.length&&performance.now()-t0<ms)envoyerBats(aBatir.shift());
-  if(!aBatir.length&&!batisFini){batisFini=true;}
+  while(aBatir.length&&place())lancerBats(aBatir.shift(),0);
 }
+
 
 // ---------- arbres (les mêmes que sur le champ de bataille) ----------
 let arbresMesh=null;
@@ -924,6 +950,7 @@ function loop(now){
   if(controls.minDistance!==dMin)controls.minDistance=dMin;
   controls.maxPolarAngle=1.02+.3*Math.min(1,Math.max(0,(dist-dMin)/900));
   UG.pxK.value=2*Math.tan(camera.fov*Math.PI/360)/Math.max(1,renderer.domElement.height);
+  dDetail=Math.min(1400,Math.max(700,.5/UG.pxK.value));   // au-delà, fenêtres et tuiles ne se voient plus : boîtes légères
   majTuiles(3,40);batirProches(frame<3?40:7);poserPhotos();if(frame%30===0)infoPhotos();if(++frame%60===0)liberer();
   // si l'ordinateur peine (moins de 52 images par seconde), on affiche un peu moins de points, puis on remonte dès que possible
   if(last){const dt=now-last;cumul+=dt;nb++;}last=now;

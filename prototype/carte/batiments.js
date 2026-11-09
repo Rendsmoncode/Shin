@@ -266,23 +266,57 @@ function construire(liste,ph){
     return {pos:new Float32Array(P),nor:new Float32Array(N),col:new Uint8Array(C),toit:new Uint8Array(TT),fa:new Float32Array(FA),fb:new Uint8Array(FB),
       idx:v>65535?new Uint32Array(I):new Uint16Array(I)};
 }
-self.ShinBat={preparer,construire,lirePhoto};
+// version légère d'un carré, pour les bâtiments vus de loin : des boîtes à toit plat, avec les mêmes couleurs de murs
+function construireSimple(liste,ph){
+  let NV=0;for(const b of liste)NV+=5*(b.length-BH)/2;
+  const pos=new Float32Array(NV*3),nor=new Float32Array(NV*3),col=new Uint8Array(NV*3),toit=new Uint8Array(NV),idx=[],c=new THREE.Color();let v=0;
+  const coul=(i,k)=>{col[i*3]=Math.min(255,c.r*255*k);col[i*3+1]=Math.min(255,c.g*255*k);col[i*3+2]=Math.min(255,c.b*255*k);};
+  for(let kb=0;kb<liste.length;kb++){
+    const b=liste[kb],v0=v,nI=idx.length;
+    try{
+      const r=aleaBat(b,BH),bot=b[0],top=(b[1]+b[2])/2,genre=GENRES[b[3]],n=(b.length-BH)/2,info=ph&&ph[kb];
+      const xs=[],zs=[];for(let i=0;i<n;i++){xs.push(b[BH+2*i]);zs.push(b[BH+1+2*i]);}
+      let a=0;for(let i=0;i<n;i++){const j=(i+1)%n;a+=xs[i]*zs[j]-xs[j]*zs[i];}
+      if(a>0){xs.reverse();zs.reverse();}
+      const oc=osm(b,iC),oct=osm(b,iCT),shade=.92+r()*.14;
+      let wc=oc||couleurMur(genre,iM>=0?b[iM]:0,r);
+      if(!oc&&info&&info.mur)wc=murPhoto(info.mur,wc);
+      typeof wc==='string'?c.set(wc):c.copy(wc);
+      for(let i=0;i<n;i++){const j=(i+1)%n,ex=xs[j]-xs[i],ez=zs[j]-zs[i],L=Math.hypot(ex,ez)||1,nx=-ez/L,nz=ex/L;
+        const q=[[xs[i],bot,zs[i]],[xs[j],bot,zs[j]],[xs[j],top,zs[j]],[xs[i],top,zs[i]]];
+        for(let k=0;k<4;k++){pos.set(q[k],(v+k)*3);nor[(v+k)*3]=nx;nor[(v+k)*3+2]=nz;coul(v+k,shade*1.085);}   // même teinte que les murs détaillés vus de loin
+        idx.push(v,v+1,v+2,v,v+2,v+3);v+=4;}
+      if(oct)c.copy(oct).convertSRGBToLinear();
+      else if(info&&info.toit)c.setRGB(info.toit[0]/255,info.toit[1]/255,info.toit[2]/255).convertSRGBToLinear();
+      else c.set(couleurToit(genre,iT>=0?b[iT]:0,r)).convertSRGBToLinear();
+      const r0=v;for(let i=0;i<n;i++){pos.set([xs[i],top,zs[i]],v*3);nor[v*3+1]=1;coul(v,shade);toit[v]=1;v++;}
+      const tris=THREE.ShapeUtils.triangulateShape(xs.map((x,i)=>new THREE.Vector2(x,zs[i])),[]);
+      for(const [p0,p1,p2] of tris){const cy=(zs[p1]-zs[p0])*(xs[p2]-xs[p0])-(xs[p1]-xs[p0])*(zs[p2]-zs[p0]);cy>0?idx.push(r0+p0,r0+p1,r0+p2):idx.push(r0+p0,r0+p2,r0+p1);}
+    }catch(e){v=v0;idx.length=nI;}
+  }
+  return {pos,nor,col,toit,idx:v>65535?new Uint32Array(idx):new Uint16Array(idx)};
+}
+self.ShinBat={preparer,construire,construireSimple,lirePhoto};
 })();
 // ---------- en arrière-plan ----------
 if(typeof document==='undefined'&&typeof importScripts==='function'){
-  const infos=new Map();   // couleurs lues sur la photo, par carré
+  const infos=new Map(),listes=new Map();   // par carré : couleurs lues sur la photo, liste des bâtiments (reçue une seule fois)
   self.onmessage=e=>{
     const m=e.data;
     if(m.type==='init'){ShinBat.preparer(m.cfg);return;}
+    if(m.liste)listes.set(m.id,m.liste);
+    const liste=listes.get(m.id);
+    if(m.type==='photo'){   // photo fine du carré : on y lit les couleurs, gardées pour toutes les constructions suivantes
+      try{
+        if(m.photo){const oc=new OffscreenCanvas(m.photo.width,m.photo.height),g=oc.getContext('2d');g.drawImage(m.photo,0,0);
+          infos.set(m.id,ShinBat.lirePhoto(liste,g.getImageData(0,0,oc.width,oc.height).data,oc.width,oc.height,m.rect));}
+        else if(m.pixels)infos.set(m.id,ShinBat.lirePhoto(liste,m.pixels,m.W,m.H,m.rect));
+      }catch(err){}
+      if(m.photo&&m.photo.close)m.photo.close();
+      self.postMessage({type:'photo',id:m.id});return;
+    }
     if(m.type!=='bat')return;
-    let inf=infos.get(m.id)||null;
-    try{
-      if(m.photo){const oc=new OffscreenCanvas(m.photo.width,m.photo.height),g=oc.getContext('2d');g.drawImage(m.photo,0,0);
-        inf=ShinBat.lirePhoto(m.liste,g.getImageData(0,0,oc.width,oc.height).data,oc.width,oc.height,m.rect);infos.set(m.id,inf);}
-      else if(m.pixels){inf=ShinBat.lirePhoto(m.liste,m.pixels,m.W,m.H,m.rect);infos.set(m.id,inf);}
-    }catch(err){}
-    if(m.photo&&m.photo.close)m.photo.close();
-    const r=ShinBat.construire(m.liste,inf);
-    self.postMessage({type:'bat',id:m.id,seq:m.seq,...r},[r.pos.buffer,r.nor.buffer,r.col.buffer,r.toit.buffer,r.fa.buffer,r.fb.buffer,r.idx.buffer]);
+    const inf=infos.get(m.id)||null,r=m.niveau?ShinBat.construire(liste,inf):ShinBat.construireSimple(liste,inf);
+    self.postMessage({type:'bat',id:m.id,seq:m.seq,niveau:m.niveau,...r},Object.values(r).map(x=>x.buffer));
   };
 }

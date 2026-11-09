@@ -38,4 +38,10 @@ Réalisé (`prototype/carte/index.html`, et `outils/carte_ville.py` pour les don
 - **Arbres** : arbres isolés (`natural=tree`) et alignements (`natural=tree_row`, un arbre tous les 8 m) d'OpenStreetMap ajoutés aux zones boisées ; tous teintés par la photo à leur emplacement quand elle ressemble à de la végétation.
 - **Zoom limité** : la caméra s'arrête à 140 m (230 m si l'IGN ne donne que le zoom 18) et se redresse de près, pour ne pas descendre là où la photo devient floue.
 
+## Fluidité (méthode « Google Earth », à vérifier sur le site)
+- **Niveaux de détail des bâtiments** : toute la ville en boîtes légères (toit plat, mêmes couleurs) ; le détail (toits en pente, tuiles, fenêtres) n'est construit que pour les carrés à moins de 700 à 1 400 m de la caméra (selon l'écran), puis retiré quand on s'éloigne.
+- **Calculs en arrière-plan** : `batiments.js` (bâtiments, couleurs lues sur la photo) et `relief.js` (relief fin, routes, rivières, murs). La page ne fait qu'afficher ; elle refait les calculs elle-même si l'arrière-plan ne démarre pas.
+- **Photos** : image préparée hors de l'affichage avant l'envoi à la carte graphique. Les bâtiments proches attendent leur photo (2,5 s au plus) pour n'être construits qu'une fois.
+- **Ombres calculées supprimées** (déjà sur les photos). Résolution adaptative visant 60 images par seconde.
+
 Limites annoncées à l'utilisateur : voitures et ombres présentes sur les photos, léger décalage des toits photographiés des grands immeubles, façades crédibles mais pas exactes.
