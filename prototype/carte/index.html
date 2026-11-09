@@ -46,6 +46,7 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
     <button type="button" id="b-shadow" aria-pressed="true">Ombres : oui</button>
   </div>
   <p id="status">Chargement…</p>
+  <p id="photoInfo" class="k"></p>
   <div id="info" aria-live="polite"></div>
 </div>
 <div id="credit">© les contributeurs d'<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · relief, bâtiments et photos aériennes <a href="https://geoservices.ign.fr/">IGN</a></div>
@@ -333,7 +334,7 @@ function demanderPhoto(T,p){
     T.phJob[p]=null;
     if(J.ko>J.total*.4){
       // zoom 19 absent ici : on se contente du zoom 18
-      if(p===0&&J.ko===J.total&&PH[0].z>18&&photoOk>50&&++z19Ko>=2)PH[0].z=18;
+      if(p===0&&J.ko>J.total*.5&&PH[0].z>18&&photoOk>20){PH[0].z=18;z19Ko++;}   // zoom 19 refusé : on passe au 18 tout de suite
       T.phEtat[p]=3;T.phRetry=performance.now()+(PH[0].z===18&&p===0?0:20000);return;
     }
     aPoser.push({T,p,J});
@@ -352,6 +353,15 @@ function poserPhotos(){
   T.ph[p]={tex:t,rect:J.rect};T.phEtat[p]=2;choisirPhoto(T);creditPhotos();
 }
 function creditPhotos(){const cr=document.getElementById('credit');if(!/photos/.test(cr.textContent))cr.textContent+=' ; photos aériennes : IGN';}
+// ligne d'information : quelle photo au centre de l'écran, tuiles reçues et en échec
+function infoPhotos(){
+  const el=document.getElementById('photoInfo');if(!el)return;
+  if(photoOff){el.textContent='Photos aériennes : IGN indisponible.';return;}
+  const T=tiles[tileIdx(controls.target.x,controls.target.z)],q=[0,1,2].find(k=>T.ph[k]);
+  const nom=q===0?`nette (zoom ${PH[0].z})`:q===1?'moyenne (zoom 18)':q===2?'légère (zoom 16)':photoG?'de toute la zone (zoom 15)':'aucune pour l\'instant';
+  const att=[0,1,2].filter(k=>T.phJob[k]).map(k=>['nette','moyenne','légère'][k]);
+  el.textContent=`Photo ici : ${nom}${att.length?' · en chargement : '+att.join(', '):''} · tuiles reçues ${photoOk}, en échec ${photoKo}`+(z19Ko?' · zoom 19 refusé par l\'IGN, zoom 18 utilisé':'');
+}
 function majPhotos(T){
   if(photoOff)return;
   for(let q=0;q<3;q++){const J=T.phJob[q];if(J){if(T.d>LV[q].d*1.3){annulerJob(J);T.phJob[q]=null;T.phEtat[q]=0;}else J.prio=q===2&&T.d<LV[1].d?T.d*.15:T.d;}}
@@ -771,7 +781,7 @@ function loop(now){
   if(ox!==sun.target.position.x||oz!==sun.target.position.z){sun.target.position.set(ox,controls.target.y,oz);sun.position.copy(sun.target.position).addScaledVector(SUN_DIR,ext*2+1500);ombreSale=true;}
   if(ombreSale){renderer.shadowMap.needsUpdate=true;ombreSale=false;}
   if(arbresMesh)arbresMesh.visible=dist<9000;
-  majTuiles(3,40);batirProches(frame<3?40:7);poserPhotos();if(++frame%60===0)liberer();
+  majTuiles(3,40);batirProches(frame<3?40:7);poserPhotos();if(frame%30===0)infoPhotos();if(++frame%60===0)liberer();
   // si l'ordinateur peine (moins de 35 images par seconde), on affiche un peu moins de points, puis on remonte dès que possible
   if(last){const dt=now-last;cumul+=dt;nb++;}last=now;
   if(nb>=90){const moy=cumul/nb;cumul=nb=0;
