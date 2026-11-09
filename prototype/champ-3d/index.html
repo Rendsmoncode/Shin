@@ -68,7 +68,7 @@ kbd{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:3px;p
 #tour-t{font-weight:700;letter-spacing:.06em;text-transform:uppercase}
 #tour-c{color:var(--gold);min-width:118px}
 #tour-c.urgent{color:var(--red)}
-#tour-a{color:var(--muted)}
+#tour-a,#tour-p{color:var(--muted)}
 #b-end{font-size:17px;border-color:var(--gold)}
 #b-end:disabled{opacity:.45;cursor:default;border-color:var(--line)}
 @media (max-width:700px){#toast{bottom:calc(36px + 30vw + env(safe-area-inset-bottom,0px))}}
@@ -77,7 +77,7 @@ kbd{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:3px;p
 <div id="scene" aria-label="Champ de bataille en 3D avec relief, rivière, forêts et deux armées. Les armées bleues se commandent à la souris."></div>
 <div class="panel">
   <div class="head"><h1>Champ de bataille 3D</h1><button type="button" id="b-help" aria-expanded="true" aria-controls="aide">Masquer l'aide</button></div>
-  <p id="aide"><b>Clic gauche</b> sur une armée bleue pour la choisir (<kbd>Maj</kbd> pour en ajouter, touches <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd>). <b>Clic droit</b> sur le terrain pour l'y envoyer, sur une armée rouge pour marcher sur elle. Glisser pour se déplacer, molette pour zoomer, glisser avec le clic droit pour pivoter. <kbd>Espace</kbd> centre la vue, <kbd>Échap</kbd> désélectionne. <b>Mini-carte</b> : clic ou glisser pour y aller, clic droit pour y envoyer les armées choisies ; ses boutons la réduisent, l'agrandissent, la changent de côté ou la masquent. <b>Combat</b> : une armée qui entre au contact d'une armée ennemie se bat ; lui donner un ordre de marche dans l'autre sens la fait se replier. <b>Tour par tour</b> : pendant la minute du tour, donne tes ordres (1 par armée, 5 au plus), puis <b>Fin du tour</b> (ou <kbd>Entrée</kbd>) : toutes les armées bougent et se battent en même temps. Une marche longue continue seule aux tours suivants, sans coûter d'action.</p>
+  <p id="aide"><b>Clic gauche</b> sur une armée bleue pour la choisir (<kbd>Maj</kbd> pour en ajouter, touches <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd>). <b>Clic droit</b> sur le terrain pour l'y envoyer, sur une armée rouge pour marcher sur elle. Glisser pour se déplacer, molette pour zoomer, glisser avec le clic droit pour pivoter. <kbd>Espace</kbd> centre la vue, <kbd>Échap</kbd> désélectionne. <b>Mini-carte</b> : clic ou glisser pour y aller, clic droit pour y envoyer les armées choisies ; ses boutons la réduisent, l'agrandissent, la changent de côté ou la masquent. <b>Combat</b> : une armée qui entre au contact d'une armée ennemie se bat ; lui donner un ordre de marche dans l'autre sens la fait se replier. <b>Tour par tour</b> : pendant la minute du tour, donne tes ordres (1 par armée, 5 au plus), puis <b>Fin du tour</b> (ou <kbd>Entrée</kbd>) : toutes les armées bougent et se battent en même temps. Une marche longue continue seule aux tours suivants, sans coûter d'action. <b>Quartier général</b> : ton général (Koby) reste dans sa tente à l'arrière, protégé par sa garde ; le déplacer (lentement) coûte une action. Le QG ennemi reste invisible tant que tes soldats n'en sont pas tout près. <b>Points</b> : général 3, chaque sous-général (une armée) 1 ; à 0 point, la bataille est perdue.</p>
   <div class="row">
     <button type="button" id="b-fog" aria-pressed="true">Brouillard : oui</button>
     <button type="button" id="b-ai" aria-pressed="true">Rouges : en patrouille</button>
@@ -91,7 +91,7 @@ kbd{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:3px;p
   <div id="sel" aria-live="polite"></div>
 </div>
 <div id="toast" role="status"></div>
-<div id="tour" hidden><span id="tour-t"></span><span id="tour-c"></span><span id="tour-a"></span><button type="button" id="b-end">Fin du tour</button></div>
+<div id="tour" hidden><span id="tour-t"></span><span id="tour-c"></span><span id="tour-a"></span><span id="tour-p"></span><button type="button" id="b-end">Fin du tour</button></div>
 <div id="reglages" hidden></div>
 <div id="hits" aria-hidden="true"></div>
 <div id="fin" role="status" hidden><b id="fin-t"></b><span id="fin-s"></span><button type="button" id="fin-b">Recommencer la bataille</button></div>
@@ -137,7 +137,14 @@ const REGLAGES_DEFAUT={
   pertes:7,            // % de son effectif qu'une armée perd par manche quand les puissances sont égales
   courbe:1.5,          // plus c'est grand, plus un écart de puissance rend les pertes inégales
   ecrasement:3,        // rapport de puissance à partir duquel le plus faible est écrasé d'un coup (testé seulement quand une attaque arrive)
-  deroute:10           // en dessous de ce nombre d'hommes, l'armée est dispersée et quitte le champ de bataille
+  deroute:10,          // en dessous de ce nombre d'hommes, l'armée est dispersée et quitte le champ de bataille
+  garnisonQG:150,      // hommes de la garde du quartier général au départ
+  pvGeneral:200,       // points de vie du général (règles : barre de vie bien plus grande)
+  pvGarde:20,          // points de vie de chacun des 3 gardes rapprochés (ils tombent avant le général)
+  forceGeneral:50,     // au combat, le général se bat comme ce nombre d'hommes
+  defenseQG:2,       // le quartier général se défend mieux (multiplie sa puissance)
+  vitesseQG:.25,       // vitesse du quartier général par rapport à l'infanterie (règles : lentement)
+  vueQG:250            // le QG ennemi n'est repéré que par des soldats à moins de cette distance
 };
 // pour le panneau : [clé, nom affiché, unité, minimum, maximum, pas, explication]
 const REGLAGES_INFO=[
@@ -164,7 +171,15 @@ const REGLAGES_INFO=[
     ['pertes','Pertes à égalité','% par manche',.5,50,.5,'Part de son effectif qu\'une armée perd par manche quand les deux puissances sont égales.'],
     ['courbe','Courbe','',.5,5,.1,'Plus c\'est grand, plus un écart de puissance rend les pertes inégales (le plus fort perd moins, le plus faible beaucoup plus).'],
     ['ecrasement','Écrasement dès','fois plus fort',1.1,20,.1,'Testé seulement quand une attaque arrive (début du combat ou nouvelle armée qui s\'en mêle) : si l\'attaque est autant de fois plus puissante, l\'armée attaquée est écrasée d\'un coup. Sinon le combat dure, manche après manche.'],
-    ['deroute','Dispersée sous','hommes',0,500,1,'Une armée qui tombe sous ce nombre d\'hommes quitte le champ de bataille.']]]
+    ['deroute','Dispersée sous','hommes',0,500,1,'Une armée qui tombe sous ce nombre d\'hommes quitte le champ de bataille.']]],
+  ['Quartier général',[
+    ['garnisonQG','Garde du QG','hommes',0,2000,10,'Soldats qui gardent le quartier général au départ (appliqué en recommençant la bataille).'],
+    ['pvGeneral','PV du général','PV',1,5000,10,'Points de vie du général. Ils ne baissent qu\'une fois la garde et les 3 gardes rapprochés tombés (appliqué en recommençant).'],
+    ['pvGarde','PV d\'un garde rapproché','PV',1,500,1,'Points de vie de chacun des 3 gardes rapprochés du général (appliqué en recommençant).'],
+    ['forceGeneral','Force du général','hommes',0,1000,1,'Au combat, le général se bat comme ce nombre d\'hommes (ses PV ne servent qu\'à encaisser les coups).'],
+    ['defenseQG','Défense du QG','×',.1,5,.05,'Multiplie la puissance du quartier général quand il est attaqué. Il n\'est jamais écrasé d\'un coup : il résiste un temps.'],
+    ['vitesseQG','Vitesse du QG','× infanterie',.05,1,.05,'Vitesse du quartier général par rapport à l\'infanterie.'],
+    ['vueQG','QG ennemi repéré à','mètres',50,1000,10,'Le quartier général ennemi n\'est visible que si un de tes soldats est à moins de cette distance (et le voit).']]]
 ];
 const REGLAGES={...REGLAGES_DEFAUT};
 try{const sv=JSON.parse(localStorage.getItem('shin-reglages-combat')||'{}');for(const k in REGLAGES_DEFAUT)if(typeof sv[k]==='number'&&isFinite(sv[k]))REGLAGES[k]=sv[k];}catch(e){}
@@ -321,7 +336,8 @@ const inWater=(x,z)=>hAt(x,z)<WATER-.4&&!onBridge(x,z);
 
 // ---------- règles de terrain (valeurs de départ, à régler) ----------
 const SPEED={inf:11,cav:22};          // m/s, accéléré environ ×8 pour le prototype
-const VISION=300,HILL=1.5,FOREST_SEE=50,TREE_H=14;
+const VISION=300,HILL=1.5,FOREST_SEE=50,TREE_H=14,VISION_QG=200;   // règles : un quartier général voit à 200 m
+const speedOf=kind=>kind==='qg'?SPEED.inf*REGLAGES.vitesseQG:SPEED[kind];
 function isHill(x,z){const h=hAt(x,z);let s=0;for(let k=0;k<8;k++){const a=k*Math.PI/4;s+=hAt(x+Math.cos(a)*200,z+Math.sin(a)*200);}return h-s/8>12;}
 function grade(x,z){const gx=(hAt(x+3,z)-hAt(x-3,z))/6,gz=(hAt(x,z+3)-hAt(x,z-3))/6;return Math.hypot(gx,gz);}
 const blocked=(x,z)=>Math.abs(x)>W/2-30||Math.abs(z)>D/2-30||grade(x,z)>.85;   // bords et falaises
@@ -341,9 +357,11 @@ function terrainName(x,z){
 // ---------- combat : le calcul (utilisé par le jeu et par le simulateur) ----------
 const TERRAINS={decouvert:'terrain découvert',foret:'forêt',pente:'colline ou pente',gue:'rivière (gué)'};
 function terrainCombat(x,z){if(onBridge(x,z))return'decouvert';if(inWater(x,z))return'gue';if(inForest(x,z))return'foret';if(isHill(x,z)||grade(x,z)>.2)return'pente';return'decouvert';}
-function multTerrain(kind,t){const r=REGLAGES;if(t==='gue')return r.gue;if(kind==='cav')return t==='foret'?r.cavForet:t==='pente'?r.cavPente:r.cavPlaine;return t==='foret'?r.infForet:1;}
+function multTerrain(kind,t){const r=REGLAGES;if(kind==='qg')return r.defenseQG;if(t==='gue')return r.gue;if(kind==='cav')return t==='foret'?r.cavForet:t==='pente'?r.cavPente:r.cavPlaine;return t==='foret'?r.infForet:1;}
 // puissance = hommes × valeur d'un homme × terrain × charge (le hasard s'ajoute à chaque manche)
-function puissanceBase(a){return a.men*(a.kind==='cav'?REGLAGES.valeurCavalier:REGLAGES.valeurFantassin)*multTerrain(a.kind,a.terrain)*(a.charge?REGLAGES.charge:1);}
+// un QG se bat avec sa garde, ses 3 gardes rapprochés et son général (qui vaut « forceGeneral » hommes) ; ses PV ne font qu'encaisser
+const forceQG=a=>{const q=qgParts(a);return q.garnison+q.gardes+(q.pv>0?REGLAGES.forceGeneral:0);};
+function puissanceBase(a){return(a.kind==='qg'?forceQG(a):a.men)*(a.kind==='cav'?REGLAGES.valeurCavalier:REGLAGES.valeurFantassin)*multTerrain(a.kind,a.terrain)*(a.charge?REGLAGES.charge:1);}
 // une manche : chaque armée partage sa puissance entre les ennemis qu'elle touche ;
 // chacune perd « pertes % » de son effectif × (puissance reçue / sa puissance) ^ courbe ;
 // l'écrasement n'est possible qu'à l'arrivée d'une attaque (armée « nouveau » au contact), sinon le combat se règle par les pertes
@@ -353,9 +371,9 @@ function resoudreManche(list){
   for(const a of list){if(!a.foes.length)continue;const share=P.get(a)/a.foes.length;
     for(const e of a.foes){loss.set(e,(loss.get(e)||0)+r.pertes/100*e.men*Math.pow(share/P.get(e),r.courbe));inc.set(e,(inc.get(e)||0)+share);}}
   return list.filter(a=>a.foes.length).map(a=>{
-    const ratio=(inc.get(a)||0)/P.get(a),crushed=ratio>=r.ecrasement&&(a.nouveau||a.foes.some(e=>e.nouveau));
+    const ratio=(inc.get(a)||0)/P.get(a),crushed=a.kind!=='qg'&&ratio>=r.ecrasement&&(a.nouveau||a.foes.some(e=>e.nouveau));   // un QG résiste : jamais écrasé d'un coup
     let l=crushed?a.men:Math.min(a.men,Math.max(1,Math.round(loss.get(a)||0)));
-    const out=a.men-l<Math.max(1,r.deroute);if(out)l=a.men;
+    const out=a.kind==='qg'?a.men-l<=0:a.men-l<Math.max(1,r.deroute);if(out)l=a.men;
     return{a,loss:l,crushed,out,ratio};});
 }
 // rapport de force estimé (sans hasard), comme l'« aperçu avant l'attaque » des règles
@@ -394,7 +412,7 @@ function emblem(g,kind,x,y,u,bg){
     g.fillStyle=bg;g.beginPath();g.moveTo(x-5*u,y+26*u);g.lineTo(x-5*u,y+14*u);g.arc(x,y+14*u,5*u,Math.PI,0);g.lineTo(x+5*u,y+26*u);g.fill();}
 }
 function bannerTex(r,sel){
-  const P=PLAYERS[r.side],u=2,count=fmtMen(r.men)+' hommes';
+  const P=PLAYERS[r.side],u=2,q=r.kind==='qg'?qgParts(r):null,count=q?`Garde ${fmtMen(q.garnison)} · PV ${fmtMen(q.pv)}`:fmtMen(r.men)+' hommes';
   const ms=document.createElement('canvas').getContext('2d');
   ms.font=`600 ${34*u}px ${BFONT}`;const w1=ms.measureText(r.name).width;ms.font=`600 ${28*u}px ${BFONT}`;const w2=ms.measureText(count).width;
   const px=14*u,cw=150*u,pw=Math.max(cw,Math.max(w1,w2)+28*u),x0=px+5*u;
@@ -418,6 +436,10 @@ function bannerTex(r,sel){
   const t=new THREE.CanvasTexture(cv);t.encoding=THREE.sRGBEncoding;t.anisotropy=4;t.userData.aspect=cv.width/cv.height;t.userData.pole=px/cv.width;return t;
 }
 // l'effectif change (pertes, renforts) : la bannière se redessine
+// le total d'un QG = garde + 3 gardes rapprochés + PV du général ; les pertes tombent dans cet ordre
+function qgParts(g){const pvG=g.pvGen||REGLAGES.pvGeneral,pvA=g.pvGar||REGLAGES.pvGarde,res=pvG+3*pvA,garnison=Math.max(0,g.men-res),rest=Math.min(g.men,res);
+  return{garnison,gardes:Math.max(0,Math.min(3,Math.ceil((rest-pvG)/pvA))),pv:Math.max(0,Math.min(rest,pvG))};}
+const pointsOf=side=>regs.filter(g=>g.side===side).reduce((s,g)=>s+(g.kind==='qg'?3:1),0);   // général 3, sous-général 1
 function setMen(g,n){
   g.men=Math.max(0,Math.round(n));g.texN.dispose();g.texS.dispose();
   g.texN=bannerTex(g,false);g.texS=bannerTex(g,true);g.banner.material.map=selected.includes(g)?g.texS:g.texN;
@@ -431,8 +453,17 @@ function setLine(line,pts){const a=new Float32Array(pts.length*3);pts.forEach((p
   line.geometry.setAttribute('position',new THREE.BufferAttribute(a,3));line.geometry.computeBoundingSphere();}
 const ringG=new THREE.RingGeometry(5,7,32);ringG.rotateX(-Math.PI/2);
 
+function makeTent(color){
+  const grp=new THREE.Group(),cloth=fogged(new THREE.MeshLambertMaterial({color:0xe9dfc6})),team=fogged(new THREE.MeshLambertMaterial({color:new THREE.Color(color),side:THREE.DoubleSide}));
+  const add=(geo,mat,x,y,z)=>{const m=new THREE.Mesh(geo,mat);m.position.set(x,y,z);m.castShadow=m.receiveShadow=true;grp.add(m);return m;};
+  add(new THREE.CylinderGeometry(.5,9,10,12),cloth,0,5,0);                       // grande tente du général
+  add(new THREE.CylinderGeometry(9.1,9.1,1.4,12,1,true),team,0,1.2,0);           // bande aux couleurs du joueur
+  add(new THREE.CylinderGeometry(.3,5,6,8),cloth,-14,3,4);add(new THREE.CylinderGeometry(.3,5,6,8),cloth,13,3,5);
+  add(new THREE.BoxGeometry(.4,7,.4),cloth,0,13,0);add(new THREE.BoxGeometry(4,2.2,.2),team,2.2,15.4,0);
+  scene.add(grp);return grp;
+}
 function regiment(o){
-  const set=mats[o.kind]; if(!set.length) return;
+  const set=mats[o.kind==='cav'?'cav':'inf']; if(!set.length) return;
   const h=o.kind==='cav'?7:4.5;
   const g={...o,men:o.cols*o.rows*2,soldiers:[],tx:null,tz:null,chase:null,contact:null,moving:false,foes:[],charge:false,nouveau:false,lastLoss:null,dead:false,wait:2+R()*6,shown:true,
     hw:o.cols*o.dx/2,hd:o.rows*o.dz/2};
@@ -451,6 +482,10 @@ function regiment(o){
     g.outline=groundLine(GOLD,.95);g.path=groundLine(0xffffff,.55);g.reach=groundLine(0x9fd18b,.6);
     g.mark=new THREE.Mesh(ringG,new THREE.MeshBasicMaterial({color:GOLD,transparent:true,opacity:.85,depthTest:false}));g.mark.renderOrder=9;g.mark.visible=false;scene.add(g.mark);
   }
+  if(o.kind==='qg'){   // quartier général : garde + gardes rapprochés + général
+    g.general=o.general;g.pvGen=REGLAGES.pvGeneral;g.pvGar=REGLAGES.pvGarde;g.men=Math.round(REGLAGES.garnisonQG)+3*g.pvGar+g.pvGen;
+    g.tent=makeTent(PLAYERS[o.side].couleur);trimSoldiers(g);setMen(g,g.men);
+  }
   place(g,0);regs.push(g);
 }
 const toWorld=(g,lx,lz)=>{const c=Math.cos(g.heading),s=Math.sin(g.heading);return[g.x+lx*c-lz*s,g.z+lx*s+lz*c];};
@@ -462,6 +497,7 @@ function place(g,t){
     P.set(x+.8,y+.25,z+.6);M.compose(P,Q,S);g.shadows.setMatrixAt(i,M);});
   g.shadows.instanceMatrix.needsUpdate=true;
   g.banner.position.set(g.x,Math.max(hAt(g.x,g.z),WATER),g.z);
+  if(g.tent){const [x,z]=toWorld(g,0,g.hd+14);g.tent.position.set(x,Math.max(hAt(x,z),WATER),z);g.tent.rotation.y=-g.heading;}
   if(g.outline&&g.outline.visible)drawOutline(g);
 }
 function drawOutline(g){
@@ -472,7 +508,7 @@ function drawOutline(g){
   pts.push(toWorld(g,-8,-g.hd-m),toWorld(g,0,-g.hd-m-9),toWorld(g,8,-g.hd-m));
   setLine(g.outline,pts);
 }
-function showReg(g,v){if(g.shown===v)return;g.shown=v;g.soldiers.forEach(s=>s.sp.visible=v);g.shadows.visible=v;g.banner.visible=v;}
+function showReg(g,v){if(g.shown===v)return;g.shown=v;g.soldiers.forEach(s=>s.sp.visible=v);g.shadows.visible=v;g.banner.visible=v;if(g.tent)g.tent.visible=v;}
 const corners=g=>[[g.x,g.z],toWorld(g,-g.hw,-g.hd),toWorld(g,g.hw,-g.hd),toWorld(g,g.hw,g.hd),toWorld(g,-g.hw,g.hd)];
 const isHidden=g=>corners(g).every(([x,z])=>inForest(x,z));
 // écart en mètres entre un point et le bloc d'une armée (0 si le point est dedans)
@@ -500,7 +536,7 @@ function step(g,dt){
   const want=Math.atan2(dx,-dz),diff=wrapA(want-g.heading),tr=TURN*dt;
   g.heading+=Math.max(-tr,Math.min(tr,diff));g.moving=true;
   if(Math.abs(diff)>.6)return;                                   // pivote d'abord sur place
-  const ux=dx/dist,uz=dz/dist,v=SPEED[g.kind]*terrainMult(g.kind,g.x,g.z,ux,uz),d=Math.min(dist,v*dt);
+  const ux=dx/dist,uz=dz/dist,v=speedOf(g.kind)*terrainMult(g.kind,g.x,g.z,ux,uz),d=Math.min(dist,v*dt);
   const nx=g.x+ux*d,nz=g.z+uz*d;
   if(blocked(nx,nz)){g.tx=null;g.chase=null;g.moving=false;if(g.side==='bleu')toast(`${g.name} : passage impossible (falaise)`,'#5a4a16');return;}
   g.x=nx;g.z=nz;
@@ -508,7 +544,7 @@ function step(g,dt){
 // les rouges patrouillent au hasard autour d'eux
 let aiOn=true;
 function ai(g,dt){
-  if(!aiOn||g.tx!==null||g.contact)return;
+  if(!aiOn||g.kind==='qg'||g.tx!==null||g.contact)return;     // le QG rouge ne bouge pas
   if((g.wait-=dt)>0)return;
   for(let k=0;k<12;k++){const a=R()*6.28,d=150+R()*350,x=Math.max(-1400,Math.min(1400,g.x+Math.cos(a)*d)),z=Math.max(-940,Math.min(940,g.z+Math.sin(a)*d));
     if(hAt(x,z)>WATER+1&&!blocked(x,z)){g.tx=x;g.tz=z;break;}}
@@ -519,7 +555,7 @@ function ai(g,dt){
 const seen=new Uint8Array(FW*FD),blur=new Float32Array(FW*FD),disp=new Float32Array(FW*FD);
 function viewshed(g){
   const h0=Math.max(hAt(g.x,g.z),WATER),eye=h0+(g.kind==='cav'?3.2:2.2);
-  const Rv=VISION*(isHill(g.x,g.z)?HILL:1);g.range=Rv;
+  const Rv=(g.kind==='qg'?VISION_QG:VISION)*(isHill(g.x,g.z)?HILL:1);g.range=Rv;
   const N=Math.ceil(2*Math.PI*Rv/6);
   for(let k=0;k<N;k++){const a=k/N*Math.PI*2,ca=Math.cos(a),sa=Math.sin(a);let maxS=-1e9;
     for(let d=5;d<=Rv;d+=5){const x=g.x+ca*d,z=g.z+sa*d;if(x<-W/2||x>W/2||z<-D/2||z>D/2)break;
@@ -542,7 +578,8 @@ function updateFog(){
   for(let i=0;i<FW*FD;i++){disp[i]=firstFog?blur[i]:disp[i]+(blur[i]-disp[i])*.5;fogData[i*4]=disp[i]*255;}
   firstFog=false;fogTex.needsUpdate=true;mmFogUpdate();
   regs.filter(g=>g.side==='rouge').forEach(e=>{
-    const v=!fogOn||spotted(e,blues);
+    // un QG n'est repéré que par des soldats assez proches (règles : éclaireurs ou soldats proches)
+    const v=!fogOn||(spotted(e,blues)&&(e.kind!=='qg'||blues.some(b=>Math.hypot(b.x-e.x,b.z-e.z)<REGLAGES.vueQG)));
     if(v&&fogOn&&!known.has(e)){known.add(e);toast(`Ennemi repéré : ${e.name} (${fmtMen(e.men)} hommes)`);}
     if(!v)known.delete(e);
     showReg(e,v);});
@@ -634,7 +671,8 @@ function renderSel(force){
     const nearInfo=near&&near[1]<120?`<span class="warn">${near[0].name} à ${Math.round(near[1])} m : envoie l'armée sur lui (clic droit sur son armée) pour attaquer</span>`:'';
     const dist=g.tx!==null?Math.hypot(g.tx-g.x,g.tz-g.z):0;
     const tourInfo=!turnMode?'':`<span><span class="k">Ce tour :</span> ${g.acted===turn?'ordre donné':actionsLeft()>0?'peut recevoir un ordre':'plus d\'action disponible'}${dist>2?` · <span class="k">arrivée dans</span> ${Math.max(1,Math.ceil(dist/reachOf(g)))} tour(s) environ`:''}</span>`;
-    h=`<b>${g.name}</b><span>${g.kind==='cav'?'Cavalerie':'Infanterie'} · ${fmtMen(g.men)} hommes</span><span>${etat}</span>${nearInfo}${tourInfo}
+    const q=g.kind==='qg'?qgParts(g):null;
+    h=`<b>${g.name}</b><span>${q?`Général ${g.general} · garde : ${fmtMen(q.garnison)} hommes · gardes rapprochés : ${q.gardes}/3 · PV du général : ${fmtMen(q.pv)}/${fmtMen(g.pvGen)}`:`${g.kind==='cav'?'Cavalerie':'Infanterie'} · ${fmtMen(g.men)} hommes`}</span><span>${etat}</span>${nearInfo}${tourInfo}
       <span><span class="k">Terrain :</span> ${t}${g.tx!==null?` · <span class="k">vitesse</span> ×${(terrainMult(g.kind,g.x,g.z,ux,uz)).toFixed(2).replace('.',',')}`:''}</span>
       <span><span class="k">Vision :</span> ${fmt(g.range||VISION)} m${(g.range||0)>VISION?' (colline : +50 %)':''}</span>
       ${isHidden(g)?'<span class="hid">Caché dans la forêt : invisible à plus de 50 m</span>':''}`;
@@ -645,8 +683,8 @@ function renderSel(force){
 }
 function renderStatus(){
   const reds=regs.filter(g=>g.side==='rouge'),vis=reds.filter(g=>g.shown);
-  status.textContent=!fogOn?'Brouillard désactivé : toutes les armées sont visibles.':
-    vis.length?`Ennemis repérés : ${vis.map(g=>g.name).join(', ')} (${vis.length} sur ${reds.length}).`:`Aucun ennemi en vue. ${reds.length} armées rouges se cachent quelque part au nord.`;
+  status.textContent=`Points : toi ${pointsOf('bleu')} · adversaire ${pointsOf('rouge')}. `+(!fogOn?'Brouillard désactivé : toutes les armées sont visibles.':
+    vis.length?`Ennemis repérés : ${vis.map(g=>g.name).join(', ')}.`:`Aucun ennemi en vue : les rouges se cachent quelque part au nord.`);
   if(failed)status.textContent+=` ${failed} image(s) manquante(s).`;
 }
 
@@ -655,10 +693,10 @@ const combatObj=g=>({men:g.men,kind:g.kind,terrain:terrainCombat(g.x,g.z),charge
 function rapport(g,foes){const mine=puissanceBase(combatObj(g));
   const theirs=foes.reduce((s,e)=>s+puissanceBase(combatObj(e))/Math.max(1,regs.filter(f=>f.side!==e.side&&contactDist(e,f)).length),0);
   return theirs>0?mine/theirs:99;}
-function trimSoldiers(g){const want=Math.ceil(g.men/2);while(g.soldiers.length>want){const s=g.soldiers.pop();scene.remove(s.sp);}g.shadows.count=g.soldiers.length;}
+function trimSoldiers(g){const want=Math.ceil((g.kind==='qg'?qgParts(g).garnison:g.men)/2);while(g.soldiers.length>want){const s=g.soldiers.pop();scene.remove(s.sp);}g.shadows.count=g.soldiers.length;}
 function removeReg(g){
   if(selected.includes(g))select(selected.filter(x=>x!==g));
-  g.soldiers.forEach(s=>scene.remove(s.sp));[g.shadows,g.banner,g.outline,g.path,g.mark,g.reach].forEach(o=>{if(o)scene.remove(o);});
+  g.soldiers.forEach(s=>scene.remove(s.sp));[g.shadows,g.banner,g.outline,g.path,g.mark,g.reach,g.tent].forEach(o=>{if(o)scene.remove(o);});
   g.texN.dispose();g.texS.dispose();g.dead=true;known.delete(g);
   const i=regs.indexOf(g);if(i>=0)regs.splice(i,1);
   regs.forEach(e=>{if(e.chase===g){e.chase=null;e.tx=null;}if(e.contact===g)e.contact=null;});
@@ -686,7 +724,7 @@ function combatRound(n){
     fighting.forEach(g=>g.charge=g.nouveau=false);
     for(const {a,loss,crushed,out} of res){
       tot.set(a,(tot.get(a)||0)+loss);
-      if(out){const by=a.foes.map(e=>e.name).join(' et ');msgs.push(crushed?`${a.name} est écrasé par ${by} !`:`${a.name} est dispersé, ses derniers hommes quittent le champ de bataille`);if(a.side==='bleu')bad=true;removeReg(a);}
+      if(out){const by=a.foes.map(e=>e.name).join(' et ');msgs.push(a.kind==='qg'?`Le général ${a.general} est tombé, son quartier général est pris ! (−3 points)`:crushed?`${a.name} est écrasé par ${by} ! (−1 point)`:`${a.name} est dispersé, ses derniers hommes quittent le champ de bataille (−1 point)`);if(a.side==='bleu')bad=true;removeReg(a);}
       else a.men-=loss;
     }
   }
@@ -700,7 +738,7 @@ function combatRound(n){
 let turnMode=true,turn=1,phase='ordres',phaseT=REGLAGES.dureeTour;
 const maxActions=()=>Math.min(REGLAGES.actionsMax,regs.filter(g=>g.side==='bleu').length);
 const actionsLeft=()=>Math.max(0,maxActions()-regs.filter(g=>g.side==='bleu'&&g.acted===turn).length);
-const reachOf=g=>REGLAGES.marcheTour*SPEED[g.kind]/SPEED.inf;
+const reachOf=g=>REGLAGES.marcheTour*speedOf(g.kind)/SPEED.inf;
 function turnTick(dt,t){
   if(phase==='ordres'){
     for(const g of regs)if(g.contact)place(g,t);
@@ -730,6 +768,7 @@ const tourEl=document.getElementById('tour'),tourT=document.getElementById('tour
 function renderTour(){
   tourEl.hidden=!turnMode||!ready;if(tourEl.hidden)return;
   tourT.textContent=`Tour ${turn}`;
+  document.getElementById('tour-p').textContent=`Points : ${pointsOf('bleu')} – ${pointsOf('rouge')}`;
   if(ended){tourC.textContent='Bataille terminée';tourC.classList.remove('urgent');tourA.textContent='';bEnd.disabled=true;return;}
   if(phase==='ordres'){const sec=Math.max(0,Math.ceil(phaseT));tourC.textContent=`Ordres · ${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`;tourC.classList.toggle('urgent',sec<=10);
     tourA.textContent=`Actions : ${actionsLeft()} / ${maxActions()}`;bEnd.disabled=false;}
@@ -748,10 +787,10 @@ document.getElementById('b-turn').addEventListener('click',e=>{
 });
 const finEl=document.getElementById('fin');
 function checkEnd(){
-  if(ended)return;const b=regs.some(g=>g.side==='bleu'),r=regs.some(g=>g.side==='rouge');
+  if(ended)return;const b=pointsOf('bleu')>0,r=pointsOf('rouge')>0;
   if(b&&r)return;ended=true;
   document.getElementById('fin-t').textContent=b?'Victoire':'Défaite';
-  document.getElementById('fin-s').textContent=b?`Il te reste ${fmtMen(regs.reduce((s,g)=>s+g.men,0))} hommes.`:'Toutes tes armées ont quitté le champ de bataille.';
+  document.getElementById('fin-s').textContent=b?`Le général ennemi et tous ses sous-généraux sont tombés. Il te reste ${pointsOf('bleu')} point(s).`:'Ton général et tous tes sous-généraux sont tombés.';
   finEl.hidden=false;drawReach();renderTour();
 }
 // les armées de départ (1 soldat affiché = 2 hommes)
@@ -763,11 +802,14 @@ const ARMEES=[
   // Rouges (de l'autre côté de la vallée, cachés par le brouillard)
   {kind:'inf',side:'rouge',name:'Kanki',color:'#c94b3f',x:-640,z:-480,cols:25,rows:9,dx:2.2,dz:3.0,heading:Math.PI},
   {kind:'inf',side:'rouge',name:'Ri Boku',color:'#c94b3f',x:-380,z:-510,cols:22,rows:9,dx:2.2,dz:3.0,heading:Math.PI},
-  {kind:'cav',side:'rouge',name:'Lü Bu',color:'#c94b3f',x:-920,z:-450,cols:12,rows:6,dx:3.6,dz:5.2,heading:Math.PI}
+  {kind:'cav',side:'rouge',name:'Lü Bu',color:'#c94b3f',x:-920,z:-450,cols:12,rows:6,dx:3.6,dz:5.2,heading:Math.PI},
+  // Quartiers généraux (le général y reste, avec sa garde) : Koby pour Mathieu, Shin en face
+  {kind:'qg',side:'bleu',name:'QG de Koby',general:'Koby',color:'#3f7fd6',x:-150,z:925,cols:15,rows:5,dx:2.2,dz:3.0,heading:0},
+  {kind:'qg',side:'rouge',name:'QG de Shin',general:'Shin',color:'#c94b3f',x:-600,z:-700,cols:15,rows:5,dx:2.2,dz:3.0,heading:Math.PI}
 ];
 function deploy(){
   select([]);regs.slice().forEach(removeReg);floats.forEach(f=>f.el.remove());floats.length=0;
-  ARMEES.forEach(o=>regiment({...o}));known.clear();ended=false;finEl.hidden=true;combatAcc=0;
+  ARMEES.forEach(o=>regiment(o.kind==='qg'?{...o,rows:Math.max(1,Math.ceil(REGLAGES.garnisonQG/2/o.cols))}:{...o}));known.clear();ended=false;finEl.hidden=true;combatAcc=0;
   turn=1;phase='ordres';phaseT=REGLAGES.dureeTour;
   updateFog();renderStatus();renderSel(true);renderTour();
 }
@@ -775,7 +817,7 @@ function deploy(){
 // ---------- panneau des réglages du combat ----------
 const RP=document.getElementById('reglages');
 const terrOpts=Object.entries(TERRAINS).map(([k,v])=>`<option value="${k}">${v}</option>`).join('');
-const simRow=(id,kind,n)=>`<div class="simrow"><b>${id}</b><select id="s${id}-k" aria-label="Type de l'armée ${id}"><option value="inf"${kind==='inf'?' selected':''}>Infanterie</option><option value="cav"${kind==='cav'?' selected':''}>Cavalerie</option></select><input id="s${id}-n" type="number" min="1" step="10" value="${n}" aria-label="Hommes de l'armée ${id}"><select id="s${id}-t" aria-label="Terrain de l'armée ${id}">${terrOpts}</select></div>`;
+const simRow=(id,kind,n)=>`<div class="simrow"><b>${id}</b><select id="s${id}-k" aria-label="Type de l'armée ${id}"><option value="inf"${kind==='inf'?' selected':''}>Infanterie</option><option value="cav"${kind==='cav'?' selected':''}>Cavalerie</option><option value="qg">QG (nombre = sa garde)</option></select><input id="s${id}-n" type="number" min="1" step="10" value="${n}" aria-label="Hommes de l'armée ${id}"><select id="s${id}-t" aria-label="Terrain de l'armée ${id}">${terrOpts}</select></div>`;
 function buildReglages(){
   let h=`<h2>Réglages du combat <button type="button" id="r-close" aria-label="Fermer">×</button></h2><p>Les changements s'appliquent tout de suite et restent gardés dans ce navigateur. Passe la souris sur un nom pour son explication.</p>`;
   for(const [titre,items] of REGLAGES_INFO){h+=`<fieldset><legend>${titre}</legend>`;
@@ -795,7 +837,8 @@ function buildReglages(){
   document.getElementById('sim-go').addEventListener('click',runSim);
 }
 function runSim(){
-  const army=id=>({kind:document.getElementById(`s${id}-k`).value,men:Math.max(1,Math.round(+document.getElementById(`s${id}-n`).value||0)),terrain:document.getElementById(`s${id}-t`).value});
+  const army=id=>{const kind=document.getElementById(`s${id}-k`).value,n=Math.max(0,Math.round(+document.getElementById(`s${id}-n`).value||0));
+    return{kind,men:kind==='qg'?n+3*REGLAGES.pvGarde+REGLAGES.pvGeneral:Math.max(1,n),terrain:document.getElementById(`s${id}-t`).value};};
   const A=army('A'),B=army('B'),r=simuler(A,B,1000),pc=x=>Math.round(x*100)+' %',f1=x=>x.toFixed(1).replace('.',',');
   const rf=puissanceBase({...A,charge:false})/puissanceBase({...B,charge:false});
   document.getElementById('sim-out').innerHTML=`<span><span class="k">Rapport de force :</span> ×${rf.toFixed(2).replace('.',',')} (${rapportMot(rf)} pour A)</span>
@@ -848,7 +891,9 @@ function drawMini(){
     mmx.setLineDash([]);mmx.strokeStyle=GOLD_CSS;mmx.beginPath();mmx.arc(X(g.tx),Z(g.tz),2.5*u,0,Math.PI*2);mmx.stroke();}
   mmx.setLineDash([]);
   // armées visibles : un bloc orienté, avec une pointe vers l'avant (agrandi pour rester lisible)
-  for(const g of regs){if(!g.shown)continue;const w=Math.max(2*g.hw*kx,8*u),h=Math.max(2*g.hd*kz,4.5*u),sel=selected.includes(g);
+  for(const g of regs){if(!g.shown)continue;
+    if(g.kind==='qg'){const sel=selected.includes(g);mmx.beginPath();mmx.arc(X(g.x),Z(g.z),5*u,0,Math.PI*2);mmx.fillStyle=g.color;mmx.fill();mmx.lineWidth=(sel?2.5:1.5)*u;mmx.strokeStyle=sel?GOLD_CSS:'#fff';mmx.stroke();continue;}
+    const w=Math.max(2*g.hw*kx,8*u),h=Math.max(2*g.hd*kz,4.5*u),sel=selected.includes(g);
     mmx.save();mmx.translate(X(g.x),Z(g.z));mmx.rotate(g.heading);mmx.fillStyle=g.color;
     mmx.beginPath();mmx.rect(-w/2,-h/2,w,h);mmx.moveTo(-2.5*u,-h/2);mmx.lineTo(0,-h/2-3.5*u);mmx.lineTo(2.5*u,-h/2);mmx.closePath();mmx.fill();
     mmx.lineWidth=(sel?2:1)*u;mmx.strokeStyle=sel?GOLD_CSS:'rgba(0,0,0,.75)';mmx.strokeRect(-w/2,-h/2,w,h);mmx.restore();}

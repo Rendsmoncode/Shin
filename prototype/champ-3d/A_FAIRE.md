@@ -17,3 +17,5 @@ Retours de l'utilisateur (validé : le rendu des armées, le mode marche et les 
 - [ ] Remplacer le sol et les rochers provisoires par des textures et des modèles dans le style de référence.
 - [x] Bannières des joueurs au-dessus des armées.
   - Fait : étendard planté au milieu de l'armée (hampe, drapeau à queue d'aronde à la couleur et à l'emblème du joueur : soleil pour les bleus, tour pour les rouges), plaque avec le nom du général et l'effectif réel, contour doré si choisie, taille lisible de près comme de loin. L'effectif se redessine tout seul quand il change (prêt pour le combat).
+- [x] Hommes clés, points et quartier général caché.
+  - Fait : un QG par camp (tente à l'arrière, garde de 150 hommes, 3 gardes rapprochés, PV du général), invisible pour l'ennemi sauf soldats à moins de 250 m, vision 200 m, se déplace lentement (coûte une action). Points : général 3, chaque armée (sous-général) 1 ; une armée détruite fait perdre 1 point, le QG pris 3 ; défaite à 0 point. Actions par tour = hommes clés (armées + général), 5 au plus. Réglages du QG dans le panneau, option QG dans le simulateur.
