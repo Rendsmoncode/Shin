@@ -73,6 +73,17 @@ kbd{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:3px;p
 #setup .sum{color:var(--fg)}
 #setup .warn{color:var(--red)}
 #carte-info{color:var(--muted)}
+/* livret de règles */
+#livret{position:fixed;inset:0;background:rgba(10,14,12,.62);display:grid;place-items:center;z-index:5}
+#livret[hidden]{display:none}
+#livret .box{background:var(--panel);border:1px solid var(--gold);border-radius:6px;padding:16px 20px;width:min(900px,calc(100vw - 24px));max-height:calc(100vh - 24px);overflow:auto;display:grid;gap:12px;font-size:16px;line-height:1.4;box-sizing:border-box}
+#livret h2{margin:0;font-size:22px;letter-spacing:.06em;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center;gap:10px}
+#livret h3{margin:0;font-size:17px;color:var(--gold);letter-spacing:.03em}
+#livret p{margin:0;color:var(--muted)}
+#livret .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:14px 22px}
+#livret ul{margin:4px 0 0;padding-left:20px;display:grid;gap:3px}
+#livret b.v{color:var(--fg)}
+#livret b.v.mod{color:var(--gold)}
 #fin{position:fixed;left:50%;top:38%;transform:translate(-50%,-50%);background:var(--panel);border:1px solid var(--gold);border-radius:6px;padding:18px 30px;text-align:center;display:grid;gap:10px;justify-items:center}
 #fin[hidden]{display:none}
 #fin b{font-size:44px;letter-spacing:.1em;text-transform:uppercase}
@@ -101,6 +112,7 @@ kbd{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:3px;p
     <button type="button" id="b-regl" aria-expanded="false">Réglages du combat</button>
     <button type="button" id="b-restart">Recommencer</button>
     <button type="button" id="b-new">Nouvelle bataille</button>
+    <button type="button" id="b-rules">Livret de règles</button>
   </div>
   <p id="carte-info"></p>
   <p id="status">Chargement…</p>
@@ -111,6 +123,7 @@ kbd{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:3px;p
 <div id="reglages" hidden></div>
 <div id="hits" aria-hidden="true"></div>
 <div id="fin" role="status" hidden><b id="fin-t"></b><span id="fin-s"></span><span class="row"><button type="button" id="fin-b">Recommencer la bataille</button><button type="button" id="fin-new">Nouvelle bataille</button></span></div>
+<div id="livret" hidden role="dialog" aria-modal="true" aria-labelledby="livret-t"><div class="box" id="livret-box"></div></div>
 <div id="setup" hidden role="dialog" aria-modal="true" aria-labelledby="setup-t"><div class="box" id="setup-box"></div></div>
 <div id="mmwrap"><div id="mmbar"><button type="button" id="mm-minus" title="Réduire la mini-carte" aria-label="Réduire la mini-carte">−</button><button type="button" id="mm-plus" title="Agrandir la mini-carte" aria-label="Agrandir la mini-carte">+</button><button type="button" id="mm-side" title="Changer la mini-carte de côté" aria-label="Changer la mini-carte de côté">⇄</button><button type="button" id="mm-hide" title="Masquer la mini-carte" aria-label="Masquer la mini-carte">×</button></div>
 <canvas id="mm" role="img" title="Mini-carte : clic pour y aller, clic droit pour y envoyer les armées choisies" aria-label="Mini-carte du champ de bataille : relief, rivière, forêts, armées visibles et cadre de la vue. Clic pour y déplacer la vue, clic droit pour y envoyer les armées choisies."></canvas></div>
@@ -916,6 +929,68 @@ SB.addEventListener('click',e=>{const t=e.target.closest('button');if(!t)return;
 SETUP.addEventListener('keydown',e=>{e.stopPropagation();if(e.key==='Escape')SETUP.hidden=true;});
 document.getElementById('b-new').addEventListener('click',openSetup);
 document.getElementById('fin-new').addEventListener('click',openSetup);
+
+// ---------- livret de règles (les valeurs suivent les réglages en cours) ----------
+const LIV=document.getElementById('livret'),LB=document.getElementById('livret-box');
+function renderLivret(){
+  const r=REGLAGES,num=x=>String(Math.round(x*100)/100).replace('.',','),
+    v=(k,suf='')=>`<b class="v${r[k]!==REGLAGES_DEFAUT[k]?' mod':''}">${num(r[k])}${suf}</b>`,
+    km=m=>(m/1000).toLocaleString('fr-FR',{maximumFractionDigits:2});
+  const sec=(t,items)=>`<div><h3>${t}</h3><ul>${items.map(i=>`<li>${i}</li>`).join('')}</ul></div>`;
+  LB.innerHTML=`<h2 id="livret-t">Livret de règles · bataille rangée <button type="button" id="livret-close" aria-label="Fermer">×</button></h2>
+  <p>Le rappel des règles telles qu'elles marchent dans ce prototype. Les chiffres suivent les « Réglages du combat » : ceux en doré ont été modifiés.</p>
+  <div class="cols">
+  ${sec('Le but',[
+    'Chaque camp a un <b>général</b>, qui reste dans son <b>quartier général</b> (QG), et des <b>hommes clés</b> à la tête des armées : sous-généraux et chefs d\'unité.',
+    'Le général vaut <b>3 points</b>, chaque homme clé <b>1 point</b>.',
+    'Un camp qui tombe à <b>0 point</b> perd la bataille : il faut détruire les armées ennemies <b>et</b> prendre leur QG.'])}
+  ${sec('Un tour de jeu',[
+    `Les deux joueurs donnent leurs ordres <b>en même temps</b>, pendant ${v('dureeTour',' s')}, sans voir ceux de l'autre.`,
+    '<b>Fin du tour</b> (ou <kbd>Entrée</kbd>) : sinon le tour passe tout seul à la fin du chrono.',
+    `Puis toutes les armées bougent ensemble (${v('dureeMouvement',' s')} d'animation) et celles au contact se battent : ${v('manchesParTour')} manche(s) de combat par tour.`])}
+  ${sec('Les ordres',[
+    `<b>1 ordre par homme clé et par tour</b>, ${v('actionsMax')} au maximum. Le général compte : déplacer le QG coûte une action.`,
+    'Changer l\'ordre d\'une armée déjà commandée ce tour ne coûte rien de plus.',
+    'Une <b>marche longue continue toute seule</b> aux tours suivants, sans coûter d\'action.',
+    'Clic droit sur le terrain pour y aller, sur une armée ennemie pour marcher sur elle.'])}
+  ${sec('Marche et terrain',[
+    `En un tour, l'infanterie parcourt ${v('marcheTour',' m')} sur terrain plat, la cavalerie 2 fois plus, le QG ×${v('vitesseQG')} (le cercle vert montre la portée).`,
+    'Forêt : infanterie ×0,75, cavalerie ×0,5. Rivière (gué) : ×0,35. Les montées ralentissent, les falaises sont infranchissables.'])}
+  ${sec('Vision et brouillard',[
+    'Une armée voit à <b>300 m</b>, <b>+50 %</b> depuis une colline. Le relief et les forêts cachent ce qui est derrière.',
+    'Une armée <b>dans une forêt est invisible</b>, sauf pour un ennemi à moins de 50 m.',
+    `Ton QG voit à 200 m. Le <b>QG ennemi reste invisible</b> tant qu'aucun de tes soldats n'est à moins de ${v('vueQG',' m')} (et ne le voit).`])}
+  ${sec('Le combat',[
+    `Deux armées ennemies se battent dès que leurs blocs sont à moins de ${v('contact',' m')}. L'armée qui arrive est l'attaquant.`,
+    `<b>Puissance</b> = hommes × valeur (fantassin ${v('valeurFantassin')}, cavalier ${v('valeurCavalier')}) × terrain × charge, ± ${v('hasard',' %')} de hasard à chaque manche.`,
+    `Terrain : cavalerie ×${v('cavPlaine')} en terrain découvert, ×${v('cavForet')} en forêt, ×${v('cavPente')} sur colline ou pente ; infanterie ×${v('infForet')} en forêt ; tout le monde ×${v('gue')} dans la rivière. Charge : ×${v('charge')} à la 1<sup>re</sup> manche.`,
+    `<b>Pertes</b> : à puissance égale, chacun perd ${v('pertes',' %')} de son effectif par manche ; plus l'écart est grand, plus les pertes sont inégales (courbe ${v('courbe')}).`,
+    `<b>Écrasement</b> : si une attaque arrive ${v('ecrasement')} fois plus puissante, l'armée attaquée est détruite d'un coup. Sinon le combat dure.`,
+    `Une armée qui tombe sous ${v('deroute')} hommes est <b>dispersée</b> et quitte le champ de bataille.`,
+    '<b>Se replier</b> : donner un ordre de marche dans l\'autre sens. On subit des pertes tant qu\'on est au contact.'])}
+  ${sec('Le quartier général',[
+    `Le général y est gardé par ${v('garnisonQG')} hommes et 3 gardes rapprochés (${v('pvGarde')} PV chacun). Il a ${v('pvGeneral')} PV.`,
+    `Attaqué, le QG se défend ×${v('defenseQG')} ; le général se bat comme ${v('forceGeneral')} hommes. Il n'est <b>jamais écrasé d'un coup</b> : il résiste un temps.`,
+    'Les pertes tombent dans l\'ordre : la garde, puis les 3 gardes rapprochés, puis le général.'])}
+  ${sec('Points et fin de la bataille',[
+    'Une armée détruite (écrasée ou dispersée) = son homme clé tombé : <b>−1 point</b>.',
+    'Le QG pris = le général tombé : <b>−3 points</b>.',
+    '<b>0 point = défaite.</b>'])}
+  ${sec('Armées et cartes',[
+    'Un <b>sous-général</b> dirige de 500 à 5 000 hommes ; en dessous de 500, c\'est un <b>chef d\'unité</b> (10 hommes au moins).',
+    `La plus grande armée choisit la carte : jusqu'à 999 hommes, petite (${km(CARTES[0].W)} × ${km(CARTES[0].D)} km) ; jusqu'à 2 999, moyenne (${km(CARTES[1].W)} × ${km(CARTES[1].D)} km) ; au-delà, grande (${km(CARTES[2].W)} × ${km(CARTES[2].D)} km).`,
+    '1 soldat affiché = 2 hommes (4 à partir de 3 000 hommes). La bannière montre toujours l\'effectif réel.',
+    'En dessous de 300 hommes, pas de bataille rangée : le combat se règle automatiquement.'])}
+  ${sec('Pas encore dans le prototype',[
+    'Angle d\'attaque (flanc, dos), formations, archers.',
+    'Effets des généraux, attaques spéciales, éclaireurs et espions.',
+    'Placement de départ en 59 secondes, nombre maximum de tours, bataille à deux joueurs en ligne.'])}
+  </div>`;
+  document.getElementById('livret-close').addEventListener('click',()=>{LIV.hidden=true;});
+}
+document.getElementById('b-rules').addEventListener('click',()=>{renderLivret();LIV.hidden=false;document.getElementById('livret-close').focus();});
+LIV.addEventListener('keydown',e=>{e.stopPropagation();if(e.key==='Escape')LIV.hidden=true;});
+LIV.addEventListener('click',e=>{if(e.target===LIV)LIV.hidden=true;});   // clic à côté = fermer
 
 // ---------- panneau des réglages du combat ----------
 const RP=document.getElementById('reglages');
