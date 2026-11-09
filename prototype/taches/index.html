@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shin, les tâches</title>
+<style>
+/* Suivi des tâches : lit taches.json (mis à jour par Claude à chaque envoi). Aspect sombre unique, volontaire. */
+:root{--bg:#141a16;--card:#1b231e;--card2:#212b25;--line:#33443a;--fg:#e7e3d6;--muted:#a3ab9f;--gold:#e3b54a;
+  --fait:#7fb069;--verif:#b5c96a;--cours:#6fa3ec;--afaire:#8b948a;--decider:#e09a5b;--aband:#5d635c;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:"Barlow Condensed","Arial Narrow",Arial,sans-serif;font-size:16px}
+main{max-width:1100px;margin:0 auto;padding:20px 16px 48px;display:grid;gap:18px}
+.haut{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 16px}
+.haut a{color:var(--gold);text-decoration:none;font-weight:700;letter-spacing:.14em}
+h1{margin:0;font-size:30px;letter-spacing:.04em}
+.maj{color:var(--muted);font-size:15px;margin-left:auto}
+.resume{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(130px,1fr))}
+.tuile{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:10px 12px;display:grid;gap:2px}
+.tuile span{color:var(--muted);font-size:14px}
+.tuile b{font-size:28px;font-variant-numeric:tabular-nums}
+.barre{height:8px;border-radius:4px;background:#2a332d;overflow:hidden;display:flex}
+.barre i{display:block;height:100%}
+.filtres{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:10px}
+.filtres label{display:flex;gap:6px;align-items:center;color:var(--muted);font-size:15px}
+select,input{font:inherit;color:var(--fg);background:var(--card2);border:1px solid var(--line);border-radius:4px;padding:4px 8px;min-width:0}
+input[type=search]{flex:1 1 200px}
+select:focus-visible,input:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
+button{font:inherit;color:var(--fg);background:var(--card2);border:1px solid var(--line);border-radius:4px;padding:4px 10px;cursor:pointer}
+button:hover{border-color:var(--gold)}
+.compte{color:var(--muted);font-size:15px}
+details.phase{background:var(--card);border:1px solid var(--line);border-radius:6px}
+details.phase>summary{list-style:none;cursor:pointer;padding:10px 12px;display:grid;grid-template-columns:1fr auto;gap:6px 12px;align-items:center}
+details.phase>summary::-webkit-details-marker{display:none}
+summary h2{margin:0;font-size:20px;letter-spacing:.02em}
+summary h2::before{content:"▸ ";color:var(--muted)}
+details[open]>summary h2::before{content:"▾ "}
+summary .pct{color:var(--muted);font-variant-numeric:tabular-nums;font-size:15px}
+summary .barre{grid-column:1/-1}
+ul{list-style:none;margin:0;padding:0 12px 10px;display:grid;gap:6px}
+li{background:var(--card2);border:1px solid var(--line);border-left:4px solid var(--c,var(--afaire));border-radius:4px;padding:8px 10px;display:grid;gap:4px}
+li .l1{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:baseline}
+li .t{font-weight:600;font-size:17px;flex:1 1 280px}
+li .d{color:var(--muted);font-size:15px;line-height:1.35}
+li .n{font-size:15px;color:var(--gold)}
+.pastille{font-size:13px;padding:1px 7px;border-radius:3px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.pastille.st{color:var(--bg);background:var(--c);border-color:var(--c);font-weight:600}
+.pastille.pay{color:#f0c27a;border-color:#6b5a2c}
+.pastille.qui{color:var(--fg);border-color:#4b6b58}
+.vide{color:var(--muted);padding:12px}
+.legende{color:var(--muted);font-size:14px;line-height:1.5}
+.legende b{color:var(--fg);font-weight:600}
+</style>
+</head>
+<body>
+<main>
+  <div class="haut"><a href="../">SHIN</a><h1>Tâches jusqu'à la fin du jeu</h1><span class="maj" id="maj"></span></div>
+  <div class="resume" id="resume"></div>
+  <div class="barre" id="barreTot" aria-hidden="true"></div>
+  <div class="filtres">
+    <input type="search" id="q" placeholder="Rechercher une tâche…" aria-label="Rechercher">
+    <label>Statut <select id="fSt"><option value="">Tous</option><option value="ouvert">Pas fini</option></select></label>
+    <label>Qui <select id="fQui"><option value="">Tout le monde</option><option value="-">Personne</option></select></label>
+    <label>Priorité <select id="fPr"><option value="">Toutes</option><option value="1">1 (première partie)</option><option value="2">2</option><option value="3">3 (plus tard)</option></select></label>
+    <label>Payant <select id="fPay"><option value="">Tout</option><option value="oui">Seulement payant</option></select></label>
+    <button type="button" id="tout">Tout ouvrir</button>
+    <span class="compte" id="compte"></span>
+  </div>
+  <div id="liste"><p class="vide">Chargement…</p></div>
+  <p class="legende"><b>Priorité</b> : 1 = nécessaire pour une première partie jouable, 2 = important ensuite, 3 = plus tard. <b>Taille</b> : S petit, M moyen, L gros, XL très gros. <b>Payant</b> : génération payante (Meshy, Gemini, ElevenLabs) à valider avant.<br>
+  Pour changer une tâche, demander à Claude : il met à jour <code>prototype/taches/taches.json</code> et la page suit à la publication suivante (une ou deux minutes).</p>
+</main>
+<script>
+(async function(){
+const COUL={'Fait':'var(--fait)','Fait, à vérifier':'var(--verif)','En cours':'var(--cours)','À faire':'var(--afaire)','À décider':'var(--decider)','Abandonné':'var(--aband)'};
+const FINI=s=>s==='Fait'||s==='Fait, à vérifier';
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let D;
+try{const r=await fetch('taches.json',{cache:'no-cache'});if(!r.ok)throw 0;D=await r.json();}
+catch(e){$('liste').innerHTML='<p class="vide">La liste des tâches n\'a pas pu se charger. Recharge la page.</p>';return;}
+const T=D.taches.filter(t=>t.statut!=='Abandonné');
+$('maj').textContent='Mise à jour : '+new Date(D.maj+'T12:00').toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+for(const s of D.statuts){const o=document.createElement('option');o.value=s;o.textContent=s;$('fSt').appendChild(o);}
+for(const s of D.responsables){const o=document.createElement('option');o.value=s;o.textContent=s;$('fQui').appendChild(o);}
+// résumé
+const nb=s=>T.filter(t=>t.statut===s).length;
+const tot=T.length,fini=T.filter(t=>FINI(t.statut)).length;
+$('resume').innerHTML=[['Avancement',Math.round(100*fini/Math.max(1,tot))+' %'],['Tâches',tot],['Faites',fini],['En cours',nb('En cours')],['À faire',nb('À faire')],['À décider',nb('À décider')]]
+  .map(([a,b])=>`<div class="tuile"><span>${a}</span><b>${b}</b></div>`).join('');
+const barre=l=>['Fait','Fait, à vérifier','En cours','À décider'].map(s=>{const n=l.filter(t=>t.statut===s).length;return n?`<i style="width:${100*n/l.length}%;background:${COUL[s]}" title="${s} : ${n}"></i>`:'';}).join('');
+$('barreTot').innerHTML=barre(T);
+// filtres (mémorisés dans ce navigateur)
+const F=['q','fSt','fQui','fPr','fPay'];
+try{const m=JSON.parse(localStorage.getItem('shin-taches')||'{}');F.forEach(k=>{if(m[k]!=null)$(k).value=m[k];});}catch(e){}
+const ouverts=new Set();
+function rendre(){
+  try{localStorage.setItem('shin-taches',JSON.stringify(Object.fromEntries(F.map(k=>[k,$(k).value]))));}catch(e){}
+  const q=$('q').value.trim().toLowerCase(),st=$('fSt').value,qui=$('fQui').value,pr=$('fPr').value,pay=$('fPay').value;
+  const ok=t=>(!q||(t.tache+' '+t.detail+' '+t.domaine+' '+t.notes).toLowerCase().includes(q))
+    &&(!st||(st==='ouvert'?!FINI(t.statut):t.statut===st))
+    &&(!qui||(qui==='-'?!t.responsable:t.responsable===qui))
+    &&(!pr||String(t.priorite)===pr)&&(!pay||/^(oui|possible)/i.test(t.payant));
+  const filtre=q||st||qui||pr||pay;
+  const phases=[...new Set(T.map(t=>t.phase))];let n=0,html='';
+  for(const ph of phases){
+    const toutes=T.filter(t=>t.phase===ph),vis=toutes.filter(ok);n+=vis.length;
+    if(!vis.length)continue;
+    const f=toutes.filter(t=>FINI(t.statut)).length,pct=Math.round(100*f/toutes.length);
+    const ordre={'En cours':0,'À décider':1,'À faire':2,'Fait, à vérifier':3,'Fait':4};
+    vis.sort((a,b)=>(ordre[a.statut]??5)-(ordre[b.statut]??5)||a.priorite-b.priorite||a.id-b.id);
+    html+=`<details class="phase" data-ph="${esc(ph)}"${filtre||ouverts.has(ph)?' open':''}><summary><h2>${esc(ph)}</h2><span class="pct">${f}/${toutes.length} · ${pct} %</span><div class="barre">${barre(toutes)}</div></summary><ul>`+
+      vis.map(t=>`<li style="--c:${COUL[t.statut]||'var(--afaire)'}"><div class="l1"><span class="t">${esc(t.tache)}</span>`+
+        `<span class="pastille st">${esc(t.statut)}</span>${t.responsable?`<span class="pastille qui">${esc(t.responsable)}</span>`:''}`+
+        `<span class="pastille" title="Priorité">P${t.priorite}</span><span class="pastille" title="Taille">${esc(t.taille)}</span>`+
+        `${/^(oui|possible)/i.test(t.payant)?`<span class="pastille pay">${esc(t.payant)}</span>`:''}<span class="pastille" title="Numéro">#${t.id}</span></div>`+
+        `<div class="d">${esc(t.domaine)} · ${esc(t.detail)}</div>${t.notes?`<div class="n">${esc(t.notes)}</div>`:''}</li>`).join('')+`</ul></details>`;
+  }
+  $('liste').innerHTML=html||'<p class="vide">Aucune tâche ne correspond.</p>';
+  $('compte').textContent=`${n} tâche${n>1?'s':''} affichée${n>1?'s':''}`;
+  $('liste').querySelectorAll('details').forEach(d=>d.addEventListener('toggle',()=>{d.open?ouverts.add(d.dataset.ph):ouverts.delete(d.dataset.ph);}));
+}
+F.forEach(k=>$(k).addEventListener('input',rendre));
+$('tout').addEventListener('click',()=>{const ds=[...$('liste').querySelectorAll('details')],ouvrir=ds.some(d=>!d.open);ds.forEach(d=>{d.open=ouvrir;});$('tout').textContent=ouvrir?'Tout fermer':'Tout ouvrir';});
+rendre();
+})();
+</script>
+</body>
+</html>

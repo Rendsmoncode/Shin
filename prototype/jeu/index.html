@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Shin, le jeu</title>
+<style>
+/* Page de jeu : barre du haut (onglets du jeu, ressources) et l'écran de l'onglet choisi. Aspect sombre unique, volontaire. */
+:root{--bg:#141a16;--bar:#10150f;--card:#1b231e;--line:#33443a;--fg:#e7e3d6;--muted:#a3ab9f;--gold:#e3b54a;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:var(--bg);color:var(--fg);font-family:"Barlow Condensed","Arial Narrow",Arial,sans-serif}
+body{display:grid;grid-template-rows:auto 1fr;overflow:hidden}
+.barre{display:flex;align-items:center;gap:10px;padding:6px max(10px,env(safe-area-inset-left,0px));background:var(--bar);border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
+.barre::-webkit-scrollbar{display:none}
+.logo{color:var(--gold);text-decoration:none;font-weight:700;letter-spacing:.14em;font-size:20px;padding-right:6px}
+nav{display:flex;gap:4px}
+nav button{font:inherit;font-size:16px;font-weight:600;letter-spacing:.03em;color:var(--muted);background:none;border:1px solid transparent;border-radius:4px;padding:5px 10px;cursor:pointer;white-space:nowrap}
+nav button:hover{color:var(--fg)}
+nav button[aria-selected="true"]{color:var(--fg);border-color:var(--line);background:var(--card)}
+nav button:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
+nav button .bientot{font-size:11px;color:var(--muted);margin-left:4px}
+.ressources{margin-left:auto;display:flex;gap:12px;color:var(--muted);font-size:15px;white-space:nowrap}
+.ressources b{color:var(--fg);font-weight:600}
+main{position:relative;min-height:0}
+iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+.vide{height:100%;display:grid;place-items:center;padding:16px}
+.vide div{max-width:520px;text-align:center;display:grid;gap:10px;border:1px solid var(--line);border-radius:8px;background:var(--card);padding:24px}
+.vide h2{margin:0;font-size:26px;letter-spacing:.04em}
+.vide p{margin:0;color:var(--muted);font-size:17px;line-height:1.4}
+.vide a{color:var(--gold)}
+</style>
+</head>
+<body>
+<header class="barre">
+  <a class="logo" href="../" title="Retour à l'accueil">SHIN</a>
+  <nav role="tablist" aria-label="Écrans du jeu" id="onglets"></nav>
+  <div class="ressources" aria-label="Ressources (pas encore en jeu)">
+    <span>Argent <b>—</b></span><span>Nourriture <b>—</b></span><span>Matériaux <b>—</b></span><span>Population <b>—</b></span>
+  </div>
+</header>
+<main id="ecran"></main>
+<script>
+// Les écrans du jeu. Seul le Monde existe pour l'instant ; les autres sont dans la liste des tâches (../taches/).
+const ONGLETS=[
+  {id:'monde',nom:'Monde',page:'../carte/'},
+  {id:'quartier',nom:'Mon quartier',texte:'La vue de ton quartier façon Clash of Clans : ta maison en hôtel de ville, les lieux réels qui produisent tes ressources, tes constructions et tes défenses.'},
+  {id:'armees',nom:'Armées',texte:'Former tes armées (général, sous-généraux, troupes) et les envoyer sur les routes d\'Aubagne.'},
+  {id:'personnages',nom:'Personnages',texte:'Ta collection de généraux, guerriers mystiques et soldats d\'élite, et les tirages du gacha.'},
+  {id:'diplomatie',nom:'Diplomatie',texte:'Contrats, alliances, guerres et chat entre joueurs.'},
+  {id:'journal',nom:'Journal',texte:'Le journal quotidien de chaque joueur et les hauts faits de la partie.'},
+];
+const nav=document.getElementById('onglets'),ecran=document.getElementById('ecran');
+function ouvrir(id){
+  const o=ONGLETS.find(x=>x.id===id)||ONGLETS[0];
+  nav.querySelectorAll('button').forEach(b=>b.setAttribute('aria-selected',b.dataset.id===o.id));
+  ecran.innerHTML='';
+  if(o.page){const f=document.createElement('iframe');f.src=o.page;f.title=o.nom;f.allow='fullscreen';ecran.appendChild(f);}
+  else{ecran.innerHTML=`<div class="vide"><div><h2>${o.nom}</h2><p>${o.texte}</p><p>Pas encore construit. Voir la <a href="../taches/">liste des tâches</a>.</p></div></div>`;}
+  try{history.replaceState(null,'','#'+o.id);}catch(e){}
+}
+ONGLETS.forEach(o=>{const b=document.createElement('button');b.type='button';b.setAttribute('role','tab');b.dataset.id=o.id;
+  b.innerHTML=o.nom+(o.page?'':'<span class="bientot">bientôt</span>');b.addEventListener('click',()=>ouvrir(o.id));nav.appendChild(b);});
+ouvrir(location.hash.slice(1));
+</script>
+</body>
+</html>

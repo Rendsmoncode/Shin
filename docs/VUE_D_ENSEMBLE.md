@@ -31,6 +31,7 @@ Ce document explique comment les parties du jeu s'emboîtent. Le détail des rè
 - Quand deux armées ou un joueur et un quartier s'affrontent : si les deux joueurs sont connectés → **bataille rangée** (niveau 3) ; sinon → **raid** façon Clash of Clans (niveau 2).
 
 ## Où en est le développement
+- **La liste complète des tâches** est sur le site (`taches/`), tirée de `prototype/taches/taches.json`.
 - **Fait** : les règles de la bataille rangée et du raid, les personnages, le style visuel, et le **prototype 3D du champ de bataille** (`prototype/champ-3d/`).
 - **Prochaine étape du prototype** : le rendre jouable (sélectionner une armée, la déplacer, brouillard de guerre). Voir `prototype/champ-3d/A_FAIRE.md`.
 - **Plus tard** : la carte d'Aubagne (OpenStreetMap), le quartier et ses défenses, le gacha, puis les guerres (gardées pour la fin).

@@ -6,4 +6,12 @@
 - L'utilisateur surveille ses crédits Claude : éviter les itérations inutiles, faire une seule passe quand c'est possible, et prévenir avant un travail coûteux.
 - Répondre en français, simplement : l'utilisateur n'est pas développeur.
 - Les règles du jeu sont dans `docs/REGLES.md`, les personnages dans `docs/PERSONNAGES.md`, le style visuel dans le skill `style-visuel`.
-- **Ne pas tester le jeu dans la session** (pas de rendu dans un navigateur headless, pas de captures d'écran) sauf si l'utilisateur le demande : coder, envoyer sur `main`, et l'utilisateur teste sur le site publié (`https://rendsmoncode.github.io/Shin/`, carte de la ville dans `carte/`, champ de bataille dans `champ-3d/`).
+- **Ne pas tester le jeu dans la session** (pas de rendu dans un navigateur headless, pas de captures d'écran) sauf si l'utilisateur le demande : coder, envoyer sur `main`, et l'utilisateur teste sur le site publié (`https://rendsmoncode.github.io/Shin/` : page de garde, le jeu dans `jeu/` (onglet Monde = carte de la ville `carte/`), test des batailles dans `champ-3d/`, tâches dans `taches/`).
+
+- **Deux personnes travaillent sur le projet, chacune avec son Claude : Ayoub (le créateur du jeu) et Mathieu.** Avant de commencer : récupérer la dernière version de `main`.
+- **Liste des tâches : `prototype/taches/taches.json`** (affichée sur le site dans `taches/`). La tenir à jour à chaque fois :
+  - au début d'une session, la lire. Si la tâche demandée est « En cours » chez l'autre personne, le dire avant de toucher à quoi que ce soit ;
+  - en commençant une tâche : statut « En cours » et responsable (Ayoub ou Mathieu), puis envoyer ce changement sur `main` tout de suite, avant de coder ;
+  - en terminant : statut « Fait, à vérifier », dans le même envoi que le travail. « Fait » seulement quand l'utilisateur a validé sur le site ;
+  - ajouter, modifier ou supprimer des tâches quand l'utilisateur le demande ou quand une décision change le plan (statut « Abandonné » plutôt que supprimer une tâche commencée). Une nouvelle tâche prend le plus grand `id` + 1, avec une phase déjà existante. Mettre à jour `maj` (date du jour) ;
+  - garder le fichier valide (une tâche par ligne) : le vérifier avec `python3 -m json.tool` avant d'envoyer.
