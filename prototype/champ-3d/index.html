@@ -59,6 +59,20 @@ kbd{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:3px;p
 #sim-out{display:grid;gap:2px}
 #sim-out .k{color:var(--muted)}
 .hit{position:fixed;pointer-events:none;font-weight:700;font-size:22px;letter-spacing:.02em;text-shadow:0 1px 3px #000,0 0 6px #000;transform:translate(-50%,-100%);white-space:nowrap}
+/* écran « Nouvelle bataille » */
+#setup{position:fixed;inset:0;background:rgba(10,14,12,.62);display:grid;place-items:center;z-index:5}
+#setup[hidden]{display:none}
+#setup .box{background:var(--panel);border:1px solid var(--gold);border-radius:6px;padding:16px 18px;width:min(780px,calc(100vw - 24px));max-height:calc(100vh - 24px);overflow:auto;display:grid;gap:12px;font-size:16px;box-sizing:border-box}
+#setup h2{margin:0;font-size:22px;letter-spacing:.06em;text-transform:uppercase}
+#setup h3{margin:0;font-size:17px;color:var(--gold)}
+#setup p{margin:0;color:var(--muted)}
+#setup .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px}
+#setup .unit{display:grid;grid-template-columns:1fr 96px 72px 84px 28px;gap:5px;align-items:center;margin-top:5px}
+#setup select,#setup input{font:inherit;color:var(--fg);background:#1b241e;border:1px solid var(--line);border-radius:3px;padding:2px 4px;min-width:0}
+#setup .role{color:var(--muted);font-size:13px}
+#setup .sum{color:var(--fg)}
+#setup .warn{color:var(--red)}
+#carte-info{color:var(--muted)}
 #fin{position:fixed;left:50%;top:38%;transform:translate(-50%,-50%);background:var(--panel);border:1px solid var(--gold);border-radius:6px;padding:18px 30px;text-align:center;display:grid;gap:10px;justify-items:center}
 #fin[hidden]{display:none}
 #fin b{font-size:44px;letter-spacing:.1em;text-transform:uppercase}
@@ -77,7 +91,7 @@ kbd{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:3px;p
 <div id="scene" aria-label="Champ de bataille en 3D avec relief, rivière, forêts et deux armées. Les armées bleues se commandent à la souris."></div>
 <div class="panel">
   <div class="head"><h1>Champ de bataille 3D</h1><button type="button" id="b-help" aria-expanded="true" aria-controls="aide">Masquer l'aide</button></div>
-  <p id="aide"><b>Clic gauche</b> sur une armée bleue pour la choisir (<kbd>Maj</kbd> pour en ajouter, touches <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd>). <b>Clic droit</b> sur le terrain pour l'y envoyer, sur une armée rouge pour marcher sur elle. Glisser pour se déplacer, molette pour zoomer, glisser avec le clic droit pour pivoter. <kbd>Espace</kbd> centre la vue, <kbd>Échap</kbd> désélectionne. <b>Mini-carte</b> : clic ou glisser pour y aller, clic droit pour y envoyer les armées choisies ; ses boutons la réduisent, l'agrandissent, la changent de côté ou la masquent. <b>Combat</b> : une armée qui entre au contact d'une armée ennemie se bat ; lui donner un ordre de marche dans l'autre sens la fait se replier. <b>Tour par tour</b> : pendant la minute du tour, donne tes ordres (1 par armée, 5 au plus), puis <b>Fin du tour</b> (ou <kbd>Entrée</kbd>) : toutes les armées bougent et se battent en même temps. Une marche longue continue seule aux tours suivants, sans coûter d'action. <b>Quartier général</b> : ton général (Koby) reste dans sa tente à l'arrière, protégé par sa garde ; le déplacer (lentement) coûte une action. Le QG ennemi reste invisible tant que tes soldats n'en sont pas tout près. <b>Points</b> : général 3, chaque sous-général (une armée) 1 ; à 0 point, la bataille est perdue.</p>
+  <p id="aide"><b>Clic gauche</b> sur une armée bleue pour la choisir (<kbd>Maj</kbd> pour en ajouter, touches <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd>). <b>Clic droit</b> sur le terrain pour l'y envoyer, sur une armée rouge pour marcher sur elle. Glisser pour se déplacer, molette pour zoomer, glisser avec le clic droit pour pivoter. <kbd>Espace</kbd> centre la vue, <kbd>Échap</kbd> désélectionne. <b>Mini-carte</b> : clic ou glisser pour y aller, clic droit pour y envoyer les armées choisies ; ses boutons la réduisent, l'agrandissent, la changent de côté ou la masquent. <b>Combat</b> : une armée qui entre au contact d'une armée ennemie se bat ; lui donner un ordre de marche dans l'autre sens la fait se replier. <b>Tour par tour</b> : pendant la minute du tour, donne tes ordres (1 par armée, 5 au plus), puis <b>Fin du tour</b> (ou <kbd>Entrée</kbd>) : toutes les armées bougent et se battent en même temps. Une marche longue continue seule aux tours suivants, sans coûter d'action. <b>Quartier général</b> : ton général (Koby) reste dans sa tente à l'arrière, protégé par sa garde ; le déplacer (lentement) coûte une action. Le QG ennemi reste invisible tant que tes soldats n'en sont pas tout près. <b>Points</b> : général 3, chaque sous-général (une armée) 1 ; à 0 point, la bataille est perdue. <b>Nouvelle bataille</b> : choisis tes chefs et tes effectifs ; la taille de la carte suit la plus grande armée.</p>
   <div class="row">
     <button type="button" id="b-fog" aria-pressed="true">Brouillard : oui</button>
     <button type="button" id="b-ai" aria-pressed="true">Rouges : en patrouille</button>
@@ -86,7 +100,9 @@ kbd{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:3px;p
     <button type="button" id="b-turn" aria-pressed="true">Tour par tour : oui</button>
     <button type="button" id="b-regl" aria-expanded="false">Réglages du combat</button>
     <button type="button" id="b-restart">Recommencer</button>
+    <button type="button" id="b-new">Nouvelle bataille</button>
   </div>
+  <p id="carte-info"></p>
   <p id="status">Chargement…</p>
   <div id="sel" aria-live="polite"></div>
 </div>
@@ -94,7 +110,8 @@ kbd{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:3px;p
 <div id="tour" hidden><span id="tour-t"></span><span id="tour-c"></span><span id="tour-a"></span><span id="tour-p"></span><button type="button" id="b-end">Fin du tour</button></div>
 <div id="reglages" hidden></div>
 <div id="hits" aria-hidden="true"></div>
-<div id="fin" role="status" hidden><b id="fin-t"></b><span id="fin-s"></span><button type="button" id="fin-b">Recommencer la bataille</button></div>
+<div id="fin" role="status" hidden><b id="fin-t"></b><span id="fin-s"></span><span class="row"><button type="button" id="fin-b">Recommencer la bataille</button><button type="button" id="fin-new">Nouvelle bataille</button></span></div>
+<div id="setup" hidden role="dialog" aria-modal="true" aria-labelledby="setup-t"><div class="box" id="setup-box"></div></div>
 <div id="mmwrap"><div id="mmbar"><button type="button" id="mm-minus" title="Réduire la mini-carte" aria-label="Réduire la mini-carte">−</button><button type="button" id="mm-plus" title="Agrandir la mini-carte" aria-label="Agrandir la mini-carte">+</button><button type="button" id="mm-side" title="Changer la mini-carte de côté" aria-label="Changer la mini-carte de côté">⇄</button><button type="button" id="mm-hide" title="Masquer la mini-carte" aria-label="Masquer la mini-carte">×</button></div>
 <canvas id="mm" role="img" title="Mini-carte : clic pour y aller, clic droit pour y envoyer les armées choisies" aria-label="Mini-carte du champ de bataille : relief, rivière, forêts, armées visibles et cadre de la vue. Clic pour y déplacer la vue, clic droit pour y envoyer les armées choisies."></canvas></div>
 <button type="button" id="mm-show" hidden>Mini-carte</button>
@@ -196,21 +213,70 @@ const sm=(a,b,x)=>{const t=Math.min(1,Math.max(0,(x-a)/(b-a)));return t*t*(3-2*t
 const bump=(x,z,cx,cz,r,h)=>h*Math.exp(-((x-cx)**2+(z-cz)**2)/(r*r));
 const wrapA=a=>Math.atan2(Math.sin(a),Math.cos(a));
 
+// ---------- la bataille : composition des armées et taille de la carte ----------
+// chefs proposés (personnages de docs/PERSONNAGES.md) ; le général, lui, reste dans son QG
+const CHEFS={bleu:['Souvorov','Robin des Bois','Uesugi Kenshin','Jeanne d\'Arc','Koutouzov','Charles Martel','Richard Cœur de Lion','Takeda Shingen','Vercingétorix','Léonidas','Bayard','Sun Tzu'],
+  rouge:['Kanki','Ri Boku','Lü Bu','Ousen','Hou Ken','Subötaï','Mehmed II','Harald Hardrada','Shaka Zulu','Baybars']};
+const GENERAUX={bleu:'Koby',rouge:'Shin'};
+const BATAILLES={
+  petite:{nom:'Petite',bleu:[{chef:'Souvorov',kind:'inf',men:250},{chef:'Uesugi Kenshin',kind:'cav',men:100}],rouge:[{chef:'Kanki',kind:'inf',men:250},{chef:'Lü Bu',kind:'cav',men:100}]},
+  moyenne:{nom:'Moyenne',bleu:[{chef:'Souvorov',kind:'inf',men:500},{chef:'Robin des Bois',kind:'inf',men:500},{chef:'Uesugi Kenshin',kind:'cav',men:168}],rouge:[{chef:'Kanki',kind:'inf',men:450},{chef:'Ri Boku',kind:'inf',men:396},{chef:'Lü Bu',kind:'cav',men:144}]},
+  grande:{nom:'Grande',bleu:[{chef:'Souvorov',kind:'inf',men:1500},{chef:'Robin des Bois',kind:'inf',men:1200},{chef:'Jeanne d\'Arc',kind:'inf',men:600},{chef:'Uesugi Kenshin',kind:'cav',men:550}],rouge:[{chef:'Kanki',kind:'inf',men:1400},{chef:'Ri Boku',kind:'inf',men:1100},{chef:'Ousen',kind:'inf',men:500},{chef:'Lü Bu',kind:'cav',men:350}]}
+};
+function cleanArmy(list){if(!Array.isArray(list)||!list.length||list.length>8)return null;const out=[];
+  for(const u of list){const men=Math.round(+(u&&u.men));if(!(men>=10&&men<=5000))return null;out.push({chef:String(u.chef||'?').slice(0,40),kind:u.kind==='cav'?'cav':'inf',men});}return out;}
+function loadBattle(){try{const c=JSON.parse(localStorage.getItem('shin-bataille')||'null');if(c){const b=cleanArmy(c.bleu),r=cleanArmy(c.rouge);if(b&&r)return{bleu:b,rouge:r};}}catch(e){}
+  return{bleu:BATAILLES.moyenne.bleu,rouge:BATAILLES.moyenne.rouge};}
+const CONF=loadBattle();
+const effectifOf=army=>army.reduce((a,u)=>a+u.men,0)+Math.round(REGLAGES.garnisonQG);   // garde du QG comprise
+// règles (proposition, à ajuster) : 300 à 999 hommes → petite carte ; 1 000 à 2 999 → moyenne ; 3 000 et plus → grande. La plus grande armée choisit.
+const CARTES=[{nom:'petite',W:1050,D:700,max:999},{nom:'moyenne',W:1950,D:1300,max:2999},{nom:'grande',W:3000,D:2000,max:Infinity}];
+const carteFor=n=>CARTES.find(m=>n<=m.max);
+const BIG=Math.max(effectifOf(CONF.bleu),effectifOf(CONF.rouge)),CARTE=carteFor(BIG);
+const HPS=BIG>=3000?4:2;      // hommes par soldat affiché (règles : 2, réglable) ; 4 pour les grandes batailles, pour rester fluide
+
 // ---------- terrain (mètres) ----------
-const W=3000,D=2000,SX=600,SZ=400,WATER=-8.5;
+// le relief est dessiné pour la grande carte (3 km × 2 km) ; une carte plus petite en est une réduction, avec les mêmes pentes
+const W=CARTE.W,D=CARTE.D,KS=W/3000,SX=Math.round(W/5),SZ=Math.round(D/5),WATER=-8.5*KS;
 const KX=1600/3000,KZ=1000/2000;                         // le relief d'origine est étiré sur la grande carte
-const riverX=z=>(110+75*Math.sin(z*KZ/170)+25*Math.sin(z*KZ/53))/KX;
-function height(x,z){
+const riverX0=z=>(110+75*Math.sin(z*KZ/170)+25*Math.sin(z*KZ/53))/KX;
+function height0(x,z){
   const u=x*KX,v=z*KZ;
   let h=(fbm(u/380+10,v/380+3)-.5)*26+(fbm(x/260+5,z/260+9)-.5)*14;
   h+=bump(u,v,-470,-260,190,48)+bump(u,v,380,-300,230,66)+bump(u,v,560,230,150,26)+bump(u,v,-640,180,170,22);
   h+=bump(x,z,-1150,-700,260,40)+bump(x,z,1150,550,240,34)+bump(x,z,-200,-150,160,18);
   h+=sm(-260,-480,v)*(52+fbm(x/170,z/170)*30);           // crête au fond
   const farm=sm(150,330,v); h=h*(1-farm*.75);            // plaine au premier plan
-  const d=Math.abs(x-riverX(z));
+  const d=Math.abs(x-riverX0(z));
   h-=5*sm(170,0,d); h-=11*sm(30,0,d);                     // vallée + lit de la rivière
   return h;
 }
+const riverX=z=>riverX0(z/KS)*KS;
+const height=(x,z)=>height0(x/KS,z/KS)*KS;
+
+// ---------- placement de départ : chaque camp en ligne dans sa moitié, le QG à l'arrière ----------
+function formation(kind,men){const n=Math.ceil(men/HPS),dx=kind==='cav'?3.6:2.2,dz=kind==='cav'?5.2:3.0;
+  const cols=Math.max(3,Math.min(60,Math.round(Math.sqrt(n*2.5))));return{cols,rows:Math.max(1,Math.ceil(n/cols)),dx,dz};}
+function planSide(side,list){
+  const blue=side==='bleu',color=blue?'#3f7fd6':'#c94b3f',heading=blue?0:Math.PI,gap=40,maxW=.85*W;
+  const qrows=Math.max(1,Math.ceil(REGLAGES.garnisonQG/HPS/15)),qhd=qrows*1.5;
+  const qx=(blue?-150:-600)*KS,qz=blue?D/2-45-qhd:-.70*D/2;
+  const units=list.map(u=>({...u,...formation(u.kind,u.men)}));
+  // rangées remplies de gauche à droite ; si ça déborde, une nouvelle rangée vers l'ennemi
+  const rows=[[]];let wcur=0;
+  for(const u of units){const w=u.cols*u.dx;if(rows[rows.length-1].length&&wcur+gap+w>maxW){rows.push([]);wcur=0;}rows[rows.length-1].push(u);wcur+=(wcur?gap:0)+w;}
+  const hdOf=row=>Math.max(...row.map(u=>u.rows*u.dz/2)),cx=(blue?-175:-650)*KS,out=[];
+  let z=blue?Math.min(.79*D/2,qz-qhd-50-hdOf(rows[0])):-.49*D/2,prev=0;
+  rows.forEach((row,ri)=>{const hd=hdOf(row);if(ri)z+=(blue?-1:1)*(prev+hd+30);prev=hd;
+    const tw=row.reduce((a,u)=>a+u.cols*u.dx,0)+gap*(row.length-1);let x=Math.max(-W/2+60+tw/2,Math.min(W/2-60-tw/2,cx))-tw/2;
+    for(const u of row){const w=u.cols*u.dx;out.push({kind:u.kind,side,name:u.chef,men:u.men,color,x:x+w/2,z,cols:u.cols,rows:u.rows,dx:u.dx,dz:u.dz,heading});x+=w+gap;}});
+  out.push({kind:'qg',side,name:`QG de ${GENERAUX[side]}`,general:GENERAUX[side],color,x:qx,z:qz,cols:15,rows:qrows,dx:2.2,dz:3.0,heading});
+  return out;
+}
+const PLAN=[...planSide('bleu',CONF.bleu),...planSide('rouge',CONF.rouge)];
+const BLUE_C=(()=>{const b=PLAN.filter(o=>o.side==='bleu'&&o.kind!=='qg');return[b.reduce((a,o)=>a+o.x,0)/b.length,b.reduce((a,o)=>a+o.z,0)/b.length];})();
+{const km=v=>(v/1000).toLocaleString('fr-FR',{maximumFractionDigits:2});
+  document.getElementById('carte-info').textContent=`Carte ${CARTE.nom} (${km(W)} km × ${km(D)} km) · 1 soldat affiché = ${HPS} hommes`;}
 
 // ---------- brouillard de guerre : une grille de 10 m sur toute la carte ----------
 const FC=10,FW=W/FC,FD=D/FC;
@@ -246,19 +312,19 @@ document.getElementById('scene').appendChild(renderer.domElement);
 const camera=new THREE.PerspectiveCamera(40,1,1,12000);
 const controls=new THREE.MapControls(camera,renderer.domElement);
 controls.enableDamping=true; controls.dampingFactor=.08;
-controls.minDistance=40; controls.maxDistance=3200;
+controls.minDistance=40; controls.maxDistance=Math.max(1400,3200*KS);
 controls.minPolarAngle=.35; controls.maxPolarAngle=1.15;
 controls.screenSpacePanning=false;
 controls.keyPanSpeed=30; controls.listenToKeyEvents(window);   // flèches du clavier
-function viewArmy(){camera.position.set(-150,300,1260);controls.target.set(-150,0,780);controls.update();}
-function viewAll(){camera.position.set(0,1900,2150);controls.target.set(0,0,0);controls.update();}
+function viewArmy(){camera.position.set(BLUE_C[0],300,BLUE_C[1]+480);controls.target.set(BLUE_C[0],0,BLUE_C[1]);controls.update();}
+function viewAll(){camera.position.set(0,300+1600*KS,200+1950*KS);controls.target.set(0,0,0);controls.update();}
 viewArmy();
 
 scene.add(new THREE.HemisphereLight(0xdfe9f2,0x5a5236,.65));
 const sun=new THREE.DirectionalLight(0xfff1d6,1.15);
 sun.position.set(-1000,1400,600); sun.castShadow=true;
 sun.shadow.mapSize.set(4096,4096);
-Object.assign(sun.shadow.camera,{left:-1600,right:1600,top:1100,bottom:-1100,near:10,far:4500});
+Object.assign(sun.shadow.camera,{left:-W/2-100,right:W/2+100,top:D/2+100,bottom:-D/2-100,near:10,far:4500});
 sun.shadow.bias=-.0006;
 scene.add(sun);
 
@@ -279,15 +345,15 @@ const grass=new THREE.Color(.42,.55,.24), gold=new THREE.Color(.74,.66,.34), dar
 for(let i=0;i<pos.count;i++){
   const x=pos.getX(i),z=pos.getZ(i),y=pos.getY(i),slope=1-nrm.getY(i);
   c.copy(grass).lerp(gold,sm(.42,.66,fbm(x/160,z/160))).lerp(dark,sm(.55,.75,fbm(x/70+40,z/70))*.5);
-  const d=Math.abs(x-riverX(z)); if(d<44) c.lerp(sand,sm(44,24,d));
-  if(slope>.18||y>58) c.lerp(rock,sm(.18,.34,slope)*.9+sm(58,80,y)*.6);
+  const d=Math.abs(x-riverX(z)); if(d<44*KS) c.lerp(sand,sm(44*KS,24*KS,d));
+  if(slope>.18||y>58*KS) c.lerp(rock,sm(.18,.34,slope)*.9+sm(58*KS,80*KS,y)*.6);
   col[i*3]=c.r;col[i*3+1]=c.g;col[i*3+2]=c.b;
 }
 geo.setAttribute('color',new THREE.BufferAttribute(col,3));
 // petite texture de détail pour casser l'aspect lisse
 const tc=document.createElement('canvas');tc.width=tc.height=256;const tg=tc.getContext('2d');
 for(let i=0;i<9000;i++){const v=200+R()*55|0;tg.fillStyle=`rgb(${v},${v},${v})`;tg.fillRect(R()*256,R()*256,2,2);}
-const detail=new THREE.CanvasTexture(tc);detail.wrapS=detail.wrapT=THREE.RepeatWrapping;detail.repeat.set(440,280);
+const detail=new THREE.CanvasTexture(tc);detail.wrapS=detail.wrapT=THREE.RepeatWrapping;detail.repeat.set(440*KS,280*KS);
 const ground=new THREE.Mesh(geo,fogged(new THREE.MeshLambertMaterial({vertexColors:true,map:detail})));
 ground.receiveShadow=true; scene.add(ground);
 
@@ -297,18 +363,21 @@ water.rotation.x=-Math.PI/2; water.position.y=WATER; scene.add(water);
 
 // ---------- forêts ----------
 const spots=[];
-const inDeploy=(x,z)=>(z>600&&x>-800&&x<450)||(z<-350&&z>-650&&x>-1150&&x<-150);
-function treeOk(x,z){const y=height(x,z);if(y<WATER+1.5||Math.abs(x-riverX(z))<40||inDeploy(x,z))return null;return y;}
+// pas d'arbres sur les zones de départ ni sous les armées placées
+const inDeploy=(x,z)=>(z>600*KS&&x>-800*KS&&x<450*KS)||(z<-350*KS&&z>-650*KS&&x>-1150*KS&&x<-150*KS)||
+  PLAN.some(o=>Math.abs(x-o.x)<o.cols*o.dx/2+20&&Math.abs(z-o.z)<o.rows*o.dz/2+20+(o.kind==='qg'?30:0));
+function treeOk(x,z){const y=height(x,z);if(y<WATER+1.5||Math.abs(x-riverX(z))<40*KS||inDeploy(x,z))return null;return y;}
 // forêts denses et bois clairsemés, selon une carte de densité
-for(let n=0;n<70000&&spots.length<11000;n++){
+const AREA=KS*KS;   // moins d'arbres et de rochers sur une petite carte
+for(let n=0;n<70000*AREA&&spots.length<11000*AREA;n++){
   const x=(R()-.5)*W*.98,z=(R()-.5)*D*.98,m=fbm(x/300+70,z/300+20);
   const keep=m>.62?1:m>.54?.16:0; if(R()>keep)continue;
   const y=treeOk(x,z); if(y!==null)spots.push([x,y,z]);
 }
 // bosquets isolés et arbres seuls dans les champs
-for(let g=0;g<70;g++){const cx=(R()-.5)*W*.95,cz=(R()-.5)*D*.95,k=4+Math.floor(R()*18),r=10+R()*22;
+for(let g=0;g<70*AREA;g++){const cx=(R()-.5)*W*.95,cz=(R()-.5)*D*.95,k=4+Math.floor(R()*18),r=10+R()*22;
   for(let i=0;i<k;i++){const a=R()*6.28,d=Math.sqrt(R())*r,x=cx+Math.cos(a)*d,z=cz+Math.sin(a)*d,y=treeOk(x,z);if(y!==null)spots.push([x,y,z]);}}
-for(let i=0;i<260;i++){const x=(R()-.5)*W*.97,z=(R()-.5)*D*.97,y=treeOk(x,z);if(y!==null)spots.push([x,y,z]);}
+for(let i=0;i<260*AREA;i++){const x=(R()-.5)*W*.97,z=(R()-.5)*D*.97,y=treeOk(x,z);if(y!==null)spots.push([x,y,z]);}
 // carte des zones boisées (case de 10 m) : sert à cacher les armées, ralentir la marche et bloquer la vue
 const forest=new Uint8Array(FW*FD);{const cnt=new Uint8Array(FW*FD);for(const [x,,z] of spots)cnt[cellOf(x,z)]++;
   for(let j=0;j<FD;j++)for(let i=0;i<FW;i++){let s=0;for(let b=-1;b<=1;b++)for(let a=-1;a<=1;a++){const ii=i+a,jj=j+b;if(ii>=0&&jj>=0&&ii<FW&&jj<FD)s+=cnt[jj*FW+ii];}
@@ -318,27 +387,27 @@ const M=new THREE.Matrix4(),Q=new THREE.Quaternion(),S=new THREE.Vector3(),P=new
 // les arbres sont des images (rendues depuis un modèle 3D Meshy) posées sur le terrain, voir build()
 
 // rochers calcaires sur la crête et la grande colline
-const rocks=[];for(let n=0;n<40000&&rocks.length<900;n++){const x=(R()-.5)*W,z=(R()-.5)*D,y=height(x,z);
-  const sl=Math.abs(height(x+3,z)-y)+Math.abs(height(x,z+3)-y);if(sl>2.4&&y>18)rocks.push([x,y,z]);}
+const rocks=[];for(let n=0;n<40000*AREA&&rocks.length<900*AREA;n++){const x=(R()-.5)*W,z=(R()-.5)*D,y=height(x,z);
+  const sl=Math.abs(height(x+3,z)-y)+Math.abs(height(x,z+3)-y);if(sl>2.4&&y>18*KS)rocks.push([x,y,z]);}
 const rockM=new THREE.InstancedMesh(new THREE.DodecahedronGeometry(3,0),fogged(new THREE.MeshLambertMaterial({color:0xd9d6cc})),rocks.length);
 rocks.forEach(([x,y,z],i)=>{const s=.6+R()*1.6;P.set(x,y+s,z);Q.setFromEuler(new THREE.Euler(R()*3,R()*3,R()*3));S.set(s*1.4,s,s*1.2);M.compose(P,Q,S);rockM.setMatrixAt(i,M);});
 rockM.castShadow=rockM.receiveShadow=true;scene.add(rockM);
 
 // ferme provençale, pont
 function box(w,h,d,color,x,y,z,ry=0){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),fogged(new THREE.MeshLambertMaterial({color})));m.position.set(x,y+h/2,z);m.rotation.y=ry;m.castShadow=m.receiveShadow=true;scene.add(m);return m;}
-const fx=-1050,fz=560,fy=height(fx,fz);
+const fx=-1050*KS,fz=560*KS,fy=height(fx,fz);
 box(22,8,12,0xd8c9a8,fx,fy,fz);
 const roof=new THREE.Mesh(new THREE.CylinderGeometry(0,9,5,4,1),fogged(new THREE.MeshLambertMaterial({color:0xb5562f})));roof.rotation.y=Math.PI/4;roof.scale.set(1.75,1,1);roof.position.set(fx,fy+10.5,fz);roof.castShadow=true;scene.add(roof);
 box(30,2,1,0xcbbd9c,fx,fy,fz+16);box(1,2,24,0xcbbd9c,fx-15,fy,fz+4);box(1,2,24,0xcbbd9c,fx+15,fy,fz+4);
-const bz=-60,bx=riverX(bz);box(70,2.5,9,0x9c8f78,bx,1.2,bz,0);
-const onBridge=(x,z)=>Math.abs(z-bz)<7&&Math.abs(x-bx)<36;
+const bz=-60*KS,bx=riverX(bz),BL=Math.max(30,70*KS);box(BL,2.5,9,0x9c8f78,bx,1.2*KS,bz,0);
+const onBridge=(x,z)=>Math.abs(z-bz)<7&&Math.abs(x-bx)<BL/2+1;
 const inWater=(x,z)=>hAt(x,z)<WATER-.4&&!onBridge(x,z);
 
 // ---------- règles de terrain (valeurs de départ, à régler) ----------
 const SPEED={inf:11,cav:22};          // m/s, accéléré environ ×8 pour le prototype
 const VISION=300,HILL=1.5,FOREST_SEE=50,TREE_H=14,VISION_QG=200;   // règles : un quartier général voit à 200 m
 const speedOf=kind=>kind==='qg'?SPEED.inf*REGLAGES.vitesseQG:SPEED[kind];
-function isHill(x,z){const h=hAt(x,z);let s=0;for(let k=0;k<8;k++){const a=k*Math.PI/4;s+=hAt(x+Math.cos(a)*200,z+Math.sin(a)*200);}return h-s/8>12;}
+function isHill(x,z){const h=hAt(x,z);let s=0;for(let k=0;k<8;k++){const a=k*Math.PI/4;s+=hAt(x+Math.cos(a)*200*KS,z+Math.sin(a)*200*KS);}return h-s/8>12*KS;}
 function grade(x,z){const gx=(hAt(x+3,z)-hAt(x-3,z))/6,gz=(hAt(x,z+3)-hAt(x,z-3))/6;return Math.hypot(gx,gz);}
 const blocked=(x,z)=>Math.abs(x)>W/2-30||Math.abs(z)>D/2-30||grade(x,z)>.85;   // bords et falaises
 function terrainMult(kind,x,z,ux,uz){
@@ -465,7 +534,7 @@ function makeTent(color){
 function regiment(o){
   const set=mats[o.kind==='cav'?'cav':'inf']; if(!set.length) return;
   const h=o.kind==='cav'?7:4.5;
-  const g={...o,men:o.cols*o.rows*2,soldiers:[],tx:null,tz:null,chase:null,contact:null,moving:false,foes:[],charge:false,nouveau:false,lastLoss:null,dead:false,wait:2+R()*6,shown:true,
+  const g={...o,men:o.men||o.cols*o.rows*HPS,soldiers:[],tx:null,tz:null,chase:null,contact:null,moving:false,foes:[],charge:false,nouveau:false,lastLoss:null,dead:false,wait:2+R()*6,shown:true,
     hw:o.cols*o.dx/2,hd:o.rows*o.dz/2};
   for(let r=0;r<o.rows;r++)for(let k=0;k<o.cols;k++){
     const m=set[Math.floor(R()*set.length)];
@@ -482,6 +551,7 @@ function regiment(o){
     g.outline=groundLine(GOLD,.95);g.path=groundLine(0xffffff,.55);g.reach=groundLine(0x9fd18b,.6);
     g.mark=new THREE.Mesh(ringG,new THREE.MeshBasicMaterial({color:GOLD,transparent:true,opacity:.85,depthTest:false}));g.mark.renderOrder=9;g.mark.visible=false;scene.add(g.mark);
   }
+  if(o.kind!=='qg')trimSoldiers(g);   // juste assez de soldats affichés pour l'effectif
   if(o.kind==='qg'){   // quartier général : garde + gardes rapprochés + général
     g.general=o.general;g.pvGen=REGLAGES.pvGeneral;g.pvGar=REGLAGES.pvGarde;g.men=Math.round(REGLAGES.garnisonQG)+3*g.pvGar+g.pvGen;
     g.tent=makeTent(PLAYERS[o.side].couleur);trimSoldiers(g);setMen(g,g.men);
@@ -546,7 +616,7 @@ let aiOn=true;
 function ai(g,dt){
   if(!aiOn||g.kind==='qg'||g.tx!==null||g.contact)return;     // le QG rouge ne bouge pas
   if((g.wait-=dt)>0)return;
-  for(let k=0;k<12;k++){const a=R()*6.28,d=150+R()*350,x=Math.max(-1400,Math.min(1400,g.x+Math.cos(a)*d)),z=Math.max(-940,Math.min(940,g.z+Math.sin(a)*d));
+  for(let k=0;k<12;k++){const a=R()*6.28,d=(150+R()*350)*Math.max(.4,KS),x=Math.max(-(W/2-100),Math.min(W/2-100,g.x+Math.cos(a)*d)),z=Math.max(-(D/2-60),Math.min(D/2-60,g.z+Math.sin(a)*d));
     if(hAt(x,z)>WATER+1&&!blocked(x,z)){g.tx=x;g.tz=z;break;}}
   g.wait=6+R()*14;
 }
@@ -693,7 +763,7 @@ const combatObj=g=>({men:g.men,kind:g.kind,terrain:terrainCombat(g.x,g.z),charge
 function rapport(g,foes){const mine=puissanceBase(combatObj(g));
   const theirs=foes.reduce((s,e)=>s+puissanceBase(combatObj(e))/Math.max(1,regs.filter(f=>f.side!==e.side&&contactDist(e,f)).length),0);
   return theirs>0?mine/theirs:99;}
-function trimSoldiers(g){const want=Math.ceil((g.kind==='qg'?qgParts(g).garnison:g.men)/2);while(g.soldiers.length>want){const s=g.soldiers.pop();scene.remove(s.sp);}g.shadows.count=g.soldiers.length;}
+function trimSoldiers(g){const want=Math.ceil((g.kind==='qg'?qgParts(g).garnison:g.men)/HPS);while(g.soldiers.length>want){const s=g.soldiers.pop();scene.remove(s.sp);}g.shadows.count=g.soldiers.length;}
 function removeReg(g){
   if(selected.includes(g))select(selected.filter(x=>x!==g));
   g.soldiers.forEach(s=>scene.remove(s.sp));[g.shadows,g.banner,g.outline,g.path,g.mark,g.reach,g.tent].forEach(o=>{if(o)scene.remove(o);});
@@ -793,26 +863,59 @@ function checkEnd(){
   document.getElementById('fin-s').textContent=b?`Le général ennemi et tous ses sous-généraux sont tombés. Il te reste ${pointsOf('bleu')} point(s).`:'Ton général et tous tes sous-généraux sont tombés.';
   finEl.hidden=false;drawReach();renderTour();
 }
-// les armées de départ (1 soldat affiché = 2 hommes)
-const ARMEES=[
-  // Bleus (premier plan, le joueur)
-  {kind:'inf',side:'bleu',name:'Souvorov',color:'#3f7fd6',x:-420,z:790,cols:25,rows:10,dx:2.2,dz:3.0,heading:0},
-  {kind:'inf',side:'bleu',name:'Robin des Bois',color:'#3f7fd6',x:-160,z:810,cols:25,rows:10,dx:2.2,dz:3.0,heading:0},
-  {kind:'cav',side:'bleu',name:'Uesugi Kenshin',color:'#3f7fd6',x:120,z:770,cols:14,rows:6,dx:3.6,dz:5.2,heading:0},
-  // Rouges (de l'autre côté de la vallée, cachés par le brouillard)
-  {kind:'inf',side:'rouge',name:'Kanki',color:'#c94b3f',x:-640,z:-480,cols:25,rows:9,dx:2.2,dz:3.0,heading:Math.PI},
-  {kind:'inf',side:'rouge',name:'Ri Boku',color:'#c94b3f',x:-380,z:-510,cols:22,rows:9,dx:2.2,dz:3.0,heading:Math.PI},
-  {kind:'cav',side:'rouge',name:'Lü Bu',color:'#c94b3f',x:-920,z:-450,cols:12,rows:6,dx:3.6,dz:5.2,heading:Math.PI},
-  // Quartiers généraux (le général y reste, avec sa garde) : Koby pour Mathieu, Shin en face
-  {kind:'qg',side:'bleu',name:'QG de Koby',general:'Koby',color:'#3f7fd6',x:-150,z:925,cols:15,rows:5,dx:2.2,dz:3.0,heading:0},
-  {kind:'qg',side:'rouge',name:'QG de Shin',general:'Shin',color:'#c94b3f',x:-600,z:-700,cols:15,rows:5,dx:2.2,dz:3.0,heading:Math.PI}
-];
+// les armées de départ : composition choisie dans « Nouvelle bataille », placées par planSide()
+const ARMEES=PLAN;
 function deploy(){
   select([]);regs.slice().forEach(removeReg);floats.forEach(f=>f.el.remove());floats.length=0;
-  ARMEES.forEach(o=>regiment(o.kind==='qg'?{...o,rows:Math.max(1,Math.ceil(REGLAGES.garnisonQG/2/o.cols))}:{...o}));known.clear();ended=false;finEl.hidden=true;combatAcc=0;
+  ARMEES.forEach(o=>regiment(o.kind==='qg'?{...o,rows:Math.max(1,Math.ceil(REGLAGES.garnisonQG/HPS/o.cols))}:{...o}));known.clear();ended=false;finEl.hidden=true;combatAcc=0;
   turn=1;phase='ordres';phaseT=REGLAGES.dureeTour;
   updateFog();renderStatus();renderSel(true);renderTour();
 }
+
+// ---------- nouvelle bataille : composition des deux armées ----------
+const SETUP=document.getElementById('setup'),SB=document.getElementById('setup-box');
+let draft=null;
+const copyArmy=a=>a.map(u=>({...u}));
+function openSetup(){draft={bleu:copyArmy(CONF.bleu),rouge:copyArmy(CONF.rouge)};SETUP.hidden=false;renderSetup();}
+function unitRow(side,u,i){
+  const opts=CHEFS[side].concat(CHEFS[side].includes(u.chef)?[]:[u.chef]).map(c=>`<option${c===u.chef?' selected':''}>${c}</option>`).join('');
+  return `<div class="unit" data-side="${side}" data-i="${i}"><select data-f="chef" aria-label="Chef de l'unité">${opts}</select>`+
+    `<select data-f="kind" aria-label="Type"><option value="inf"${u.kind==='inf'?' selected':''}>Infanterie</option><option value="cav"${u.kind==='cav'?' selected':''}>Cavalerie</option></select>`+
+    `<input data-f="men" type="number" min="10" max="5000" step="10" value="${u.men}" aria-label="Hommes">`+
+    `<span class="role">${u.men>=500?'sous-général':'chef d\'unité'}</span><button type="button" data-f="del" aria-label="Retirer cette unité"${draft[side].length<2?' disabled':''}>×</button></div>`;
+}
+function renderSetup(){
+  const eb=effectifOf(draft.bleu),er=effectifOf(draft.rouge),big=Math.max(eb,er),m=carteFor(big),hps=big>=3000?4:2,errs=[];
+  for(const side of ['bleu','rouge']){const who=side==='bleu'?'Ton armée':'L\'armée adverse',names=draft[side].map(u=>u.chef);
+    if(new Set(names).size<names.length)errs.push(`${who} a deux fois le même chef.`);
+    if(draft[side].some(u=>!(u.men>=10&&u.men<=5000)))errs.push(`${who} : chaque unité doit avoir de 10 à 5 000 hommes.`);}
+  if(big<300)errs.push('En dessous de 300 hommes, pas de bataille rangée : le combat se règle automatiquement.');
+  const km=v=>(v/1000).toLocaleString('fr-FR',{maximumFractionDigits:2});
+  SB.innerHTML=`<h2 id="setup-t">Nouvelle bataille</h2>
+    <div class="row">${Object.entries(BATAILLES).map(([k,b])=>`<button type="button" data-preset="${k}">${b.nom} (${fmtMen(effectifOf(b.bleu))} contre ${fmtMen(effectifOf(b.rouge))})</button>`).join('')}</div>
+    <p>Un sous-général dirige de 500 à 5 000 hommes ; en dessous de 500, c'est un chef d'unité (10 hommes au moins). Chacun est un homme clé : 1 point et 1 action par tour. Le général reste dans son QG avec sa garde de ${fmtMen(REGLAGES.garnisonQG)} hommes.</p>
+    <div class="cols">${['bleu','rouge'].map(side=>`<div><h3>${side==='bleu'?'Ton armée':'Armée adverse'} · général ${GENERAUX[side]}</h3>${draft[side].map((u,i)=>unitRow(side,u,i)).join('')}
+      <div class="row" style="margin-top:6px"><button type="button" data-add="${side}"${draft[side].length>=8?' disabled':''}>Ajouter une unité</button>${side==='rouge'?'<button type="button" data-copy="1">Copier mon armée</button>':''}</div>
+      <p class="sum">${fmtMen(side==='bleu'?eb:er)} hommes, garde du QG comprise</p></div>`).join('')}</div>
+    <p class="sum">Carte ${m.nom} (${km(m.W)} km × ${km(m.D)} km), choisie par la plus grande armée · 1 soldat affiché = ${hps} hommes</p>
+    ${errs.map(e=>`<p class="warn">${e}</p>`).join('')}
+    <div class="row"><button type="button" id="setup-go"${errs.length?' disabled':''}>Lancer la bataille</button><button type="button" id="setup-cancel">Annuler</button></div>`;
+}
+SB.addEventListener('change',e=>{const row=e.target.closest('.unit');if(!row)return;const u=draft[row.dataset.side][+row.dataset.i],f=e.target.dataset.f;
+  if(f==='chef')u.chef=e.target.value;else if(f==='kind')u.kind=e.target.value;else if(f==='men')u.men=Math.round(+e.target.value||0);
+  renderSetup();});
+SB.addEventListener('click',e=>{const t=e.target.closest('button');if(!t)return;
+  if(t.dataset.preset){const b=BATAILLES[t.dataset.preset];draft={bleu:copyArmy(b.bleu),rouge:copyArmy(b.rouge)};}
+  else if(t.dataset.add){const side=t.dataset.add,free=CHEFS[side].find(c=>!draft[side].some(u=>u.chef===c))||'?';draft[side].push({chef:free,kind:'inf',men:300});}
+  else if(t.dataset.copy){draft.rouge=draft.bleu.map((u,i)=>({...u,chef:CHEFS.rouge[i]||u.chef}));}
+  else if(t.dataset.f==='del'){const row=t.closest('.unit');draft[row.dataset.side].splice(+row.dataset.i,1);}
+  else if(t.id==='setup-go'){try{localStorage.setItem('shin-bataille',JSON.stringify(draft));}catch(err){}location.reload();return;}
+  else if(t.id==='setup-cancel'){SETUP.hidden=true;return;}
+  else return;
+  renderSetup();});
+SETUP.addEventListener('keydown',e=>{e.stopPropagation();if(e.key==='Escape')SETUP.hidden=true;});
+document.getElementById('b-new').addEventListener('click',openSetup);
+document.getElementById('fin-new').addEventListener('click',openSetup);
 
 // ---------- panneau des réglages du combat ----------
 const RP=document.getElementById('reglages');
@@ -870,7 +973,7 @@ const mmBase=document.createElement('canvas');mmBase.width=SX;mmBase.height=SZ;
     img.data[o]=toS(r*.95);img.data[o+1]=toS(gg*.95);img.data[o+2]=toS(b*.95);img.data[o+3]=255;}
   g.putImageData(img,0,0);
   const bx2=(bx+W/2)/W*SX,bz2=(bz+D/2)/D*SZ,fx2=(fx+W/2)/W*SX,fz2=(fz+D/2)/D*SZ;
-  g.fillStyle='#d9cdb3';g.fillRect(bx2-7,bz2-1,14,2);                  // pont
+  g.fillStyle='#d9cdb3';g.fillRect(bx2-BL/10,bz2-1,BL/5,2);                  // pont
   g.fillStyle='#e07a4c';g.fillRect(fx2-2.5,fz2-1.5,5,3);               // ferme
 }
 // brouillard de la mini-carte : 1 pixel par case de 10 m, mis à jour avec celui de la scène
