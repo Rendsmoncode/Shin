@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pistes d'identité</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=Ma+Shan+Zheng&family=Marcellus&family=Pirata+One&family=Shippori+Mincho:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* Page de travail : pistes d'identité visuelle. Chaque piste a ses propres couleurs (thème volontairement fixe). */
+:root{--bg:#141a16;--fg:#e7e3d6;--muted:#a3ab9f;--line:#33443a;--gold:#e3b54a;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:"Cormorant Garamond",Georgia,serif;font-size:18px;line-height:1.45}
+.page{max-width:1040px;margin:0 auto;padding:32px 16px 48px;display:grid;gap:36px}
+.intro h1{margin:0 0 8px;font-family:Cinzel,serif;font-weight:600;letter-spacing:.08em;color:var(--gold);font-size:clamp(28px,5vw,40px)}
+.intro p{margin:0 0 8px;color:var(--muted);max-width:70ch}
+.intro a{color:var(--gold)}
+.sommaire{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.sommaire a{color:var(--fg);text-decoration:none;border:1px solid var(--line);border-radius:4px;padding:4px 10px;font-size:16px}
+.sommaire a:hover{border-color:var(--gold)}
+
+/* ---------- Gabarit commun d'une piste ---------- */
+.piste{border-radius:6px;overflow:hidden;background:var(--p-bg);color:var(--p-fg);border:1px solid var(--p-line)}
+.piste .tete{display:grid;grid-template-columns:minmax(0,1fr) 200px;gap:24px;padding:28px 24px;align-items:center}
+.piste .lettre{font-size:14px;letter-spacing:.2em;text-transform:uppercase;color:var(--p-accent)}
+.piste h2{margin:4px 0 10px;font-family:var(--p-titre);font-weight:400;font-size:clamp(28px,5vw,42px);line-height:1.1;color:var(--p-fg)}
+.piste .ambiance{margin:0;color:var(--p-muted);font-family:var(--p-texte);max-width:60ch}
+.logo{width:100%;max-width:200px;justify-self:center}
+.corps{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1px;background:var(--p-line);border-top:1px solid var(--p-line)}
+.bloc{background:var(--p-bg);padding:20px 24px;display:grid;gap:12px;align-content:start}
+.bloc h3{margin:0;font-family:var(--p-texte);font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--p-muted);font-weight:400}
+.nuancier{display:flex;gap:8px;flex-wrap:wrap}
+.nuancier div{display:grid;gap:4px;font-size:13px;color:var(--p-muted);font-family:var(--p-texte);width:64px}
+.nuancier i{display:block;height:44px;border-radius:3px;border:1px solid var(--p-line)}
+.polices p{margin:0;font-family:var(--p-texte);color:var(--p-fg)}
+.polices .grand{font-family:var(--p-titre);font-size:30px;line-height:1.15}
+.polices small{display:block;color:var(--p-muted);font-size:13px;font-family:var(--p-texte)}
+.musique{margin:0;padding-left:18px;font-family:var(--p-texte);color:var(--p-fg)}
+.musique li{margin-bottom:4px}
+.musique li::marker{color:var(--p-accent)}
+
+/* Aperçu d'interface */
+.ecran{grid-column:1/-1;background:var(--p-bg2);padding:20px 24px 24px}
+.ecran h3{margin:0 0 12px;font-family:var(--p-texte);font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--p-muted);font-weight:400}
+.maquette{border:1px solid var(--p-line);border-radius:var(--p-rayon);overflow:hidden;background:var(--p-fond-carte);min-height:260px;display:grid;grid-template-rows:auto 1fr}
+.barre{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center;padding:8px 14px;background:var(--p-barre);color:var(--p-barre-fg);border-bottom:1px solid var(--p-line);font-family:var(--p-texte);font-size:16px}
+.barre .nomjeu{font-family:var(--p-titre);font-size:20px;margin-right:auto;color:var(--p-accent2,var(--p-accent))}
+.barre span b{font-weight:600;margin-left:4px}
+.barre svg{width:14px;height:14px;vertical-align:-1px;fill:none;stroke:currentColor;stroke-width:1.6}
+.scene{position:relative;padding:18px;display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;justify-content:space-between}
+.onglets{display:flex;flex-direction:column;gap:6px}
+.onglets a{font-family:var(--p-texte);font-size:15px;color:var(--p-fg);text-decoration:none;padding:4px 10px;border-left:2px solid transparent}
+.onglets a.actif{border-left-color:var(--p-accent);color:var(--p-accent)}
+.panneau{width:min(100%,300px);background:var(--p-panneau);color:var(--p-fg);border:1px solid var(--p-line);border-radius:var(--p-rayon);padding:14px 16px;display:grid;gap:8px;box-shadow:var(--p-ombre,none)}
+.panneau .titre{font-family:var(--p-titre);font-size:22px;line-height:1.1}
+.panneau .sous{font-family:var(--p-texte);font-size:14px;color:var(--p-muted)}
+.panneau .stats{display:grid;grid-template-columns:1fr auto;gap:2px 10px;font-family:var(--p-texte);font-size:15px}
+.panneau .stats b{font-weight:600}
+.boutons{display:flex;gap:8px;margin-top:4px}
+.btn{font-family:var(--p-texte);font-size:15px;letter-spacing:.06em;padding:7px 14px;border-radius:var(--p-rayon);cursor:pointer;border:1px solid var(--p-accent);background:var(--p-accent);color:var(--p-sur-accent)}
+.btn.sec{background:transparent;color:var(--p-fg);border-color:var(--p-line)}
+
+@media (max-width:640px){
+  .piste .tete{grid-template-columns:1fr;padding:22px 16px}
+  .logo{max-width:160px}
+  .bloc,.ecran{padding:18px 16px}
+}
+
+/* ---------- A : Encre et sceau ---------- */
+#encre{--p-bg:#efe6d2;--p-bg2:#e6dbc2;--p-fg:#1d1a16;--p-muted:#6b6255;--p-line:#cdbf9f;--p-accent:#b3261e;--p-sur-accent:#f6efe0;
+  --p-titre:"Shippori Mincho",serif;--p-texte:"Shippori Mincho",serif;--p-rayon:0;
+  --p-fond-carte:radial-gradient(ellipse at 70% 30%,#f4ecda 0%,#e3d5b6 100%);--p-barre:#1d1a16;--p-barre-fg:#efe6d2;--p-accent2:#efe6d2;--p-panneau:#f6efe0}
+#encre .panneau{border-left:4px solid var(--p-accent)}
+#encre .scene::before{content:"";position:absolute;inset:auto 0 0 0;height:60%;background:linear-gradient(170deg,transparent 40%,rgba(29,26,22,.12) 41%,transparent 70%),linear-gradient(185deg,transparent 55%,rgba(29,26,22,.18) 56%,transparent 85%);pointer-events:none}
+
+/* ---------- B : Parchemin et cire ---------- */
+#parchemin{--p-bg:#e9dcc0;--p-bg2:#dfcfae;--p-fg:#2e2216;--p-muted:#76634a;--p-line:#bfa77e;--p-accent:#7a1f1a;--p-sur-accent:#f3e8d0;
+  --p-titre:"IM Fell English SC",serif;--p-texte:"IM Fell English",serif;--p-rayon:2px;
+  --p-fond-carte:linear-gradient(#e2d2b0,#d6c39c);--p-barre:#cdb88f;--p-barre-fg:#2e2216;--p-panneau:#f1e6cc;--p-ombre:0 2px 0 #bfa77e}
+#parchemin .panneau{outline:1px solid var(--p-line);outline-offset:3px}
+
+/* ---------- C : Carte de navigateur ---------- */
+#navigateur{--p-bg:#ead9b5;--p-bg2:#e0cb9f;--p-fg:#1f2a36;--p-muted:#6a5d45;--p-line:#b9a272;--p-accent:#1f3d5c;--p-sur-accent:#efe2c4;
+  --p-titre:"Pirata One",serif;--p-texte:"Cormorant Garamond",serif;--p-rayon:3px;
+  --p-fond-carte:repeating-linear-gradient(0deg,transparent 0 39px,rgba(31,61,92,.12) 39px 40px),repeating-linear-gradient(90deg,transparent 0 39px,rgba(31,61,92,.12) 39px 40px),#e6d3aa;
+  --p-barre:#1f3d5c;--p-barre-fg:#efe2c4;--p-accent2:#efe2c4;--p-panneau:#f2e6cb}
+#navigateur .btn{background:#8a2b1e;border-color:#8a2b1e}
+
+/* ---------- D : Fer et bronze ---------- */
+#fer{--p-bg:#16181a;--p-bg2:#1d2023;--p-fg:#e4dccb;--p-muted:#968c79;--p-line:#353a3e;--p-accent:#b08a4a;--p-sur-accent:#16181a;
+  --p-titre:"Cinzel",serif;--p-texte:"Cormorant Garamond",serif;--p-rayon:0;
+  --p-fond-carte:radial-gradient(ellipse at 50% 0%,#2a2e31 0%,#121415 75%);--p-barre:#0f1112;--p-barre-fg:#e4dccb;--p-panneau:#1d2023}
+#fer .panneau{border-top:2px solid var(--p-accent)}
+#fer h2{letter-spacing:.12em;text-transform:uppercase}
+
+/* ---------- E : Terre de Provence ---------- */
+#provence{--p-bg:#f1e7d6;--p-bg2:#e8dac2;--p-fg:#3a2a1f;--p-muted:#7d6550;--p-line:#d3bc9c;--p-accent:#b5532e;--p-sur-accent:#fbf3e6;
+  --p-titre:"Marcellus",serif;--p-texte:"Cormorant Garamond",serif;--p-rayon:10px;
+  --p-fond-carte:linear-gradient(180deg,#cfdde0 0%,#e9dcc3 45%,#d8c39d 100%);--p-barre:#fbf3e6;--p-barre-fg:#3a2a1f;--p-panneau:#fbf3e6;--p-ombre:0 6px 18px rgba(58,42,31,.12)}
+#provence .barre .nomjeu{color:#5e6b3a}
+
+.fin{border:1px solid var(--line);border-radius:6px;padding:20px 24px;display:grid;gap:8px}
+.fin h2{margin:0;font-family:Cinzel,serif;font-weight:400;color:var(--gold)}
+.fin p,.fin ul{margin:0;color:var(--fg)}
+.fin li{margin-bottom:4px}
+</style>
+</head>
+<body>
+<div class="page">
+
+<section class="intro">
+  <h1>Pistes d'identité visuelle</h1>
+  <p>Cinq directions « ancien mais minimaliste », inspirées de <i>Kingdom</i>. Chacune montre un logo provisoire, des couleurs, des polices, un aperçu d'écran du jeu et une idée de musique.</p>
+  <p>« SHIN » n'est qu'un nom provisoire : le logo est pensé pour qu'on puisse changer le mot plus tard. Tu peux aussi mélanger deux pistes, par exemple le logo de l'une avec les couleurs d'une autre.</p>
+  <p><a href="../">← Retour à l'accueil</a></p>
+  <nav class="sommaire">
+    <a href="#encre">A · Encre et sceau</a><a href="#parchemin">B · Parchemin et cire</a><a href="#navigateur">C · Carte de navigateur</a><a href="#fer">D · Fer et bronze</a><a href="#provence">E · Terre de Provence</a>
+  </nav>
+</section>
+
+<!-- Icônes communes de la barre des ressources -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-or" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6"/><circle cx="8" cy="8" r="2.5"/></symbol>
+  <symbol id="i-ble" viewBox="0 0 16 16"><path d="M8 15V5M8 5c-3 0-3-3-3-3s3 0 3 3zm0 0c3 0 3-3 3-3s-3 0-3 3zM8 9c-3 0-3-3-3-3s3 0 3 3zm0 0c3 0 3-3 3-3s-3 0-3 3z"/></symbol>
+  <symbol id="i-pierre" viewBox="0 0 16 16"><path d="M2 13l3-8 5-2 4 5-2 5z"/></symbol>
+  <symbol id="i-hommes" viewBox="0 0 16 16"><circle cx="8" cy="4.5" r="2.5"/><path d="M3 15c0-4 2-6 5-6s5 2 5 6"/></symbol>
+</svg>
+
+<!-- =================== A =================== -->
+<section class="piste" id="encre">
+  <div class="tete">
+    <div>
+      <div class="lettre">Piste A</div>
+      <h2>Encre et sceau</h2>
+      <p class="ambiance">La plus proche de <i>Kingdom</i>. Papier crème, encre noire et un seul rouge, celui du sceau impérial. Beaucoup de vide, comme une peinture à l'encre. Le logo est un tampon carré avec le caractère 信 (« Shin »), qui peut rester même si le nom change.</p>
+    </div>
+    <svg class="logo" viewBox="0 0 200 200" role="img" aria-label="Logo piste A : sceau rouge">
+      <path d="M38 34 L164 30 L168 160 L36 166 Z" fill="#b3261e"/>
+      <path d="M38 34 L164 30 L168 160 L36 166 Z" fill="none" stroke="#efe6d2" stroke-width="3" transform="translate(100 98) scale(.86) translate(-100 -98)"/>
+      <text x="101" y="138" text-anchor="middle" font-family="Ma Shan Zheng, serif" font-size="104" fill="#efe6d2">信</text>
+      <text x="100" y="194" text-anchor="middle" font-family="Shippori Mincho, serif" font-size="20" letter-spacing="10" fill="#1d1a16">SHIN</text>
+    </svg>
+  </div>
+  <div class="corps">
+    <div class="bloc"><h3>Couleurs</h3>
+      <div class="nuancier"><div><i style="background:#efe6d2"></i>Papier</div><div><i style="background:#1d1a16"></i>Encre</div><div><i style="background:#6b6255"></i>Lavis</div><div><i style="background:#b3261e"></i>Sceau</div></div>
+    </div>
+    <div class="bloc polices"><h3>Polices</h3>
+      <p class="grand">La guerre des quartiers</p>
+      <p>Les généraux attendent tes ordres.<small>Shippori Mincho (titres et textes), Ma Shan Zheng (pinceau, logo seulement)</small></p>
+    </div>
+    <div class="bloc"><h3>Musique</h3>
+      <ul class="musique"><li>Grands tambours de guerre (taiko), flûte en bambou, cordes pincées (guzheng)</li><li>Calme et lent sur la carte, tambours qui montent en bataille</li></ul>
+    </div>
+    <div class="ecran"><h3>Aperçu d'un écran du jeu</h3>
+      <div class="maquette">
+        <div class="barre"><span class="nomjeu">信 SHIN</span><span><svg><use href="#i-or"/></svg><b>12 400</b></span><span><svg><use href="#i-ble"/></svg><b>3 210</b></span><span><svg><use href="#i-pierre"/></svg><b>860</b></span><span><svg><use href="#i-hommes"/></svg><b>1 450</b></span></div>
+        <div class="scene">
+          <nav class="onglets"><a class="actif">Monde</a><a>Mon quartier</a><a>Armées</a><a>Personnages</a><a>Diplomatie</a></nav>
+          <div class="panneau"><div class="titre">Armée du Pin Vert</div><div class="sous">Ton général · en marche vers Les Passons</div>
+            <div class="stats"><span>Fantassins</span><b>900</b><span>Archers</span><b>350</b><span>Cavaliers</span><b>200</b></div>
+            <div class="boutons"><button class="btn">Attaquer</button><button class="btn sec">Détails</button></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =================== B =================== -->
+<section class="piste" id="parchemin">
+  <div class="tete">
+    <div>
+      <div class="lettre">Piste B</div>
+      <h2>Parchemin et cire</h2>
+      <p class="ambiance">Le Moyen Âge européen, version épurée. Parchemin, encre brune et cire rouge pour les décisions importantes (déclarer la guerre, signer un contrat). Les lettres font penser aux vieux manuscrits imprimés. Le logo est un écu tout simple avec une tour, et un sceau de cire.</p>
+    </div>
+    <svg class="logo" viewBox="0 0 200 200" role="img" aria-label="Logo piste B : écu et sceau de cire">
+      <path d="M100 22 L158 38 L158 96 C158 136 130 160 100 176 C70 160 42 136 42 96 L42 38 Z" fill="none" stroke="#2e2216" stroke-width="4"/>
+      <path d="M100 32 L149 45 L149 96 C149 130 126 151 100 165 C74 151 51 130 51 96 L51 45 Z" fill="none" stroke="#2e2216" stroke-width="1.2"/>
+      <path d="M80 130 V82 H86 V74 H94 V82 H106 V74 H114 V82 H120 V130 Z M95 130 V112 a5 5 0 0 1 10 0 V130" fill="#2e2216"/>
+      <circle cx="146" cy="150" r="22" fill="#7a1f1a"/>
+      <circle cx="146" cy="150" r="15" fill="none" stroke="#a8433a" stroke-width="2"/>
+      <text x="146" y="157" text-anchor="middle" font-family="IM Fell English SC, serif" font-size="20" fill="#e9dcc0">S</text>
+      <text x="100" y="196" text-anchor="middle" font-family="IM Fell English SC, serif" font-size="22" letter-spacing="8" fill="#2e2216">SHIN</text>
+    </svg>
+  </div>
+  <div class="corps">
+    <div class="bloc"><h3>Couleurs</h3>
+      <div class="nuancier"><div><i style="background:#e9dcc0"></i>Parchemin</div><div><i style="background:#2e2216"></i>Encre brune</div><div><i style="background:#bfa77e"></i>Cuir</div><div><i style="background:#7a1f1a"></i>Cire</div></div>
+    </div>
+    <div class="bloc polices"><h3>Polices</h3>
+      <p class="grand">La guerre des quartiers</p>
+      <p>Les généraux attendent tes ordres.<small>IM Fell English SC (titres), IM Fell English (textes)</small></p>
+    </div>
+    <div class="bloc"><h3>Musique</h3>
+      <ul class="musique"><li>Luth, vièle, flûte à bec, cornemuse au loin</li><li>Chœur d'hommes grave et tambour pour les batailles</li></ul>
+    </div>
+    <div class="ecran"><h3>Aperçu d'un écran du jeu</h3>
+      <div class="maquette">
+        <div class="barre"><span class="nomjeu">Shin</span><span><svg><use href="#i-or"/></svg><b>12 400</b></span><span><svg><use href="#i-ble"/></svg><b>3 210</b></span><span><svg><use href="#i-pierre"/></svg><b>860</b></span><span><svg><use href="#i-hommes"/></svg><b>1 450</b></span></div>
+        <div class="scene">
+          <nav class="onglets"><a class="actif">Monde</a><a>Mon quartier</a><a>Armées</a><a>Personnages</a><a>Diplomatie</a></nav>
+          <div class="panneau"><div class="titre">Armée du Pin Vert</div><div class="sous">Ton général · en marche vers Les Passons</div>
+            <div class="stats"><span>Fantassins</span><b>900</b><span>Archers</span><b>350</b><span>Cavaliers</span><b>200</b></div>
+            <div class="boutons"><button class="btn">Attaquer</button><button class="btn sec">Détails</button></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =================== C =================== -->
+<section class="piste" id="navigateur">
+  <div class="tete">
+    <div>
+      <div class="lettre">Piste C</div>
+      <h2>Carte de navigateur</h2>
+      <p class="ambiance">L'esprit pirate et explorateur : comme une vieille carte marine posée sur la table du capitaine. Papier jauni, quadrillage fin, bleu de marine et rouge brique. Le logo est une rose des vents, qui va bien avec un jeu où tout se passe sur une carte.</p>
+    </div>
+    <svg class="logo" viewBox="0 0 200 200" role="img" aria-label="Logo piste C : rose des vents">
+      <circle cx="100" cy="88" r="70" fill="none" stroke="#1f3d5c" stroke-width="1.5"/>
+      <circle cx="100" cy="88" r="62" fill="none" stroke="#1f3d5c" stroke-width="1" stroke-dasharray="2 4"/>
+      <g fill="#1f3d5c" transform="rotate(45 100 88)"><path d="M100 40 L106 88 L100 136 L94 88 Z"/><path d="M52 88 L100 82 L148 88 L100 94 Z"/></g>
+      <path d="M100 14 L110 88 L100 162 L90 88 Z" fill="#1f3d5c"/>
+      <path d="M26 88 L100 78 L174 88 L100 98 Z" fill="#1f3d5c"/>
+      <path d="M100 14 L110 88 L100 88 Z M174 88 L100 98 L100 88 Z M100 162 L90 88 L100 88 Z M26 88 L100 78 L100 88 Z" fill="#8a2b1e"/>
+      <circle cx="100" cy="88" r="5" fill="#ead9b5" stroke="#1f3d5c" stroke-width="2"/>
+      <text x="100" y="196" text-anchor="middle" font-family="Pirata One, serif" font-size="30" letter-spacing="4" fill="#1f2a36">Shin</text>
+    </svg>
+  </div>
+  <div class="corps">
+    <div class="bloc"><h3>Couleurs</h3>
+      <div class="nuancier"><div><i style="background:#ead9b5"></i>Vieux papier</div><div><i style="background:#1f3d5c"></i>Marine</div><div><i style="background:#1f2a36"></i>Encre</div><div><i style="background:#8a2b1e"></i>Brique</div></div>
+    </div>
+    <div class="bloc polices"><h3>Polices</h3>
+      <p class="grand">La guerre des quartiers</p>
+      <p>Les généraux attendent tes ordres.<small>Pirata One (titres), Cormorant Garamond (textes)</small></p>
+    </div>
+    <div class="bloc"><h3>Musique</h3>
+      <ul class="musique"><li>Violon, accordéon, tambour, chants de marins</li><li>Plus vif et aventureux, cuivres pour les batailles</li></ul>
+    </div>
+    <div class="ecran"><h3>Aperçu d'un écran du jeu</h3>
+      <div class="maquette">
+        <div class="barre"><span class="nomjeu">Shin</span><span><svg><use href="#i-or"/></svg><b>12 400</b></span><span><svg><use href="#i-ble"/></svg><b>3 210</b></span><span><svg><use href="#i-pierre"/></svg><b>860</b></span><span><svg><use href="#i-hommes"/></svg><b>1 450</b></span></div>
+        <div class="scene">
+          <nav class="onglets"><a class="actif">Monde</a><a>Mon quartier</a><a>Armées</a><a>Personnages</a><a>Diplomatie</a></nav>
+          <div class="panneau"><div class="titre">Armée du Pin Vert</div><div class="sous">Ton général · en marche vers Les Passons</div>
+            <div class="stats"><span>Fantassins</span><b>900</b><span>Archers</span><b>350</b><span>Cavaliers</span><b>200</b></div>
+            <div class="boutons"><button class="btn">Attaquer</button><button class="btn sec">Détails</button></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =================== D =================== -->
+<section class="piste" id="fer">
+  <div class="tete">
+    <div>
+      <div class="lettre">Piste D</div>
+      <h2>Fer et bronze</h2>
+      <p class="ambiance">Sombre et guerrier, comme les grandes batailles de l'Antiquité. Fond presque noir, lettres gravées dans la pierre comme sur les monuments romains, un seul accent en bronze. C'est la plus « sérieuse » et la plus proche de la page d'accueil actuelle. Le logo : deux lances croisées dans un cercle.</p>
+    </div>
+    <svg class="logo" viewBox="0 0 200 200" role="img" aria-label="Logo piste D : lances croisées">
+      <circle cx="100" cy="86" r="66" fill="none" stroke="#b08a4a" stroke-width="3"/>
+      <g stroke="#e4dccb" stroke-width="4" stroke-linecap="round"><line x1="58" y1="132" x2="138" y2="40"/><line x1="142" y1="132" x2="62" y2="40"/></g>
+      <path d="M138 40 l8 -14 l-2 16 Z M62 40 l-8 -14 l2 16 Z" fill="#e4dccb" stroke="#e4dccb" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M100 62 L118 72 L118 96 C118 108 110 116 100 120 C90 116 82 108 82 96 L82 72 Z" fill="#b08a4a"/>
+      <text x="100" y="192" text-anchor="middle" font-family="Cinzel, serif" font-weight="600" font-size="24" letter-spacing="12" fill="#e4dccb">SHIN</text>
+    </svg>
+  </div>
+  <div class="corps">
+    <div class="bloc"><h3>Couleurs</h3>
+      <div class="nuancier"><div><i style="background:#16181a"></i>Charbon</div><div><i style="background:#353a3e"></i>Fer</div><div><i style="background:#e4dccb"></i>Os</div><div><i style="background:#b08a4a"></i>Bronze</div></div>
+    </div>
+    <div class="bloc polices"><h3>Polices</h3>
+      <p class="grand">La guerre des quartiers</p>
+      <p>Les généraux attendent tes ordres.<small>Cinzel (titres, lettres romaines), Cormorant Garamond (textes)</small></p>
+    </div>
+    <div class="bloc"><h3>Musique</h3>
+      <ul class="musique"><li>Grosses percussions, cors graves, chœur, à la façon des films de guerre antique</li><li>Presque silencieux sur la carte, juste un drone grave et du vent</li></ul>
+    </div>
+    <div class="ecran"><h3>Aperçu d'un écran du jeu</h3>
+      <div class="maquette">
+        <div class="barre"><span class="nomjeu">SHIN</span><span><svg><use href="#i-or"/></svg><b>12 400</b></span><span><svg><use href="#i-ble"/></svg><b>3 210</b></span><span><svg><use href="#i-pierre"/></svg><b>860</b></span><span><svg><use href="#i-hommes"/></svg><b>1 450</b></span></div>
+        <div class="scene">
+          <nav class="onglets"><a class="actif">Monde</a><a>Mon quartier</a><a>Armées</a><a>Personnages</a><a>Diplomatie</a></nav>
+          <div class="panneau"><div class="titre">Armée du Pin Vert</div><div class="sous">Ton général · en marche vers Les Passons</div>
+            <div class="stats"><span>Fantassins</span><b>900</b><span>Archers</span><b>350</b><span>Cavaliers</span><b>200</b></div>
+            <div class="boutons"><button class="btn">Attaquer</button><button class="btn sec">Détails</button></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =================== E =================== -->
+<section class="piste" id="provence">
+  <div class="tete">
+    <div>
+      <div class="lettre">Piste E</div>
+      <h2>Terre de Provence</h2>
+      <p class="ambiance">Un clin d'œil à Aubagne : la terre cuite (Aubagne est la ville de l'argile et des santons), l'ocre, l'olivier et le ciel. Toujours ancien, mais plus lumineux et chaleureux, et raccord avec les champs de bataille en Provence au printemps. Le logo : une tour sous une branche d'olivier.</p>
+    </div>
+    <svg class="logo" viewBox="0 0 200 200" role="img" aria-label="Logo piste E : tour et branche d'olivier">
+      <circle cx="100" cy="86" r="68" fill="#e7c9a6"/>
+      <path d="M78 140 V84 H84 V74 H92 V84 H108 V74 H116 V84 H122 V140 Z" fill="#b5532e"/>
+      <path d="M94 140 V122 a6 6 0 0 1 12 0 V140" fill="#e7c9a6"/>
+      <path d="M44 120 C60 64 120 36 158 58" fill="none" stroke="#5e6b3a" stroke-width="3" stroke-linecap="round"/>
+      <g fill="#5e6b3a">
+        <ellipse cx="60" cy="92" rx="10" ry="4" transform="rotate(-50 60 92)"/><ellipse cx="74" cy="72" rx="10" ry="4" transform="rotate(-30 74 72)"/>
+        <ellipse cx="94" cy="58" rx="10" ry="4" transform="rotate(-15 94 58)"/><ellipse cx="118" cy="50" rx="10" ry="4" transform="rotate(5 118 50)"/>
+        <ellipse cx="140" cy="50" rx="10" ry="4" transform="rotate(20 140 50)"/>
+      </g>
+      <text x="100" y="192" text-anchor="middle" font-family="Marcellus, serif" font-size="26" letter-spacing="10" fill="#3a2a1f">SHIN</text>
+    </svg>
+  </div>
+  <div class="corps">
+    <div class="bloc"><h3>Couleurs</h3>
+      <div class="nuancier"><div><i style="background:#f1e7d6"></i>Chaux</div><div><i style="background:#b5532e"></i>Terre cuite</div><div><i style="background:#5e6b3a"></i>Olivier</div><div><i style="background:#cfdde0"></i>Ciel</div></div>
+    </div>
+    <div class="bloc polices"><h3>Polices</h3>
+      <p class="grand">La guerre des quartiers</p>
+      <p>Les généraux attendent tes ordres.<small>Marcellus (titres), Cormorant Garamond (textes)</small></p>
+    </div>
+    <div class="bloc"><h3>Musique</h3>
+      <ul class="musique"><li>Galoubet-tambourin (la flûte et le tambour provençaux), guitare, mandoline</li><li>Cigales et vent sur la carte, tambours et cuivres en bataille</li></ul>
+    </div>
+    <div class="ecran"><h3>Aperçu d'un écran du jeu</h3>
+      <div class="maquette">
+        <div class="barre"><span class="nomjeu">SHIN</span><span><svg><use href="#i-or"/></svg><b>12 400</b></span><span><svg><use href="#i-ble"/></svg><b>3 210</b></span><span><svg><use href="#i-pierre"/></svg><b>860</b></span><span><svg><use href="#i-hommes"/></svg><b>1 450</b></span></div>
+        <div class="scene">
+          <nav class="onglets"><a class="actif">Monde</a><a>Mon quartier</a><a>Armées</a><a>Personnages</a><a>Diplomatie</a></nav>
+          <div class="panneau"><div class="titre">Armée du Pin Vert</div><div class="sous">Ton général · en marche vers Les Passons</div>
+            <div class="stats"><span>Fantassins</span><b>900</b><span>Archers</span><b>350</b><span>Cavaliers</span><b>200</b></div>
+            <div class="boutons"><button class="btn">Attaquer</button><button class="btn sec">Détails</button></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="fin">
+  <h2>Et ensuite ?</h2>
+  <ul>
+    <li>Choisis une piste (ou un mélange), puis je l'affine : vrai logo, boutons, cadres, icônes, et j'applique le style au site et au jeu.</li>
+    <li>Le logo final pourra être redessiné à la main ou avec Gemini à partir de celui-ci (je te demanderai ton accord avant toute génération payante).</li>
+    <li>Pour la musique : des morceaux libres de droits dans ce style existent gratuitement. On peut aussi en générer sur mesure avec une IA musicale, mais c'est payant.</li>
+  </ul>
+</section>
+
+</div>
+</body>
+</html>
