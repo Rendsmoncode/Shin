@@ -715,7 +715,14 @@ function goTo(x,z,dist,pitch=.85){
 let allView=[0,0];
 {const f=communes['Aubagne'];if(f){const c=turf.centroid(f).geometry.coordinates;allView=c;}}
 function viewAll(){goTo(allView[0]-1500,allView[1],11000,.75);}
-{const t=new THREE.Vector3(allView[0]-1500,0,allView[1]);controls.target.copy(t);camera.position.set(t.x,Math.cos(.75)*11000,t.z+Math.sin(.75)*11000);controls.update();}
+let qDepart=null;
+// départ : zoomé sur le quartier du joueur (moins lourd que toute la ville) ; ?quartier=Nom pour en choisir un autre, ?vue=ville pour la vue d'ensemble
+{let p=null;
+ try{p=new URLSearchParams(location.search);}catch(e){}
+ const nom=p&&p.get('quartier')||'Pin Vert',q=quartiers.find(q=>norm(q.nom)===norm(nom));
+ if(q&&!(p&&p.get('vue')==='ville')){const pitch=.9,d=1600,y=Math.max(hAt(q.c[0],q.c[1]),0);controls.target.set(q.c[0],y,q.c[1]);camera.position.set(q.c[0],y+Math.cos(pitch)*d,q.c[1]+Math.sin(pitch)*d);qDepart=q;}
+ else{const t=new THREE.Vector3(allView[0]-1500,0,allView[1]);controls.target.copy(t);camera.position.set(t.x,Math.cos(.75)*11000,t.z+Math.sin(.75)*11000);}
+ controls.update();}
 document.getElementById('b-all').addEventListener('click',viewAll);
 const gotoEl=document.getElementById('goto');
 JOUEURS.forEach(j=>{const q=quartiers.find(q=>norm(q.nom)===norm(j.quartier));if(!q)return;
@@ -775,6 +782,7 @@ majTuiles(0,1e9);
 travailPhoto(X0,Z0,GW,GD,15,4096,Math.round(4096*GD/GW),-1,finGlobal);pomperPhotos();
 requestAnimationFrame(loop);
 setTimeout(()=>planterArbres().catch(()=>{}),400);
+if(qDepart)montrer(qDepart);
 status.textContent=`${V.batiments.length} bâtiments, ${V.routes.length} routes, ${quartiers.length} quartiers.`+(manquants.length?` Position approximative pour : ${manquants.join(', ')} (absent d'OpenStreetMap, à vérifier).`:'');
 })();
 </script>
