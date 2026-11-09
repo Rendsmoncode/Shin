@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cinq vieux livres</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alegreya:ital@0;1&family=Alegreya+SC&family=Bodoni+Moda:ital@0;1&family=Caveat:wght@500&family=Courier+Prime&family=Crimson+Pro:ital@0;1&family=DM+Mono&family=La+Belle+Aurore&family=Libre+Baskerville:ital@0;1&family=Libre+Caslon+Text:ital@0;1&family=Old+Standard+TT:ital@0;1&family=Reenie+Beanie&family=Space+Mono&family=Special+Elite&family=Spectral:ital@0;1&family=Stardos+Stencil:wght@400;700&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+<style>
+/* Essai 3 : cinq objets anciens, chacun avec ses onglets et sa touche moderne. Thèmes volontairement fixes. */
+:root{
+  --grain:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .22 0 0 0 0 .13 0 0 0 0 .05 0 0 0 .30 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#17100a var(--grain);color:#eadbbb;font-family:"Spectral",Georgia,serif;font-size:17px;line-height:1.5}
+.page{max-width:1160px;margin:0 auto;padding:36px 16px 56px;display:grid;gap:36px}
+.intro{display:grid;gap:10px;max-width:760px}
+.intro small{font-family:"DM Mono",monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#c9a35e}
+.intro h1{margin:0;font-family:"Bodoni Moda",serif;font-style:italic;font-weight:400;font-size:clamp(34px,6vw,54px);line-height:1.05}
+.intro p{margin:0;color:#b9a07c}
+.sommaire{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.sommaire a{color:#eadbbb;text-decoration:none;border:1px solid #4a3523;padding:4px 10px;font-size:15px}
+.sommaire a:hover{border-color:#c9a35e}
+
+/* ---------- Gabarit commun ---------- */
+.piste{background:var(--grain),var(--couv);color:var(--couv-fg);border:1px solid rgba(0,0,0,.5)}
+.tete{padding:28px 24px 6px;display:grid;gap:8px;max-width:860px}
+.tete .numero{font-family:var(--f-chiffre);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--vif-couv)}
+.tete h2{margin:0;font-family:var(--f-titre);font-weight:400;font-size:clamp(30px,5vw,46px);line-height:1.08}
+.tete p{margin:0;color:var(--couv-muted);font-family:var(--f-texte)}
+.tete dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px 24px;margin:8px 0 0}
+.tete dt{font-family:var(--f-chiffre);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--vif-couv)}
+.tete dd{margin:2px 0 0;font-family:var(--f-texte);color:var(--couv-fg);font-size:16px}
+.demo{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:24px;padding:18px 24px 28px;align-items:start}
+.maquette{border:1px solid rgba(0,0,0,.5);background:rgba(0,0,0,.22)}
+.ressources{display:flex;flex-wrap:wrap;gap:4px 20px;align-items:center;padding:10px 16px;border-bottom:1px solid rgba(0,0,0,.45);font-family:var(--f-texte)}
+.ressources .jeu{font-family:var(--f-titre);font-size:20px;margin-right:auto}
+.res small{display:block;font-size:12px;color:var(--couv-muted);letter-spacing:.05em;line-height:1.2}
+.res b{font-family:var(--f-chiffre);font-weight:400;font-size:15px}
+.res em{font-family:var(--f-chiffre);font-style:normal;font-size:11px;color:var(--vif-couv);margin-left:5px}
+.heure{font-family:var(--f-chiffre);font-size:12px;color:var(--vif-couv);letter-spacing:.06em}
+.cadran{display:none}
+.livre{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;padding:20px 0 24px 18px;min-height:480px}
+.feuilles{position:relative;z-index:2}
+.feuille{display:none;position:relative;background:var(--page);color:var(--encre);padding:24px 28px 30px;min-height:440px;font-family:var(--f-texte);font-size:var(--t-texte,17px)}
+.feuille.active{display:block;animation:apparait .35s ease-out}
+@keyframes apparait{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:none}}
+.entete{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-family:var(--f-chiffre);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--encre-2);margin-bottom:14px}
+.entete .live{color:var(--vif)}
+.feuille h3{font-family:var(--f-titre);font-weight:400;font-size:var(--t-titre,36px);line-height:1.1;margin:0 0 4px}
+.chapeau{font-style:italic;color:var(--encre-2);margin:0 0 14px}
+.texte{margin:0 0 14px}
+.liste{list-style:none;padding:0;margin:0 0 12px}
+.liste li{display:flex;justify-content:space-between;gap:12px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.13)}
+.liste small{display:block;font-size:.8em;color:var(--encre-2);font-style:italic}
+.num{font-family:var(--f-chiffre);color:var(--vif);white-space:nowrap;font-size:.92em}
+.note{font-family:var(--f-main);font-size:var(--t-main,24px);color:var(--accent);margin:4px 0 0;line-height:1.15}
+.actions{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:16px}
+.btn{cursor:pointer;font-family:var(--f-titre);font-size:16px;padding:8px 16px;border:0;background:var(--accent);color:var(--page)}
+.lien{cursor:pointer;background:none;border:0;padding:2px 0;font-family:var(--f-texte);font-style:italic;font-size:16px;color:var(--encre);text-decoration:underline;text-underline-offset:3px}
+.tampon,.censure,.o-i,.o-r,.o-n{display:none}
+mark{background:none;color:inherit}
+.onglets{display:flex;flex-direction:column;gap:3px;padding-top:24px}
+.onglet{cursor:pointer;border:0;font:inherit;color:inherit;background:none;padding:0;position:relative;z-index:1}
+.onglet[aria-selected="true"]{z-index:3}
+.onglet:focus-visible{outline:2px solid var(--vif-couv);outline-offset:2px}
+
+.charte{display:grid;gap:20px}
+.charte h4{font-family:var(--f-chiffre);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--couv-muted);margin:0 0 6px;font-weight:400}
+.sw{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:10px;align-items:center;font-size:14px;padding:3px 0;font-family:var(--f-texte)}
+.sw i{height:26px;border:1px solid rgba(255,255,255,.18)}
+.sw span small{display:block;color:var(--couv-muted);font-size:12px;line-height:1.2}
+.sw code{font-family:var(--f-chiffre);font-size:11px;color:var(--couv-muted)}
+.pol{padding:7px 0;border-bottom:1px solid rgba(255,255,255,.09)}
+.pol .ex{display:block;line-height:1.15;color:var(--couv-fg);overflow-wrap:anywhere}
+.pol small{font-family:var(--f-chiffre);font-size:11px;color:var(--couv-muted)}
+
+.fin{border:1px solid #4a3523;padding:20px 24px;display:grid;gap:8px;background:#1f160e}
+.fin h2{margin:0;font-family:"Bodoni Moda",serif;font-style:italic;font-weight:400;font-size:28px}
+.fin ul{margin:0;padding-left:20px;color:#b9a07c}
+
+@media (max-width:860px){
+  .demo{grid-template-columns:1fr;padding:14px 12px 22px}
+  .tete{padding:22px 16px 4px}
+  .livre{padding:16px 0 20px 10px}
+  .feuille{padding:20px 18px 26px}
+}
+@media (prefers-reduced-motion:reduce){.feuille.active{animation:none}}
+
+/* =========================================================
+   A · LE REGISTRE — grand livre de comptes, rempli au stylo-bille
+   ========================================================= */
+#registre{--couv:#3a2416;--couv-fg:#efe2c6;--couv-muted:#b89c78;--page:#f2e8cf;--encre:#2a1a0e;--encre-2:#6d543b;--accent:#8b1e14;--vif:#2440b3;--vif-couv:#93a8ff;
+  --f-titre:"Old Standard TT",serif;--f-texte:"Libre Caslon Text",serif;--f-chiffre:"Courier Prime",monospace;--f-main:"La Belle Aurore",cursive;--t-texte:15px;--t-titre:34px;--t-main:21px;--col:84px}
+#registre .feuille{padding:28px calc(var(--col) + 18px) 28px 62px;line-height:28px;
+  background:
+    linear-gradient(90deg,transparent 42px,rgba(160,40,30,.55) 42px 43px,transparent 43px 46px,rgba(160,40,30,.55) 46px 47px,transparent 47px),
+    linear-gradient(270deg,transparent var(--col),rgba(160,40,30,.55) var(--col) calc(var(--col) + 1px),transparent calc(var(--col) + 1px)),
+    repeating-linear-gradient(180deg,transparent 0 27px,rgba(60,100,170,.30) 27px 28px),
+    var(--grain),var(--page);
+  box-shadow:inset 0 0 30px rgba(120,80,35,.35),3px 3px 0 #d9c9a4,5px 5px 0 #c4ae84}
+#registre .entete{line-height:1;margin-bottom:0;height:28px;align-items:center}
+#registre h3{font-style:italic;line-height:56px;margin:0}
+#registre .chapeau,#registre .texte,#registre .note{line-height:28px;margin:0 0 28px}
+#registre .liste{margin:0 0 0}
+#registre .liste li{border:0;padding:0;line-height:28px;margin-right:calc(-1 * var(--col) - 8px)}
+#registre .liste small{display:inline;margin-left:8px}
+#registre .num{color:var(--vif);min-width:calc(var(--col) - 14px);text-align:right}
+#registre .live{color:var(--vif)}
+#registre .live::after{content:"▍";margin-left:3px;animation:clign 1s steps(1) infinite}
+@keyframes clign{50%{opacity:0}}
+#registre .note{color:var(--vif);margin-top:0}
+#registre .btn{background:transparent;color:var(--accent);border:2px solid var(--accent);outline:1px solid var(--accent);outline-offset:3px;text-transform:uppercase;letter-spacing:.14em;font-size:13px;padding:6px 14px}
+#registre .tampon{display:grid;place-items:center;position:absolute;right:calc(var(--col) + 30px);top:64px;width:90px;height:90px;border-radius:50%;border:3px double rgba(139,30,20,.7);color:rgba(139,30,20,.7);font-family:"Old Standard TT",serif;font-size:14px;letter-spacing:.14em;text-transform:uppercase;transform:rotate(-14deg);line-height:1.1;text-align:center;pointer-events:none}
+#registre .onglets{padding-top:18px;gap:2px}
+#registre .onglet{width:40px;min-height:94px;margin-left:-1px;border-radius:0 22px 22px 0;background:#241509;color:#d9b968;display:flex;flex-direction:column;align-items:center;gap:6px;padding:8px 0 12px;box-shadow:inset 6px 0 8px -5px rgba(0,0,0,.6)}
+#registre .onglet .o-i{display:block;font-family:"Old Standard TT",serif;font-style:italic;font-size:21px;line-height:1}
+#registre .onglet span{writing-mode:vertical-rl;font-family:"Courier Prime",monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase}
+#registre .onglet[aria-selected="true"]{background:var(--page);color:var(--accent);box-shadow:none}
+#registre .ressources .live-cur::after{content:"▍";animation:clign 1s steps(1) infinite;color:var(--vif-couv)}
+@media (max-width:860px){#registre{--col:58px}#registre .feuille{padding-left:54px}#registre .tampon{right:calc(var(--col) + 6px);top:40px;transform:rotate(-14deg) scale(.75)}}
+
+/* =========================================================
+   B · LE CARNET DE CAMPAGNE — cuir cousu, marque-pages scotchés, surligneur fluo
+   ========================================================= */
+#carnet{--couv:#4a2e1b;--couv-fg:#f1e3c6;--couv-muted:#c9a983;--page:#efe4c9;--encre:#2b2018;--encre-2:#6b5844;--accent:#7c2d1a;--vif:#2b2018;--vif-couv:#ffc21a;
+  --f-titre:"Special Elite",monospace;--f-texte:"Crimson Pro",serif;--f-chiffre:"Space Mono",monospace;--f-main:"Reenie Beanie",cursive;--t-texte:18px;--t-titre:31px;--t-main:30px}
+#carnet .livre{grid-template-columns:minmax(0,1fr);grid-template-rows:auto 1fr;padding:14px 22px 26px;outline:1px dashed rgba(241,227,198,.35);outline-offset:-9px}
+#carnet .livre::after{content:"";position:absolute;top:0;bottom:0;right:14%;width:10px;background:linear-gradient(90deg,#0f0a07,#2a1d14 50%,#0f0a07);z-index:4;pointer-events:none}
+#carnet .onglets{flex-direction:row;order:-1;padding:6px 0 0 14px;gap:10px;margin-bottom:-14px;flex-wrap:wrap}
+#carnet .onglet{padding:10px 14px 24px;font-family:"Reenie Beanie",cursive;font-size:25px;line-height:1;color:#2b2018;background:#d9c49a;transform:rotate(-2deg)}
+#carnet .onglet:nth-child(2){background:#c7a27a;transform:rotate(1.5deg)}
+#carnet .onglet:nth-child(3){background:#e2d6b8;transform:rotate(-1deg)}
+#carnet .onglet:nth-child(4){background:#b99f7e;transform:rotate(2deg)}
+#carnet .onglet::before{content:"";position:absolute;top:-7px;left:50%;width:42px;height:15px;margin-left:-21px;background:rgba(255,248,225,.5);transform:rotate(4deg);box-shadow:0 0 0 1px rgba(255,255,255,.15)}
+#carnet .onglet[aria-selected="true"]{background:var(--page)}
+#carnet .feuille{background:radial-gradient(circle,rgba(60,40,20,.28) 1px,transparent 1.3px) 0 0/18px 18px,var(--grain),var(--page);box-shadow:2px 2px 0 #d8c9a6,4px 4px 0 #c9b68f,6px 8px 12px rgba(0,0,0,.4)}
+#carnet mark,#carnet .num{background:linear-gradient(100deg,rgba(255,194,26,0) 1%,rgba(255,194,26,.8) 4%,rgba(255,170,0,.7) 95%,rgba(255,194,26,0) 99%);padding:0 4px;color:var(--encre)}
+#carnet .live{background:#ffc21a;color:#2b2018;padding:1px 6px}
+#carnet h3{letter-spacing:.01em}
+#carnet .note{transform:rotate(-2deg);display:inline-block}
+#carnet .btn{font-family:"Special Elite",monospace;background:#c49a6c;color:#2b2018;border:1px dashed rgba(43,32,24,.55);outline:3px solid #c49a6c;box-shadow:3px 3px 0 rgba(0,0,0,.25);transform:rotate(-1deg);margin-left:3px}
+
+/* =========================================================
+   C · LE CODEX — manuscrit enluminé, signets en ruban, tracés de construction
+   ========================================================= */
+#codex{--couv:#2a1a10;--couv-fg:#f0e1bf;--couv-muted:#b79b72;--page:#ecdab3;--encre:#2a1a10;--encre-2:#6e5236;--accent:#7a1f24;--vif:#1f6f96;--vif-couv:#6cc0e6;
+  --f-titre:"Alegreya SC",serif;--f-texte:"Alegreya",serif;--f-chiffre:"Space Mono",monospace;--f-main:"Alegreya",serif;--t-texte:17.5px;--t-titre:34px;--t-main:19px}
+#codex .livre{grid-template-columns:minmax(0,1fr);padding:0 20px 26px;box-shadow:inset 0 0 0 7px #2a1a10,inset 0 0 0 8px #a8823a}
+#codex .feuilles{margin-top:24px}
+#codex .feuille{padding:38px 36px 36px;background:var(--grain),radial-gradient(ellipse at 50% 45%,#f2e3c0 35%,#dcc395 100%);box-shadow:inset 0 0 24px rgba(110,70,30,.35)}
+#codex .feuille::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.55;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><g fill='none' stroke='%231f6f96' stroke-width='.6' vector-effect='non-scaling-stroke'><rect x='8' y='6' width='84' height='88' vector-effect='non-scaling-stroke'/><line x1='0' y1='0' x2='100' y2='100' vector-effect='non-scaling-stroke'/><line x1='100' y1='0' x2='0' y2='100' vector-effect='non-scaling-stroke'/><line x1='50' y1='0' x2='50' y2='100' stroke-dasharray='2 2' vector-effect='non-scaling-stroke'/></g></svg>") center/100% 100% no-repeat}
+#codex .feuille::before{content:"↔ 84 · ↕ 88 · φ 1,618";position:absolute;right:14px;bottom:10px;font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.08em;color:var(--vif);opacity:.8}
+#codex .entete,#codex h3,#codex .chapeau{margin-right:170px}
+#codex h3{color:var(--accent)}
+#codex .texte::first-letter{float:left;font-family:"UnifrakturMaguntia",serif;font-size:50px;line-height:1;padding:8px 10px 4px;margin:4px 10px 0 0;background:linear-gradient(135deg,#ecca73,#a77f2f);color:#5a1219;box-shadow:inset 0 0 0 2px #5a1219}
+#codex .note{font-style:italic}
+#codex .btn{font-family:"Alegreya SC",serif;font-size:17px;background:linear-gradient(135deg,#ecca73,#a77f2f);color:#2a1a10;box-shadow:inset 0 0 0 1px #5a3d14}
+#codex .onglets{position:absolute;top:0;right:30px;flex-direction:row;gap:8px;padding:0;z-index:4}
+#codex .onglet{width:30px;height:96px;padding:16px 0 20px;writing-mode:vertical-rl;font-family:"Alegreya SC",serif;font-size:14px;letter-spacing:.04em;color:#f6e9cc;background:#7a1f24;clip-path:polygon(0 0,100% 0,100% 100%,50% 86%,0 100%);transition:height .2s;text-align:start}
+#codex .onglet:nth-child(2){background:#4f5a2a}
+#codex .onglet:nth-child(3){background:#a8762a}
+#codex .onglet:nth-child(4){background:#2f4a63}
+#codex .onglet[aria-selected="true"]{height:150px}
+@media (max-width:860px){#codex .onglets{right:18px;gap:5px}#codex .onglet{width:25px;font-size:12px}#codex .entete,#codex h3,#codex .chapeau{margin-right:118px}#codex .feuille{padding:34px 20px 34px}}
+
+/* =========================================================
+   D · LES ARCHIVES — chemises cartonnées, tampons, passages censurés
+   ========================================================= */
+#archives{--couv:#2a2119;--couv-fg:#eee4d0;--couv-muted:#b3a083;--page:#efe7d6;--encre:#25201b;--encre-2:#6a5e50;--accent:#b3261e;--vif:#25201b;--vif-couv:#ff4b3a;
+  --f-titre:"Stardos Stencil",sans-serif;--f-texte:"Libre Baskerville",serif;--f-chiffre:"Courier Prime",monospace;--f-main:"Caveat",cursive;--t-texte:15px;--t-titre:31px;--t-main:25px}
+#archives .livre{grid-template-columns:minmax(0,1fr);grid-template-rows:auto 1fr;padding:18px 18px 26px;background:var(--grain),linear-gradient(#3a2d22,#2a2119)}
+#archives .onglets{flex-direction:row;order:-1;padding:0 0 0 10px;gap:0;flex-wrap:wrap}
+#archives .onglet{clip-path:polygon(9% 0,91% 0,100% 100%,0 100%);padding:9px 22px 7px;font-family:"Courier Prime",monospace;font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#3a2a1a;background:#b88d56;margin-right:-8px}
+#archives .onglet:nth-child(2){background:#a98049}
+#archives .onglet:nth-child(3){background:#b1874f}
+#archives .onglet:nth-child(4){background:#a27a45}
+#archives .onglet .o-n{display:inline;opacity:.65;margin-right:6px}
+#archives .onglet[aria-selected="true"]{background:#c39a62}
+#archives .feuilles{background:var(--grain),#c39a62;padding:16px 16px 18px;box-shadow:0 8px 18px rgba(0,0,0,.5)}
+#archives .feuille{background:var(--grain),var(--page);box-shadow:0 1px 3px rgba(0,0,0,.35);min-height:410px}
+#archives .feuille::before{content:"";position:absolute;top:-14px;left:30px;width:13px;height:46px;border:2.5px solid #8f959b;border-radius:7px;box-shadow:inset 0 0 0 2px transparent;z-index:2}
+#archives h3{text-transform:uppercase;letter-spacing:.03em;font-weight:700}
+#archives .entete{font-family:"Courier Prime",monospace}
+#archives .live{background:#1a1210;color:#ff4b3a;padding:2px 7px;text-shadow:0 0 6px rgba(255,75,58,.7)}
+#archives .num{font-family:"Courier Prime",monospace}
+#archives .liste li{border-bottom:1px dashed rgba(37,32,27,.3)}
+#archives .tampon{display:block;position:absolute;top:58px;right:22px;border:3px solid rgba(179,38,30,.75);color:rgba(179,38,30,.75);padding:3px 12px;font-family:"Stardos Stencil",sans-serif;font-weight:700;font-size:20px;text-transform:uppercase;letter-spacing:.06em;transform:rotate(-9deg);mix-blend-mode:multiply;pointer-events:none}
+#archives .censure{display:inline;background:#1b1714;color:transparent;padding:0 4px;cursor:help;transition:color .2s;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+#archives .censure:hover{color:#efe7d6}
+#archives .note{color:#1f3f8a}
+#archives .btn{font-family:"Stardos Stencil",sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.08em;background:#25201b;color:var(--page);padding:9px 16px}
+
+/* =========================================================
+   E · L'ALMANACH DE L'HORLOGER — laiton, cadrans, vert-de-gris
+   ========================================================= */
+#horloger{--couv:#1a110b;--couv-fg:#ecd9b0;--couv-muted:#a98d63;--page:#e2cc9f;--encre:#241609;--encre-2:#6b5130;--accent:#5b1d12;--vif:#2f7a68;--vif-couv:#73c2ad;
+  --f-titre:"Bodoni Moda",serif;--f-texte:"Spectral",serif;--f-chiffre:"DM Mono",monospace;--f-main:"Spectral",serif;--t-texte:16.5px;--t-titre:38px;--t-main:18px}
+#horloger .livre::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.9;background:
+  radial-gradient(circle at 0 0,#c39a4b 0 20px,transparent 21px),radial-gradient(circle at 0 100%,#c39a4b 0 20px,transparent 21px),
+  radial-gradient(circle at 100% 0,#c39a4b 0 20px,transparent 21px),radial-gradient(circle at 100% 100%,#c39a4b 0 20px,transparent 21px)}
+#horloger .feuille{background:var(--grain),radial-gradient(ellipse at 50% 40%,#ecdab2 30%,#cdac77 85%,#a5804b 100%);box-shadow:inset 0 0 30px rgba(90,50,15,.45)}
+#horloger h3{font-style:italic}
+#horloger .texte::first-letter{float:left;font-family:"Bodoni Moda",serif;font-size:58px;line-height:.9;padding:4px 8px 0 0;color:var(--accent)}
+#horloger .note{font-style:italic}
+#horloger .liste li{border-bottom:1px solid rgba(36,22,9,.18)}
+#horloger .btn{font-family:"Spectral",serif;text-transform:uppercase;letter-spacing:.16em;font-size:13px;padding:9px 16px;border-radius:3px;color:#2a1a0c;background:linear-gradient(135deg,#e7c97f,#a87d32 45%,#e9cf8d 55%,#8a6526);box-shadow:inset 0 0 0 1px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.4)}
+#horloger .onglets{padding-top:28px;gap:6px}
+#horloger .onglet{width:46px;min-height:90px;margin-left:-1px;display:flex;flex-direction:column;align-items:center;gap:6px;padding:13px 0;border-radius:0 6px 6px 0;color:#2a1a0c;
+  background:linear-gradient(135deg,#e7c97f,#a87d32 45%,#e9cf8d 55%,#8a6526);box-shadow:inset 0 0 0 1px rgba(0,0,0,.45),2px 2px 5px rgba(0,0,0,.55);filter:saturate(.5) brightness(.7)}
+#horloger .onglet::before,#horloger .onglet::after{content:"";position:absolute;left:50%;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:#5a3e16;box-shadow:inset 1px 1px 0 rgba(255,255,255,.35)}
+#horloger .onglet::before{top:4px}#horloger .onglet::after{bottom:4px}
+#horloger .onglet .o-r{display:block;font-family:"Bodoni Moda",serif;font-size:15px;line-height:1}
+#horloger .onglet span{writing-mode:vertical-rl;font-family:"Spectral",serif;font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+#horloger .onglet[aria-selected="true"]{filter:none}
+#horloger .cadran{display:block;width:36px;height:36px}
+</style>
+</head>
+<body>
+<div class="page">
+
+<section class="intro">
+  <small>Identité visuelle · essai n° 3</small>
+  <h1>Cinq vieux livres</h1>
+  <p>Chaque piste est un vrai objet ancien, avec sa façon à lui de faire les onglets, et une touche moderne qui le « dérègle » dans le temps. Clique sur les onglets de chaque livre pour tourner les pages.</p>
+  <nav class="sommaire">
+    <a href="#registre">A · Le registre</a><a href="#carnet">B · Le carnet de campagne</a><a href="#codex">C · Le codex</a><a href="#archives">D · Les archives</a><a href="#horloger">E · L'almanach de l'horloger</a>
+  </nav>
+</section>
+
+<section class="piste" id="registre">
+  <div class="tete">
+    <div class="numero">Piste A</div>
+    <h2>Le registre</h2>
+    <p>Le grand livre de comptes d'une seigneurie : papier réglé, colonnes rouges, encoches en demi-lune sur la tranche comme dans les vieux dictionnaires. On y gère un royaume comme un notaire.</p>
+    <dl><div><dt>Authentique</dt><dd>Lignes de registre, colonne des chiffres, tampon rond, lettres du XIXᵉ siècle.</dd></div>
+        <div><dt>Moderne</dt><dd>Le registre se remplit tout seul, au stylo-bille bleu, avec un curseur qui clignote.</dd></div></dl>
+  </div>
+  <div class="demo"><div class="maquette"></div><div class="charte"></div></div>
+</section>
+
+<section class="piste" id="carnet">
+  <div class="tete">
+    <div class="numero">Piste B</div>
+    <h2>Le carnet de campagne</h2>
+    <p>Le carnet d'un général en campagne : cuir cousu, élastique, papier pointé, marque-pages en papier scotchés en haut, notes griffonnées et texte tapé à la machine.</p>
+    <dl><div><dt>Authentique</dt><dd>Couture, scotch jauni, machine à écrire, écriture pressée.</dd></div>
+        <div><dt>Moderne</dt><dd>Le surligneur fluo : tout ce qui est important ou en temps réel est surligné.</dd></div></dl>
+  </div>
+  <div class="demo"><div class="maquette"></div><div class="charte"></div></div>
+</section>
+
+<section class="piste" id="codex">
+  <div class="tete">
+    <div class="numero">Piste C</div>
+    <h2>Le codex</h2>
+    <p>Un manuscrit enluminé : vélin, lettrines dorées en écriture gothique, rubriques rouges et signets en ruban de soie qui pendent du haut du livre.</p>
+    <dl><div><dt>Authentique</dt><dd>Lettrines à la feuille d'or, rubans de couleur, petites capitales anciennes.</dd></div>
+        <div><dt>Moderne</dt><dd>Les traits de construction de la page restent visibles en bleu, avec des mesures, comme un plan d'architecte posé sur le manuscrit.</dd></div></dl>
+  </div>
+  <div class="demo"><div class="maquette"></div><div class="charte"></div></div>
+</section>
+
+<section class="piste" id="archives">
+  <div class="tete">
+    <div class="numero">Piste D</div>
+    <h2>Les archives</h2>
+    <p>Des dossiers secrets : chemises en carton à onglets numérotés, feuilles tapées à la machine, trombones, tampons rouges et titres au pochoir militaire.</p>
+    <dl><div><dt>Authentique</dt><dd>Carton kraft, pochoir, tampons, annotations au stylo.</dd></div>
+        <div><dt>Moderne</dt><dd>Les chiffres en rouge lumineux comme un écran, et les passages censurés (passe la souris sur la barre noire).</dd></div></dl>
+  </div>
+  <div class="demo"><div class="maquette"></div><div class="charte"></div></div>
+</section>
+
+<section class="piste" id="horloger">
+  <div class="tete">
+    <div class="numero">Piste E</div>
+    <h2>L'almanach de l'horloger</h2>
+    <p>Le livre d'un horloger qui joue avec le temps : cuir noir, coins en laiton, onglets en plaques de laiton rivetées, chiffres romains, et un cadran dans la barre du haut.</p>
+    <dl><div><dt>Authentique</dt><dd>Laiton, rivets, lettres gravées du XVIIIᵉ siècle.</dd></div>
+        <div><dt>Moderne</dt><dd>Le vert-de-gris (la patine du laiton) sert de couleur vive, et l'aiguille verte du cadran tourne à l'envers : c'est la distorsion du temps.</dd></div></dl>
+  </div>
+  <div class="demo"><div class="maquette"></div><div class="charte"></div></div>
+</section>
+
+<section class="fin">
+  <h2>À toi de jouer</h2>
+  <ul>
+    <li>Dis-moi quelle piste te parle le plus, ou ce que tu prendrais dans chacune (par exemple les onglets de E avec le papier de A).</li>
+    <li>Les noms et chiffres sont des exemples, pas des règles du jeu.</li>
+  </ul>
+</section>
+</div>
+
+<script>
+const PAGES=[
+ {tab:'Monde',i:'M',r:'I',titre:'Le Monde',chapeau:"Aubagne et La Valentine, quartier par quartier.",
+  texte:"Douze quartiers se partagent la vallée de l'Huveaune. <mark>Trois ont prêté serment</mark> à ta bannière<span class=\"censure\"> — et l'un d'eux prépare déjà sa trahison</span>.",
+  liste:[['Pin Vert','Hôtel de ville','640 h.'],['Le Charrel','Pris il y a 6 jours','210 h.'],['Les Passons','Neutre','—']],
+  note:'→ fortifier Le Charrel !',live:'Jour 214',bouton:'Ouvrir la carte',lien:'Voir les routes',tampon:'Visé'},
+ {tab:'Armées',i:'A',r:'II',titre:'Armée du Pin Vert',chapeau:"En route vers Les Passons, par la vieille route d'Aix.",
+  texte:"Neuf cents hommes à pied, <mark>deux cents cavaliers</mark>, et un moral qui tient encore.",
+  liste:[['Fantassins','Lances et boucliers','900'],['Archers','Arcs courts','350'],['Cavaliers','Chevaux légers','200']],
+  note:'attendre les archers ?',live:'En marche · 00:18:40',bouton:'Attaquer',lien:'Changer de formation',tampon:'En marche'},
+ {tab:'Diplomatie',i:'D',r:'III',titre:'Pacte de non-agression',chapeau:"Proposé par Mathieu, seigneur de La Valentine.",
+  texte:"Les deux parties s'engagent à ne pas lever d'armée l'une contre l'autre pendant <mark>sept jours</mark>.<span class=\"censure\"> Clause secrète : partage du Charrel.</span>",
+  liste:[['Durée','','7 jours'],['Garantie','Versée par Mathieu','500 or'],['En cas de rupture','Connue de tous','traître']],
+  note:'méfiance…',live:'Expire dans 47:12:00',bouton:'Sceller le pacte',lien:'Refuser',tampon:'Proposé'},
+ {tab:'Journal',i:'J',r:'IV',titre:'Journal',chapeau:"Ce qui s'est passé pendant ton absence.",
+  texte:"Le vent a tourné sur la vallée. <mark>Une armée</mark> a été vue au sud.",
+  liste:[['Armée repérée','Près de La Valentine','14:32'],['Marché du Pin Vert','+420 pièces d’or','11:05'],['Raid repoussé','Au Charrel','08:47']],
+  note:'',live:"Aujourd'hui",bouton:'Tout marquer lu',lien:'Archives',tampon:'Lu'}
+];
+const CHARTES={
+ registre:{c:[['Cuir de noix','#3A2416','Couverture'],['Papier réglé','#F2E8CF','Pages'],['Encre','#2A1A0E','Texte'],['Rouge registre','#8B1E14','Colonnes, actions'],['Lignes','#7C98C2','Réglure'],['Stylo-bille','#2440B3','Le présent']],
+  p:[['Old Standard TT','Titres · 34 px','font-family:Old Standard TT;font-style:italic;font-size:28px'],['Libre Caslon Text','Texte · 15 px','font-family:Libre Caslon Text;font-size:15px'],['Courier Prime','Chiffres · 13 px','font-family:Courier Prime;font-size:15px'],['La Belle Aurore','Notes · 21 px','font-family:La Belle Aurore;font-size:21px']]},
+ carnet:{c:[['Cuir cousu','#4A2E1B','Couverture'],['Papier pointé','#EFE4C9','Pages'],['Encre','#2B2018','Texte'],['Kraft','#C49A6C','Marque-pages, boutons'],['Brique','#7C2D1A','Notes'],['Fluo','#FFC21A','Le présent']],
+  p:[['Special Elite','Titres · 31 px','font-family:Special Elite;font-size:26px'],['Crimson Pro','Texte · 18 px','font-family:Crimson Pro;font-size:18px'],['Space Mono','Chiffres · 15 px','font-family:Space Mono;font-size:14px'],['Reenie Beanie','Onglets, notes · 25 à 30 px','font-family:Reenie Beanie;font-size:28px']]},
+ codex:{c:[['Noyer','#2A1A10','Couverture'],['Vélin','#ECDAB3','Pages'],['Rubrique','#7A1F24','Titres, ruban'],['Feuille d’or','#C9A24A','Lettrines, boutons'],['Olive','#4F5A2A','Ruban'],['Bleu de tracé','#1F6F96','Le présent']],
+  p:[['Alegreya SC','Titres, rubans · 34 px','font-family:Alegreya SC;font-size:28px'],['Alegreya','Texte · 17,5 px','font-family:Alegreya;font-size:17px'],['UnifrakturMaguntia','Lettrines seulement','font-family:UnifrakturMaguntia;font-size:30px'],['Space Mono','Chiffres, mesures · 13 px','font-family:Space Mono;font-size:14px']]},
+ archives:{c:[['Bureau','#2A2119','Fond'],['Kraft','#C39A62','Chemises'],['Papier','#EFE7D6','Feuilles'],['Encre machine','#25201B','Texte'],['Tampon','#B3261E','Tampons'],['Rouge écran','#FF4B3A','Le présent']],
+  p:[['Stardos Stencil','Titres · 31 px','font-family:Stardos Stencil;font-weight:700;font-size:26px'],['Libre Baskerville','Texte · 15 px','font-family:Libre Baskerville;font-size:15px'],['Courier Prime','Onglets, chiffres · 12 à 14 px','font-family:Courier Prime;font-size:15px'],['Caveat','Annotations · 25 px','font-family:Caveat;font-size:25px']]},
+ horloger:{c:[['Cuir noir','#1A110B','Couverture'],['Papier','#E2CC9F','Pages'],['Encre','#241609','Texte'],['Laiton','#C39A4B','Onglets, boutons'],['Grenat','#5B1D12','Lettrines'],['Vert-de-gris','#2F7A68','Le présent']],
+  p:[['Bodoni Moda','Titres · 38 px','font-family:Bodoni Moda;font-style:italic;font-size:30px'],['Spectral','Texte · 16,5 px','font-family:Spectral;font-size:16px'],['DM Mono','Chiffres · 14 px','font-family:DM Mono;font-size:14px']]}
+};
+const cadran=`<svg class="cadran" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18" fill="#2a1a0c" stroke="#c39a4b" stroke-width="2"/>${[...Array(12)].map((_,k)=>`<line x1="20" y1="4" x2="20" y2="${k%3?6:8}" stroke="#c39a4b" stroke-width="1.2" transform="rotate(${k*30} 20 20)"/>`).join('')}<line class="h-h" x1="20" y1="20" x2="20" y2="11" stroke="#ecd9b0" stroke-width="2" stroke-linecap="round"/><line class="h-m" x1="20" y1="20" x2="20" y2="7" stroke="#ecd9b0" stroke-width="1.3" stroke-linecap="round"/><line class="h-v" x1="20" y1="23" x2="20" y2="6" stroke="#73c2ad" stroke-width="1"/><circle cx="20" cy="20" r="1.8" fill="#c39a4b"/></svg>`;
+document.querySelectorAll('.piste').forEach(piste=>{
+  const id=piste.id,ch=CHARTES[id];
+  piste.querySelector('.maquette').innerHTML=`
+   <div class="ressources">${cadran}<span class="jeu">Nom du jeu</span>
+     <span class="res"><small>Or</small><b>12 400</b><em>+320/h</em></span>
+     <span class="res"><small>Vivres</small><b>3 210</b><em>+85/h</em></span>
+     <span class="res"><small>Matériaux</small><b>860</b><em>+40/h</em></span>
+     <span class="res"><small>Hommes</small><b>1 450</b><em>/2 000</em></span>
+     <span class="heure${id==='registre'?' live-cur':''}">--:--:--</span></div>
+   <div class="livre">
+     <div class="feuilles">${PAGES.map((p,k)=>`
+       <article class="feuille${k?'':' active'}" role="tabpanel" aria-label="${p.tab}">
+         <div class="entete"><span>Folio ${p.r} · ${p.tab}</span><span class="live">${p.live}</span></div>
+         <h3>${p.titre}</h3><p class="chapeau">${p.chapeau}</p>
+         <p class="texte">${p.texte}</p>
+         <ul class="liste">${p.liste.map(l=>`<li><span>${l[0]}${l[1]?`<small>${l[1]}</small>`:''}</span><span class="num">${l[2]}</span></li>`).join('')}</ul>
+         ${p.note?`<p class="note">${p.note}</p>`:''}
+         <div class="actions"><button class="btn" type="button">${p.bouton}</button><button class="lien" type="button">${p.lien}</button></div>
+         <div class="tampon" aria-hidden="true">${p.tampon}</div>
+       </article>`).join('')}</div>
+     <nav class="onglets" role="tablist" aria-label="Sections du livre">${PAGES.map((p,k)=>`
+       <button class="onglet" role="tab" type="button" aria-selected="${!k}" aria-label="${p.tab}"><i class="o-n">N°0${k+1}</i><b class="o-i">${p.i}</b><b class="o-r">${p.r}</b><span>${p.tab}</span></button>`).join('')}</nav>
+   </div>`;
+  piste.querySelector('.charte').innerHTML=`
+   <div><h4>Couleurs</h4>${ch.c.map(c=>`<div class="sw"><i style="background:${c[1]}"></i><span>${c[0]}<small>${c[2]}</small></span><code>${c[1]}</code></div>`).join('')}</div>
+   <div><h4>Polices et tailles</h4>${ch.p.map(p=>`<div class="pol"><span class="ex" style="${p[2]}">${p[0]}</span><small>${p[1]}</small></div>`).join('')}</div>`;
+  const ong=[...piste.querySelectorAll('.onglet')],fe=[...piste.querySelectorAll('.feuille')];
+  ong.forEach((o,k)=>o.addEventListener('click',()=>{ong.forEach((x,j)=>x.setAttribute('aria-selected',j===k));fe.forEach((f,j)=>f.classList.toggle('active',j===k));}));
+});
+const deux=n=>String(n).padStart(2,'0');let inverse=0;
+function tic(){const d=new Date();const t=deux(d.getHours())+':'+deux(d.getMinutes())+':'+deux(d.getSeconds());
+  document.querySelectorAll('.heure').forEach(e=>e.textContent=t);
+  inverse-=6;
+  document.querySelectorAll('.cadran').forEach(s=>{
+    s.querySelector('.h-h').setAttribute('transform',`rotate(${(d.getHours()%12)*30+d.getMinutes()/2} 20 20)`);
+    s.querySelector('.h-m').setAttribute('transform',`rotate(${d.getMinutes()*6} 20 20)`);
+    s.querySelector('.h-v').setAttribute('transform',`rotate(${inverse} 20 20)`);});}
+tic();setInterval(tic,1000);
+</script>
+</body>
+</html>
