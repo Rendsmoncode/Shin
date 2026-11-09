@@ -43,7 +43,6 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
   <div class="row" id="goto"></div>
   <div class="row">
     <button type="button" id="b-all">Vue d'ensemble</button>
-    <button type="button" id="b-shadow" aria-pressed="true">Ombres : oui</button>
   </div>
   <p class="k">Version : détails (étape C) — toits en tuiles, fenêtres, volets.</p>
   <p id="status">Chargement…</p>
@@ -126,7 +125,8 @@ scene.fog=new THREE.Fog(0xa9bccb,9000,30000);
 const renderer=new THREE.WebGLRenderer({antialias:true});
 renderer.setPixelRatio(Math.min(2,window.devicePixelRatio||1));
 renderer.outputEncoding=THREE.sRGBEncoding;
-renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+// pas d'ombres calculées : elles sont déjà sur les photos aériennes (et c'était le plus lent)
+renderer.shadowMap.enabled=false;
 document.getElementById('scene').appendChild(renderer.domElement);
 const camera=new THREE.PerspectiveCamera(40,1,2,60000);
 const controls=new THREE.MapControls(camera,renderer.domElement);
@@ -135,7 +135,6 @@ controls.minDistance=140;controls.maxDistance=16000;controls.minPolarAngle=.1;co
 controls.keyPanSpeed=40;controls.listenToKeyEvents(window);
 scene.add(new THREE.HemisphereLight(0xdfe9f2,0x5a5236,.62));
 const sun=new THREE.DirectionalLight(0xfff1d6,1.15),SUN_DIR=new THREE.Vector3(-.55,.75,.36).normalize();
-sun.castShadow=true;sun.shadow.mapSize.set(4096,4096);sun.shadow.bias=-.0004;sun.shadow.normalBias=.6;
 scene.add(sun,sun.target);
 function resize(){const w=innerWidth,h=innerHeight;renderer.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix();}
 addEventListener('resize',resize);resize();
@@ -860,7 +859,6 @@ const gotoEl=document.getElementById('goto');
 JOUEURS.forEach(j=>{const q=quartiers.find(q=>norm(q.nom)===norm(j.quartier));if(!q)return;
   const b=document.createElement('button');b.type='button';b.textContent=j.quartier;b.style.borderColor=j.couleur;
   b.addEventListener('click',()=>{goTo(q.c[0],q.c[1],1600,.9);montrer(q);});gotoEl.appendChild(b);});
-document.getElementById('b-shadow').addEventListener('click',e=>{renderer.shadowMap.enabled=!renderer.shadowMap.enabled;scene.traverse(o=>{if(o.material)o.material.needsUpdate=true});e.currentTarget.textContent='Ombres : '+(renderer.shadowMap.enabled?'oui':'non');e.currentTarget.setAttribute('aria-pressed',renderer.shadowMap.enabled);ombreSale=true;});
 
 // ---------- clic sur un quartier ----------
 let sel=null,selCurtain=null;
@@ -892,17 +890,6 @@ function loop(now){
   controls.update();
   const dist=camera.position.distanceTo(controls.target);
   qLabels.forEach(s=>s.visible=dist<7000);vLabels.forEach(s=>s.visible=dist>2500);
-  // l'ombre du soleil suit la zone regardée, par sauts : elle n'est recalculée que quand la zone change (le décor ne bouge pas)
-  // … et seulement quand la caméra s'est arrêtée : pendant un déplacement, on garde les ombres déjà calculées (c'était le plus lent)
-  if(fly||camera.position.distanceToSquared(camPrec)>(dist*4e-4)**2)tCalme=now;
-  camPrec.copy(camera.position);
-  if(now-tCalme>220){
-    const ext=Math.min(3500,Math.max(250,dist*.9)),sc=sun.shadow.camera;
-    if(Math.abs(sc.right-ext*1.12)>ext*.1){const e2=ext*1.12;Object.assign(sc,{left:-e2,right:e2,top:e2,bottom:-e2,near:10,far:ext*4+3000});sc.updateProjectionMatrix();ombreSale=true;}
-    const pasO=ext*.1,ox=Math.round(controls.target.x/pasO)*pasO,oz=Math.round(controls.target.z/pasO)*pasO;
-    if(ox!==sun.target.position.x||oz!==sun.target.position.z){sun.target.position.set(ox,controls.target.y,oz);sun.position.copy(sun.target.position).addScaledVector(SUN_DIR,ext*2+1500);ombreSale=true;}
-    if(ombreSale){renderer.shadowMap.needsUpdate=true;ombreSale=false;}
-  }
   if(arbresMesh)arbresMesh.visible=dist<9000;
   // limite de zoom : on ne descend pas là où la photo deviendrait floue (environ 140 m avec la photo nette, 230 m sans) ;
   // de près, la caméra ne peut plus se coucher (le sol au premier plan serait flou)
@@ -919,8 +906,7 @@ function loop(now){
   if(arbresSales&&arbresAttr){arbresAttr.needsUpdate=true;arbresSales=false;}
   renderer.render(scene,camera);requestAnimationFrame(loop);
 }
-let frame=0,last=0,cumul=0,nb=0,tCalme=-1e9;const camPrec=new THREE.Vector3();const prMax=Math.min(2,window.devicePixelRatio||1);let prAct=prMax;
-renderer.shadowMap.autoUpdate=false;
+let frame=0,last=0,cumul=0,nb=0;const prMax=Math.min(2,window.devicePixelRatio||1);let prAct=prMax;
 majTuiles(0,1e9);
 travailPhoto(X0,Z0,GW,GD,15,4096,Math.round(4096*GD/GW),900,finGlobal);
 requestAnimationFrame(loop);
