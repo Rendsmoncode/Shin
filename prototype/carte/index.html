@@ -212,9 +212,9 @@ const PMARGE=20;
 const UG={photoG:{value:null},rectG:{value:new THREE.Vector4(X0,Z0,GW,GD)},hasG:{value:0},teinte:{value:teinteTex}};
 const PHOTO_GLSL=`uniform sampler2D photoG,photoL,teinte;uniform vec4 rectG,rectL;uniform float hasG,hasL;varying vec2 vXZ;
 vec3 versLin(vec3 c){return mix(c/12.92,pow((c+.055)/1.055,vec3(2.4)),step(.04045,c));}
-vec3 photoA(vec2 p){vec2 a=(p-rectL.xy)/rectL.zw,b=(p-rectG.xy)/rectG.zw;
+vec4 photoA(vec2 p){vec2 a=(p-rectL.xy)/rectL.zw,b=(p-rectG.xy)/rectG.zw;
   vec3 cl=texture2D(photoL,vec2(clamp(a.x,0.,1.),1.-clamp(a.y,0.,1.))).rgb,cg=texture2D(photoG,vec2(b.x,1.-b.y)).rgb;
-  float k=hasL*step(0.,a.x)*step(a.x,1.)*step(0.,a.y)*step(a.y,1.);return versLin(mix(cg,cl,k));}
+  float k=hasL*step(0.,a.x)*step(a.x,1.)*step(0.,a.y)*step(a.y,1.);return vec4(versLin(mix(cg,cl,k)),max(k,hasG));}
 vec3 teinter(vec3 c,vec2 p){vec2 b=(p-rectG.xy)/rectG.zw;vec4 t=texture2D(teinte,vec2(b.x,1.-b.y));return mix(c,versLin(t.rgb),t.a);}`;
 // un matériau par carré (mêmes programmes pour tous) : chaque carré a sa propre photo fine
 function matSol(T){
@@ -229,9 +229,10 @@ float hsh(vec2 p){p=mod(p,512.);return fract(sin(dot(p,vec2(127.1,311.7)))*43758
 float vn(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hsh(i),hsh(i+vec2(1,0)),f.x),mix(hsh(i+vec2(0,1)),hsh(i+vec2(1,1)),f.x),f.y);}`)
       .replace('#include <map_fragment>',`#include <map_fragment>
 float lumP=.16;
-if(hasG>.5){vec3 ph=photoA(vXZ);lumP=dot(ph,vec3(.3,.59,.11));diffuseColor.rgb=teinter(ph,vXZ);}
+float aPh=0.;
+if(hasG>.5||hasL>.5){vec4 ph=photoA(vXZ);aPh=ph.a;lumP=mix(lumP,dot(ph.rgb,vec3(.3,.59,.11)),aPh);diffuseColor.rgb=mix(diffuseColor.rgb,teinter(ph.rgb,vXZ),aPh);}
 if(vRock>.001){float nn=.5*vn(vXZ*.3)+.3*vn(vXZ*1.1)+.2*vn(vXZ*3.7);vec3 rc=mix(vec3(.30,.27,.22),vec3(.58,.54,.46),nn);
-  if(hasG>.5)rc*=clamp(sqrt(lumP/.16),.7,1.3);diffuseColor.rgb=mix(diffuseColor.rgb,rc,vRock*(hasG>.5?.8:1.));}`);
+  rc*=mix(1.,clamp(sqrt(lumP/.16),.7,1.3),aPh);diffuseColor.rgb=mix(diffuseColor.rgb,rc,vRock*mix(1.,.8,aPh));}`);
   };
   return m;
 }
@@ -240,7 +241,7 @@ function matRoute(T){
   m.onBeforeCompile=s=>{Object.assign(s.uniforms,UG,T.u);
     s.vertexShader=s.vertexShader.replace('#include <common>','#include <common>\nvarying vec2 vXZ;').replace('#include <begin_vertex>','#include <begin_vertex>\nvXZ=position.xz;');
     s.fragmentShader=s.fragmentShader.replace('#include <common>','#include <common>\n'+PHOTO_GLSL)
-      .replace('#include <color_fragment>','#include <color_fragment>\nif(hasG>.5)diffuseColor.rgb=teinter(photoA(vXZ),vXZ);');
+      .replace('#include <color_fragment>','#include <color_fragment>\nif(hasG>.5||hasL>.5){vec4 ph=photoA(vXZ);diffuseColor.rgb=mix(diffuseColor.rgb,teinter(ph.rgb,vXZ),ph.a);}');
   };
   return m;
 }
@@ -250,7 +251,7 @@ function matBat(T){   // façades : couleur des sommets ; toits : la photo prise
     s.vertexShader=s.vertexShader.replace('#include <common>','#include <common>\nattribute float toit;\nvarying float vToit;\nvarying vec2 vXZ;')
       .replace('#include <begin_vertex>','#include <begin_vertex>\nvToit=toit;vXZ=position.xz;');
     s.fragmentShader=s.fragmentShader.replace('#include <common>','#include <common>\nvarying float vToit;\n'+PHOTO_GLSL)
-      .replace('#include <color_fragment>','#include <color_fragment>\nif(hasG>.5&&vToit>.5)diffuseColor.rgb=photoA(vXZ);');
+      .replace('#include <color_fragment>','#include <color_fragment>\nif(vToit>.5&&(hasG>.5||hasL>.5)){vec4 ph=photoA(vXZ);diffuseColor.rgb=mix(diffuseColor.rgb,ph.rgb,ph.a);}');
   };
   return m;
 }
@@ -299,11 +300,11 @@ async function tuilePhoto(J,t){
 }
 function pomperPhotos(){
   if(photoOff||performance.now()<photoPause)return;
-  while(photoActifs<8){
+  while(photoActifs<16){
     let J=null,Jo=null,nOuv=0;
     for(const t of travaux){if(t.c)nOuv++;if(!t.tuiles.length)continue;if(!J||t.prio<J.prio)J=t;if(t.c&&(!Jo||t.prio<Jo.prio))Jo=t;}
     if(!J)return;
-    if(!J.c){if(nOuv>=3){if(!Jo)return;J=Jo;}else ouvrirJob(J);}
+    if(!J.c){if(nOuv>=5){if(!Jo)return;J=Jo;}else ouvrirJob(J);}
     tuilePhoto(J,J.tuiles.shift());
   }
 }
@@ -317,9 +318,8 @@ function texPhoto(c){
   return t;
 }
 function finGlobal(J){
-  if(J.ko>J.total*.5){couperPhotos();return;}
-  photoG=J.c;UG.photoG.value=texPhoto(J.c);UG.hasG.value=1;
-  const cr=document.getElementById('credit');if(!/photos/.test(cr.textContent))cr.textContent+=' ; photos aériennes : IGN';
+  if(J.ko>J.total*.5){if(!photoOk)couperPhotos();return;}
+  photoG=J.c;UG.photoG.value=texPhoto(J.c);UG.hasG.value=1;creditPhotos();
 }
 function choisirPhoto(T){
   const p=[0,1,2].find(q=>T.ph[q]);
@@ -349,14 +349,18 @@ function poserPhotos(){
   const t=texPhoto(J.c),W=J.W,H=J.H;
   t.onUpdate=()=>{t.image={width:W,height:H};t.onUpdate=null;};   // l'image n'est plus utile une fois envoyée à la carte graphique
   J.c=J.g=null;
-  T.ph[p]={tex:t,rect:J.rect};T.phEtat[p]=2;choisirPhoto(T);
+  T.ph[p]={tex:t,rect:J.rect};T.phEtat[p]=2;choisirPhoto(T);creditPhotos();
 }
+function creditPhotos(){const cr=document.getElementById('credit');if(!/photos/.test(cr.textContent))cr.textContent+=' ; photos aériennes : IGN';}
 function majPhotos(T){
-  if(!photoG||photoOff)return;
-  for(let q=0;q<3;q++){const J=T.phJob[q];if(J){if(T.d>LV[q].d*1.3){annulerJob(J);T.phJob[q]=null;T.phEtat[q]=0;}else J.prio=T.d;}}
+  if(photoOff)return;
+  for(let q=0;q<3;q++){const J=T.phJob[q];if(J){if(T.d>LV[q].d*1.3){annulerJob(J);T.phJob[q]=null;T.phEtat[q]=0;}else J.prio=q===2&&T.d<LV[1].d?T.d*.15:T.d;}}
   const p=[0,1,2].find(q=>T.d<LV[q].d);
   if(p===undefined||T.ph[p])return;
-  if(T.phEtat[p]===0||(T.phEtat[p]===3&&performance.now()>T.phRetry))demanderPhoto(T,p);
+  const libre=q=>T.phEtat[q]===0||(T.phEtat[q]===3&&performance.now()>T.phRetry);
+  // version légère (environ 1,7 m, quelques tuiles) d'abord, pour que tout le quartier s'affiche vite
+  if(p<2&&!T.ph[2]&&!T.ph[1]&&libre(2)){demanderPhoto(T,2);if(T.phJob[2])T.phJob[2].prio=T.d*.15;}
+  if(libre(p))demanderPhoto(T,p);
 }
 const tiles=[];
 for(let j=0;j<NTZ;j++)for(let i=0;i<NTX;i++){
@@ -779,7 +783,7 @@ function loop(now){
 let frame=0,last=0,cumul=0,nb=0;const prMax=Math.min(2,window.devicePixelRatio||1);let prAct=prMax;
 renderer.shadowMap.autoUpdate=false;
 majTuiles(0,1e9);
-travailPhoto(X0,Z0,GW,GD,15,4096,Math.round(4096*GD/GW),-1,finGlobal);pomperPhotos();
+travailPhoto(X0,Z0,GW,GD,15,4096,Math.round(4096*GD/GW),900,finGlobal);
 requestAnimationFrame(loop);
 setTimeout(()=>planterArbres().catch(()=>{}),400);
 if(qDepart)montrer(qDepart);
