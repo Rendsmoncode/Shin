@@ -38,7 +38,7 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 <div id="scene" aria-label="La ville d'Aubagne en 3D avec ses bâtiments, ses routes, son relief et ses quartiers"></div>
 <div class="panel">
   <h1>Carte d'Aubagne</h1>
-  <p>La vraie ville en 3D : photos aériennes IGN drapées sur le relief et sur les toits, relief précis, bâtiments à leur vraie hauteur, routes, ponts, murs de soutènement, rivière, forêts. Glisser pour se déplacer, molette pour zoomer de la ville jusqu'aux rues, clic droit pour pivoter et incliner. Clic sur un quartier pour le voir.</p>
+  <p>La vraie ville en 3D : photos aériennes IGN drapées sur le relief et sur les toits, relief précis, bâtiments à leur vraie hauteur, routes, ponts, murs de soutènement, rivière, forêts. De près : toits de tuiles, fenêtres, volets et portes, arbres teintés d'après la photo. Glisser pour se déplacer, molette pour zoomer de la ville jusqu'aux rues (le zoom s'arrête là où la photo deviendrait floue), clic droit pour pivoter et incliner. Clic sur un quartier pour le voir.</p>
   <div class="legend" id="legend"></div>
   <div class="row" id="goto"></div>
   <div class="row">
@@ -67,7 +67,7 @@ const say=async t=>{status.textContent=t;await pause();};
 const JOUEURS=[
   {nom:'Mathieu',quartier:'Les Passons',couleur:'#3f7fd6'},
   {nom:'Nico',quartier:'La Valentine',couleur:'#c94b3f'},
-  {nom:'Le créateur',quartier:'Pin Vert',couleur:'#e3b54a'},
+  {nom:'Ayoub',quartier:'Pin Vert',couleur:'#e3b54a'},
 ];
 // Positions de secours (longitude, latitude) si un quartier n'est pas nommé dans OpenStreetMap : approximatives, à vérifier
 const SECOURS={'les passons':[5.5935,43.2905],'pin vert':[5.5855,43.3045]};
@@ -129,7 +129,7 @@ document.getElementById('scene').appendChild(renderer.domElement);
 const camera=new THREE.PerspectiveCamera(40,1,2,60000);
 const controls=new THREE.MapControls(camera,renderer.domElement);
 controls.enableDamping=true;controls.dampingFactor=.08;controls.screenSpacePanning=false;
-controls.minDistance=30;controls.maxDistance=16000;controls.minPolarAngle=.1;controls.maxPolarAngle=1.32;
+controls.minDistance=140;controls.maxDistance=16000;controls.minPolarAngle=.1;controls.maxPolarAngle=1.32;
 controls.keyPanSpeed=40;controls.listenToKeyEvents(window);
 scene.add(new THREE.HemisphereLight(0xdfe9f2,0x5a5236,.62));
 const sun=new THREE.DirectionalLight(0xfff1d6,1.15),SUN_DIR=new THREE.Vector3(-.55,.75,.36).normalize();
@@ -210,7 +210,8 @@ const GROS=renderer.capabilities.maxTextureSize>=8192&&!(window.matchMedia&&matc
 // par niveau de détail du relief : zoom WMTS et taille de l'image du carré (500 m + marges) ; près ≈ 26 cm, moyen ≈ 53 cm, loin ≈ 1,7 m par point
 const PH=[{z:19,px:GROS?2048:1024,lim:GROS?14:8},{z:18,px:GROS?1024:768,lim:48},{z:16,px:320,lim:220}];
 const PMARGE=20;
-const UG={photoG:{value:null},rectG:{value:new THREE.Vector4(X0,Z0,GW,GD)},hasG:{value:0},teinte:{value:teinteTex}};
+const UG={photoG:{value:null},rectG:{value:new THREE.Vector4(X0,Z0,GW,GD)},hasG:{value:0},teinte:{value:teinteTex},
+  pxK:{value:.0005},relais:{value:new THREE.Vector2(260,620)}};   // taille d'un point de l'écran par mètre de distance ; distances où les tuiles cèdent la place à la photo
 const PHOTO_GLSL=`uniform sampler2D photoG,photoL,teinte;uniform vec4 rectG,rectL;uniform float hasG,hasL;varying vec2 vXZ;
 vec3 versLin(vec3 c){return mix(c/12.92,pow((c+.055)/1.055,vec3(2.4)),step(.04045,c));}
 vec4 photoA(vec2 p){vec2 a=(p-rectL.xy)/rectL.zw,b=(p-rectG.xy)/rectG.zw;
@@ -246,16 +247,83 @@ function matRoute(T){
   };
   return m;
 }
-function matBat(T){   // façades : couleur des sommets ; toits : la photo prise juste au-dessus
-  const m=new THREE.MeshLambertMaterial({vertexColors:true});
+function matBat(T){   // façades (fenêtres, volets, portes dessinés), toits de tuiles de près, photo de loin ; toits plats : la photo
+  const m=new THREE.MeshLambertMaterial({vertexColors:true,side:THREE.DoubleSide});
   m.onBeforeCompile=s=>{Object.assign(s.uniforms,UG,T.u);
-    s.vertexShader=s.vertexShader.replace('#include <common>','#include <common>\nattribute float toit;\nvarying float vToit;\nvarying vec2 vXZ;')
-      .replace('#include <begin_vertex>','#include <begin_vertex>\nvToit=toit;vXZ=position.xz;');
-    s.fragmentShader=s.fragmentShader.replace('#include <common>','#include <common>\nvarying float vToit;\n'+PHOTO_GLSL)
-      .replace('#include <color_fragment>','#include <color_fragment>\nif(vToit>.5&&(hasG>.5||hasL>.5)){vec4 ph=photoA(vXZ);diffuseColor.rgb=mix(diffuseColor.rgb,ph.rgb,ph.a);}');
+    s.vertexShader=s.vertexShader.replace('#include <common>','#include <common>\nattribute float toit;\nattribute vec4 fa;\nattribute vec4 fb;\nvarying float vToit;\nvarying vec2 vXZ;\nvarying vec4 vFa;\nvarying vec4 vFb;\nvarying float vDist;')
+      .replace('#include <begin_vertex>','#include <begin_vertex>\nvToit=toit;vXZ=position.xz;vFa=fa;vFb=fb;')
+      .replace('#include <project_vertex>','#include <project_vertex>\nvDist=-mvPosition.z;');
+    s.fragmentShader=s.fragmentShader.replace('#include <common>','#include <common>\nvarying float vToit;\nvarying vec4 vFa;\nvarying vec4 vFb;\nvarying float vDist;\n'+PHOTO_GLSL+FACADE_GLSL)
+      .replace('#include <color_fragment>',`#include <color_fragment>
+float flouB=vDist*pxK;
+if(vToit>1.5){
+  vec3 c=diffuseColor.rgb*versLin(texture2D(tuiles,vFa.xy).rgb)/tuileMoy;
+  if(hasG>.5||hasL>.5){vec4 ph=photoA(vXZ);c=mix(c,ph.rgb,ph.a*smoothstep(relais.x,relais.y,vDist));}
+  diffuseColor.rgb=c;
+}else if(vToit>.5){
+  vec3 c=diffuseColor.rgb*(.9+.2*hbat(floor(vXZ*2.5)));
+  if(hasG>.5||hasL>.5){vec4 ph=photoA(vXZ);c=mix(c,ph.rgb,ph.a*mix(.45,1.,smoothstep(relais.x,relais.y,vDist)));}
+  diffuseColor.rgb=c;
+}else diffuseColor.rgb=facade(diffuseColor.rgb*mix(.84,1.,smoothstep(-.2,.8,vFa.y)),flouB);`);
   };
   return m;
 }
+// façades : fa = (distance le long du mur, hauteur au-dessus du sol, longueur du mur, hauteur d'un étage),
+// fb = (style, couleur des volets, mur de la porte, hauteur des murs × 4). Styles : 0 rien, 1 maison, 2 immeuble,
+// 3 commerce, 4 industrie, 5 bâtiment public, 6 lieu de culte. Les détails s'effacent de loin (pas de scintillement).
+const FACADE_GLSL=`uniform sampler2D tuiles;uniform vec3 tuileMoy;uniform float pxK;uniform vec2 relais;
+float hbat(vec2 p){p=mod(p,4096.);return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+float bande(float x,float a,float b,float w){return smoothstep(a-w,a+w,x)-smoothstep(b-w,b+w,x);}
+vec3 voletC(float i){
+  if(i<1.5)return vec3(.42,.55,.47);
+  if(i<2.5)return vec3(.40,.52,.66);
+  if(i<3.5)return vec3(.58,.66,.70);
+  if(i<4.5)return vec3(.47,.50,.33);
+  if(i<5.5)return vec3(.50,.36,.24);
+  if(i<6.5)return vec3(.80,.78,.72);
+  return vec3(.52,.27,.24);
+}
+vec3 facade(vec3 mur,float flou){
+  float st=vFb.x,u=vFa.x,v=vFa.y,L=vFa.z,fh=max(vFa.w,2.4),hm=vFb.w*.25;
+  if(st<.5||L<2.4||v<-.3||v>hm-.25)return mur;
+  float aa=max(flou*.6,.015),loin=1.-smoothstep(.2,.55,flou);
+  vec3 cad=min(mur*1.1+.05,vec3(1.)),verre=vec3(.03,.04,.05),res=mur;
+  if(st>3.5&&st<4.5){
+    float n=max(1.,floor(L/5.)),cell=L/n,ci=floor(u/cell),cu=u-(ci+.5)*cell;
+    res=mix(res,verre+vec3(.06,.07,.08),bande(cu,-cell*.38,cell*.38,aa)*bande(v,hm-2.3,hm-1.1,aa));
+    if(vFb.z>.5&&abs(ci-floor(n*.5))<.5&&hm>5.)res=mix(res,vec3(.42,.43,.44)*(.92+.08*step(.5,fract(v*4.))),bande(cu,-2.,2.,aa)*bande(v,-1.,min(4.2,hm-2.6),aa));
+    return mix(mur*.94,res,loin);
+  }
+  float esp=st<1.5?3.3:st<2.5?3.:st<3.5?3.4:st<5.5?3.6:5.;
+  float ww=st<1.5?.5:st<2.5?.55:st<5.5?.65:.38;
+  float n=max(1.,floor(L/esp)),cell=L/n,ci=floor(u/cell),cu=u-(ci+.5)*cell;
+  float fi=floor(v/fh),fv=v-fi*fh,s=fh/3.,y0=.95*s,y1=2.2*s;
+  if(st>5.5){y0=2.;y1=max(3.,hm*.72);fi=1.;fv=v;}
+  else if(fi>.5&&fi*fh+y1>hm-.2)return mur;
+  bool rdc=fi<.5;
+  if(rdc&&vFb.z>.5&&abs(ci-floor(n*.5))<.5){
+    float pw=st<1.5?.5:.75;
+    vec3 bois=st<1.5?(vFb.y>.5?voletC(vFb.y)*.8:vec3(.33,.22,.14)):vec3(.2,.19,.18)+verre;
+    res=mix(res,cad,bande(cu,-pw,pw,aa)*bande(fv,-1.,2.25*s,aa));
+    res=mix(res,bois*(.92+.08*step(.5,fract(cu*2.5+.25))),bande(cu,-pw+.08,pw-.08,aa)*bande(fv,-1.,2.17*s,aa));
+  }else if(rdc&&st>2.5&&st<3.5){
+    float hv=min(2.8,fh-.4);
+    res=mix(res,vec3(.22),bande(cu,-cell*.42,cell*.42,aa)*bande(fv,.25,hv,aa));
+    res=mix(res,verre+vec3(.05,.06,.07)*clamp(fv/hv,0.,1.),bande(cu,-cell*.42+.1,cell*.42-.1,aa)*bande(fv,.33,hv-.08,aa));
+    res=mix(res,voletC(max(1.,vFb.y))*.85,.85*bande(cu,-cell*.45,cell*.45,aa)*bande(fv,hv+.05,min(hv+.45,fh-.05),aa));
+  }else{
+    vec3 vit=verre+vec3(.07,.085,.1)*clamp((fv-y0)/(y1-y0),0.,1.);
+    if(st<2.5)vit=mix(vit,cad*.9,bande(cu,-.03,.03,aa));
+    res=mix(res,cad,bande(cu,-ww-.07,ww+.07,aa)*bande(fv,y0-.1,y1+.07,aa));
+    res=mix(res,vit,bande(cu,-ww,ww,aa)*bande(fv,y0,y1,aa));
+    res=mix(res,cad*1.05,bande(cu,-ww-.12,ww+.12,aa)*bande(fv,y0-.17,y0-.07,aa));
+    if(vFb.y>.5&&st<2.5){
+      float sv=(bande(cu,-2.*ww-.04,-ww-.07,aa)+bande(cu,ww+.07,2.*ww+.04,aa))*bande(fv,y0-.02,y1+.03,aa);
+      res=mix(res,voletC(vFb.y)*(1.-.12*step(.5,fract(fv*9.))*(1.-smoothstep(.03,.08,flou))),sv);
+    }
+  }
+  return mix(mur*.93,res,loin);
+}`;
 const matR=T=>T.mR||(T.mR=matRoute(T)),matB=T=>T.mB||(T.mB=matBat(T));
 // chargement des tuiles WMTS (Web Mercator), recollées dans une image alignée sur la carte
 const merLat=(y,n)=>Math.atan(Math.sinh(Math.PI*(1-2*y/n)))*180/Math.PI;
@@ -349,6 +417,10 @@ function poserPhotos(){
   if(T.ph[p]||T.d>LV[p].d*1.3){T.phEtat[p]=0;return;}   // devenue inutile entre-temps
   const t=texPhoto(J.c),W=J.W,H=J.H;
   t.onUpdate=()=>{t.image={width:W,height:H};t.onUpdate=null;};   // l'image n'est plus utile une fois envoyée à la carte graphique
+  // photo fine (zoom 18 ou 19) : on y lit la couleur des murs et des toits de chaque bâtiment du carré, puis on le reconstruit
+  if(p<=1&&!T.photoBat&&T.batsListe){
+    try{lirePhotoBats(T,J.g.getImageData(0,0,W,H).data,W,H,J.rect);if(T.batMesh&&!aBatir.includes(T)){aBatir.push(T);aBatir.trie=false;}}catch(e){}
+  }
   J.c=J.g=null;
   T.ph[p]={tex:t,rect:J.rect};T.phEtat[p]=2;choisirPhoto(T);creditPhotos();
 }
@@ -587,19 +659,19 @@ const PAL_MAT={1:['#d8c9aa','#cdbd9c','#e0d3b6','#c6b595'],2:['#c49a6c','#b98d60
   4:['#b5644a','#a95a42','#c07456'],5:['#c2beb6','#b5b1a9'],6:['#8d6b4b','#9a7754','#7f5f42']};
 // toits, quand la photo manque : 1 tuiles, 2 ardoises, 3 zinc ou aluminium, 4 béton
 const PAL_TOIT={1:['#b5562f','#a84d2a','#bf6539','#b0603c'],2:['#5f636a','#6a6e73'],3:['#9aa0a4','#a7aaa8','#8e9296'],4:['#b8b3a8','#aaa59b']};
-const pick=a=>a[(R()*a.length)|0];
+const pick=(a,r=R)=>a[(r()*a.length)|0];
 const chiffres=(v,max)=>[Math.floor(v/10)%10,v%10].filter(x=>x>=1&&x<=max);
-function couleurMur(genre,murs){
-  const d=chiffres(murs,6),m=d.length?d[(R()*d.length)|0]:0,habite=genre==='maison'||genre==='immeuble';
-  if(m===1||m===2||m===6)return pick(PAL_MAT[m]);
-  if(m===3)return habite||genre==='public'||genre==='autre'?pick(PAL_AUBAGNE):pick(PAL_MAT[3]);
-  if(m===4)return genre==='industrie'||genre==='annexe'||R()<.15?pick(PAL_MAT[4]):pick(PAL_AUBAGNE);   // en Provence, la brique est presque toujours enduite
-  if(m===5)return genre==='industrie'||genre==='annexe'?pick(PAL_MAT[5]):pick(PAL_AUBAGNE);
-  if(genre==='religieux')return pick(PAL_MAT[1]);
-  if(habite||genre==='autre')return pick(PAL_AUBAGNE);
-  return pick((PAL[genre]||PAL.autre)[0]);
+function couleurMur(genre,murs,r=R){
+  const d=chiffres(murs,6),m=d.length?d[(r()*d.length)|0]:0,habite=genre==='maison'||genre==='immeuble';
+  if(m===1||m===2||m===6)return pick(PAL_MAT[m],r);
+  if(m===3)return habite||genre==='public'||genre==='autre'?pick(PAL_AUBAGNE,r):pick(PAL_MAT[3],r);
+  if(m===4)return genre==='industrie'||genre==='annexe'||r()<.15?pick(PAL_MAT[4],r):pick(PAL_AUBAGNE,r);   // en Provence, la brique est presque toujours enduite
+  if(m===5)return genre==='industrie'||genre==='annexe'?pick(PAL_MAT[5],r):pick(PAL_AUBAGNE,r);
+  if(genre==='religieux')return pick(PAL_MAT[1],r);
+  if(habite||genre==='autre')return pick(PAL_AUBAGNE,r);
+  return pick((PAL[genre]||PAL.autre)[0],r);
 }
-function couleurToit(genre,toit){const d=chiffres(toit,4);return d.length?pick(PAL_TOIT[d[(R()*d.length)|0]]):pick((PAL[genre]||PAL.autre)[1]);}
+function couleurToit(genre,toit,r=R){const d=chiffres(toit,4);return d.length?pick(PAL_TOIT[d[(r()*d.length)|0]],r):pick((PAL[genre]||PAL.autre)[1],r);}
 const ADOUCIR=new THREE.Color('#d8cfc0');
 function couleurOSM(s){
   s=String(s||'').split(';')[0].trim().toLowerCase().replace(/[\s_-]/g,'');
@@ -609,40 +681,241 @@ function couleurOSM(s){
   return c&&c.lerp(ADOUCIR,.15);   // évite les blancs et rouges purs
 }
 const COULS=(V.couleursBat||[]).map(couleurOSM);
-const tmpC=new THREE.Color(),aBatir=[];let construireBats=null,batisFini=false,ombreSale=true;
+// tirage au sort propre à chaque bâtiment : le même à chaque reconstruction du carré (couleurs, volets, forme du toit)
+function aleaBat(b,BH){
+  let h=(Math.imul(Math.round(b[BH]*10),73856093)^Math.imul(Math.round(b[BH+1]*10),19349663))|0;
+  return ()=>{h=h+0x6D2B79F5|0;let x=Math.imul(h^h>>>15,1|h);x=x+Math.imul(x^x>>>7,61|x)^x;return((x^x>>>14)>>>0)/4294967296;};
+}
+// tuiles canal provençales : colonnes de tuiles bombées et creuses en alternance, rangs qui se recouvrent
+// (motif sans couture de 1,6 m sur 2 m ; le haut de l'image est vers le faîtage)
 {
-  const B=V.batiments,CB=V.champsBat,BH=CB.length,iM=CB.indexOf('murs'),iT=CB.indexOf('toiture'),iC=CB.indexOf('couleur'),iCT=CB.indexOf('couleur_toit');
+  const S=512,NC=8,NR=5,cw=S/NC,rh=S/NR,c=document.createElement('canvas');c.width=c.height=S;const t=c.getContext('2d');
+  t.fillStyle='#4a2a1a';t.fillRect(0,0,S,S);
+  const TERRE=['#b85a34','#c4693d','#a9502f','#c97a4a','#9e4a2c','#b66440','#d08455','#bb6f4e'],LICHEN=new THREE.Color('#857a62');
+  for(let col=0;col<NC;col++){
+    const bombe=col%2===0,x0=col*cw,off=R()*rh;
+    t.save();t.beginPath();t.rect(x0,0,cw,S);t.clip();
+    for(let r=0;r<NR;r++){
+      const y=r*rh+off+(R()-.5)*10,base=new THREE.Color(pick(TERRE));
+      if(R()<.12)base.lerp(LICHEN,.35+R()*.3);   // tuiles vieillies
+      const grain=[];for(let k=0;k<16;k++)grain.push([R()*cw,R()*rh,1+R()*3,1+R()*3,R()<.5]);
+      const g=t.createLinearGradient(x0,0,x0+cw,0);
+      for(let k=0;k<=8;k++){const q=k/8,pr=Math.sin(Math.PI*q),l=bombe?.62+.48*pr:1.02-.3*pr;   // bombée : claire au milieu ; creuse : sombre au milieu
+        g.addColorStop(q,'#'+base.clone().multiplyScalar(l).getHexString());}
+      for(const dy of [0,-S,S]){   // recopié en haut et en bas : le motif se raccorde
+        const yy=y+dy;
+        t.fillStyle=g;t.fillRect(x0,yy,cw,rh+3);
+        const o=t.createLinearGradient(0,yy,0,yy+rh*.28);o.addColorStop(0,'rgba(30,12,4,.55)');o.addColorStop(1,'rgba(30,12,4,0)');
+        t.fillStyle=o;t.fillRect(x0,yy,cw,rh*.28);                       // ombre de la tuile du dessus
+        t.fillStyle='rgba(255,225,190,.18)';t.fillRect(x0,yy+rh-4,cw,3);   // bord du bas, éclairé
+        for(const [gx,gy,gw,gh,cl] of grain){t.fillStyle=cl?'rgba(0,0,0,.08)':'rgba(255,240,220,.07)';t.fillRect(x0+gx,yy+gy,gw,gh);}
+      }
+    }
+    t.restore();
+    t.fillStyle='rgba(25,10,4,.5)';t.fillRect(x0,0,2,S);   // joint entre deux colonnes
+  }
+  const tx=new THREE.CanvasTexture(c);tx.wrapS=tx.wrapT=THREE.RepeatWrapping;tx.anisotropy=ANISO;tx.encoding=THREE.LinearEncoding;
+  const d=t.getImageData(0,0,S,S).data,m=[0,0,0],lin=x=>{x/=255;return x<=.04045?x/12.92:Math.pow((x+.055)/1.055,2.4);};
+  let nb=0;for(let i=0;i<d.length;i+=28){for(let k=0;k<3;k++)m[k]+=lin(d[i+k]);nb++;}
+  UG.tuiles={value:tx};UG.tuileMoy={value:new THREE.Vector3(m[0]/nb,m[1]/nb,m[2]/nb)};
+}
+// ---------- toits en pente : rectangle qui enveloppe le bâtiment, pans du toit, découpage ----------
+function dansPoly(x,z,xs,zs){
+  let ok=false;for(let i=0,j=xs.length-1;i<xs.length;j=i++)if((zs[i]>z)!==(zs[j]>z)&&x<xs[i]+(z-zs[i])*(xs[j]-xs[i])/(zs[j]-zs[i]))ok=!ok;return ok;
+}
+// plus petit rectangle orienté qui contient le contour : e = sens du faîtage (grand côté), n = sa perpendiculaire
+function rectOriente(xs,zs){
+  const P=xs.map((x,i)=>[x,zs[i]]).sort((a,b)=>a[0]-b[0]||a[1]-b[1]),cr=(o,a,b)=>(a[0]-o[0])*(b[1]-o[1])-(a[1]-o[1])*(b[0]-o[0]),lo=[],up=[];
+  for(const p of P){while(lo.length>=2&&cr(lo[lo.length-2],lo[lo.length-1],p)<=0)lo.pop();lo.push(p);}
+  for(let i=P.length-1;i>=0;i--){const p=P[i];while(up.length>=2&&cr(up[up.length-2],up[up.length-1],p)<=0)up.pop();up.push(p);}
+  const H=lo.slice(0,-1).concat(up.slice(0,-1));
+  let best=null;
+  for(let i=0;i<H.length;i++){const a=H[i],b=H[(i+1)%H.length];let ex=b[0]-a[0],ez=b[1]-a[1];const l=Math.hypot(ex,ez);if(l<1e-6)continue;ex/=l;ez/=l;
+    let u0=1e9,u1=-1e9,v0=1e9,v1=-1e9;
+    for(const p of H){const v=p[0]*ex+p[1]*ez,u=-p[0]*ez+p[1]*ex;if(v<v0)v0=v;if(v>v1)v1=v;if(u<u0)u0=u;if(u>u1)u1=u;}
+    const ar=(v1-v0)*(u1-u0);if(!best||ar<best.ar)best={ar,ex,ez,u0,u1,v0,v1};}
+  if(!best)return null;
+  let {ex,ez,u0,u1,v0,v1}=best,hl=(v1-v0)/2,hw=(u1-u0)/2,nx=-ez,nz=ex;
+  const cv=(v0+v1)/2,cu=(u0+u1)/2,cx=cv*ex-cu*ez,cz=cv*ez+cu*ex;
+  if(hw>hl){[hl,hw]=[hw,hl];[ex,ez,nx,nz]=[nx,nz,-ex,-ez];}
+  return {cx,cz,ex,ez,nx,nz,hl,hw,ar:best.ar};
+}
+// pans du toit : des plans y = A x + B z + C ; le toit est le plus bas d'entre eux en chaque point
+// (2 = deux pans, 3 = quatre pans, 4 = pyramide, 5 = un pan)
+function plansToit(Q,forme,gout,rise){
+  const pl=(wx,wz,d,s)=>[-s*wx,-s*wz,gout+s*d+s*(wx*Q.cx+wz*Q.cz)];
+  if(forme===5)return [pl(Q.nx,Q.nz,Q.hw,rise/(2*Q.hw))];
+  const sA=rise/Q.hw,P=[pl(Q.nx,Q.nz,Q.hw,sA),pl(-Q.nx,-Q.nz,Q.hw,sA)];
+  if(forme===3||forme===4){const sB=forme===4?rise/Q.hl:sA;P.push(pl(Q.ex,Q.ez,Q.hl,sB),pl(-Q.ex,-Q.ez,Q.hl,sB));}
+  return P;
+}
+// garde la partie du polygone où a x + b z + c <= 0
+function couperDemi(poly,a,b,c){
+  const out=[],n=poly.length;
+  for(let i=0;i<n;i++){const p=poly[i],q=poly[(i+1)%n],fp=a*p[0]+b*p[1]+c,fq=a*q[0]+b*q[1]+c;
+    if(fp<=0)out.push(p);
+    if((fp<0&&fq>0)||(fp>0&&fq<0)){const t=fp/(fp-fq);out.push([p[0]+(q[0]-p[0])*t,p[1]+(q[1]-p[1])*t]);}}
+  return out;
+}
+function nettoyerPoly(pg){
+  const out=[];for(const p of pg){const q=out[out.length-1];if(!q||Math.hypot(p[0]-q[0],p[1]-q[1])>1e-3)out.push(p);}
+  while(out.length>1&&Math.hypot(out[0][0]-out[out.length-1][0],out[0][1]-out[out.length-1][1])<=1e-3)out.pop();
+  return out;
+}
+// forme du toit : 1 plat, 2 deux pans, 3 quatre pans, 4 pyramide, 5 un pan.
+// D'après OpenStreetMap (roof:shape), la hauteur du toit et le matériau BD TOPO, et ce que montre la photo (tuiles rouges ou toit gris)
+function formeDuToit(genre,aireP,Q,ecart,matT,osmF,info,r){
+  if(!Q||Q.hw<1.2||aireP<6||osmF===1)return 1;
+  const dm=chiffres(matT,4),tuile=dm.includes(1)||dm.includes(2),beton=dm.includes(4)&&!tuile,rouge=info?info.rouge:-1;
+  let pente;
+  if(osmF>=2)pente=true;
+  else if(genre==='industrie'||genre==='commerce')pente=(ecart>=1&&aireP<400)||(rouge>=.4&&aireP<600);
+  else if(genre==='immeuble')pente=((ecart>=1||tuile||rouge>=.35)&&aireP<900&&!beton);
+  else pente=(aireP<(ecart>=1.5?2500:900)&&!beton)||(rouge>=.35&&aireP<1500);
+  // la photo montre un toit gris sans tuiles et la BD TOPO ne donne pas de pente : toit-terrasse
+  if(pente&&!osmF&&ecart<.5&&!tuile&&info&&rouge>=0&&rouge<.08&&info.gris>=.5)pente=false;
+  if(!pente)return 1;
+  if(osmF>=2)return osmF;
+  if(genre==='annexe'&&aireP<40)return 5;
+  if(Q.hl/Q.hw>1.7)return r()<.8?2:3;
+  return r()<.65?3:2;
+}
+// couleur des murs lue sur la photo (façade vue de biais), éclaircie un peu (voile de la photo) et mêlée à la palette
+function murPhoto(c,base){
+  const col=new THREE.Color(c[0]/255,c[1]/255,c[2]/255),hsl={};col.getHSL(hsl);
+  col.setHSL(hsl.h,Math.min(.42,hsl.s*1.2),Math.min(.88,Math.max(.6,hsl.l*1.1+.06)));
+  return (typeof base==='string'?new THREE.Color(base):base.clone()).lerp(col,.75);
+}
+// lit la photo fine d'un carré pour chacun de ses bâtiments : dedans, la couleur du toit (part de tuiles rouges, part de gris) ;
+// autour (de 0,7 à 1,6 m du mur), la façade que la photo montre souvent de biais : couleurs claires, peu saturées, sans végétation ni ombre
+function lirePhotoBats(T,d,W,H,rect){
+  const BH=V.champsBat.length,[rx,rz,rw,rd]=rect,m=new Map();
+  const lire=(x,z)=>{const i=Math.floor((x-rx)/rw*W),j=Math.floor((z-rz)/rd*H);return i<0||j<0||i>=W||j>=H?-1:(j*W+i)*4;};
+  for(const b of T.batsListe){
+    const n=(b.length-BH)/2,xs=[],zs=[];let a=0,x0=1e9,x1=-1e9,z0=1e9,z1=-1e9;
+    for(let i=0;i<n;i++){const x=b[BH+2*i],z=b[BH+1+2*i];xs.push(x);zs.push(z);if(x<x0)x0=x;if(x>x1)x1=x;if(z<z0)z0=z;if(z>z1)z1=z;}
+    for(let i=0;i<n;i++){const j=(i+1)%n;a+=xs[i]*zs[j]-xs[j]*zs[i];}
+    const sg=a>0?-1:1,pas=Math.max(.5,Math.sqrt((x1-x0)*(z1-z0)/60));
+    let tot=0,ro=0,gr=0;const s=[0,0,0],sr=[0,0,0];
+    for(let x=x0+pas/2;x<x1;x+=pas)for(let z=z0+pas/2;z<z1;z+=pas){
+      if(!dansPoly(x,z,xs,zs))continue;const o=lire(x,z);if(o<0)continue;
+      const R0=d[o],G0=d[o+1],B0=d[o+2],mx=Math.max(R0,G0,B0),mn=Math.min(R0,G0,B0);
+      tot++;s[0]+=R0;s[1]+=G0;s[2]+=B0;
+      if(R0>G0*1.1&&R0>B0*1.25&&R0>70){ro++;sr[0]+=R0;sr[1]+=G0;sr[2]+=B0;}else if(mx-mn<mx*.14+4)gr++;
+    }
+    const fac=[];
+    for(let i=0;i<n&&fac.length<400;i++){
+      const j=(i+1)%n,ex=xs[j]-xs[i],ez=zs[j]-zs[i],L=Math.hypot(ex,ez);if(L<1)continue;
+      const nx=-ez/L*sg,nz=ex/L*sg;
+      for(let t=.6;t<L-.3;t+=1.2)for(const off of [.7,1.6]){
+        const x=xs[i]+ex/L*t+nx*off,z=zs[i]+ez/L*t+nz*off;if(dansPoly(x,z,xs,zs))continue;const o=lire(x,z);if(o<0)continue;
+        const R0=d[o],G0=d[o+1],B0=d[o+2],mx=Math.max(R0,G0,B0),mn=Math.min(R0,G0,B0),lum=(R0+G0+B0)/3;
+        if(lum>105&&mx-mn<mx*.38&&G0<=R0+6&&B0<=R0+4&&!(R0>G0*1.12&&R0>B0*1.3))fac.push([R0,G0,B0,lum]);
+      }
+    }
+    const e={rouge:tot?ro/tot:-1,gris:tot?gr/tot:0,toit:null,mur:null};
+    if(ro>=3&&ro>=tot*.3)e.toit=sr.map(c=>c/ro);else if(tot)e.toit=s.map(c=>c/tot);
+    if(fac.length>=6){fac.sort((p,q)=>q[3]-p[3]);const k=Math.max(4,Math.ceil(fac.length*.6)),c=[0,0,0];for(let i=0;i<k;i++)for(let q=0;q<3;q++)c[q]+=fac[i][q];e.mur=c.map(x=>x/k);}
+    m.set(b,e);
+  }
+  T.photoBat=m;
+}
+const aBatir=[];let construireBats=null,batisFini=false,ombreSale=true;
+{
+  const B=V.batiments,CB=V.champsBat,BH=CB.length,iM=CB.indexOf('murs'),iT=CB.indexOf('toiture'),iC=CB.indexOf('couleur'),iCT=CB.indexOf('couleur_toit'),
+    iE=CB.indexOf('etages'),iF=CB.indexOf('forme_toit');
   const osm=(b,i)=>i>=0&&b[i]>0?COULS[b[i]-1]||null:null;
   // rangés par carré de 500 m : chaque carré projette sa propre photo sur ses toits
   const parCarre=new Map();
   for(const b of B){const n=(b.length-BH)/2;let cx=0,cz=0;for(let i=0;i<n;i++){cx+=b[BH+2*i];cz+=b[BH+1+2*i];}
     const T=tiles[tileIdx(cx/n,cz/n)];let l=parCarre.get(T);if(!l)parCarre.set(T,l=[]);l.push(b);}
-  for(const [T,liste] of parCarre){T.bats=liste;aBatir.push(T);}
+  for(const [T,liste] of parCarre){T.batsListe=liste;aBatir.push(T);}
+  const STYLE={maison:1,immeuble:2,commerce:3,industrie:4,public:5,religieux:6,annexe:0},ETAGE={1:2.9,2:2.95,3:3.6,4:5,5:3.6,6:6};
+  // construit (ou reconstruit, quand la photo fine est arrivée) tous les bâtiments d'un carré en un seul objet
   construireBats=T=>{
-    const liste=T.bats;T.bats=null;
-    let NV=0;for(const b of liste)NV+=5*(b.length-BH)/2;
-    const pos=new Float32Array(NV*3),nor=new Float32Array(NV*3),col=new Uint8Array(NV*3),toit=new Uint8Array(NV),idx=[];let v=0;
-    const setC=(i,c,k)=>{typeof c==='string'?tmpC.set(c):tmpC.copy(c);col[i*3]=Math.min(255,tmpC.r*255*k);col[i*3+1]=Math.min(255,tmpC.g*255*k);col[i*3+2]=Math.min(255,tmpC.b*255*k);};
-    for(const b of liste){
-      // bas des murs sous le terrain, toit à son altitude réelle (BD TOPO) : ni flottant, ni enfoncé
-      const bot=b[0],top=(b[1]+b[2])/2,genre=V.genres[b[3]],n=(b.length-BH)/2;
-      let xs=[],zs=[];for(let i=0;i<n;i++){xs.push(b[BH+2*i]);zs.push(b[BH+1+2*i]);}
+    const liste=T.batsListe,ph=T.photoBat||null;
+    if(T.batMesh){scene.remove(T.batMesh);T.batMesh.geometry.dispose();T.batMesh=null;}
+    const P=[],N=[],C=[],TT=[],FA=[],FB=[],I=[];let v=0;
+    const sommet=(x,y,z,nx,ny,nz,c,k,toit,a0,a1,a2,a3,b0,b1,b2,b3)=>{
+      P.push(x,y,z);N.push(nx,ny,nz);C.push(Math.min(255,c.r*255*k),Math.min(255,c.g*255*k),Math.min(255,c.b*255*k));TT.push(toit);FA.push(a0,a1,a2,a3);FB.push(b0,b1,b2,b3);return v++;};
+    const unBat=b=>{
+      // bas des murs sous le terrain, gouttière et faîtage à leur altitude réelle (BD TOPO) : ni flottant, ni enfoncé
+      const r=aleaBat(b,BH),bot=b[0],sol=bot+1.5,gout=b[1],ecart=b[2]-b[1],genre=V.genres[b[3]],et=iE>=0?b[iE]:0,n=(b.length-BH)/2;
+      const xs=[],zs=[];for(let i=0;i<n;i++){xs.push(b[BH+2*i]);zs.push(b[BH+1+2*i]);}
       let a=0;for(let i=0;i<n;i++){const j=(i+1)%n;a+=xs[i]*zs[j]-xs[j]*zs[i];}
       if(a>0){xs.reverse();zs.reverse();}
-      const wc=osm(b,iC)||couleurMur(genre,iM>=0?b[iM]:0),rc=osm(b,iCT)||couleurToit(genre,iT>=0?b[iT]:0),shade=.92+R()*.14;
-      for(let i=0;i<n;i++){const j=(i+1)%n,ex=xs[j]-xs[i],ez=zs[j]-zs[i],L=Math.hypot(ex,ez)||1,nx=-ez/L,nz=ex/L;
-        const q=[[xs[i],bot,zs[i]],[xs[j],bot,zs[j]],[xs[j],top,zs[j]],[xs[i],top,zs[i]]];
-        q.forEach((p,k)=>{pos.set(p,(v+k)*3);nor.set([nx,0,nz],(v+k)*3);setC(v+k,wc,shade*(k<2?.82:1));});
-        idx.push(v,v+1,v+2,v,v+2,v+3);v+=4;}
-      const r0=v;for(let i=0;i<n;i++){pos.set([xs[i],top,zs[i]],v*3);nor.set([0,1,0],v*3);setC(v,rc,shade);toit[v]=1;v++;}
-      const tris=THREE.ShapeUtils.triangulateShape(xs.map((x,i)=>new THREE.Vector2(x,zs[i])),[]);
-      for(const [p0,p1,p2] of tris){const cy=(zs[p1]-zs[p0])*(xs[p2]-xs[p0])-(xs[p1]-xs[p0])*(zs[p2]-zs[p0]);cy>0?idx.push(r0+p0,r0+p1,r0+p2):idx.push(r0+p0,r0+p2,r0+p1);}
-    }
+      const aireP=Math.abs(a)/2,info=ph&&ph.get(b),oc=osm(b,iC),oct=osm(b,iCT),matT=iT>=0?b[iT]:0,shade=.92+r()*.14;
+      let wc=oc||couleurMur(genre,iM>=0?b[iM]:0,r);
+      if(!oc&&info&&info.mur)wc=murPhoto(info.mur,wc);
+      if(typeof wc==='string')wc=new THREE.Color(wc);
+      const Q=n>=3?rectOriente(xs,zs):null,forme=formeDuToit(genre,aireP,Q,ecart,matT,iF>=0?b[iF]:0,info,r);
+      // couleur du toit, en couleurs « réelles » comme la photo : lue sur la photo, sinon OpenStreetMap, sinon le matériau BD TOPO
+      let rc;
+      if(oct)rc=oct.clone().convertSRGBToLinear();
+      else if(info&&info.toit&&(forme===1||info.rouge>=.3||info.gris>=.5))rc=new THREE.Color(info.toit[0]/255,info.toit[1]/255,info.toit[2]/255).convertSRGBToLinear();
+      else rc=new THREE.Color(forme>1&&!chiffres(matT,4).length?pick(PAL_TOIT[1],r):couleurToit(genre,matT,r)).convertSRGBToLinear();
+      // façade : style, volets (couleurs provençales), hauteur d'un étage, mur de la porte (le plus long)
+      const st=genre==='autre'?(aireP>300?5:1):STYLE[genre]??1;
+      const vol=st===1||st===3?1+(r()*7|0):st===2&&r()<.7?1+(r()*7|0):0;
+      const hm=Math.max(0,gout-sol),fh=et>0&&hm>2?Math.min(4.5,Math.max(2.6,hm/et)):ETAGE[st]||3,hmC=Math.min(255,Math.round(hm*4));
+      let lg=-1,iP=0;for(let i=0;i<n;i++){const j=(i+1)%n,l=Math.hypot(xs[j]-xs[i],zs[j]-zs[i]);if(l>lg){lg=l;iP=i;}}
+      let plans=null;
+      if(forme>1){
+        let rise=forme===5?(ecart>=.5?Math.min(ecart,Q.hw*1.2):Q.hw*.36):(ecart>=.5?Math.min(ecart,Q.hw*1.1):Q.hw*.32);
+        plans=plansToit(Q,forme,gout,Math.max(.4,rise));
+      }
+      const parapet=forme===1&&aireP>60&&st>=2&&st<=5?(st===4?.4:.6):0;   // acrotère autour des toits-terrasses
+      const yPlat=(gout+b[2])/2,hTop=(x,z)=>{if(!plans)return yPlat+parapet;let h=1e9;for(const q of plans){const y=q[0]*x+q[1]*z+q[2];if(y<h)h=y;}return h;};
+      // murs : coupés là où le toit change de pan, pour monter exactement jusqu'au toit (pignons)
+      for(let i=0;i<n;i++){
+        const j=(i+1)%n,ex=xs[j]-xs[i],ez=zs[j]-zs[i],L=Math.hypot(ex,ez)||1,nx=-ez/L,nz=ex/L,ts=[0,1],porte=i===iP?1:0;
+        if(plans&&plans.length>1)for(let k=0;k<plans.length;k++)for(let q=k+1;q<plans.length;q++){
+          const A=plans[k][0]-plans[q][0],Bq=plans[k][1]-plans[q][1],Cq=plans[k][2]-plans[q][2],g0=A*xs[i]+Bq*zs[i]+Cq,g1=A*xs[j]+Bq*zs[j]+Cq;
+          if(g0*g1<0)ts.push(g0/(g0-g1));}
+        ts.sort((p,q)=>p-q);
+        for(let k=0;k<ts.length-1;k++){
+          const t0=ts[k],t1=ts[k+1];if(t1-t0<1e-6)continue;
+          const xa=xs[i]+ex*t0,za=zs[i]+ez*t0,xb=xs[i]+ex*t1,zb=zs[i]+ez*t1,ya=hTop(xa,za),yb=hTop(xb,zb);
+          const s0=sommet(xa,bot,za,nx,0,nz,wc,shade,0,t0*L,bot-sol,L,fh,st,vol,porte,hmC);
+          sommet(xb,bot,zb,nx,0,nz,wc,shade,0,t1*L,bot-sol,L,fh,st,vol,porte,hmC);
+          sommet(xb,yb,zb,nx,0,nz,wc,shade,0,t1*L,yb-sol,L,fh,st,vol,porte,hmC);
+          sommet(xa,ya,za,nx,0,nz,wc,shade,0,t0*L,ya-sol,L,fh,st,vol,porte,hmC);
+          I.push(s0,s0+1,s0+2,s0,s0+2,s0+3);
+        }
+      }
+      if(!plans){   // toit plat : la photo
+        const r0=v,tris=THREE.ShapeUtils.triangulateShape(xs.map((x,i)=>new THREE.Vector2(x,zs[i])),[]);
+        for(let i=0;i<n;i++)sommet(xs[i],yPlat,zs[i],0,1,0,rc,shade,1,0,0,0,0,0,0,0,0);
+        for(const [p0,p1,p2] of tris){const cy=(zs[p1]-zs[p0])*(xs[p2]-xs[p0])-(xs[p1]-xs[p0])*(zs[p2]-zs[p0]);cy>0?I.push(r0+p0,r0+p1,r0+p2):I.push(r0+p0,r0+p2,r0+p1);}
+        return;
+      }
+      // toit en pente : bâtiment presque rectangulaire → toit sur le rectangle avec un débord de 40 cm ; sinon sur le contour
+      let poly;
+      if(aireP/(4*Q.hl*Q.hw)>.88){const o=.4,L2=Q.hl+o,W2=Q.hw+o,{cx,cz,ex,ez,nx,nz}=Q;
+        poly=[[cx+ex*L2+nx*W2,cz+ez*L2+nz*W2],[cx-ex*L2+nx*W2,cz-ez*L2+nz*W2],[cx-ex*L2-nx*W2,cz-ez*L2-nz*W2],[cx+ex*L2-nx*W2,cz+ez*L2-nz*W2]];}
+      else poly=xs.map((x,i)=>[x,zs[i]]);
+      for(let k=0;k<plans.length;k++){
+        let pg=poly;
+        for(let q=0;q<plans.length&&pg.length>=3;q++)if(q!==k)pg=couperDemi(pg,plans[k][0]-plans[q][0],plans[k][1]-plans[q][1],plans[k][2]-plans[q][2]);
+        pg=nettoyerPoly(pg);if(pg.length<3)continue;
+        // tuiles : colonnes dans le sens de la pente, à leur vraie taille sur le pan incliné
+        const [A,Bp,Cp]=plans[k],g=Math.hypot(A,Bp)||1e-6,dx=-A/g,dz=-Bp/g,tx=-dz,tz=dx,kk=Math.sqrt(1+g*g),nl=Math.hypot(A,1,Bp);
+        const tris=THREE.ShapeUtils.triangulateShape(pg.map(p=>new THREE.Vector2(p[0],p[1])),[]),r0=v;
+        for(const [x,z] of pg){const lx=x-Q.cx,lz=z-Q.cz;sommet(x,A*x+Bp*z+Cp,z,-A/nl,1/nl,-Bp/nl,rc,shade,2,(lx*tx+lz*tz)/1.6,-(lx*dx+lz*dz)*kk/2.05,0,0,0,0,0,0);}
+        for(const [p0,p1,p2] of tris){const cy=(pg[p1][1]-pg[p0][1])*(pg[p2][0]-pg[p0][0])-(pg[p1][0]-pg[p0][0])*(pg[p2][1]-pg[p0][1]);cy>0?I.push(r0+p0,r0+p1,r0+p2):I.push(r0+p0,r0+p2,r0+p1);}
+      }
+    };
+    for(const b of liste){const nI=I.length;try{unBat(b);}catch(e){I.length=nI;}}
+    if(!I.length)return;
+    // une fois envoyés à la carte graphique, les tableaux ne servent plus : on libère la mémoire
+    const lib=function(){this.array=null;},at=(arr,k,nm)=>new THREE.BufferAttribute(arr,k,nm).onUpload(lib);
     const geo=new THREE.BufferGeometry();
-    geo.setAttribute('position',new THREE.BufferAttribute(pos,3));geo.setAttribute('normal',new THREE.BufferAttribute(nor,3));
-    geo.setAttribute('color',new THREE.BufferAttribute(col,3,true));geo.setAttribute('toit',new THREE.BufferAttribute(toit,1));
-    geo.setIndex(new THREE.BufferAttribute(v>65535?new Uint32Array(idx):new Uint16Array(idx),1));
-    const mesh=new THREE.Mesh(geo,matB(T));mesh.castShadow=mesh.receiveShadow=true;scene.add(mesh);
+    geo.setAttribute('position',at(new Float32Array(P),3));geo.setAttribute('normal',at(new Float32Array(N),3));
+    geo.setAttribute('color',at(new Uint8Array(C),3,true));geo.setAttribute('toit',at(new Uint8Array(TT),1));
+    geo.setAttribute('fa',at(new Float32Array(FA),4));geo.setAttribute('fb',at(new Uint8Array(FB),4));
+    geo.setIndex(at(v>65535?new Uint32Array(I):new Uint16Array(I),1));
+    geo.computeBoundingSphere();
+    const mesh=new THREE.Mesh(geo,matB(T));mesh.castShadow=mesh.receiveShadow=true;scene.add(mesh);T.batMesh=mesh;
     ombreSale=true;
   };
 }
@@ -669,6 +942,10 @@ if(treeImgs.some(Boolean)){
   for(let k=0;k<520000&&spots.length<90000;k++){if(k%40000===0)await pause();const x=X0+R()*GW,z=Z0+R()*GD,px=((x-X0)/GW*MW)|0,py=((z-Z0)/GD*MH)|0,o=(py*MW+px)*4;
     const f=md[o]>128,ga=md[o+1]>128,pa=md[o+2]>128,keep=f?.85:ga?.22:pa?.12:0;
     if(R()<keep)spots.push([x,hAt(x,z),z,f?11+R()*7:ga?4+R()*4:8+R()*6]);}
+  // arbres recensés dans OpenStreetMap : isolés et alignements (un tous les 8 m environ)
+  const unArbre=(x,z)=>{if(x>X0&&x<X0+GW&&z>Z0&&z<Z0+GD)spots.push([x,hAt(x,z),z,7+R()*5]);};
+  {const A=V.arbres||[];for(let i=0;i+1<A.length;i+=2)unArbre(A[i],A[i+1]);}
+  for(const f of V.rangees||[]){const P=dens(f,8);for(let i=0;i+1<P.length;i+=2)unArbre(P[i]+(R()-.5)*.8,P[i+1]+(R()-.5)*.8);}
   // rangés par carré : leur pied est recalé sur le relief fin quand il arrive
   spots.forEach(s=>s.push(tileIdx(s[0],s[2])));spots.sort((a,b)=>a[4]-b[4]);
   spots.forEach((s,i)=>{const T=tiles[s[4]];if(!T.arbres)T.arbres=[i,i];T.arbres[1]=i+1;});
@@ -681,12 +958,18 @@ if(treeImgs.some(Boolean)){
   spots.forEach(([x,y,z,h],i)=>{ip.set([x,y,z],i*3);is.set([h*(R()<.5?-1:1),h],i*2);it[i]=Math.floor(R()*8);ic[i]=.8+R()*.28;});
   arbresIP=ip;arbresAttr=new THREE.InstancedBufferAttribute(ip,3);geo.setAttribute('iPos',arbresAttr);geo.setAttribute('iSize',new THREE.InstancedBufferAttribute(is,2));
   geo.setAttribute('iTile',new THREE.InstancedBufferAttribute(it,1));geo.setAttribute('iShade',new THREE.InstancedBufferAttribute(ic,1));geo.instanceCount=n;
-  const mat=new THREE.ShaderMaterial({uniforms:{map:{value:atlas}},side:THREE.DoubleSide,
-    vertexShader:`attribute vec3 iPos;attribute vec2 iSize;attribute float iTile;attribute float iShade;varying vec2 vUv;varying float vShade;
+  // teinte : la couleur de la photo aérienne à l'emplacement de l'arbre (seulement si elle ressemble à de la végétation)
+  const mat=new THREE.ShaderMaterial({uniforms:{map:{value:atlas},photoG:UG.photoG,rectG:UG.rectG,hasG:UG.hasG},side:THREE.DoubleSide,
+    vertexShader:`attribute vec3 iPos;attribute vec2 iSize;attribute float iTile;attribute float iShade;uniform vec4 rectG;varying vec2 vUv;varying float vShade;varying vec2 vPh;
       void main(){vec4 mv=modelViewMatrix*vec4(iPos,1.0);vec2 p=position.xy;p.y+=0.42;mv.xy+=p*iSize;gl_Position=projectionMatrix*mv;
-      float c=mod(iTile,4.0),r=floor(iTile/4.0);vUv=vec2((c+uv.x)/4.0,1.0-(r+1.0-uv.y)/2.0);vShade=iShade;}`,
-    fragmentShader:`uniform sampler2D map;varying vec2 vUv;varying float vShade;
-      void main(){vec4 c=texture2D(map,vUv);if(c.a<0.5)discard;gl_FragColor=vec4(c.rgb*vShade,1.0);}`});
+      float c=mod(iTile,4.0),r=floor(iTile/4.0);vUv=vec2((c+uv.x)/4.0,1.0-(r+1.0-uv.y)/2.0);vShade=iShade;
+      vec2 b=(iPos.xz-rectG.xy)/rectG.zw;vPh=vec2(b.x,1.0-b.y);}`,
+    fragmentShader:`uniform sampler2D map,photoG;uniform float hasG;varying vec2 vUv;varying float vShade;varying vec2 vPh;
+      void main(){vec4 c=texture2D(map,vUv);if(c.a<0.5)discard;vec3 col=c.rgb*vShade;
+        if(hasG>0.5){vec3 p=texture2D(photoG,vPh).rgb;float lp=dot(p,vec3(.3,.59,.11)),lc=dot(col,vec3(.3,.59,.11));
+          float veg=smoothstep(.86,1.,p.g/max(p.r,.01))*(1.-smoothstep(.02,.1,p.b-p.g));
+          vec3 cible=p/max(lp,.01)*lc*clamp(lp/.28,.75,1.15);col=mix(col,cible,.55*veg);}
+        gl_FragColor=vec4(col,1.0);}`});
   const trees=new THREE.Mesh(geo,mat);trees.frustumCulled=false;scene.add(trees);arbresMesh=trees;
   for(const T of tiles)if(T.fine)affinerArbres(T);   // carrés dont le relief fin est arrivé avant les arbres
 }
@@ -781,6 +1064,12 @@ function loop(now){
   if(ox!==sun.target.position.x||oz!==sun.target.position.z){sun.target.position.set(ox,controls.target.y,oz);sun.position.copy(sun.target.position).addScaledVector(SUN_DIR,ext*2+1500);ombreSale=true;}
   if(ombreSale){renderer.shadowMap.needsUpdate=true;ombreSale=false;}
   if(arbresMesh)arbresMesh.visible=dist<9000;
+  // limite de zoom : on ne descend pas là où la photo deviendrait floue (environ 140 m avec la photo nette, 230 m sans) ;
+  // de près, la caméra ne peut plus se coucher (le sol au premier plan serait flou)
+  const dMin=PH[0].z>=19?140:230;
+  if(controls.minDistance!==dMin)controls.minDistance=dMin;
+  controls.maxPolarAngle=1.02+.3*Math.min(1,Math.max(0,(dist-dMin)/900));
+  UG.pxK.value=2*Math.tan(camera.fov*Math.PI/360)/Math.max(1,renderer.domElement.height);
   majTuiles(3,40);batirProches(frame<3?40:7);poserPhotos();if(frame%30===0)infoPhotos();if(++frame%60===0)liberer();
   // si l'ordinateur peine (moins de 35 images par seconde), on affiche un peu moins de points, puis on remonte dès que possible
   if(last){const dt=now-last;cumul+=dt;nb++;}last=now;

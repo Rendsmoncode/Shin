@@ -205,7 +205,11 @@ def ecrire_relief(dossier):
 
 # ---------- bâtiments ----------
 GENRES = ["maison", "immeuble", "industrie", "commerce", "public", "religieux", "annexe", "autre"]
-CHAMPS_BAT = ["bas", "gouttiere", "faite", "genre", "etages", "murs", "toiture", "couleur", "couleur_toit"]   # puis les points x, z
+CHAMPS_BAT = ["bas", "gouttiere", "faite", "genre", "etages", "murs", "toiture", "couleur", "couleur_toit", "forme_toit"]   # puis les points x, z
+# forme du toit (OpenStreetMap roof:shape) : 0 inconnue, 1 plat, 2 deux pans, 3 quatre pans, 4 pyramide, 5 un pan
+FORMES_TOIT = {"flat": 1, "round": 1, "dome": 1, "gabled": 2, "gambrel": 2, "saltbox": 2, "hipped": 3, "half-hipped": 3,
+               "mansard": 3, "side_hipped": 3, "pyramidal": 4, "skillion": 5, "lean_to": 5}
+
 COULEURS = []        # couleurs OpenStreetMap (texte brut) ; dans un bâtiment : 0 = aucune, k = COULEURS[k - 1]
 _ICOUL = {}
 
@@ -240,7 +244,7 @@ def poser_couleurs(batiments, colores):
             for j in range(int(min(zs) // C), int(max(zs) // C) + 1):
                 grille[i, j].append(k)
     n = 0
-    for cx, cz, cm, ct in colores:
+    for cx, cz, cm, ct, ft in colores:
         for k in grille.get((int(cx // C), int(cz // C)), ()):
             b = batiments[k]
             if dans(cx, cz, b[BH:]):
@@ -248,9 +252,11 @@ def poser_couleurs(batiments, colores):
                     b[7] = cm
                 if ct and not b[8]:
                     b[8] = ct
+                if ft and not b[9]:
+                    b[9] = ft
                 n += 1
                 break
-    print(f"  couleurs OpenStreetMap : {n}/{len(colores)} posées sur la BD TOPO", flush=True)
+    print(f"  couleurs et formes de toit OpenStreetMap : {n}/{len(colores)} posées sur la BD TOPO", flush=True)
 
 
 def genre_batiment(t):
@@ -318,7 +324,7 @@ def code(v):
     return int(s) if s.isdigit() and len(s) <= 4 else 0
 
 
-def enregistrement(pts, genre, sol=None, gout=None, faite=None, h=None, etages=0, murs=0, toit=0, coul=0, coul_toit=0):
+def enregistrement(pts, genre, sol=None, gout=None, faite=None, h=None, etages=0, murs=0, toit=0, coul=0, coul_toit=0, forme=0):
     """Bâtiment posé sur le relief : bas des murs sous le point le plus bas du terrain, toit à sa vraie altitude."""
     xs, zs = [p[0] for p in pts], [p[1] for p in pts]
     hs = hauteurs(xs + [sum(xs) / len(xs)], zs + [sum(zs) / len(zs)])
@@ -337,7 +343,7 @@ def enregistrement(pts, genre, sol=None, gout=None, faite=None, h=None, etages=0
     if faite is None or not (gout <= faite <= gout + 25):
         faite = gout
     flat = [v for p in pts for v in p]
-    return [round(bas, 1), round(gout, 1), round(faite, 1), GENRES.index(genre), int(etages or 0), murs, toit, coul, coul_toit] + flat
+    return [round(bas, 1), round(gout, 1), round(faite, 1), GENRES.index(genre), int(etages or 0), murs, toit, coul, coul_toit, forme] + flat
 
 
 def batiments_bdtopo():
@@ -529,6 +535,7 @@ def main(entree, sortie):
     DEM, src_relief = releve()
     print("Lecture d'OpenStreetMap…", flush=True)
     bat_osm, routes, ponts, ancres, rivieres, murs, sols, communes, lieux = [], [], [], set(), [], [], [], {}, []
+    arbres, rangees = [], []   # arbres OpenStreetMap : isolés (natural=tree) et alignements (natural=tree_row)
     for f in lire(entree):
         t = f.get("properties") or {}
         g = f.get("geometry") or {}
@@ -540,6 +547,13 @@ def main(entree, sortie):
         if typ == "Point":
             if t.get("place") in LIEUX and t.get("name"):
                 lieux.append([t["name"], t["place"]] + list(xz(*c[:2])))
+            elif t.get("natural") == "tree":
+                x, z = xz(*c[:2])
+                arbres += [round(x, 1), round(z, 1)]
+        elif t.get("natural") == "tree_row":
+            for l in lignes:
+                if len(l) > 1:
+                    rangees.append([round(v, 1) for v in plat(pts_xz(l))])
         elif t.get("barrier") == "retaining_wall" or t.get("wall") == "retaining_wall":
             for l in lignes:
                 if len(l) > 1:
@@ -549,7 +563,8 @@ def main(entree, sortie):
             for p in polys:
                 pts = anneau(p[0])
                 if len(pts) >= 3:
-                    bat_osm.append((pts, gen, hauteur_osm(t, gen), couleur(t.get("building:colour")), couleur(t.get("roof:colour"))))
+                    bat_osm.append((pts, gen, hauteur_osm(t, gen), couleur(t.get("building:colour")), couleur(t.get("roof:colour")),
+                                    FORMES_TOIT.get(str(t.get("roof:shape", "")).strip().lower(), 0)))
         elif t.get("boundary") == "administrative":
             nom = t.get("name", "")
             if polys and ((t.get("admin_level") == "8" and nom in ("Aubagne", "La Penne-sur-Huveaune")) or nom == "La Valentine"):
@@ -595,17 +610,18 @@ def main(entree, sortie):
     else:
         src_bat = "IGN BD TOPO"
     colores = []
-    for pts, gen, h, cm, ct in bat_osm:   # OpenStreetMap là où la BD TOPO n'a pas répondu
+    for pts, gen, h, cm, ct, ft in bat_osm:   # OpenStreetMap là où la BD TOPO n'a pas répondu
         cx, cz = sum(p[0] for p in pts) / len(pts), sum(p[1] for p in pts) / len(pts)
         if echecs is None or any(x0 <= cx < x1 and z0 <= cz < z1 for x0, z0, x1, z1 in echecs):
-            batiments.append(enregistrement(pts, gen, h=h, coul=cm, coul_toit=ct))
-        elif cm or ct:
-            colores.append((cx, cz, cm, ct))
+            batiments.append(enregistrement(pts, gen, h=h, coul=cm, coul_toit=ct, forme=ft))
+        elif cm or ct or ft:
+            colores.append((cx, cz, cm, ct, ft))
     if colores:
         poser_couleurs(batiments, colores)
 
     print(f"  {len(batiments)} bâtiments ({src_bat}), {len(routes)} routes, {len(ponts)} ponts, {len(murs)} murs de soutènement, "
-          f"{len(sols)} zones, {len(rivieres)} cours d'eau, {len(lieux)} lieux-dits, communes : {list(communes)}", flush=True)
+          f"{len(sols)} zones, {len(rivieres)} cours d'eau, {len(arbres) // 2} arbres et {len(rangees)} alignements, "
+          f"{len(lieux)} lieux-dits, communes : {list(communes)}", flush=True)
     if not batiments or "Aubagne" not in communes:
         raise RuntimeError("Données incomplètes : pas de bâtiments ou pas de commune d'Aubagne")
 
@@ -618,7 +634,7 @@ def main(entree, sortie):
                       "gn": [(NX - 1) // GK + 1, (NZ - 1) // GK + 1], "dossier": "relief/", "source": src_relief},
            "genres": GENRES, "champsBat": CHAMPS_BAT, "couleursBat": COULEURS, "batiments": batiments, "classes": ROUTES, "largeurs": LARGEUR,
            "routes": routes, "ponts": ponts, "rivieres": rivieres, "murs": murs, "typesSol": SOLS, "sols": sols,
-           "communes": communes, "lieux": lieux,
+           "communes": communes, "lieux": lieux, "arbres": arbres, "rangees": rangees,
            "source": f"© les contributeurs d'OpenStreetMap (ODbL) ; relief : {src_relief} ; bâtiments : {src_bat}"}
     tmp = sortie + ".tmp"
     with open(tmp, "w") as f:
