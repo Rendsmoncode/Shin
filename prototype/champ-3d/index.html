@@ -29,12 +29,16 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 kbd{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:3px;padding:0 4px;color:var(--fg)}
 #toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);max-width:calc(100vw - 32px);background:rgba(90,26,22,.92);border:1px solid #b24a3e;color:#fff;padding:8px 16px;border-radius:4px;font-size:18px;font-weight:600;letter-spacing:.03em;opacity:0;transition:opacity .3s;pointer-events:none;text-align:center}
 #toast.on{opacity:1}
+/* mini-carte : coin bas droit, même habillage que le panneau */
+#mm{position:fixed;right:max(12px,env(safe-area-inset-right,0px));bottom:calc(12px + env(safe-area-inset-bottom,0px));width:min(330px,45vw);aspect-ratio:3/2;display:block;background:var(--panel);border:1px solid var(--line);border-radius:6px;box-shadow:0 4px 18px rgba(0,0,0,.45);cursor:crosshair;touch-action:none}
+#mm:hover{border-color:var(--gold)}
+@media (max-width:700px){#toast{bottom:calc(36px + 30vw + env(safe-area-inset-bottom,0px))}}
 </style>
 
 <div id="scene" aria-label="Champ de bataille en 3D avec relief, rivière, forêts et deux armées. Les armées bleues se commandent à la souris."></div>
 <div class="panel">
   <h1>Champ de bataille 3D</h1>
-  <p><b>Clic gauche</b> sur une armée bleue pour la choisir (<kbd>Maj</kbd> pour en ajouter, touches <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd>). <b>Clic droit</b> sur le terrain pour l'y envoyer, sur une armée rouge pour marcher sur elle. Glisser pour se déplacer, molette pour zoomer, glisser avec le clic droit pour pivoter. <kbd>Espace</kbd> centre la vue, <kbd>Échap</kbd> désélectionne.</p>
+  <p><b>Clic gauche</b> sur une armée bleue pour la choisir (<kbd>Maj</kbd> pour en ajouter, touches <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd>). <b>Clic droit</b> sur le terrain pour l'y envoyer, sur une armée rouge pour marcher sur elle. Glisser pour se déplacer, molette pour zoomer, glisser avec le clic droit pour pivoter. <kbd>Espace</kbd> centre la vue, <kbd>Échap</kbd> désélectionne. <b>Mini-carte</b> (en bas à droite) : clic ou glisser pour y aller, clic droit pour y envoyer les armées choisies.</p>
   <div class="row">
     <button type="button" id="b-fog" aria-pressed="true">Brouillard : oui</button>
     <button type="button" id="b-ai" aria-pressed="true">Rouges : en patrouille</button>
@@ -45,6 +49,7 @@ kbd{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:3px;p
   <div id="sel" aria-live="polite"></div>
 </div>
 <div id="toast" role="status"></div>
+<canvas id="mm" role="img" title="Mini-carte : clic pour y aller, clic droit pour y envoyer les armées choisies" aria-label="Mini-carte du champ de bataille : relief, rivière, forêts, armées visibles et cadre de la vue. Clic pour y déplacer la vue, clic droit pour y envoyer les armées choisies."></canvas>
 
 <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/controls/OrbitControls.js"></script>
@@ -343,7 +348,7 @@ function updateFog(){
   // flou léger pour des bords doux
   for(let j=0;j<FD;j++)for(let i=0;i<FW;i++){let s=0,n=0;for(let b=-1;b<=1;b++)for(let a=-1;a<=1;a++){const ii=i+a,jj=j+b;if(ii>=0&&jj>=0&&ii<FW&&jj<FD){s+=seen[jj*FW+ii];n++;}}blur[j*FW+i]=s/n;}
   for(let i=0;i<FW*FD;i++){disp[i]=firstFog?blur[i]:disp[i]+(blur[i]-disp[i])*.5;fogData[i*4]=disp[i]*255;}
-  firstFog=false;fogTex.needsUpdate=true;
+  firstFog=false;fogTex.needsUpdate=true;mmFogUpdate();
   regs.filter(g=>g.side==='rouge').forEach(e=>{
     const v=!fogOn||spotted(e,blues);
     if(v&&fogOn&&!known.has(e)){known.add(e);toast(`Ennemi repéré : ${e.name} (${e.men} hommes)`);}
@@ -438,6 +443,69 @@ function renderStatus(){
   if(failed)status.textContent+=` ${failed} image(s) manquante(s).`;
 }
 
+// ---------- mini-carte ----------
+// fond dessiné une seule fois (1 pixel = 5 m) : couleurs du sol, ombrage du relief, rivière, forêts, ferme et pont
+const GOLD_CSS='#e3b54a';
+const mm=document.getElementById('mm'),mmx=mm.getContext('2d');
+const mmBase=document.createElement('canvas');mmBase.width=SX;mmBase.height=SZ;
+{const g=mmBase.getContext('2d'),img=g.createImageData(SX,SZ),L=new THREE.Vector3(-1000,1400,600).normalize();
+  const toS=v=>255*Math.pow(Math.min(1,Math.max(0,v)),1/2.2);          // couleurs de la scène (linéaires) vers l'écran
+  const wc=new THREE.Color(0x3b6f86),fc=new THREE.Color(.10,.20,.07);
+  for(let py=0;py<SZ;py++)for(let px=0;px<SX;px++){
+    const i=py*(SX+1)+px,o=(py*SX+px)*4,x=-W/2+(px+.5)*W/SX,z=-D/2+(py+.5)*D/SZ;
+    let r=col[i*3],gg=col[i*3+1],b=col[i*3+2];
+    const shade=Math.min(1.25,Math.max(.5,(nrm.getX(i)*L.x+nrm.getY(i)*L.y+nrm.getZ(i)*L.z)/L.y));
+    if(hAt(x,z)<WATER-.3){r=wc.r;gg=wc.g;b=wc.b;}
+    else{if(forest[cellOf(x,z)]){r+=(fc.r-r)*.75;gg+=(fc.g-gg)*.75;b+=(fc.b-b)*.75;}r*=shade;gg*=shade;b*=shade;}
+    img.data[o]=toS(r*.95);img.data[o+1]=toS(gg*.95);img.data[o+2]=toS(b*.95);img.data[o+3]=255;}
+  g.putImageData(img,0,0);
+  const bx2=(bx+W/2)/W*SX,bz2=(bz+D/2)/D*SZ,fx2=(fx+W/2)/W*SX,fz2=(fz+D/2)/D*SZ;
+  g.fillStyle='#d9cdb3';g.fillRect(bx2-7,bz2-1,14,2);                  // pont
+  g.fillStyle='#e07a4c';g.fillRect(fx2-2.5,fz2-1.5,5,3);               // ferme
+}
+// brouillard de la mini-carte : 1 pixel par case de 10 m, mis à jour avec celui de la scène
+const mmFog=document.createElement('canvas');mmFog.width=FW;mmFog.height=FD;
+const mmFogCtx=mmFog.getContext('2d'),mmFogImg=mmFogCtx.createImageData(FW,FD);
+for(let i=0;i<FW*FD;i++){mmFogImg.data[i*4]=10;mmFogImg.data[i*4+1]=14;mmFogImg.data[i*4+2]=12;}
+function mmFogUpdate(){for(let i=0;i<FW*FD;i++)mmFogImg.data[i*4+3]=(1-disp[i])*150;mmFogCtx.putImageData(mmFogImg,0,0);}
+const mmRay=new THREE.Raycaster(),mmNdc=new THREE.Vector2();
+function drawMini(){
+  const cw=mm.width,ch=mm.height;if(!cw)return;
+  const u=cw/Math.max(1,mm.clientWidth),kx=cw/W,kz=ch/D,X=x=>(x+W/2)*kx,Z=z=>(z+D/2)*kz;
+  mmx.imageSmoothingEnabled=true;mmx.drawImage(mmBase,0,0,cw,ch);
+  if(fogOn)mmx.drawImage(mmFog,0,0,cw,ch);
+  // trajets des armées bleues et point d'arrivée
+  for(const g of regs)if(g.side==='bleu'&&g.tx!==null){
+    mmx.setLineDash([4*u,3*u]);mmx.lineWidth=1.2*u;mmx.strokeStyle='rgba(255,255,255,.75)';
+    mmx.beginPath();mmx.moveTo(X(g.x),Z(g.z));mmx.lineTo(X(g.tx),Z(g.tz));mmx.stroke();
+    mmx.setLineDash([]);mmx.strokeStyle=GOLD_CSS;mmx.beginPath();mmx.arc(X(g.tx),Z(g.tz),2.5*u,0,Math.PI*2);mmx.stroke();}
+  mmx.setLineDash([]);
+  // armées visibles : un bloc orienté, avec une pointe vers l'avant (agrandi pour rester lisible)
+  for(const g of regs){if(!g.shown)continue;const w=Math.max(2*g.hw*kx,8*u),h=Math.max(2*g.hd*kz,4.5*u),sel=selected.includes(g);
+    mmx.save();mmx.translate(X(g.x),Z(g.z));mmx.rotate(g.heading);mmx.fillStyle=g.color;
+    mmx.beginPath();mmx.rect(-w/2,-h/2,w,h);mmx.moveTo(-2.5*u,-h/2);mmx.lineTo(0,-h/2-3.5*u);mmx.lineTo(2.5*u,-h/2);mmx.closePath();mmx.fill();
+    mmx.lineWidth=(sel?2:1)*u;mmx.strokeStyle=sel?GOLD_CSS:'rgba(0,0,0,.75)';mmx.strokeRect(-w/2,-h/2,w,h);mmx.restore();}
+  // cadre de ce que montre la caméra (les coins de l'écran projetés sur le sol)
+  const y0=controls.target.y;mmx.beginPath();
+  [[-1,-1],[1,-1],[1,1],[-1,1]].forEach(([a,b],k)=>{mmNdc.set(a,b);mmRay.setFromCamera(mmNdc,camera);const o=mmRay.ray.origin,d=mmRay.ray.direction;
+    const t=d.y<-.01?Math.min(9000,(o.y-y0)/-d.y):9000,px=X(o.x+d.x*t),pz=Z(o.z+d.z*t);k?mmx.lineTo(px,pz):mmx.moveTo(px,pz);});
+  mmx.closePath();mmx.fillStyle='rgba(255,255,255,.10)';mmx.fill();mmx.lineWidth=1.5*u;mmx.strokeStyle='rgba(255,255,255,.9)';mmx.stroke();
+}
+function mmPoint(e){const r=mm.getBoundingClientRect();return[Math.max(-W/2,Math.min(W/2,((e.clientX-r.left)/r.width-.5)*W)),Math.max(-D/2,Math.min(D/2,((e.clientY-r.top)/r.height-.5)*D))];}
+function lookAt(x,z){const off=camera.position.clone().sub(controls.target);controls.target.set(x,Math.max(hAt(x,z),0),z);camera.position.copy(controls.target).add(off);controls.update();}
+let mmDrag=false;
+mm.addEventListener('pointerdown',e=>{e.preventDefault();const [x,z]=mmPoint(e);
+  if(e.button===2){
+    if(!selected.length){toast('Choisis d\'abord une armée bleue','#5a4a16');return;}
+    // clic droit sur une armée rouge visible : marcher sur elle
+    const foe=regs.find(g=>g.side==='rouge'&&g.shown&&Math.hypot(g.x-x,g.z-z)<Math.max(g.hw,g.hd)+40);
+    foe?order(0,0,foe):order(x,z,null);return;}
+  if(e.button!==0)return;mmDrag=true;mm.setPointerCapture(e.pointerId);lookAt(x,z);});
+mm.addEventListener('pointermove',e=>{if(mmDrag){const [x,z]=mmPoint(e);lookAt(x,z);}});
+mm.addEventListener('pointerup',()=>{mmDrag=false;});
+mm.addEventListener('pointercancel',()=>{mmDrag=false;});
+mm.addEventListener('contextmenu',e=>e.preventDefault());
+
 function forestMesh(){
   const set=mats.arbre; if(!set.length) return;
   // planche de 4 x 2 vues de l'arbre
@@ -483,7 +551,8 @@ function done(){if(++loaded===toLoad)build();}
 // ---------- boucle ----------
 const walkAnim=!window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 let last=performance.now(),acc=0;
-function resize(){const w=window.innerWidth,h=window.innerHeight;renderer.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix();}
+function resize(){const w=window.innerWidth,h=window.innerHeight;renderer.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix();
+  const r=mm.getBoundingClientRect(),k=Math.min(2,window.devicePixelRatio||1);mm.width=Math.round(r.width*k);mm.height=Math.round(r.height*k);}
 window.addEventListener('resize',resize);resize();
 function loop(now){const dt=Math.min(.1,(now-last)/1000),t=now/1000;last=now;
   if(ready){
@@ -493,7 +562,7 @@ function loop(now){const dt=Math.min(.1,(now-last)/1000),t=now/1000;last=now;
         if(on){const d=Math.hypot(g.tx-g.x,g.tz-g.z),n=Math.max(2,Math.ceil(d/10)),pts=[];for(let i=0;i<=n;i++)pts.push([g.x+(g.tx-g.x)*i/n,g.z+(g.tz-g.z)*i/n]);setLine(g.path,pts);
           g.mark.position.set(g.tx,Math.max(hAt(g.tx,g.tz),WATER)+1,g.tz);}}}
   }
-  controls.update();renderer.render(scene,camera);requestAnimationFrame(loop);}
+  controls.update();renderer.render(scene,camera);drawMini();requestAnimationFrame(loop);}
 requestAnimationFrame(loop);
 
 document.getElementById('b-fog').addEventListener('click',e=>{fogOn=!fogOn;fogU.fogOn.value=fogOn?1:0;updateFog();renderStatus();e.currentTarget.textContent='Brouillard : '+(fogOn?'oui':'non');e.currentTarget.setAttribute('aria-pressed',fogOn);});
