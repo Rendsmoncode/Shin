@@ -1,0 +1,9 @@
+# Images anciennes (domaine public, Wikimedia Commons) pour prototype/identite/essai7.html
+journal.jpg https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Le_Petit_Journal_Balkan_Crisis_%281908%29.jpg/1280px-Le_Petit_Journal_Balkan_Crisis_%281908%29.jpg
+charte.jpg https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Norfolk%2C_Charter_%2818463919602%29.jpg/1920px-Norfolk%2C_Charter_%2818463919602%29.jpg
+velin.jpg https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Towneley_Lectionary_%28blank_page%29_%28NYPL_b12455533-1610013%29.tiff/lossy-page1-1280px-Towneley_Lectionary_%28blank_page%29_%28NYPL_b12455533-1610013%29.tiff.jpg
+reliure.jpg https://upload.wikimedia.org/wikipedia/commons/c/cc/Covers_From_a_Bookbinding%2C_between_1500_and_1550.jpg
+sceau.jpg https://upload.wikimedia.org/wikipedia/commons/b/b3/NLW_Wynnstay_Estate_%2C_Ystrad_Marchell_Charters_58_%28seal_1%29_front_%288633592701%29.jpg
+cassini.jpg https://upload.wikimedia.org/wikipedia/commons/4/4a/Minute_Cassini_-_Marseille-124_-_1778.jpg
+portulan.jpg https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Mediterranean_chart_fourteenth_century2.jpg/1920px-Mediterranean_chart_fourteenth_century2.jpg
+portulan2.png https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/1590_Portolan_chart_of_the_Mediterranean_Sea_and_Europe.png/1920px-1590_Portolan_chart_of_the_Mediterranean_Sea_and_Europe.png

@@ -1,0 +1,31 @@
+# Télécharge les images anciennes (domaine public, Wikimedia Commons) listées dans outils/matiere_identite.txt
+# vers prototype/identite/matiere/, puis les enregistre dans le projet.
+# (Le serveur de Claude est bloqué par Wikimedia, ceux de GitHub non.)
+name: Récupérer la matière de l'identité visuelle
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [outils/matiere_identite.txt]
+permissions:
+  contents: write
+jobs:
+  telecharger:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Télécharger les images
+        run: |
+          mkdir -p prototype/identite/matiere
+          grep -v '^#' outils/matiere_identite.txt | while read nom url; do
+            [ -z "$nom" ] && continue
+            curl -sSL --retry 4 --retry-delay 5 -A "ShinPrototype/0.1 (github.com/Rendsmoncode/Shin)" -o "prototype/identite/matiere/$nom" "$url"
+            file "prototype/identite/matiere/$nom"
+          done
+      - name: Enregistrer dans le projet
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add prototype/identite/matiere
+          git diff --cached --quiet || git commit -m "Identité visuelle : images anciennes téléchargées depuis Wikimedia Commons"
+          git pull --rebase origin main && git push origin HEAD:main
