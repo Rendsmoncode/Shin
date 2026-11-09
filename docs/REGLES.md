@@ -170,6 +170,8 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 - ✅ **Formats** : 1v1, 1v1v1, 2v1, 2v2.
 - ✅ **Terrain tiré au hasard** : désert, montagne, champ, ruines…
 - ✅ **Tour par tour** : à chaque tour, on déplace ses troupes, on attaque ou non, etc.
+  - ✅ **Les joueurs jouent en même temps** (choix de Mathieu, 9/11/2026) : pendant la minute du tour, chacun donne ses ordres sans voir ceux des autres, puis toutes les armées bougent et se battent ensemble. Personne n'attend son tour, même en 2v2 ou 1v1v1.
+  - ✅ **Une marche longue continue gratuitement** (choix de Mathieu, 9/11/2026) : une armée envoyée à plusieurs tours de marche poursuit seule aux tours suivants, sans utiliser d'action. Une action ne sert qu'à donner un nouvel ordre.
 - ✅ Les aptitudes spéciales s'y utilisent (par exemple, l'attaque spéciale d'un Grand Général Sous les Cieux).
 - ✅ **Quand** : tout combat entre joueurs **connectés** se joue en bataille rangée. Si l'un des deux n'est pas connecté, le combat se joue en mode Clash of Clans (ses défenses le remplacent).
 - ✅ **Inactivité** : sans aucune action sur le jeu pendant 3 minutes, le joueur passe hors ligne (tout combat contre lui se joue en mode Clash of Clans).

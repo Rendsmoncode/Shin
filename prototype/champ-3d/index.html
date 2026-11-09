@@ -27,7 +27,7 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 #sel .hid{color:#9fd18b}
 #sel .warn{color:var(--red)}
 kbd{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:3px;padding:0 4px;color:var(--fg)}
-#toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);max-width:calc(100vw - 32px);background:rgba(90,26,22,.92);border:1px solid #b24a3e;color:#fff;padding:8px 16px;border-radius:4px;font-size:18px;font-weight:600;letter-spacing:.03em;opacity:0;transition:opacity .3s;pointer-events:none;text-align:center}
+#toast{position:fixed;left:50%;bottom:calc(72px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);max-width:calc(100vw - 32px);background:rgba(90,26,22,.92);border:1px solid #b24a3e;color:#fff;padding:8px 16px;border-radius:4px;font-size:18px;font-weight:600;letter-spacing:.03em;opacity:0;transition:opacity .3s;pointer-events:none;text-align:center}
 #toast.on{opacity:1}
 /* mini-carte : coin bas droit, même habillage que le panneau */
 #mm{position:fixed;right:max(12px,env(safe-area-inset-right,0px));bottom:calc(12px + env(safe-area-inset-bottom,0px));width:min(330px,45vw);aspect-ratio:3/2;display:block;background:var(--panel);border:1px solid var(--line);border-radius:6px;box-shadow:0 4px 18px rgba(0,0,0,.45);cursor:crosshair;touch-action:none}
@@ -50,18 +50,28 @@ kbd{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:3px;p
 #fin{position:fixed;left:50%;top:38%;transform:translate(-50%,-50%);background:var(--panel);border:1px solid var(--gold);border-radius:6px;padding:18px 30px;text-align:center;display:grid;gap:10px;justify-items:center}
 #fin[hidden]{display:none}
 #fin b{font-size:44px;letter-spacing:.1em;text-transform:uppercase}
+/* barre du tour par tour */
+#tour{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);display:flex;align-items:center;gap:14px;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:7px 10px 7px 16px;font-size:19px;white-space:nowrap}
+#tour[hidden]{display:none}
+#tour-t{font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+#tour-c{color:var(--gold);min-width:118px}
+#tour-c.urgent{color:var(--red)}
+#tour-a{color:var(--muted)}
+#b-end{font-size:17px;border-color:var(--gold)}
+#b-end:disabled{opacity:.45;cursor:default;border-color:var(--line)}
 @media (max-width:700px){#toast{bottom:calc(36px + 30vw + env(safe-area-inset-bottom,0px))}}
 </style>
 
 <div id="scene" aria-label="Champ de bataille en 3D avec relief, rivière, forêts et deux armées. Les armées bleues se commandent à la souris."></div>
 <div class="panel">
   <h1>Champ de bataille 3D</h1>
-  <p><b>Clic gauche</b> sur une armée bleue pour la choisir (<kbd>Maj</kbd> pour en ajouter, touches <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd>). <b>Clic droit</b> sur le terrain pour l'y envoyer, sur une armée rouge pour marcher sur elle. Glisser pour se déplacer, molette pour zoomer, glisser avec le clic droit pour pivoter. <kbd>Espace</kbd> centre la vue, <kbd>Échap</kbd> désélectionne. <b>Mini-carte</b> (en bas à droite) : clic ou glisser pour y aller, clic droit pour y envoyer les armées choisies. <b>Combat</b> : une armée qui entre au contact d'une armée ennemie se bat ; lui donner un ordre de marche dans l'autre sens la fait se replier.</p>
+  <p><b>Clic gauche</b> sur une armée bleue pour la choisir (<kbd>Maj</kbd> pour en ajouter, touches <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd>). <b>Clic droit</b> sur le terrain pour l'y envoyer, sur une armée rouge pour marcher sur elle. Glisser pour se déplacer, molette pour zoomer, glisser avec le clic droit pour pivoter. <kbd>Espace</kbd> centre la vue, <kbd>Échap</kbd> désélectionne. <b>Mini-carte</b> (en bas à droite) : clic ou glisser pour y aller, clic droit pour y envoyer les armées choisies. <b>Combat</b> : une armée qui entre au contact d'une armée ennemie se bat ; lui donner un ordre de marche dans l'autre sens la fait se replier. <b>Tour par tour</b> : pendant la minute du tour, donne tes ordres (1 par armée, 5 au plus), puis <b>Fin du tour</b> (ou <kbd>Entrée</kbd>) : toutes les armées bougent et se battent en même temps. Une marche longue continue seule aux tours suivants, sans coûter d'action.</p>
   <div class="row">
     <button type="button" id="b-fog" aria-pressed="true">Brouillard : oui</button>
     <button type="button" id="b-ai" aria-pressed="true">Rouges : en patrouille</button>
     <button type="button" id="b-shadow" aria-pressed="true">Ombres : oui</button>
     <button type="button" id="b-view">Vue d'ensemble</button>
+    <button type="button" id="b-turn" aria-pressed="true">Tour par tour : oui</button>
     <button type="button" id="b-regl" aria-expanded="false">Réglages du combat</button>
     <button type="button" id="b-restart">Recommencer</button>
   </div>
@@ -69,6 +79,7 @@ kbd{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:3px;p
   <div id="sel" aria-live="polite"></div>
 </div>
 <div id="toast" role="status"></div>
+<div id="tour" hidden><span id="tour-t"></span><span id="tour-c"></span><span id="tour-a"></span><button type="button" id="b-end">Fin du tour</button></div>
 <div id="reglages" hidden></div>
 <div id="hits" aria-hidden="true"></div>
 <div id="fin" role="status" hidden><b id="fin-t"></b><span id="fin-s"></span><button type="button" id="fin-b">Recommencer la bataille</button></div>
@@ -87,7 +98,12 @@ if(!window.THREE){status.textContent='La bibliothèque 3D n\'a pas pu se charger
 // gardées dans le navigateur, et le bouton « Copier les valeurs » permet de les partager.
 // =====================================================================================
 const REGLAGES_DEFAUT={
-  manche:3,            // secondes entre deux manches de combat (deviendra un tour avec le mode tour par tour)
+  dureeTour:60,        // secondes pour donner ses ordres à chaque tour (règles : 1 minute)
+  dureeMouvement:4,    // secondes pendant lesquelles on voit les armées bouger après la fin du tour
+  marcheTour:250,      // mètres parcourus en un tour par l'infanterie sur terrain plat (la cavalerie va 2 fois plus loin)
+  actionsMax:5,        // actions par tour au maximum (règles : 5) ; une armée = un homme clé = 1 action
+  manchesParTour:3,    // manches de combat calculées à chaque tour
+  manche:3,            // en temps réel seulement : secondes entre deux manches de combat
   valeurFantassin:1,   // puissance d'un fantassin
   valeurCavalier:2.5,  // puissance d'un cavalier
   cavPlaine:1.3,       // cavalerie en terrain découvert (règles : ×1,3 en plaine)
@@ -104,7 +120,13 @@ const REGLAGES_DEFAUT={
 };
 // pour le panneau : [clé, nom affiché, unité, minimum, maximum, pas, explication]
 const REGLAGES_INFO=[
-  ['Rythme',[['manche','Durée d\'une manche','secondes',.5,30,.5,'Temps entre deux calculs de combat. Avec le tour par tour, une manche deviendra un tour.']]],
+  ['Tour par tour',[
+    ['dureeTour','Temps pour les ordres','secondes',5,600,5,'Temps pour donner ses ordres à chaque tour. À la fin du chrono, le tour passe tout seul.'],
+    ['dureeMouvement','Animation du mouvement','secondes',.5,20,.5,'Durée pendant laquelle on voit les armées bouger après la fin du tour (ça ne change pas la distance parcourue).'],
+    ['marcheTour','Marche par tour','mètres',20,2000,10,'Distance parcourue en un tour par l\'infanterie sur terrain plat. La cavalerie va 2 fois plus loin ; forêt, pente et rivière ralentissent.'],
+    ['actionsMax','Actions par tour','maximum',1,20,1,'Nombre d\'ordres qu\'on peut donner par tour. Une armée ne peut recevoir qu\'un ordre par tour.'],
+    ['manchesParTour','Combat par tour','manches',1,20,1,'Nombre de manches de combat calculées à chaque tour pour les armées au contact.']]],
+  ['Temps réel',[['manche','Durée d\'une manche','secondes',.5,30,.5,'Seulement quand le tour par tour est coupé : temps entre deux manches de combat.']]],
   ['Valeur d\'un homme',[
     ['valeurFantassin','Fantassin','puissance',.1,20,.1,'Puissance apportée par un fantassin.'],
     ['valeurCavalier','Cavalier','puissance',.1,20,.1,'Puissance apportée par un cavalier.']]],
@@ -404,7 +426,7 @@ function regiment(o){
   g.banner=new THREE.Sprite(new THREE.SpriteMaterial({map:g.texN,depthTest:false}));g.banner.center.set(g.texN.userData.pole,0);
   g.banner.renderOrder=10;g.banner.userData.reg=g;scene.add(g.banner);
   if(o.side==='bleu'){
-    g.outline=groundLine(GOLD,.95);g.path=groundLine(0xffffff,.55);
+    g.outline=groundLine(GOLD,.95);g.path=groundLine(0xffffff,.55);g.reach=groundLine(0x9fd18b,.6);
     g.mark=new THREE.Mesh(ringG,new THREE.MeshBasicMaterial({color:GOLD,transparent:true,opacity:.85,depthTest:false}));g.mark.renderOrder=9;g.mark.visible=false;scene.add(g.mark);
   }
   place(g,0);regs.push(g);
@@ -504,19 +526,28 @@ function select(list){
   selected.forEach(g=>{g.banner.material.map=g.texN;g.outline.visible=false;});
   selected=list;
   selected.forEach(g=>{g.banner.material.map=g.texS;g.outline.visible=true;drawOutline(g);});
-  renderSel(true);
+  renderSel(true);drawReach();
 }
 function order(tx,tz,target){
   if(!selected.length)return;
-  const cx=selected.reduce((s,g)=>s+g.x,0)/selected.length,cz=selected.reduce((s,g)=>s+g.z,0)/selected.length;
-  selected.forEach(g=>{
+  let list=selected;
+  if(turnMode){
+    if(phase!=='ordres'){toast('Les armées bougent : attends le tour suivant pour donner des ordres','#5a4a16');return;}
+    // changer l'ordre d'une armée déjà commandée ce tour ne coûte rien de plus
+    let left=actionsLeft();list=selected.filter(g=>g.acted===turn||(left>0&&left--));
+    if(list.length<selected.length)toast(`Plus d'action disponible ce tour (${maxActions()} au maximum)`,'#5a4a16');
+    if(!list.length)return;
+    list.forEach(g=>g.acted=turn);
+  }
+  const cx=list.reduce((s,g)=>s+g.x,0)/list.length,cz=list.reduce((s,g)=>s+g.z,0)/list.length;
+  list.forEach(g=>{
     g.chase=target||null;
     // en groupe, chaque armée garde sa place par rapport aux autres
-    let x=target?target.x:tx+(selected.length>1?g.x-cx:0),z=target?target.z:tz+(selected.length>1?g.z-cz:0);
+    let x=target?target.x:tx+(list.length>1?g.x-cx:0),z=target?target.z:tz+(list.length>1?g.z-cz:0);
     x=Math.max(-W/2+40,Math.min(W/2-40,x));z=Math.max(-D/2+40,Math.min(D/2-40,z));
     g.tx=x;g.tz=z;
   });
-  renderSel(true);
+  renderSel(true);renderTour();
 }
 const ray=new THREE.Raycaster(),ndc=new THREE.Vector2();
 function pick(ev){
@@ -555,6 +586,7 @@ window.addEventListener('keydown',e=>{
   if(/^[1-9]$/.test(e.key)){const g=blues[+e.key-1];if(g)select(e.shiftKey?[...new Set([...selected,g])]:[g]);}
   else if(e.key==='Escape')select([]);
   else if(e.key===' '&&selected.length){e.preventDefault();centerOn(selected);}
+  else if(e.key==='Enter'&&turnMode&&phase==='ordres'&&ready&&!ended){e.preventDefault();startMove();}
 });
 function centerOn(list){
   const x=list.reduce((s,g)=>s+g.x,0)/list.length,z=list.reduce((s,g)=>s+g.z,0)/list.length;
@@ -569,8 +601,10 @@ function renderSel(force){
   let h='';
   if(selected.length===1){const g=selected[0],t=terrainName(g.x,g.z),ux=g.tx!==null?Math.sin(g.heading):0,uz=g.tx!==null?-Math.cos(g.heading):0;
     const foes=regs.filter(e=>e.side!==g.side&&contactDist(g,e)),rf=foes.length?rapport(g,foes):0;
-    const etat=foes.length?`<span class="warn">Au combat contre ${foes.map(e=>e.name).join(' et ')}</span><span><span class="k">Rapport de force :</span> ${rapportMot(rf)} (×${rf.toFixed(2).replace('.',',')})</span>${g.lastLoss!=null?`<span><span class="k">Dernière manche :</span> −${fmtMen(g.lastLoss)} hommes (ennemi : −${fmtMen(foes.reduce((s,e)=>s+(e.lastLoss||0),0))})</span>`:''}`:g.chase?`Marche sur ${g.chase.name}`:g.tx!==null?'En marche':'À l\'arrêt';
-    h=`<b>${g.name}</b><span>${g.kind==='cav'?'Cavalerie':'Infanterie'} · ${fmtMen(g.men)} hommes</span><span>${etat}</span>
+    const etat=foes.length?`<span class="warn">Au combat contre ${foes.map(e=>e.name).join(' et ')}</span><span><span class="k">Rapport de force :</span> ${rapportMot(rf)} (×${rf.toFixed(2).replace('.',',')})</span>${g.lastLoss!=null?`<span><span class="k">${turnMode?'Dernier tour':'Dernière manche'} :</span> −${fmtMen(g.lastLoss)} hommes (ennemi : −${fmtMen(foes.reduce((s,e)=>s+(e.lastLoss||0),0))})</span>`:''}`:g.chase?`Marche sur ${g.chase.name}`:g.tx!==null?'En marche':'À l\'arrêt';
+    const dist=g.tx!==null?Math.hypot(g.tx-g.x,g.tz-g.z):0;
+    const tourInfo=!turnMode?'':`<span><span class="k">Ce tour :</span> ${g.acted===turn?'ordre donné':actionsLeft()>0?'peut recevoir un ordre':'plus d\'action disponible'}${dist>2?` · <span class="k">arrivée dans</span> ${Math.max(1,Math.ceil(dist/reachOf(g)))} tour(s) environ`:''}</span>`;
+    h=`<b>${g.name}</b><span>${g.kind==='cav'?'Cavalerie':'Infanterie'} · ${fmtMen(g.men)} hommes</span><span>${etat}</span>${tourInfo}
       <span><span class="k">Terrain :</span> ${t}${g.tx!==null?` · <span class="k">vitesse</span> ×${(terrainMult(g.kind,g.x,g.z,ux,uz)).toFixed(2).replace('.',',')}`:''}</span>
       <span><span class="k">Vision :</span> ${fmt(g.range||VISION)} m${(g.range||0)>VISION?' (colline : +50 %)':''}</span>
       ${isHidden(g)?'<span class="hid">Caché dans la forêt : invisible à plus de 50 m</span>':''}`;
@@ -594,10 +628,10 @@ function rapport(g,foes){const mine=puissanceBase(combatObj(g));
 function trimSoldiers(g){const want=Math.ceil(g.men/2);while(g.soldiers.length>want){const s=g.soldiers.pop();scene.remove(s.sp);}g.shadows.count=g.soldiers.length;}
 function removeReg(g){
   if(selected.includes(g))select(selected.filter(x=>x!==g));
-  g.soldiers.forEach(s=>scene.remove(s.sp));[g.shadows,g.banner,g.outline,g.path,g.mark].forEach(o=>{if(o)scene.remove(o);});
+  g.soldiers.forEach(s=>scene.remove(s.sp));[g.shadows,g.banner,g.outline,g.path,g.mark,g.reach].forEach(o=>{if(o)scene.remove(o);});
   g.texN.dispose();g.texS.dispose();g.dead=true;known.delete(g);
   const i=regs.indexOf(g);if(i>=0)regs.splice(i,1);
-  regs.forEach(e=>{if(e.chase===g){e.chase=null;e.tx=null;}});
+  regs.forEach(e=>{if(e.chase===g){e.chase=null;e.tx=null;}if(e.contact===g)e.contact=null;});
 }
 // chiffres de pertes qui montent au-dessus des bannières
 const hitsEl=document.getElementById('hits'),floats=[],HV=new THREE.Vector3();
@@ -610,28 +644,85 @@ function drawFloats(now){
     f.el.style.display=vis?'':'none';f.el.style.left=((HV.x+1)/2*window.innerWidth)+'px';f.el.style.top=((1-HV.y)/2*window.innerHeight-age*45)+'px';f.el.style.opacity=String(1-age*age);}
 }
 let combatAcc=0,ended=false;
-function combatTick(dt){
-  if((combatAcc+=dt)<REGLAGES.manche)return;combatAcc=0;
-  const fighting=regs.filter(g=>(g.foes=regs.filter(e=>e.side!==g.side&&contactDist(g,e))).length);
-  if(!fighting.length)return;
-  fighting.forEach(g=>g.terrain=terrainCombat(g.x,g.z));
-  const res=resoudreManche(fighting),msgs=[];let bad=false;
-  fighting.forEach(g=>g.charge=g.nouveau=false);
-  for(const {a,loss,crushed,out} of res){
-    a.lastLoss=loss;if(loss>0)floatHit(a,loss);
-    if(out){const by=a.foes.map(e=>e.name).join(' et ');msgs.push(crushed?`${a.name} est écrasé par ${by} !`:`${a.name} est dispersé, ses derniers hommes quittent le champ de bataille`);if(a.side==='bleu')bad=true;removeReg(a);}
-    else{a.men-=loss;trimSoldiers(a);setMen(a,a.men);}
+function combatTick(dt){if((combatAcc+=dt)<REGLAGES.manche)return;combatAcc=0;combatRound(1);}
+// n manches de suite ; les pertes s'affichent en une fois à la fin
+function combatRound(n){
+  const msgs=[],tot=new Map();let bad=false;
+  for(let k=0;k<n;k++){
+    const fighting=regs.filter(g=>(g.foes=regs.filter(e=>e.side!==g.side&&contactDist(g,e))).length);
+    if(!fighting.length)break;
+    fighting.forEach(g=>g.terrain=terrainCombat(g.x,g.z));
+    const res=resoudreManche(fighting);
+    fighting.forEach(g=>g.charge=g.nouveau=false);
+    for(const {a,loss,crushed,out} of res){
+      tot.set(a,(tot.get(a)||0)+loss);
+      if(out){const by=a.foes.map(e=>e.name).join(' et ');msgs.push(crushed?`${a.name} est écrasé par ${by} !`:`${a.name} est dispersé, ses derniers hommes quittent le champ de bataille`);if(a.side==='bleu')bad=true;removeReg(a);}
+      else a.men-=loss;
+    }
   }
+  if(!tot.size)return;
+  for(const [a,l] of tot){a.lastLoss=l;if(l>0)floatHit(a,l);if(!a.dead){trimSoldiers(a);setMen(a,a.men);}}
   if(msgs.length)toast(msgs.join(' · '),bad?'#5a1a16':'#1d4a2a');
   checkEnd();renderSel(true);renderStatus();
 }
+
+// ---------- tour par tour : ordres pendant le chrono, puis tout le monde bouge et se bat en même temps ----------
+let turnMode=true,turn=1,phase='ordres',phaseT=REGLAGES.dureeTour;
+const maxActions=()=>Math.min(REGLAGES.actionsMax,regs.filter(g=>g.side==='bleu').length);
+const actionsLeft=()=>Math.max(0,maxActions()-regs.filter(g=>g.side==='bleu'&&g.acted===turn).length);
+const reachOf=g=>REGLAGES.marcheTour*SPEED[g.kind]/SPEED.inf;
+function turnTick(dt,t){
+  if(phase==='ordres'){
+    for(const g of regs)if(g.contact)place(g,t);
+    if((phaseT-=dt)<=0)startMove();
+  }else{
+    // le temps du jeu est accéléré pour que l'infanterie parcoure « marcheTour » mètres pendant l'animation
+    const f=REGLAGES.marcheTour/(SPEED.inf*Math.max(.5,REGLAGES.dureeMouvement));
+    for(const g of regs){const was=g.moving;step(g,dt*f);if(g.moving||was||g.contact)place(g,t);}
+    if((phaseT-=dt)<=0)endMove(t);
+  }
+}
+function startMove(){
+  if(phase!=='ordres')return;
+  phase='mouvement';phaseT=REGLAGES.dureeMouvement;
+  for(const g of regs)if(g.side==='rouge')ai(g,REGLAGES.marcheTour/SPEED.inf);      // les rouges décident aussi
+  if(!regs.some(g=>g.tx!==null||g.contact))phaseT=.4;                               // rien ne bouge : on passe vite
+  drawReach();renderTour();renderSel(true);
+}
+function endMove(t){
+  for(const g of regs){if(g.moving){g.moving=false;place(g,t);}}
+  combatRound(Math.max(1,Math.round(REGLAGES.manchesParTour)));
+  if(ended){renderTour();return;}
+  turn++;phase='ordres';phaseT=REGLAGES.dureeTour;
+  drawReach();renderTour();renderSel(true);
+}
+const tourEl=document.getElementById('tour'),tourT=document.getElementById('tour-t'),tourC=document.getElementById('tour-c'),tourA=document.getElementById('tour-a'),bEnd=document.getElementById('b-end');
+function renderTour(){
+  tourEl.hidden=!turnMode||!ready;if(tourEl.hidden)return;
+  tourT.textContent=`Tour ${turn}`;
+  if(ended){tourC.textContent='Bataille terminée';tourC.classList.remove('urgent');tourA.textContent='';bEnd.disabled=true;return;}
+  if(phase==='ordres'){const sec=Math.max(0,Math.ceil(phaseT));tourC.textContent=`Ordres · ${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`;tourC.classList.toggle('urgent',sec<=10);
+    tourA.textContent=`Actions : ${actionsLeft()} / ${maxActions()}`;bEnd.disabled=false;}
+  else{tourC.textContent='Mouvement…';tourC.classList.remove('urgent');tourA.textContent='';bEnd.disabled=true;}
+}
+// cercle vert : jusqu'où l'armée choisie peut aller ce tour (sur terrain plat)
+function drawReach(){
+  for(const g of regs){if(!g.reach)continue;const on=turnMode&&phase==='ordres'&&!ended&&selected.includes(g);g.reach.visible=on;
+    if(on){const r=reachOf(g),pts=[];for(let i=0;i<=72;i++){const a=i/72*Math.PI*2;pts.push([g.x+Math.cos(a)*r,g.z+Math.sin(a)*r]);}setLine(g.reach,pts);}}
+}
+bEnd.addEventListener('click',startMove);
+document.getElementById('b-turn').addEventListener('click',e=>{
+  turnMode=!turnMode;phase='ordres';phaseT=REGLAGES.dureeTour;regs.forEach(g=>g.moving=false);
+  e.currentTarget.textContent='Tour par tour : '+(turnMode?'oui':'non');e.currentTarget.setAttribute('aria-pressed',turnMode);
+  drawReach();renderTour();renderSel(true);
+});
 const finEl=document.getElementById('fin');
 function checkEnd(){
   if(ended)return;const b=regs.some(g=>g.side==='bleu'),r=regs.some(g=>g.side==='rouge');
   if(b&&r)return;ended=true;
   document.getElementById('fin-t').textContent=b?'Victoire':'Défaite';
   document.getElementById('fin-s').textContent=b?`Il te reste ${fmtMen(regs.reduce((s,g)=>s+g.men,0))} hommes.`:'Toutes tes armées ont quitté le champ de bataille.';
-  finEl.hidden=false;
+  finEl.hidden=false;drawReach();renderTour();
 }
 // les armées de départ (1 soldat affiché = 2 hommes)
 const ARMEES=[
@@ -647,7 +738,8 @@ const ARMEES=[
 function deploy(){
   select([]);regs.slice().forEach(removeReg);floats.forEach(f=>f.el.remove());floats.length=0;
   ARMEES.forEach(o=>regiment({...o}));known.clear();ended=false;finEl.hidden=true;combatAcc=0;
-  updateFog();renderStatus();renderSel(true);
+  turn=1;phase='ordres';phaseT=REGLAGES.dureeTour;
+  updateFog();renderStatus();renderSel(true);renderTour();
 }
 
 // ---------- panneau des réglages du combat ----------
@@ -679,7 +771,7 @@ function runSim(){
   document.getElementById('sim-out').innerHTML=`<span><span class="k">Rapport de force :</span> ×${rf.toFixed(2).replace('.',',')} (${rapportMot(rf)} pour A)</span>
     <span><span class="k">Victoires :</span> A ${pc(r.winA)} · B ${pc(r.winB)}</span>
     <span><span class="k">Combats finis par un écrasement :</span> ${pc(r.crush)}</span>
-    <span><span class="k">Durée moyenne :</span> ${f1(r.rounds)} manches (${Math.round(r.rounds*REGLAGES.manche)} s)</span>
+    <span><span class="k">Durée moyenne :</span> ${f1(r.rounds)} manches, soit ${f1(r.rounds/Math.max(1,Math.round(REGLAGES.manchesParTour)))} tours (${Math.round(r.rounds*REGLAGES.manche)} s en temps réel)</span>
     <span><span class="k">Pertes moyennes :</span> A −${fmtMen(r.lossA)} (${pc(r.lossA/A.men)}) · B −${fmtMen(r.lossB)} (${pc(r.lossB/B.men)})</span>`;
 }
 function toggleReglages(on){RP.hidden=!on;document.getElementById('b-regl').setAttribute('aria-expanded',on);if(on&&!RP.innerHTML)buildReglages();}
@@ -793,9 +885,10 @@ function resize(){const w=window.innerWidth,h=window.innerHeight;renderer.setSiz
 window.addEventListener('resize',resize);resize();
 function loop(now){const dt=Math.min(.1,(now-last)/1000),t=now/1000;last=now;
   if(ready){
-    for(const g of regs){if(g.side==='rouge')ai(g,dt);const was=g.moving;step(g,dt);if(g.moving||was||g.contact)place(g,t);}
-    if(!ended)combatTick(dt);
-    if((acc+=dt)>.2){acc=0;updateFog();renderStatus();renderSel(false);
+    if(ended){for(const g of regs)if(g.contact)place(g,t);}
+    else if(turnMode)turnTick(dt,t);
+    else{for(const g of regs){if(g.side==='rouge')ai(g,dt);const was=g.moving;step(g,dt);if(g.moving||was||g.contact)place(g,t);}combatTick(dt);}
+    if((acc+=dt)>.2){acc=0;updateFog();renderStatus();renderSel(false);renderTour();
       for(const g of regs)if(g.path){const on=g.tx!==null;g.path.visible=g.mark.visible=on;
         if(on){const d=Math.hypot(g.tx-g.x,g.tz-g.z),n=Math.max(2,Math.ceil(d/10)),pts=[];for(let i=0;i<=n;i++)pts.push([g.x+(g.tx-g.x)*i/n,g.z+(g.tz-g.z)*i/n]);setLine(g.path,pts);
           g.mark.position.set(g.tx,Math.max(hAt(g.tx,g.tz),WATER)+1,g.tz);}}}
@@ -809,6 +902,6 @@ document.getElementById('b-fog').addEventListener('click',e=>{fogOn=!fogOn;fogU.
 document.getElementById('b-ai').addEventListener('click',e=>{aiOn=!aiOn;if(!aiOn)regs.forEach(g=>{if(g.side==='rouge')g.tx=null;});e.currentTarget.textContent='Rouges : '+(aiOn?'en patrouille':'immobiles');e.currentTarget.setAttribute('aria-pressed',aiOn);});
 document.getElementById('b-shadow').addEventListener('click',e=>{renderer.shadowMap.enabled=!renderer.shadowMap.enabled;scene.traverse(o=>{if(o.material)o.material.needsUpdate=true});e.currentTarget.textContent='Ombres : '+(renderer.shadowMap.enabled?'oui':'non');});
 let overall=false;document.getElementById('b-view').addEventListener('click',e=>{overall=!overall;overall?viewAll():viewArmy();e.currentTarget.textContent=overall?'Vue des armées':'Vue d\'ensemble';});
-window.__shin={regs,select,order,setMen,REGLAGES,resoudreManche,simuler,deploy,get selected(){return selected},seen,forest};   // pour les tests
+window.__shin={regs,select,order,setMen,REGLAGES,resoudreManche,simuler,deploy,startMove,get turn(){return turn},get phase(){return phase},get selected(){return selected},seen,forest};   // pour les tests
 })();
 </script>
