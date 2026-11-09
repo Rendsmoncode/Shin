@@ -13,3 +13,5 @@ Retours de l'utilisateur (validé : le rendu des armées, le mode marche et les 
   - Fait : coin bas droit, relief, rivière, forêts, brouillard, armées visibles (bloc orienté, or si choisie), trajets, cadre de la vue ; clic ou glisser pour y aller, clic droit pour y envoyer les armées choisies (ou marcher sur une armée rouge).
 - [ ] Le mode tour par tour (5 actions par tour, chrono d'une minute).
 - [ ] Remplacer le sol et les rochers provisoires par des textures et des modèles dans le style de référence.
+- [x] Bannières des joueurs au-dessus des armées.
+  - Fait : étendard planté au milieu de l'armée (hampe, drapeau à queue d'aronde à la couleur et à l'emblème du joueur : soleil pour les bleus, tour pour les rouges), plaque avec le nom du général et l'effectif réel, contour doré si choisie, taille lisible de près comme de loin. L'effectif se redessine tout seul quand il change (prêt pour le combat).
