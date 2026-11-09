@@ -260,15 +260,19 @@ const merLat=(y,n)=>Math.atan(Math.sinh(Math.PI*(1-2*y/n)))*180/Math.PI;
 const tuileX=(lon,n)=>(lon+180)/360*n,tuileY=(lat,n)=>{const r=lat*Math.PI/180;return (1-Math.log(Math.tan(r)+1/Math.cos(r))/Math.PI)/2*n;};
 let photoOff=false,photoOk=0,photoKo=0,photoActifs=0,photoPause=0,photoG=null,z19Ko=0;
 const travaux=[];
-function travailPhoto(rx,rz,rw,rd,z,W,H,prio,fin){
-  const c=document.createElement('canvas');c.width=W;c.height=H;const g2=c.getContext('2d');
+// l'image de travail d'un carré n'est créée qu'au moment où ses tuiles commencent à arriver (mémoire et à-coups)
+function ouvrirJob(J){
+  const [rx,rz,rw,rd]=J.rect,c=document.createElement('canvas');c.width=J.W;c.height=J.H;const g2=c.getContext('2d');
   // fond : la photo globale si elle est là (sinon la carte peinte), visible seulement si une tuile manque
   const src=photoG||cv;
-  try{g2.drawImage(src,(rx-X0)/GW*src.width,(rz-Z0)/GD*src.height,rw/GW*src.width,rd/GD*src.height,0,0,W,H);}catch(e){}
+  try{g2.drawImage(src,(rx-X0)/GW*src.width,(rz-Z0)/GD*src.height,rw/GW*src.width,rd/GD*src.height,0,0,J.W,J.H);}catch(e){}
+  J.c=c;J.g=g2;
+}
+function travailPhoto(rx,rz,rw,rd,z,W,H,prio,fin){
   const n=2**z,lo0=LON0+rx/V.kx,lo1=LON0+(rx+rw)/V.kx,laN=LAT0-rz/V.kz,laS=LAT0-(rz+rd)/V.kz;
   const tx0=Math.floor(tuileX(lo0,n)),tx1=Math.floor(tuileX(lo1,n)),ty0=Math.floor(tuileY(laN,n)),ty1=Math.floor(tuileY(laS,n));
   const px=x=>Math.round((x-rx)/rw*W),py=zz=>Math.round((zz-rz)/rd*H);
-  const J={c,g:g2,prio,fin,rect:[rx,rz,rw,rd],tuiles:[],total:0,reste:0,ko:0,annule:false,ctrl:window.AbortController?new AbortController():null};
+  const J={c:null,g:null,W,H,prio,fin,rect:[rx,rz,rw,rd],tuiles:[],total:0,reste:0,ko:0,annule:false,ctrl:window.AbortController?new AbortController():null};
   for(let ty=ty0;ty<=ty1;ty++)for(let tx=tx0;tx<=tx1;tx++){
     const xa=(tx/n*360-180-LON0)*V.kx,xb=((tx+1)/n*360-180-LON0)*V.kx,za=-(merLat(ty,n)-LAT0)*V.kz,zb=-(merLat(ty+1,n)-LAT0)*V.kz;
     J.tuiles.push({url:`${WMTS}&TILEMATRIX=${z}&TILEROW=${ty}&TILECOL=${tx}`,x:px(xa),y:py(za),w:px(xb)-px(xa),h:py(zb)-py(za),essai:0});
@@ -285,7 +289,7 @@ async function chargerTuile(url,ctrl){
 }
 async function tuilePhoto(J,t){
   photoActifs++;
-  try{const im=await chargerTuile(t.url,J.ctrl);photoOk++;if(!J.annule)J.g.drawImage(im,t.x,t.y,t.w,t.h);if(im.close)im.close();}
+  try{const im=await chargerTuile(t.url,J.ctrl);photoOk++;if(!J.annule&&J.g)J.g.drawImage(im,t.x,t.y,t.w,t.h);if(im.close)im.close();}
   catch(e){
     if(!J.annule&&e&&e.trop&&t.essai<4){t.essai++;J.tuiles.push(t);photoPause=performance.now()+1500*t.essai;photoActifs--;return;}
     if(!J.annule){photoKo++;J.ko++;if(photoKo>=40&&!photoOk)couperPhotos();}
@@ -296,12 +300,14 @@ async function tuilePhoto(J,t){
 function pomperPhotos(){
   if(photoOff||performance.now()<photoPause)return;
   while(photoActifs<8){
-    let J=null;for(const t of travaux)if(t.tuiles.length&&(!J||t.prio<J.prio))J=t;
+    let J=null,Jo=null,nOuv=0;
+    for(const t of travaux){if(t.c)nOuv++;if(!t.tuiles.length)continue;if(!J||t.prio<J.prio)J=t;if(t.c&&(!Jo||t.prio<Jo.prio))Jo=t;}
     if(!J)return;
+    if(!J.c){if(nOuv>=3){if(!Jo)return;J=Jo;}else ouvrirJob(J);}
     tuilePhoto(J,J.tuiles.shift());
   }
 }
-function annulerJob(J){J.annule=true;if(J.ctrl)J.ctrl.abort();const i=travaux.indexOf(J);if(i>=0)travaux.splice(i,1);}
+function annulerJob(J){J.annule=true;J.c=J.g=null;if(J.ctrl)J.ctrl.abort();const i=travaux.indexOf(J);if(i>=0)travaux.splice(i,1);}
 function couperPhotos(){
   if(photoOff)return;photoOff=true;travaux.slice().forEach(annulerJob);
   status.textContent+=' Photos aériennes IGN indisponibles pour le moment : carte peinte affichée.';
@@ -330,10 +336,20 @@ function demanderPhoto(T,p){
       if(p===0&&J.ko===J.total&&PH[0].z>18&&photoOk>50&&++z19Ko>=2)PH[0].z=18;
       T.phEtat[p]=3;T.phRetry=performance.now()+(PH[0].z===18&&p===0?0:20000);return;
     }
-    const t=texPhoto(J.c);
-    t.onUpdate=()=>{t.image={width:J.c.width,height:J.c.height};t.onUpdate=null;J.c=J.g=null;};   // l'image n'est plus utile une fois envoyée à la carte graphique
-    T.ph[p]={tex:t,rect:J.rect};T.phEtat[p]=2;choisirPhoto(T);
+    aPoser.push({T,p,J});
   });
+}
+const aPoser=[];
+function poserPhotos(){
+  // la plus proche d'abord, une seule par image affichée
+  if(!aPoser.length)return;
+  let k=0;for(let i=1;i<aPoser.length;i++)if(aPoser[i].T.d<aPoser[k].T.d)k=i;
+  const {T,p,J}=aPoser.splice(k,1)[0];
+  if(T.ph[p]||T.d>LV[p].d*1.3){T.phEtat[p]=0;return;}   // devenue inutile entre-temps
+  const t=texPhoto(J.c),W=J.W,H=J.H;
+  t.onUpdate=()=>{t.image={width:W,height:H};t.onUpdate=null;};   // l'image n'est plus utile une fois envoyée à la carte graphique
+  J.c=J.g=null;
+  T.ph[p]={tex:t,rect:J.rect};T.phEtat[p]=2;choisirPhoto(T);
 }
 function majPhotos(T){
   if(!photoG||photoOff)return;
@@ -501,7 +517,7 @@ function pomperFin(){
     lireRelief(`${RF.dossier}t_${T.i}_${T.j}.png`,FN,FN).then(F=>{T.fine=F;T.etat=2;affinerArbres(T);}).catch(()=>{T.etat=3;}).finally(()=>{enCours--;});}
 }
 function majTuiles(budgetFin,budgetGros){
-  const cp=camera.position;
+  const cp=camera.position,t0=performance.now(),tropTard=()=>budgetFin<3&&performance.now()-t0>6;
   for(const T of tiles){
     const dx=Math.max(T.x0-cp.x,0,cp.x-T.x0-TU),dz=Math.max(T.z0-cp.z,0,cp.z-T.z0-TU),dy=Math.max(T.ymin-cp.y,0,cp.y-T.ymax);
     T.d=Math.hypot(dx,dy,dz);
@@ -515,10 +531,10 @@ function majTuiles(budgetFin,budgetGros){
   for(const T of todo){
     const L=T.want,fin=L<=1;
     if(T.want!==T.lvl){
-      if(!T.geos[L]){if(fin?budgetFin<=0:budgetGros<=0)continue;T.geos[L]=tileGeo(T,L);fin?budgetFin--:budgetGros--;}
+      if(!T.geos[L]){if(fin?budgetFin<=0||tropTard():budgetGros<=0)continue;T.geos[L]=tileGeo(T,L);fin?budgetFin--:budgetGros--;}
       T.mesh.geometry=T.geos[L];T.mesh.visible=true;T.lvl=L;
     }
-    if(L<=1){if(T.extraLvl!==L&&budgetFin>0){construireExtra(T,L);budgetFin--;}}
+    if(L<=1){if(T.extraLvl!==L&&budgetFin>0&&!tropTard()){construireExtra(T,L);budgetFin--;ombreSale=true;}}
     else enleverExtra(T);
   }
   pomperFin();pomperPhotos();
@@ -579,7 +595,7 @@ function couleurOSM(s){
   return c&&c.lerp(ADOUCIR,.15);   // évite les blancs et rouges purs
 }
 const COULS=(V.couleursBat||[]).map(couleurOSM);
-const tmpC=new THREE.Color();
+const tmpC=new THREE.Color(),aBatir=[];let construireBats=null,batisFini=false,ombreSale=true;
 {
   const B=V.batiments,CB=V.champsBat,BH=CB.length,iM=CB.indexOf('murs'),iT=CB.indexOf('toiture'),iC=CB.indexOf('couleur'),iCT=CB.indexOf('couleur_toit');
   const osm=(b,i)=>i>=0&&b[i]>0?COULS[b[i]-1]||null:null;
@@ -587,7 +603,9 @@ const tmpC=new THREE.Color();
   const parCarre=new Map();
   for(const b of B){const n=(b.length-BH)/2;let cx=0,cz=0;for(let i=0;i<n;i++){cx+=b[BH+2*i];cz+=b[BH+1+2*i];}
     const T=tiles[tileIdx(cx/n,cz/n)];let l=parCarre.get(T);if(!l)parCarre.set(T,l=[]);l.push(b);}
-  for(const [T,liste] of parCarre){
+  for(const [T,liste] of parCarre){T.bats=liste;aBatir.push(T);}
+  construireBats=T=>{
+    const liste=T.bats;T.bats=null;
     let NV=0;for(const b of liste)NV+=5*(b.length-BH)/2;
     const pos=new Float32Array(NV*3),nor=new Float32Array(NV*3),col=new Uint8Array(NV*3),toit=new Uint8Array(NV),idx=[];let v=0;
     const setC=(i,c,k)=>{typeof c==='string'?tmpC.set(c):tmpC.copy(c);col[i*3]=Math.min(255,tmpC.r*255*k);col[i*3+1]=Math.min(255,tmpC.g*255*k);col[i*3+2]=Math.min(255,tmpC.b*255*k);};
@@ -611,11 +629,20 @@ const tmpC=new THREE.Color();
     geo.setAttribute('color',new THREE.BufferAttribute(col,3,true));geo.setAttribute('toit',new THREE.BufferAttribute(toit,1));
     geo.setIndex(new THREE.BufferAttribute(v>65535?new Uint32Array(idx):new Uint16Array(idx),1));
     const mesh=new THREE.Mesh(geo,matB(T));mesh.castShadow=mesh.receiveShadow=true;scene.add(mesh);
-  }
+    ombreSale=true;
+  };
+}
+function batirProches(ms){
+  if(!aBatir.length)return;
+  if(frame%20===0||!aBatir.trie){aBatir.sort((a,b)=>a.d-b.d);aBatir.trie=true;}
+  const t0=performance.now();
+  while(aBatir.length&&performance.now()-t0<ms)construireBats(aBatir.shift());
+  if(!aBatir.length&&!batisFini){batisFini=true;}
 }
 
 // ---------- arbres (les mêmes que sur le champ de bataille) ----------
-await say('Plantation des arbres…');
+let arbresMesh=null;
+async function planterArbres(){
 const treeImgs=await Promise.all([...Array(8)].map((_,i)=>new Promise(res=>{const im=new Image();im.onload=()=>res(im);im.onerror=()=>res(null);im.src=`../champ-3d/sprites/arbre_${String(i+1).padStart(2,'0')}.png`;})));
 if(treeImgs.some(Boolean)){
   // masque des zones boisées : rouge = forêt, vert = garrigue, bleu = parcs
@@ -625,7 +652,7 @@ if(treeImgs.some(Boolean)){
   // pas d'arbres sur les routes ni les bâtiments
   mg.strokeStyle='#000';mg.lineWidth=2;for(const r of V.routes){if(r[0]>2)continue;const f=r.slice(1);mg.beginPath();for(let i=0;i<f.length;i+=2){const px=(f[i]-X0)*MW/GW,py=(f[i+1]-Z0)*MH/GD;i?mg.lineTo(px,py):mg.moveTo(px,py);}mg.stroke();}
   const md=mg.getImageData(0,0,MW,MH).data,spots=[];
-  for(let k=0;k<520000&&spots.length<90000;k++){const x=X0+R()*GW,z=Z0+R()*GD,px=((x-X0)/GW*MW)|0,py=((z-Z0)/GD*MH)|0,o=(py*MW+px)*4;
+  for(let k=0;k<520000&&spots.length<90000;k++){if(k%40000===0)await pause();const x=X0+R()*GW,z=Z0+R()*GD,px=((x-X0)/GW*MW)|0,py=((z-Z0)/GD*MH)|0,o=(py*MW+px)*4;
     const f=md[o]>128,ga=md[o+1]>128,pa=md[o+2]>128,keep=f?.85:ga?.22:pa?.12:0;
     if(R()<keep)spots.push([x,hAt(x,z),z,f?11+R()*7:ga?4+R()*4:8+R()*6]);}
   // rangés par carré : leur pied est recalé sur le relief fin quand il arrive
@@ -646,7 +673,9 @@ if(treeImgs.some(Boolean)){
       float c=mod(iTile,4.0),r=floor(iTile/4.0);vUv=vec2((c+uv.x)/4.0,1.0-(r+1.0-uv.y)/2.0);vShade=iShade;}`,
     fragmentShader:`uniform sampler2D map;varying vec2 vUv;varying float vShade;
       void main(){vec4 c=texture2D(map,vUv);if(c.a<0.5)discard;gl_FragColor=vec4(c.rgb*vShade,1.0);}`});
-  const trees=new THREE.Mesh(geo,mat);trees.frustumCulled=false;scene.add(trees);
+  const trees=new THREE.Mesh(geo,mat);trees.frustumCulled=false;scene.add(trees);arbresMesh=trees;
+  for(const T of tiles)if(T.fine)affinerArbres(T);   // carrés dont le relief fin est arrivé avant les arbres
+}
 }
 
 // ---------- frontières (rideaux lumineux façon CK3) et noms ----------
@@ -692,7 +721,7 @@ const gotoEl=document.getElementById('goto');
 JOUEURS.forEach(j=>{const q=quartiers.find(q=>norm(q.nom)===norm(j.quartier));if(!q)return;
   const b=document.createElement('button');b.type='button';b.textContent=j.quartier;b.style.borderColor=j.couleur;
   b.addEventListener('click',()=>{goTo(q.c[0],q.c[1],1600,.9);montrer(q);});gotoEl.appendChild(b);});
-document.getElementById('b-shadow').addEventListener('click',e=>{renderer.shadowMap.enabled=!renderer.shadowMap.enabled;scene.traverse(o=>{if(o.material)o.material.needsUpdate=true});e.currentTarget.textContent='Ombres : '+(renderer.shadowMap.enabled?'oui':'non');e.currentTarget.setAttribute('aria-pressed',renderer.shadowMap.enabled);});
+document.getElementById('b-shadow').addEventListener('click',e=>{renderer.shadowMap.enabled=!renderer.shadowMap.enabled;scene.traverse(o=>{if(o.material)o.material.needsUpdate=true});e.currentTarget.textContent='Ombres : '+(renderer.shadowMap.enabled?'oui':'non');e.currentTarget.setAttribute('aria-pressed',renderer.shadowMap.enabled);ombreSale=true;});
 
 // ---------- clic sur un quartier ----------
 let sel=null,selCurtain=null;
@@ -724,17 +753,28 @@ function loop(now){
   controls.update();
   const dist=camera.position.distanceTo(controls.target);
   qLabels.forEach(s=>s.visible=dist<7000);vLabels.forEach(s=>s.visible=dist>2500);
-  // l'ombre du soleil suit la zone regardée
+  // l'ombre du soleil suit la zone regardée, par sauts : elle n'est recalculée que quand la zone change (le décor ne bouge pas)
   const ext=Math.min(3500,Math.max(250,dist*.9)),sc=sun.shadow.camera;
-  if(Math.abs(sc.right-ext)>ext*.1){Object.assign(sc,{left:-ext,right:ext,top:ext,bottom:-ext,near:10,far:ext*4+3000});sc.updateProjectionMatrix();}
-  sun.target.position.copy(controls.target);sun.position.copy(controls.target).addScaledVector(SUN_DIR,ext*2+1500);
-  majTuiles(2,40);if(++frame%60===0)liberer();
+  if(Math.abs(sc.right-ext*1.12)>ext*.1){const e2=ext*1.12;Object.assign(sc,{left:-e2,right:e2,top:e2,bottom:-e2,near:10,far:ext*4+3000});sc.updateProjectionMatrix();ombreSale=true;}
+  const pasO=ext*.1,ox=Math.round(controls.target.x/pasO)*pasO,oz=Math.round(controls.target.z/pasO)*pasO;
+  if(ox!==sun.target.position.x||oz!==sun.target.position.z){sun.target.position.set(ox,controls.target.y,oz);sun.position.copy(sun.target.position).addScaledVector(SUN_DIR,ext*2+1500);ombreSale=true;}
+  if(ombreSale){renderer.shadowMap.needsUpdate=true;ombreSale=false;}
+  if(arbresMesh)arbresMesh.visible=dist<9000;
+  majTuiles(3,40);batirProches(frame<3?40:7);poserPhotos();if(++frame%60===0)liberer();
+  // si l'ordinateur peine (moins de 35 images par seconde), on affiche un peu moins de points, puis on remonte dès que possible
+  if(last){const dt=now-last;cumul+=dt;nb++;}last=now;
+  if(nb>=90){const moy=cumul/nb;cumul=nb=0;
+    if(now>15000){let pr=prAct;if(moy>28&&prAct>1)pr=Math.max(1,prAct-.25);else if(moy<19&&prAct<prMax)pr=Math.min(prMax,prAct+.25);
+      if(pr!==prAct){prAct=pr;renderer.setPixelRatio(pr);resize();}}}
   if(arbresSales&&arbresAttr){arbresAttr.needsUpdate=true;arbresSales=false;}
   renderer.render(scene,camera);requestAnimationFrame(loop);
 }
-let frame=0;majTuiles(0,1e9);
+let frame=0,last=0,cumul=0,nb=0;const prMax=Math.min(2,window.devicePixelRatio||1);let prAct=prMax;
+renderer.shadowMap.autoUpdate=false;
+majTuiles(0,1e9);
 travailPhoto(X0,Z0,GW,GD,15,4096,Math.round(4096*GD/GW),-1,finGlobal);pomperPhotos();
 requestAnimationFrame(loop);
+setTimeout(()=>planterArbres().catch(()=>{}),400);
 status.textContent=`${V.batiments.length} bâtiments, ${V.routes.length} routes, ${quartiers.length} quartiers.`+(manquants.length?` Position approximative pour : ${manquants.join(', ')} (absent d'OpenStreetMap, à vérifier).`:'');
 })();
 </script>
