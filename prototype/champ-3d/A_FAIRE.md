@@ -25,3 +25,12 @@ Retours de l'utilisateur (validé : le rendu des armées, le mode marche et les 
 - [x] Angle d'attaque : de face, de flanc (×1,3) ou de dos (×1,6) selon la position de l'attaquant par rapport à l'avant de sa cible ; annonce au début du combat ; l'armée attaquée se retourne face à son principal assaillant après 2 manches. Réglable, dans le simulateur et dans le livret.
 - [x] Placement de départ en 59 secondes : cadre bleu (sa moitié de carte), clic droit pour placer les armées choisies, R pour les tourner, « Prêt » ou Entrée ; l'adversaire se place au hasard dans sa zone et reste caché pendant le placement. Durée réglable.
 - [x] Fin de bataille : victoire à 0 point ou aux points au bout du nombre maximum de tours (30, réglable ; égalité possible), enjeu choisi avant la bataille (amicale ou mise), bilan (hommes restants, ennemis mis hors de combat par chaque homme clé, tombés, mise, XP annoncée).
+- [x] Bloc tactique :
+  - Types de troupes : infanterie, cavalerie, archers, éclaireurs, espions (choisis dans « Nouvelle bataille », batailles toutes prêtes mises à jour).
+  - Formations serrée / normale / dispersée (boutons ou F), blocs qui se resserrent ou s'étalent, effets sur le corps à corps, les flèches, la vitesse et les charges.
+  - Archers : tir automatique à chaque manche sur l'ennemi visible le plus proche (150 m, +30 % sur colline), volées de flèches visibles.
+  - Terrain : archers ×1,3 sur colline et ×0,7 en forêt, charge en descente ×1,2.
+  - Éclaireurs (vision 700 m, repèrent les QG) et espions (armées cachées en forêt à 150 m).
+  - Zoom près / tactique / stratégique (bouton ou Z) ; de très loin, les armées deviennent des bannières.
+  - Panneau « Ton armée » : toutes les troupes, effectifs, formation, état, ordre donné ce tour.
+- [ ] Images propres aux archers et aux espions (génération Gemini, payante : à valider avant).
