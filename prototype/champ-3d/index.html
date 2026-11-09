@@ -153,6 +153,7 @@ const REGLAGES_DEFAUT={
   marcheTour:250,      // mètres parcourus en un tour par l'infanterie sur terrain plat (la cavalerie va 2 fois plus loin)
   actionsMax:5,        // actions par tour au maximum (règles : 5) ; une armée = un homme clé = 1 action
   manchesParTour:3,    // manches de combat calculées à chaque tour
+  placement:59,        // secondes pour placer ses armées au début de la bataille (règles : 59 s) ; 0 = pas de placement
   manche:3,            // en temps réel seulement : secondes entre deux manches de combat
   valeurFantassin:1,   // puissance d'un fantassin
   valeurCavalier:2.5,  // puissance d'un cavalier
@@ -186,7 +187,8 @@ const REGLAGES_INFO=[
     ['dureeMouvement','Animation du mouvement','secondes',.5,20,.5,'Durée pendant laquelle on voit les armées bouger après la fin du tour (ça ne change pas la distance parcourue).'],
     ['marcheTour','Marche par tour','mètres',20,2000,10,'Distance parcourue en un tour par l\'infanterie sur terrain plat. La cavalerie va 2 fois plus loin ; forêt, pente et rivière ralentissent.'],
     ['actionsMax','Actions par tour','maximum',1,20,1,'Nombre d\'ordres qu\'on peut donner par tour. Une armée ne peut recevoir qu\'un ordre par tour.'],
-    ['manchesParTour','Combat par tour','manches',1,20,1,'Nombre de manches de combat calculées à chaque tour pour les armées au contact.']]],
+    ['manchesParTour','Combat par tour','manches',1,20,1,'Nombre de manches de combat calculées à chaque tour pour les armées au contact.'],
+    ['placement','Temps de placement','secondes',0,600,1,'Temps pour placer ses armées dans sa zone au début de la bataille (appliqué en recommençant). 0 = pas de placement.']]],
   ['Temps réel',[['manche','Durée d\'une manche','secondes',.5,30,.5,'Seulement quand le tour par tour est coupé : temps entre deux manches de combat.']]],
   ['Valeur d\'un homme',[
     ['valeurFantassin','Fantassin','puissance',.1,20,.1,'Puissance apportée par un fantassin.'],
@@ -677,7 +679,7 @@ function updateFog(){
   firstFog=false;fogTex.needsUpdate=true;mmFogUpdate();
   regs.filter(g=>g.side==='rouge').forEach(e=>{
     // un QG n'est repéré que par des soldats assez proches (règles : éclaireurs ou soldats proches)
-    const v=!fogOn||(spotted(e,blues)&&(e.kind!=='qg'||blues.some(b=>Math.hypot(b.x-e.x,b.z-e.z)<REGLAGES.vueQG)));
+    const v=placing?!fogOn:(!fogOn||(spotted(e,blues)&&(e.kind!=='qg'||blues.some(b=>Math.hypot(b.x-e.x,b.z-e.z)<REGLAGES.vueQG))));   // placement : rien ne se voit
     if(v&&fogOn&&!known.has(e)){known.add(e);toast(`Ennemi repéré : ${e.name} (${fmtMen(e.men)} hommes)`);}
     if(!v)known.delete(e);
     showReg(e,v);});
@@ -693,6 +695,7 @@ function select(list){
 }
 function order(tx,tz,target){
   if(!selected.length)return;
+  if(placing){placeSelected(tx,tz,0);return;}
   let list=selected;
   if(turnMode){
     if(phase!=='ordres'){toast('Les armées bougent : attends le tour suivant pour donner des ordres','#5a4a16');return;}
@@ -749,6 +752,8 @@ window.addEventListener('keydown',e=>{
   if(/^[1-9]$/.test(e.key)){const g=blues[+e.key-1];if(g)select(e.shiftKey?[...new Set([...selected,g])]:[g]);}
   else if(e.key==='Escape')select([]);
   else if(e.key===' '&&selected.length){e.preventDefault();centerOn(selected);}
+  else if(e.key==='Enter'&&placing&&ready){e.preventDefault();endPlacement();}
+  else if((e.key==='r'||e.key==='R')&&placing&&selected.length){placeSelected(null,null,e.shiftKey?-Math.PI/4:Math.PI/4);}
   else if(e.key==='Enter'&&turnMode&&phase==='ordres'&&ready&&!ended){e.preventDefault();startMove();}
 });
 function centerOn(list){
@@ -839,6 +844,46 @@ function combatRound(n){
   checkEnd();renderSel(true);renderStatus();
 }
 
+// ---------- placement de départ (règles : 59 s, dans une large zone de sa moitié de carte, sans voir l'adversaire) ----------
+let placing=false;
+const ZONES={bleu:{x0:-W/2+30,x1:W/2-30,z0:D*.1,z1:D/2-30},rouge:{x0:-W/2+30,x1:W/2-30,z0:-D/2+30,z1:-D*.1}};
+const zoneLine=groundLine(0x6fa3ec,.95);
+{const z=ZONES.bleu,pts=[],edge=(ax,az,bx,bz)=>{const n=Math.ceil(Math.hypot(bx-ax,bz-az)/15);for(let i=0;i<n;i++)pts.push([ax+(bx-ax)*i/n,az+(bz-az)*i/n]);};
+  edge(z.x0,z.z0,z.x1,z.z0);edge(z.x1,z.z0,z.x1,z.z1);edge(z.x1,z.z1,z.x0,z.z1);edge(z.x0,z.z1,z.x0,z.z0);pts.push([z.x0,z.z0]);setLine(zoneLine,pts);}
+const inZone=(o,zone)=>[[-1,-1],[1,-1],[1,1],[-1,1]].every(([u,v])=>{const [x,z]=toWorld(o,u*o.hw,v*o.hd);return x>=zone.x0&&x<=zone.x1&&z>=zone.z0&&z<=zone.z1;});
+const dryGround=o=>RECT_PTS.every(([u,v])=>{const [x,z]=toWorld(o,u*o.hw,v*o.hd);return hAt(x,z)>WATER+.3&&grade(x,z)<.6;});
+// déplacer (tx,tz) et/ou tourner (rot) les armées choisies, en gardant leurs places relatives
+function placeSelected(tx,tz,rot){
+  const list=selected.filter(g=>g.side==='bleu');if(!list.length)return;
+  const cx=list.reduce((a,g)=>a+g.x,0)/list.length,cz=list.reduce((a,g)=>a+g.z,0)/list.length;
+  const cand=list.map(g=>({g,x:tx===null?g.x:tx+(list.length>1?g.x-cx:0),z:tz===null?g.z:tz+(list.length>1?g.z-cz:0),heading:g.heading+rot,hw:g.hw,hd:g.hd}));
+  for(const c of cand){
+    if(!inZone(c,ZONES.bleu)){toast('Hors de ta zone de départ (le cadre bleu)','#5a4a16');return;}
+    if(!dryGround(c)){toast('Pas dans la rivière ni sur une falaise','#5a4a16');return;}
+    if(regs.some(e=>e.side==='bleu'&&!list.includes(e)&&gap(c,e)<8)){toast('Trop près d\'une autre de tes armées','#5a4a16');return;}}
+  for(const c of cand){c.g.x=c.x;c.g.z=c.z;c.g.heading=c.heading;c.g.tx=null;c.g.chase=null;place(c.g,performance.now()/1000);}
+  renderSel(true);
+}
+// les rouges se placent au hasard dans leur zone (le QG dans la moitié arrière)
+function placeReds(){
+  const zone=ZONES.rouge,done=[];
+  for(const g of regs.filter(e=>e.side==='rouge').sort((a,b)=>(a.kind==='qg')-(b.kind==='qg'))){
+    for(let k=0;k<80;k++){const back=g.kind==='qg';
+      const c={x:zone.x0+g.hw+R()*(zone.x1-zone.x0-2*g.hw),z:back?zone.z0+g.hd+R()*((zone.z1-zone.z0)/2):zone.z0+g.hd+R()*(zone.z1-zone.z0-2*g.hd),heading:Math.PI+(R()-.5)*.6,hw:g.hw,hd:g.hd};
+      if(inZone(c,zone)&&dryGround(c)&&!done.some(e=>gap(c,e)<25)){g.x=c.x;g.z=c.z;g.heading=c.heading;break;}}
+    done.push(g);place(g,0);}
+}
+function startPlacement(){
+  if(!(REGLAGES.placement>0)){placing=false;zoneLine.visible=false;return;}
+  placing=true;phaseT=REGLAGES.placement;zoneLine.visible=true;placeReds();
+  toast(`Placement : ${Math.round(REGLAGES.placement)} s pour placer tes armées dans le cadre bleu (clic droit, R pour tourner), puis « Prêt »`,'#1d4a2a');
+}
+function endPlacement(){
+  if(!placing)return;placing=false;zoneLine.visible=false;
+  phase='ordres';phaseT=REGLAGES.dureeTour;combatAcc=0;regs.forEach(g=>{g.acted=0;g.wait=2+R()*6;});
+  updateFog();renderStatus();renderTour();drawReach();renderSel(true);toast('La bataille commence !','#1d4a2a');
+}
+
 // ---------- tour par tour : ordres pendant le chrono, puis tout le monde bouge et se bat en même temps ----------
 let turnMode=true,turn=1,phase='ordres',phaseT=REGLAGES.dureeTour;
 const maxActions=()=>Math.min(REGLAGES.actionsMax,regs.filter(g=>g.side==='bleu').length);
@@ -871,7 +916,10 @@ function endMove(t){
 }
 const tourEl=document.getElementById('tour'),tourT=document.getElementById('tour-t'),tourC=document.getElementById('tour-c'),tourA=document.getElementById('tour-a'),bEnd=document.getElementById('b-end');
 function renderTour(){
-  tourEl.hidden=!turnMode||!ready;if(tourEl.hidden)return;
+  tourEl.hidden=!(turnMode||placing)||!ready;if(tourEl.hidden)return;
+  if(placing){const sec=Math.max(0,Math.ceil(phaseT));tourT.textContent='Placement';tourC.textContent=`${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`;tourC.classList.toggle('urgent',sec<=10);
+    tourA.textContent='Clic droit dans ta zone · R pour tourner';document.getElementById('tour-p').textContent='';bEnd.textContent='Prêt';bEnd.disabled=false;return;}
+  bEnd.textContent='Fin du tour';
   tourT.textContent=`Tour ${turn}`;
   document.getElementById('tour-p').textContent=`Points : ${pointsOf('bleu')} – ${pointsOf('rouge')}`;
   if(ended){tourC.textContent='Bataille terminée';tourC.classList.remove('urgent');tourA.textContent='';bEnd.disabled=true;return;}
@@ -881,10 +929,10 @@ function renderTour(){
 }
 // cercle vert : jusqu'où l'armée choisie peut aller ce tour (sur terrain plat)
 function drawReach(){
-  for(const g of regs){if(!g.reach)continue;const on=turnMode&&phase==='ordres'&&!ended&&selected.includes(g);g.reach.visible=on;
+  for(const g of regs){if(!g.reach)continue;const on=turnMode&&phase==='ordres'&&!ended&&!placing&&selected.includes(g);g.reach.visible=on;
     if(on){const r=reachOf(g),pts=[];for(let i=0;i<=72;i++){const a=i/72*Math.PI*2;pts.push([g.x+Math.cos(a)*r,g.z+Math.sin(a)*r]);}setLine(g.reach,pts);}}
 }
-bEnd.addEventListener('click',startMove);
+bEnd.addEventListener('click',()=>{if(placing)endPlacement();else startMove();});
 document.getElementById('b-turn').addEventListener('click',e=>{
   turnMode=!turnMode;phase='ordres';phaseT=REGLAGES.dureeTour;regs.forEach(g=>g.moving=false);
   e.currentTarget.textContent='Tour par tour : '+(turnMode?'oui':'non');e.currentTarget.setAttribute('aria-pressed',turnMode);
@@ -903,7 +951,7 @@ const ARMEES=PLAN;
 function deploy(){
   select([]);regs.slice().forEach(removeReg);floats.forEach(f=>f.el.remove());floats.length=0;
   ARMEES.forEach(o=>regiment(o.kind==='qg'?{...o,rows:Math.max(1,Math.ceil(REGLAGES.garnisonQG/HPS/o.cols))}:{...o}));known.clear();ended=false;finEl.hidden=true;combatAcc=0;
-  turn=1;phase='ordres';phaseT=REGLAGES.dureeTour;
+  turn=1;phase='ordres';phaseT=REGLAGES.dureeTour;startPlacement();
   updateFog();renderStatus();renderSel(true);renderTour();
 }
 
@@ -1007,10 +1055,14 @@ function renderLivret(){
     `La plus grande armée choisit la carte : jusqu'à 999 hommes, petite (${km(CARTES[0].W)} × ${km(CARTES[0].D)} km) ; jusqu'à 2 999, moyenne (${km(CARTES[1].W)} × ${km(CARTES[1].D)} km) ; au-delà, grande (${km(CARTES[2].W)} × ${km(CARTES[2].D)} km).`,
     '1 soldat affiché = 2 hommes (4 à partir de 3 000 hommes). La bannière montre toujours l\'effectif réel.',
     'En dessous de 300 hommes, pas de bataille rangée : le combat se règle automatiquement.'])}
+  ${sec('Placement de départ',[
+    `Au début de la bataille, chacun a ${v('placement',' s')} pour placer ses armées et son QG où il veut dans sa zone (le cadre bleu, sa moitié de carte).`,
+    'Clic droit dans la zone pour y mettre les armées choisies, <kbd>R</kbd> pour les tourner (<kbd>Maj</kbd>+<kbd>R</kbd> dans l\'autre sens), puis <b>Prêt</b> (ou <kbd>Entrée</kbd>).',
+    'Les deux camps se placent <b>en même temps, sans voir l\'adversaire</b>.'])}
   ${sec('Pas encore dans le prototype',[
     'Formations, archers.',
     'Effets des généraux, attaques spéciales, éclaireurs et espions.',
-    'Placement de départ en 59 secondes, nombre maximum de tours, bataille à deux joueurs en ligne.'])}
+    'Nombre maximum de tours, bataille à deux joueurs en ligne.'])}
   </div>`;
   document.getElementById('livret-close').addEventListener('click',()=>{LIV.hidden=true;});
 }
@@ -1107,6 +1159,7 @@ function drawMini(){
   [[-1,-1],[1,-1],[1,1],[-1,1]].forEach(([a,b],k)=>{mmNdc.set(a,b);mmRay.setFromCamera(mmNdc,camera);const o=mmRay.ray.origin,d=mmRay.ray.direction;
     const t=d.y<-.01?Math.min(9000,(o.y-y0)/-d.y):9000,px=X(o.x+d.x*t),pz=Z(o.z+d.z*t);k?mmx.lineTo(px,pz):mmx.moveTo(px,pz);});
   mmx.closePath();mmx.fillStyle='rgba(255,255,255,.10)';mmx.fill();mmx.lineWidth=1.5*u;mmx.strokeStyle='rgba(255,255,255,.9)';mmx.stroke();
+  if(placing){const z=ZONES.bleu;mmx.setLineDash([5*u,3*u]);mmx.lineWidth=1.5*u;mmx.strokeStyle='#6fa3ec';mmx.strokeRect(X(z.x0),Z(z.z0),X(z.x1)-X(z.x0),Z(z.z1)-Z(z.z0));mmx.setLineDash([]);}
 }
 function mmPoint(e){const r=mm.getBoundingClientRect();return[Math.max(-W/2,Math.min(W/2,((e.clientX-r.left)/r.width-.5)*W)),Math.max(-D/2,Math.min(D/2,((e.clientY-r.top)/r.height-.5)*D))];}
 function lookAt(x,z){const off=camera.position.clone().sub(controls.target);controls.target.set(x,Math.max(hAt(x,z),0),z);camera.position.copy(controls.target).add(off);controls.update();}
@@ -1194,7 +1247,8 @@ applyAide(aideMasquee);
 window.addEventListener('resize',resize);applyMini();resize();
 function loop(now){const dt=Math.min(.1,(now-last)/1000),t=now/1000;last=now;
   if(ready)try{
-    if(ended){for(const g of regs)if(g.contact)place(g,t);}
+    if(placing){if((phaseT-=dt)<=0)endPlacement();}
+    else if(ended){for(const g of regs)if(g.contact)place(g,t);}
     else if(turnMode)turnTick(dt,t);
     else{for(const g of regs){if(g.side==='rouge')ai(g,dt);const was=g.moving;step(g,dt);if(g.moving||was||g.contact)place(g,t);}combatTick(dt);}
     if((acc+=dt)>.2){acc=0;updateFog();renderStatus();renderSel(false);renderTour();
