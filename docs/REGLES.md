@@ -22,7 +22,7 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 - ✅ **Joueurs** : uniquement nous 3 pour l'instant. Les nouveaux joueurs arrivent sur invitation.
 - ✅ **Liberté totale entre joueurs** (10/11) : chacun fait ce qu'il veut. On peut s'allier, se faire la guerre, se trahir. Les tyrans (PNJ) tiennent la plupart des quartiers, les joueurs peuvent aussi s'attaquer entre eux.
   - ✅ **Trêve forcée** : pendant les moments de l'histoire qui réunissent les 3 joueurs (déblocage du 500 contre 500 et tutoriel, première guerre en 3 contre 3), toutes les guerres entre joueurs sont suspendues. Après l'événement, chacun reprend sa liberté.
-  - ✅ **Protection au début** : pas d'attaque entre joueurs pendant le début du jeu, on commence contre les tyrans. 💡 Fin de la protection : au déblocage du 500 contre 500 (à confirmer).
+  - ✅ **Protection au début** : pas d'attaque entre joueurs pendant le début du jeu, on commence contre les tyrans. La protection s'arrête **au déblocage du 500 contre 500**.
 - ✅ **Monde persistant** : la partie ne s'arrête jamais. Des événements par saison pourront être ajoutés plus tard.
 - ✅ **Rythme** : en temps réel, comme Rise of Kingdoms.
 - ✅ **Plateforme** : navigateur (pas d'application mobile pour l'instant).
@@ -301,6 +301,11 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 - ✅ **Pas de pillage en bataille rangée** : le pillage des ressources se gagne uniquement dans le mode Clash of Clans. En bataille rangée, le vainqueur remporte seulement la mise ou l'objectif (sauf bataille amicale).
 - ✅ **XP** : en bataille rangée, même amicale, tout le monde gagne de l'XP.
 
+## 9 bis (suite). Les combats contre les tyrans
+
+- ✅ **Attaquer le quartier d'un tyran** (contrôlé par le jeu) se fait en **bataille rangée contre une IA**, pas en raid. Il faudra donc programmer une IA de bataille (gros chantier, tâche 224).
+- ❓ En dessous de 500 hommes (avant le déblocage du 500 contre 500), les combats contre les tyrans se règlent-ils automatiquement, comme les autres petits combats ?
+
 ## 9 ter. Le mode raid (façon Clash of Clans)
 
 On reprend les mécaniques de Clash of Clans (pas ses noms ni ses visuels).
@@ -338,7 +343,10 @@ On reprend les mécaniques de Clash of Clans (pas ses noms ni ses visuels).
   - **défaite totale** : ses armées sont détruites.
 - ✅ **Coût d'une guerre** : elle coûte des hommes et des ressources. Sans ressources, les soldats meurent progressivement. Les généraux et les soldats rares ne meurent pas : ils sont blessés jusqu'à la fin de la guerre.
 - ✅ **Plusieurs guerres et alliances** : on peut être en guerre contre n'importe qui, et former des alliances avant ou pendant une guerre.
-- ❓ Comment les batailles font avancer la guerre (score de guerre ?).
+- ✅ **Gagner une guerre entre joueurs** : **prendre l'objectif** (le quartier ou le lieu visé), **ou tuer tous les chefs ennemis** (généraux et sous-généraux engagés).
+- ✅ **Gagner une guerre contre l'IA (les tyrans)** :
+  - si ce sont les joueurs qui ont déclenché la guerre : **réussir l'attaque** (prendre le quartier ou l'objectif du tyran) ;
+  - si ce sont les joueurs qui subissent l'attaque : **vaincre le chef ennemi**.
 
 ## 11. La diplomatie
 
