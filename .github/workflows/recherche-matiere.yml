@@ -1,0 +1,24 @@
+# Cherche et télécharge des images anciennes libres de droits (voir outils/recherche_matiere.py),
+# puis les enregistre dans le projet. Le serveur de Claude est bloqué par Wikimedia, ceux de GitHub non.
+name: Chercher de la matière pour l'identité visuelle
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [outils/recherche_matiere.txt]
+permissions:
+  contents: write
+jobs:
+  chercher:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Chercher et télécharger
+        run: python3 outils/recherche_matiere.py
+      - name: Enregistrer dans le projet
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add prototype/identite/matiere/recherche
+          git diff --cached --quiet || git commit -m "Identité visuelle : images anciennes trouvées sur Wikimedia Commons"
+          git pull --rebase origin main && git push origin HEAD:main

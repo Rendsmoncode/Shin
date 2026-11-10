@@ -1,0 +1,7 @@
+# clé|recherche Wikimedia Commons (une par ligne). Modifier ce fichier relance la recherche sur GitHub.
+mosaique|Byzantine mosaic gold tesserae
+email|champlevé enamel Limoges
+cloisonne|cloisonné enamel medieval
+astrolabe|astrolabe medieval
+entrelacs|Book of Kells
+damasquine|damascened inlay silver iron
