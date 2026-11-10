@@ -56,6 +56,8 @@ En fonction du choix du joueur, des guerriers différents apparaîtront.
 
 - ✅ **Les sauveurs apparaissent dans des conquêtes prévues dans l'histoire.** Ce sont des batailles **impossibles à gagner** sans un effet ou une faculté que le joueur n'a pas encore. Le joueur perd, une **cinématique** se lance (le sauveur arrive et lui donne une leçon), et le joueur **obtient l'effet**. Il rejoue alors la bataille et la gagne (tout est arrangé pour qu'il gagne).
 - ✅ **L'autre voie** (« prêt à tout ») fait apparaître des hommes prêts à tout pour la victoire : par exemple **Alexandre** ou **Hannibal** (plutôt pas Gengis Khan).
+- ✅ **Les personnages du lore restent tirables au gacha** (sauveurs, guerriers de l'autre voie, Grands Généraux Sous les Cieux, Napoléon…), même s'ils apparaissent dans l'histoire. Exception : les grands méchants (Griffith est retiré du gacha).
+- 💡 Autres guerriers possibles pour la voie « prêt à tout » : César, Mehmed II, Napoléon, Scipion, Takeda Shingen.
 - ✅ **Le choix de philosophie est définitif**, et **chaque joueur fait le sien** (les trois peuvent choisir des voies différentes).
 
 ## Décisions (10/11)
