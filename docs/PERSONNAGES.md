@@ -95,9 +95,9 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
   - **Shin** : de paysan (commun) jusqu'à **Grand Général Sous les Cieux** ;
   - **Koby** : pareil, de commun jusqu'à **Sous les Cieux** ;
   - **Guts** : d'enfant (commun) jusqu'à **guerrier mystique**.
-- ✅ **Guts sera le seul général qui est aussi guerrier mystique.** 💡 Peut-être aussi **Kyoukai** (Kingdom).
+- ✅ **Guts sera le seul guerrier mystique avec le trait Général.** 💡 Peut-être aussi **Kyoukai** (Kingdom).
 - ✅ **Monter de rareté** : deux conditions à remplir en même temps, chacune avec son seuil : le **niveau (XP)** du général et le **nombre de soldats de son armée**. Les deux montent en général ensemble, mais il faut atteindre les deux seuils pour passer à la rareté suivante. Valeurs des seuils à fixer à l'équilibrage.
-- ✅ **Guts, général ou guerrier mystique** : il est l'un **ou** l'autre, jamais les deux à la fois. Nicolas choisit au début de la partie.
+- ✅ **Guts** : sa rareté finale est **guerrier mystique**, mais il a le **trait Général** : il peut commander une armée comme un général. (Remplace l'idée d'un choix en début de partie.)
 
 ### Mentors du tutoriel (un par joueur)
 
