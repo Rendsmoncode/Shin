@@ -52,6 +52,12 @@ Les joueurs devront choisir entre **2 philosophies** au début du jeu :
 
 En fonction du choix du joueur, des guerriers différents apparaîtront.
 
+### Décisions (10/11, suite)
+
+- ✅ **Les sauveurs apparaissent dans des conquêtes prévues dans l'histoire.** Ce sont des batailles **impossibles à gagner** sans un effet ou une faculté que le joueur n'a pas encore. Le joueur perd, une **cinématique** se lance (le sauveur arrive et lui donne une leçon), et le joueur **obtient l'effet**. Il rejoue alors la bataille et la gagne (tout est arrangé pour qu'il gagne).
+- ✅ **L'autre voie** (« prêt à tout ») fait apparaître des hommes prêts à tout pour la victoire : par exemple **Alexandre** ou **Hannibal** (plutôt pas Gengis Khan).
+- ✅ **Le choix de philosophie est définitif**, et **chaque joueur fait le sien** (les trois peuvent choisir des voies différentes).
+
 ## Décisions (10/11)
 
 - ✅ **Les joueurs sont eux-mêmes** (Ayoub, Mathieu, Nicolas). En arrivant en ville depuis l'extérieur, l'**âme d'un personnage de fiction s'est liée à chacun** : Shin pour Ayoub, Koby pour Mathieu, Guts pour Nicolas. Ils sont eux et leur personnage à la fois.
@@ -61,9 +67,6 @@ En fonction du choix du joueur, des guerriers différents apparaîtront.
 
 ## Points à préciser (notés par Claude)
 
-- ❓ **Les sauveurs** : à quel moment ils apparaissent (défaite précise prévue dans l'histoire, ou n'importe quelle défaite contre un tyran ?), une seule fois chacun ? Ils rejoignent ensuite le joueur, ou repartent ?
-- ❓ **Les sauveurs et la philosophie** : les sept sauveurs vont plutôt avec « la vie des hommes vaut plus » (Musashi et Knut par leur rédemption). Qui sont les sauveurs ou guerriers de l'autre voie (par exemple Gengis Khan, César, Napoléon) ?
-- ❓ **Les philosophies** : le choix est-il définitif ? Change-t-il autre chose que les guerriers qui apparaissent (gacha, bonus, fin de l'histoire) ? Les trois joueurs peuvent-ils choisir différemment ?
 
 - ✅ **Griffith** est retiré du gacha : il fait partie de l'alliance des grands méchants.
 - ✅ **Bataille rangée dès 500 hommes** (avant : 300). Le déblocage du 500 contre 500 amène la bataille perdue du tuto, puis le mentor et son cadeau.
