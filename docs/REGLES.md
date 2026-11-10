@@ -20,6 +20,7 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 ## 1. Le cadre général
 
 - ✅ **Joueurs** : uniquement nous 3 pour l'instant. Les nouveaux joueurs arrivent sur invitation.
+- ✅ **Liberté totale entre joueurs** (10/11) : chacun fait ce qu'il veut. On peut s'allier, se faire la guerre, se trahir. Les tyrans (PNJ) tiennent la plupart des quartiers, les joueurs peuvent aussi s'attaquer entre eux.
 - ✅ **Monde persistant** : la partie ne s'arrête jamais. Des événements par saison pourront être ajoutés plus tard.
 - ✅ **Rythme** : en temps réel, comme Rise of Kingdoms.
 - ✅ **Plateforme** : navigateur (pas d'application mobile pour l'instant).
