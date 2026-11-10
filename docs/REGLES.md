@@ -125,6 +125,14 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 - ✅ **Soignants** : ils remettent les troupes d'aplomb pendant les batailles et les guerres, et donnent des bonus (par exemple +300 vitalité pour tous les fantassins).
 - ✅ **Ni moral ni fatigue** : une troupe se bat à 100 % tant qu'elle a des soldats (pour ne pas rendre le jeu trop sérieux).
 
+## 6 bis. Le calcul de la puissance (façon Dokkan Battle)
+
+- ✅ **Principe** (10/11) : chaque personnage (comme une carte de Dokkan Battle) et chaque troupe a des **stats de base**. Une foule de facteurs viennent les **augmenter par addition** (+200 ATK) ou les **multiplier** (+10 %).
+- ✅ **Les défenses du quartier comptent dans toutes les batailles**, pas seulement en défense. Exemple : une tour donne **+10 % aux archers**.
+- ✅ **Les liens entre personnages** : réunir certains personnages dans la même armée donne un bonus. Exemple : **Thorfinn + Knut + Thorkell** dans la même équipe → **toute l'armée +50 % de puissance**.
+- Autres facteurs déjà prévus ailleurs : rareté et grade du général, formations, terrain, soignants, stratégies, effets des mentors et des sauveurs, hasard de ±10 %.
+- ❓ **Comment les bonus se combinent** : additions d'abord puis multiplications ? Les pourcentages de même type s'additionnent entre eux (+10 % et +20 % = +30 %) ou se multiplient (×1,1 × 1,2 = +32 %) ? Plafond éventuel ? (à fixer avec la formule de puissance, tâche 21)
+
 ## 7. Les généraux et les grades
 
 - ✅ **Échelle des effectifs** : 5 → 10 → 20 → 100 → 1 000 → 3 000 → 5 000 → sans limite (ou limite lointaine).
