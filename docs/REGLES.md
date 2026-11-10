@@ -23,8 +23,7 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 - ✅ **Monde persistant** : la partie ne s'arrête jamais. Des événements par saison pourront être ajoutés plus tard.
 - ✅ **Rythme** : en temps réel, comme Rise of Kingdoms.
 - ✅ **Plateforme** : navigateur (pas d'application mobile pour l'instant).
-- ✅ **PC et téléphone** : les batailles et les guerres se jouent uniquement sur PC. Sur téléphone, on ne peut que gérer son quartier.
-- 💡 Un joueur connecté sur téléphone compte comme hors ligne pour les combats : ses défenses jouent à sa place.
+- ✅ **PC uniquement pour l'instant** : tout le jeu se joue sur PC. Le téléphone (gestion du quartier) sera vu plus tard.
 - ✅ **Absence** : il ne se passe rien de spécial pour un joueur absent.
 - ✅ **Récompenses de connexion** : une récompense quotidienne, plus des récompenses de jours de connexion d'affilée.
 - ✅ **Ton** : un mélange de sérieux (c'est un jeu de gestion) et d'humour.
@@ -178,7 +177,8 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 - ✅ **Alerte d'attaque** : le défenseur connecté choisit entre « bataille rangée » et « défenses automatiques ». Sans réponse au bout de 30 secondes, ses défenses jouent à sa place.
 - ✅ **Chrono par tour** : 1 minute par tour. Si le chrono s'écoule, le tour passe ; un joueur qui abandonne en cours de route voit ses troupes se défendre automatiquement.
 - ✅ **Seuil de la bataille rangée** : la bataille rangée se joue **dès 300 hommes**, sur une carte plus petite quand les armées sont petites (une bataille de 500 contre 500 est tout à fait jouable). En dessous de 300 hommes, les combats se règlent automatiquement (même formule de puissance, courte scène de résultat). Les raids façon Clash of Clans fonctionnent quel que soit l'effectif.
-- 💡 **Taille de la carte selon l'effectif** (valeurs de départ, à ajuster pendant les tests) : de 300 à 999 hommes, environ 1 km × 0,7 km ; de 1 000 à 2 999 hommes, environ 2 km × 1,3 km ; à partir de 3 000 hommes, la grande carte de 3 km × 2 km. C'est l'effectif total des deux camps (ou du plus grand) qui choisit la carte.
+- ✅ **Taille de la carte selon l'effectif** (validé temporairement) : de 300 à 999 hommes, environ 1 km × 0,7 km ; de 1 000 à 2 999 hommes, environ 2 km × 1,3 km ; à partir de 3 000 hommes, la grande carte de 3 km × 2 km. Les tailles définitives seront fixées par Claude en simulant des parties, une fois tous les paramètres réglés.
+- ✅ **Distances réelles sur toutes les cartes** : vision, vitesses et portées ne changent pas sur une petite carte. Une petite carte est simplement vue de plus près (la caméra zoome pour qu'elle remplisse l'écran comme la grande).
 - ✅ **Hommes clés d'une petite armée** : un sous-général dirige 500 hommes minimum, donc une petite armée en a peu ou pas. Avant la bataille, le joueur choisit lui-même les hommes clés qui lui manquent parmi ses personnages : chacun prend la tête d'une unité (10 hommes minimum). Ces hommes clés n'ont pas le droit d'entrer dans le quartier général : ils doivent rester sur le terrain avec leurs hommes. La limite reste de 5 actions par tour.
 - ✅ **Rappel, guerrier mystique** : il est homme clé, sauf s'il est placé dans la garde rapprochée du général (il ne compte plus comme homme clé et perd son attaque spéciale).
 - ✅ **Progression rapide** : les armées doivent atteindre 300 hommes très vite, pour pouvoir jouer des batailles rangées dès la première soirée.
@@ -285,11 +285,11 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
   - Chaque général a l'un **ou** l'autre. Les **Grands Généraux Sous les Cieux ont les deux** : c'est ce qui les distingue sur le terrain.
   - Chaque attaque a des conditions de déclenchement, ou une jauge si elle n'en a pas.
   - Pas d'animation propre à chaque général pour les attaques spéciales.
-- 💡 **Aperçu avant l'attaque** : pas de chiffres exacts, seulement une estimation (« écrasant », « avantage », « équilibré », « désavantage », « suicide »), et seulement si l'armée ennemie est visible. Un espion rend l'estimation plus précise.
+- 💡 **Aperçu avant l'attaque** (à décider en travaillant sur les calculs) : pas de chiffres exacts, seulement une estimation (« écrasant », « avantage », « équilibré », « désavantage », « suicide »), et seulement si l'armée ennemie est visible. Un espion rend l'estimation plus précise.
 - ✅ **Le mouvement crée l'attaque** : entrer dans la zone d'une armée ennemie déclenche le combat. Selon l'angle (de face, de flanc, de dos), ça donne un affrontement de face, une attaque surprise, etc.
 - ✅ **Brouillard de guerre** : une armée n'est visible que si elle est dans la portée visuelle de soldats adverses. Une armée cachée derrière une montagne ou une forêt reste invisible, même toute proche.
 - ✅ **Placement de départ** : chaque joueur place ses forces où il veut, dans une large zone de sa moitié de la carte. Il a 59 secondes pour se placer.
-- 💡 Les deux joueurs se placent en même temps, sans voir le placement de l'adversaire (brouillard de guerre).
+- ✅ **Placement simultané et caché** : les deux joueurs se placent en même temps, chacun dans sa partie du terrain, sans voir le placement de l'adversaire. Les deux zones de départ sont séparées par un no man's land, pour que les quartiers généraux ne soient pas visibles des troupes adverses dès le début.
 - ✅ **Enjeu d'une bataille** : si la bataille n'est pas amicale, le vainqueur remporte la mise ou l'objectif fixé. Une bataille amicale n'a pas d'enjeu.
 - ✅ **Bataille qui s'éternise** : au bout d'un nombre maximum de tours, la victoire revient au joueur qui a le plus de points. Le nombre de tours sera fixé à la fin du développement, en simulant des batailles.
 - ✅ **Champ de bataille à part** : la bataille rangée ne se joue pas autour d'un quartier. Les deux camps sont à égalité, chacun attaque et se défend (comme une petite guerre).
