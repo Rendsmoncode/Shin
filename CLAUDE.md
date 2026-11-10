@@ -1,6 +1,6 @@
 # Consignes pour Claude (projet Shin)
 
-- **Lire d'abord `docs/VUE_D_ENSEMBLE.md`** : il explique la différence entre le jeu (monde persistant sur la carte d'Aubagne), la bataille rangée en 3D (le mode raid façon Clash of Clans a été supprimé) (le prototype). Ne pas les confondre.
+- **Lire d'abord `docs/VUE_D_ENSEMBLE.md`** : il explique la différence entre le jeu (monde persistant sur la carte d'Aubagne) et la bataille rangée en 3D (le prototype). Ne pas les confondre. Le mode raid façon Clash of Clans a été supprimé.
 
 - **Toujours demander l'accord de l'utilisateur avant toute génération payante** (Meshy, Gemini, ou tout autre service qui consomme des crédits), en annonçant le coût prévu. Ne jamais enchaîner plusieurs générations payantes sans accord explicite pour chacune.
 - L'utilisateur surveille ses crédits Claude : éviter les itérations inutiles, faire une seule passe quand c'est possible, et prévenir avant un travail coûteux.

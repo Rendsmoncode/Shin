@@ -158,6 +158,7 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 ## 9. Les petits combats (moins de 500 hommes)
 
 - ✅ **Combat automatique** : en dessous de 500 hommes, tous les combats (contre les tyrans ou entre joueurs) se règlent automatiquement, avec la formule de puissance et une courte scène de résultat. C'est la phase « bagarres de rue » du lore, avant le déblocage du 500 contre 500.
+- ✅ **Pillage** : comme en bataille rangée, le perdant se fait piller une partie de ses ressources.
 - ✅ **Le terrain compte**, en restant logique : par exemple, la cavalerie est rapide en terrain plat mais lente en montagne.
 - ✅ **Protection après une défaite** (10/11) : un joueur battu ne peut pas être attaqué de nouveau tant qu'il n'a pas réparé ses installations. Soins et réparations se lancent en cliquant sur les troupes et les bâtiments.
 - ✅ Un bâtiment endommagé ne produit plus rien, pour que personne ne reste protégé indéfiniment en refusant de réparer.
@@ -293,7 +294,7 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 - ✅ **Enjeu d'une bataille** : si la bataille n'est pas amicale, le vainqueur remporte la mise ou l'objectif fixé. Une bataille amicale n'a pas d'enjeu.
 - ✅ **Bataille qui s'éternise** : au bout d'un nombre maximum de tours, la victoire revient au joueur qui a le plus de points. Le nombre de tours sera fixé à la fin du développement, en simulant des batailles.
 - ✅ **Champ de bataille à part** : la bataille rangée ne se joue pas autour d'un quartier. Les deux camps sont à égalité, chacun attaque et se défend (comme une petite guerre).
-- ✅ **Pas de pillage en bataille rangée** : le vainqueur remporte la mise ou l'objectif (sauf bataille amicale). ❓ Avec la suppression du raid, faut-il un pillage quelque part (par exemple en prenant un quartier) ?
+- ✅ **Pillage** (10/11) : le perdant d'une bataille se fait piller une partie de ses ressources (pas tout), en plus de la mise ou de l'objectif que remporte le vainqueur. Pas de pillage ni d'enjeu dans une bataille amicale.
 - ✅ **XP** : en bataille rangée, même amicale, tout le monde gagne de l'XP.
 
 ## 9 bis (suite). Les combats contre les tyrans
