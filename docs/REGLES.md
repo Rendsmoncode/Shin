@@ -11,7 +11,7 @@ Légende : ✅ décidé · 💡 proposé, à valider · ❓ à décider plus tar
 
 ## Le concept
 
-Un mélange de **Crusader Kings III** (carte, guerres longues, diplomatie) et de **Rise of Kingdoms / Clash of Clans** (ville à développer, batailles rapides), sur la **vraie carte d'Aubagne et de La Valentine**.
+Un mélange de **Crusader Kings III** (carte, guerres longues, diplomatie) et de **Rise of Kingdoms / Clash of Clans** (ville à développer), sur la **vraie carte d'Aubagne et de La Valentine**.
 Chaque joueur part de son quartier et cherche à s'agrandir en prenant les quartiers neutres, puis ceux des autres joueurs.
 Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 hommes et finit à la tête d'armées immenses.
 
@@ -305,7 +305,9 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 ## 9 ter. Le mode raid : ❌ supprimé (10/11)
 
 - ❌ **Plus de mode raid façon Clash of Clans.** Les tyrans se combattent en bataille rangée contre une IA, et un joueur hors ligne est aussi remplacé par l'IA en bataille rangée. En dessous de 500 hommes, combat automatique.
-- ❓ **Défenses et pièges du quartier** (tours, garnisons, pièges des architectes) : ils servaient au raid. On les garde sous une autre forme (par exemple des bonus pour le défenseur en bataille rangée) ou on les supprime ?
+- ✅ **Défenses et pièges du quartier** (tours, garnisons, pièges des architectes) : on les garde, avec un nouveau rôle (10/11) :
+  - **source d'XP** : améliorer leur niveau rapporte de l'XP (on peut s'en servir pour « farmer » de l'XP) ;
+  - **renfort de l'armée** : chaque tour, garnison, etc. **augmente le nombre d'hommes de l'armée ou sa puissance**.
 - Ancien contenu, gardé pour mémoire :
 
 > On reprend les mécaniques de Clash of Clans (pas ses noms ni ses visuels).
