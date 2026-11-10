@@ -36,10 +36,15 @@ Combat après combat, bataille après bataille, et après avoir fait tomber plus
 
 Le plus important : que les joueurs accrochent au jeu, et que les différents tyrans soient assez dispersés pour qu'on veuille aller les affronter. Par exemple, à côté de mon quartier il y a Ray Dark : si je veux prendre son territoire, je dois l'affronter et gagner. Pour cela il faudra que je nourrisse mes hommes et que je les arme. Si je le bats, il y aura un autre adversaire au quartier suivant, etc.
 
+## Décisions (10/11)
+
+- ✅ **Les joueurs sont eux-mêmes** (Ayoub, Mathieu, Nicolas). En arrivant en ville depuis l'extérieur, l'**âme d'un personnage de fiction s'est liée à chacun** : Shin pour Ayoub, Koby pour Mathieu, Guts pour Nicolas. Ils sont eux et leur personnage à la fois.
+- ✅ **Ceux qui tirent les ficelles** (pour l'instant) : une **alliance entre Imu, Qin Shi Huang et Griffith**.
+- ✅ **Le cadeau du mentor** ajoute un **effet permanent** au personnage. Il arrive quand les 3 joueurs débloquent le **mode guerre à 500 contre 500**.
+- ✅ **Quartiers** : seulement quelques quartiers neutres au début, pour aider à démarrer. Tous les autres sont **dirigés par un tyran**, qu'il faut battre pour prendre le quartier.
+
 ## Points à préciser (notés par Claude)
 
-- ❓ **Les joueurs et leurs généraux de départ** : les joueurs sont-ils eux-mêmes (Ayoub, Mathieu, Nicolas) et Shin, Koby et Guts sont leurs généraux, ou les joueurs *incarnent* Shin, Koby et Guts ?
-- ❓ **Le grand méchant caché** (« qui contrôle tout dans l'ombre ») : piste discutée, Qin Shi Huang, l'empereur obsédé par l'immortalité, avec un conseil de tyrans façon Imu et les Cinq Doyens (One Piece).
-- ❓ **Le cadeau du mentor** : effet permanent ? Lié à la montée en rareté ?
+- ❓ **Griffith** : il était prévu comme général tirable au gacha. S'il fait partie de l'alliance du grand méchant, on le retire du gacha ?
+- ❓ **Le tutoriel et les 500 contre 500** : la bataille rangée est jouable dès 300 hommes. La bataille perdue du tuto et l'arrivée du mentor ont-elles lieu au déblocage des 500 contre 500 (les 3 joueurs ensemble), ou avant ?
 - ❓ **Les messagers** : nouvelle règle à écrire dans `REGLES.md` (vitesse des messages entre alliés pendant une guerre).
-- ❓ **Les quartiers neutres** : chaque quartier neutre est-il tenu par un tyran (Ray Dark, Attila…) qu'il faut battre pour le prendre ?
