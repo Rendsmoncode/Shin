@@ -89,6 +89,15 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 - Nicolas : **Guts** (Berserk), le mercenaire à l'épée géante qui se bat seul contre tout (remplace Gustave). Ici en général de départ, pas en guerrier mystique : il part d'en bas, sans pouvoirs.
 - Mathieu : **Koby** (One Piece), l'élève formé par Garp qui part de tout en bas et devient un héros
 
+### Évolution des généraux de départ
+
+- ✅ Les trois généraux de départ **évoluent en rareté** au fil de la partie (exception à la règle « la rareté s'obtient, elle ne se gagne pas ») :
+  - **Shin** : de paysan (commun) jusqu'à **Grand Général Sous les Cieux** ;
+  - **Koby** : pareil, de commun jusqu'à **Sous les Cieux** ;
+  - **Guts** : d'enfant (commun) jusqu'à **guerrier mystique**.
+- ✅ **Guts sera le seul général qui est aussi guerrier mystique.** 💡 Peut-être aussi **Kyoukai** (Kingdom).
+- ❓ À fixer : ce qui fait monter la rareté (paliers de grade, quêtes, batailles clés), et comment un général-guerrier mystique compte dans les hommes clés et la garde rapprochée.
+
 ### Mentors du tutoriel (un par joueur)
 
 - Le créateur du jeu : **Ouki** (Kingdom), le mentor de Shin
