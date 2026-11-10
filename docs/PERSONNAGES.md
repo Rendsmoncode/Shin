@@ -93,7 +93,7 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 
 - Le créateur du jeu : **Ouki** (Kingdom), le mentor de Shin
 - Mathieu : **Garp** (One Piece), le mentor de Koby
-- 💡 Nicolas : **Griffith** (Berserk) ? Chef de la Troupe du Faucon, il recrute Guts… puis le trahit. Mentor qui devient un ennemi (déjà prévu comme général du gacha : à trancher).
+- Nicolas : **le Chevalier squelette** (Berserk), qui sauve Guts pendant l'Éclipse et le guide ensuite par ses conseils. Mentor mystérieux (personnage non jouable dans ce rôle). Griffith reste un général du gacha : c'est le rival et le frère d'armes de Guts, pas son mentor.
 - 💡 Idée : le mentor tombe à la fin du tutoriel ou à la première guerre, tué par un lieutenant du grand méchant ; le joueur hérite de son arme ou de son titre.
 
 - 💡 Idée de personnage rare : Adolphe Sax, inventeur du saxophone, qui l'a créé pour les musiques militaires (bonus aux troupes)
