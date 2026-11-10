@@ -14,13 +14,12 @@ Ce document explique comment les parties du jeu s'emboîtent. Le détail des rè
 - Les **armées se déplacent sur les routes** de la carte d'Aubagne.
 - Vue : carte zoomable comme CK3 (villes → quartiers → détails).
 
-### 2. Le quartier et les raids (façon Clash of Clans / Rise of Kingdoms)
-- Chaque quartier se **construit et s'améliore** (bâtiments réels transformés, constructions sur les espaces vides, défenses, pièges).
-- Un **raid** est une attaque courte (3 minutes) sur un quartier : l'attaquant déploie ses troupes, qui agissent seules, contre les défenses. On gagne du **butin** (pillage) et des étoiles.
-- C'est le mode utilisé quand **le défenseur n'est pas connecté** (ses défenses jouent seules).
+### 2. Le quartier (façon Rise of Kingdoms)
+- Chaque quartier se **construit et s'améliore** (bâtiments réels transformés, constructions sur les espaces vides) et produit les ressources.
+- ❌ **Plus de raids façon Clash of Clans** (supprimés le 10/11).
 
 ### 3. La bataille rangée (tour par tour, façon Warhammer / Total War)
-- Un **affrontement entre joueurs connectés**, sur un **champ de bataille séparé**, tiré au hasard (pas sur la carte d'Aubagne).
+- Le **mode de combat principal**, contre un joueur ou contre un tyran, sur un **champ de bataille séparé**, tiré au hasard (pas sur la carte d'Aubagne).
 - Tour par tour : général dans son quartier général caché, sous-généraux, unités, 5 actions maximum par tour, brouillard de guerre, formations, terrain et relief.
 - Jouable **dès 500 hommes**, sur une carte plus petite pour les petites armées (en dessous de 500, les combats se règlent automatiquement).
 - Le vainqueur remporte la **mise ou l'objectif** (pas de pillage), tout le monde gagne de l'XP.
@@ -34,10 +33,10 @@ Ce document explique comment les parties du jeu s'emboîtent. Le détail des rè
 
 ### Comment ils se relient
 - Une **guerre** (niveau 1) se joue sur la carte d'Aubagne et se compose de plusieurs combats.
-- Quand deux armées ou un joueur et un quartier s'affrontent : si les deux joueurs sont connectés → **bataille rangée** (niveau 3) ; sinon → **raid** façon Clash of Clans (niveau 2).
+- Quand deux armées s'affrontent : **500 hommes ou plus → bataille rangée** (niveau 3). Un tyran, ou un joueur hors ligne, est joué par une **IA**. **Moins de 500 hommes → combat automatique.**
 
 ## Où en est le développement
 - **La liste complète des tâches** est sur le site (`taches/`), tirée de `prototype/taches/taches.json`.
-- **Fait** : les règles de la bataille rangée et du raid, les personnages, le style visuel, et le **prototype 3D du champ de bataille** (`prototype/champ-3d/`).
+- **Fait** : les règles de la bataille rangée, les personnages, le style visuel, et le **prototype 3D du champ de bataille** (`prototype/champ-3d/`).
 - **Prochaine étape du prototype** : le rendre jouable (sélectionner une armée, la déplacer, brouillard de guerre). Voir `prototype/champ-3d/A_FAIRE.md`.
 - **Plus tard** : la carte d'Aubagne (OpenStreetMap), le quartier et ses défenses, le gacha, puis les guerres (gardées pour la fin).

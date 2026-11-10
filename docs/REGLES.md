@@ -155,32 +155,27 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 - ✅ La liste des personnages est dans [PERSONNAGES.md](PERSONNAGES.md).
 - ❓ Probabilités et équilibrage (à faire ensemble).
 
-## 9. Les batailles (court terme, façon Clash of Clans)
+## 9. Les petits combats (moins de 500 hommes)
 
-- ✅ **N'importe qui attaque n'importe qui, à tout moment.**
-- ✅ **Déroulement** : le joueur pose ses troupes autour du quartier visé, comme dans Clash of Clans.
+- ✅ **Combat automatique** : en dessous de 500 hommes, tous les combats (contre les tyrans ou entre joueurs) se règlent automatiquement, avec la formule de puissance et une courte scène de résultat. C'est la phase « bagarres de rue » du lore, avant le déblocage du 500 contre 500.
 - ✅ **Le terrain compte**, en restant logique : par exemple, la cavalerie est rapide en terrain plat mais lente en montagne.
-- ✅ **Durée** : comme dans Clash of Clans.
-- ✅ **Conséquences** : le perdant perd une partie de son butin et de ses ressources, pas tout.
-- ✅ **Joueur hors ligne** : ses défenses le remplacent.
-- ✅ **Affichage** : vue de dessus, avec animations.
-- ✅ **Protection contre le pillage** : un joueur ne peut pas être pillé deux fois d'affilée. Il reste protégé tant qu'il ne s'est pas reconnecté, n'a pas soigné ses troupes et n'a pas réparé ses infrastructures. Soins et réparations se lancent en cliquant sur les troupes et les bâtiments, comme dans Clash of Clans.
+- ✅ **Protection après une défaite** (10/11) : un joueur battu ne peut pas être attaqué de nouveau tant qu'il n'a pas réparé ses installations. Soins et réparations se lancent en cliquant sur les troupes et les bâtiments.
 - ✅ Un bâtiment endommagé ne produit plus rien, pour que personne ne reste protégé indéfiniment en refusant de réparer.
-- ❓ La préparation (choix du général, composition, formation) et les stratégies (embuscade, encerclement, charge…).
+- ❌ **Le mode raid façon Clash of Clans est supprimé** (10/11) : voir la section 9 ter.
 
 ## 9 bis. Les batailles rangées (tour par tour, façon Warhammer)
 
-- ✅ **Un troisième mode de conflit**, qui s'ajoute aux batailles façon Clash of Clans et aux guerres. Il ne remplace rien.
+- ✅ **Le mode de combat principal** dès 500 hommes, contre les joueurs comme contre les tyrans (le mode raid est supprimé).
 - ✅ **Formats** : 1v1, 1v1v1, 2v1, 2v2.
 - ✅ **Terrain tiré au hasard** : désert, montagne, champ, ruines…
 - ✅ **Tour par tour** : à chaque tour, on déplace ses troupes, on attaque ou non, etc.
   - ✅ **Les joueurs jouent en même temps** (choix de Mathieu, 9/11/2026) : pendant la minute du tour, chacun donne ses ordres sans voir ceux des autres, puis toutes les armées bougent et se battent ensemble. Personne n'attend son tour, même en 2v2 ou 1v1v1.
   - ✅ **Une marche longue continue gratuitement** (choix de Mathieu, 9/11/2026) : une armée envoyée à plusieurs tours de marche poursuit seule aux tours suivants, sans utiliser d'action. Une action ne sert qu'à donner un nouvel ordre.
 - ✅ Les aptitudes spéciales s'y utilisent (par exemple, l'attaque spéciale d'un Grand Général Sous les Cieux).
-- ✅ **Quand** : tout combat entre joueurs **connectés** se joue en bataille rangée. Si l'un des deux n'est pas connecté, le combat se joue en mode Clash of Clans (ses défenses le remplacent).
-- ✅ **Inactivité** : sans aucune action sur le jeu pendant 3 minutes, le joueur passe hors ligne (tout combat contre lui se joue en mode Clash of Clans).
-- ✅ **Alerte d'attaque** : le défenseur connecté choisit entre « bataille rangée » et « défenses automatiques ». Sans réponse au bout de 30 secondes, ses défenses jouent à sa place.
-- ✅ **Chrono par tour** : 1 minute par tour. Si le chrono s'écoule, le tour passe ; un joueur qui abandonne en cours de route voit ses troupes se défendre automatiquement.
+- ✅ **Quand** : tout combat de 500 hommes ou plus se joue en bataille rangée. **Si un joueur n'est pas connecté, une IA joue à sa place** (la même IA que celle des tyrans).
+- ✅ **Inactivité** : sans aucune action sur le jeu pendant 3 minutes, le joueur passe hors ligne (l'IA joue à sa place).
+- ✅ **Alerte d'attaque** : le défenseur connecté choisit entre jouer la bataille lui-même ou laisser l'IA jouer. Sans réponse au bout de 30 secondes, l'IA joue à sa place.
+- ✅ **Chrono par tour** : 1 minute par tour. Si le chrono s'écoule, le tour passe ; un joueur qui abandonne en cours de route est remplacé par l'IA.
 - ✅ **Seuil de la bataille rangée** : la bataille rangée se joue **dès 500 hommes** (changé le 10/11, avant 300), sur une carte plus petite quand les armées sont petites (500 contre 500 est le premier palier, débloqué par les 3 joueurs en même temps que le cadeau des mentors). En dessous de 500 hommes, les combats se règlent automatiquement (même formule de puissance, courte scène de résultat). Les raids façon Clash of Clans fonctionnent quel que soit l'effectif.
 - ✅ **Taille de la carte selon l'effectif** (validé temporairement) : de 500 à 999 hommes, environ 1 km × 0,7 km ; de 1 000 à 2 999 hommes, environ 2 km × 1,3 km ; à partir de 3 000 hommes, la grande carte de 3 km × 2 km. Les tailles définitives seront fixées par Claude en simulant des parties, une fois tous les paramètres réglés.
 - ✅ **Distances réelles sur toutes les cartes** : vision, vitesses et portées ne changent pas sur une petite carte. Une petite carte est simplement vue de plus près (la caméra zoome pour qu'elle remplisse l'écran comme la grande).
@@ -298,33 +293,38 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 - ✅ **Enjeu d'une bataille** : si la bataille n'est pas amicale, le vainqueur remporte la mise ou l'objectif fixé. Une bataille amicale n'a pas d'enjeu.
 - ✅ **Bataille qui s'éternise** : au bout d'un nombre maximum de tours, la victoire revient au joueur qui a le plus de points. Le nombre de tours sera fixé à la fin du développement, en simulant des batailles.
 - ✅ **Champ de bataille à part** : la bataille rangée ne se joue pas autour d'un quartier. Les deux camps sont à égalité, chacun attaque et se défend (comme une petite guerre).
-- ✅ **Pas de pillage en bataille rangée** : le pillage des ressources se gagne uniquement dans le mode Clash of Clans. En bataille rangée, le vainqueur remporte seulement la mise ou l'objectif (sauf bataille amicale).
+- ✅ **Pas de pillage en bataille rangée** : le vainqueur remporte la mise ou l'objectif (sauf bataille amicale). ❓ Avec la suppression du raid, faut-il un pillage quelque part (par exemple en prenant un quartier) ?
 - ✅ **XP** : en bataille rangée, même amicale, tout le monde gagne de l'XP.
 
 ## 9 bis (suite). Les combats contre les tyrans
 
 - ✅ **Attaquer le quartier d'un tyran** (contrôlé par le jeu) se fait en **bataille rangée contre une IA**, pas en raid. Il faudra donc programmer une IA de bataille (gros chantier, tâche 224).
-- ❓ En dessous de 500 hommes (avant le déblocage du 500 contre 500), les combats contre les tyrans se règlent-ils automatiquement, comme les autres petits combats ?
+- ✅ En dessous de 500 hommes, les combats contre les tyrans se règlent automatiquement (section 9).
+- ✅ **Les tyrans attaquent aussi d'eux-mêmes, de temps en temps** : un tyran voisin peut lancer une attaque contre un joueur (avec préavis), par exemple si le joueur est faible ou l'a provoqué.
 
-## 9 ter. Le mode raid (façon Clash of Clans)
+## 9 ter. Le mode raid : ❌ supprimé (10/11)
 
-On reprend les mécaniques de Clash of Clans (pas ses noms ni ses visuels).
+- ❌ **Plus de mode raid façon Clash of Clans.** Les tyrans se combattent en bataille rangée contre une IA, et un joueur hors ligne est aussi remplacé par l'IA en bataille rangée. En dessous de 500 hommes, combat automatique.
+- ❓ **Défenses et pièges du quartier** (tours, garnisons, pièges des architectes) : ils servaient au raid. On les garde sous une autre forme (par exemple des bonus pour le défenseur en bataille rangée) ou on les supprime ?
+- Ancien contenu, gardé pour mémoire :
 
-- ✅ **La base** : le quartier du joueur, sur la vraie carte d'Aubagne. La maison du joueur joue le rôle de l'hôtel de ville.
-- ✅ **Défenses** : tours, garnisons et défenses du quartier, améliorables. Pas de murs.
-- ✅ **Pièges** : posés par les architectes, invisibles pour l'attaquant. On peut les placer sur les routes et sur les bâtiments.
-- ✅ **Placement** : le quartier suit la vraie ville, on ne déplace pas la maison ni les commerces. On place librement les défenses et les pièges.
-- ✅ **Déploiement** : l'attaquant fait entrer ses troupes par les bords du quartier (par exemple par les routes).
-- ✅ **Troupes autonomes** : une fois déployées, les troupes agissent seules (l'infanterie vise le bâtiment le plus proche, la cavalerie les défenses, les archers restent à distance). Le joueur choisit seulement le moment et l'endroit où il les fait entrer.
-- ✅ **Héros** : les généraux et guerriers mystiques qui participent au raid ont simplement de meilleures stats. Pas d'attaque spéciale en raid.
-- ✅ **Stratégies** (nuage de poussière, flèches enflammées…) : utilisables une fois par raid, comme des sorts.
-- ✅ **Durée** : 3 minutes.
-- ✅ **Étoiles** : une étoile à 50 % du quartier détruit, une étoile si la maison du joueur est détruite, une étoile à 100 %.
-- ✅ **Butin** : le vainqueur pille un pourcentage des ressources stockées dans le quartier.
-- ✅ **Protection, troupes indisponibles, défense hors ligne, réparation** : voir les règles déjà fixées (pas deux pillages d'affilée, pas de mort définitive, défenses automatiques, bâtiment endommagé improductif).
-- ✅ **Renforts** : les alliés (via les contrats de diplomatie) peuvent envoyer des troupes en renfort dans le quartier d'un ami.
-- ✅ **Replay et vengeance** : le défenseur peut revoir l'attaque et lancer une contre-attaque.
-- ❓ **Construire ses défenses** : transformer des bâtiments du quartier en tours ou en défenses, et faire apparaître des tours sur les routes (chantier à traiter).
+> On reprend les mécaniques de Clash of Clans (pas ses noms ni ses visuels).
+>
+> - ✅ **La base** : le quartier du joueur, sur la vraie carte d'Aubagne. La maison du joueur joue le rôle de l'hôtel de ville.
+> - ✅ **Défenses** : tours, garnisons et défenses du quartier, améliorables. Pas de murs.
+> - ✅ **Pièges** : posés par les architectes, invisibles pour l'attaquant. On peut les placer sur les routes et sur les bâtiments.
+> - ✅ **Placement** : le quartier suit la vraie ville, on ne déplace pas la maison ni les commerces. On place librement les défenses et les pièges.
+> - ✅ **Déploiement** : l'attaquant fait entrer ses troupes par les bords du quartier (par exemple par les routes).
+> - ✅ **Troupes autonomes** : une fois déployées, les troupes agissent seules (l'infanterie vise le bâtiment le plus proche, la cavalerie les défenses, les archers restent à distance). Le joueur choisit seulement le moment et l'endroit où il les fait entrer.
+> - ✅ **Héros** : les généraux et guerriers mystiques qui participent au raid ont simplement de meilleures stats. Pas d'attaque spéciale en raid.
+> - ✅ **Stratégies** (nuage de poussière, flèches enflammées…) : utilisables une fois par raid, comme des sorts.
+> - ✅ **Durée** : 3 minutes.
+> - ✅ **Étoiles** : une étoile à 50 % du quartier détruit, une étoile si la maison du joueur est détruite, une étoile à 100 %.
+> - ✅ **Butin** : le vainqueur pille un pourcentage des ressources stockées dans le quartier.
+> - ✅ **Protection, troupes indisponibles, défense hors ligne, réparation** : voir les règles déjà fixées (pas deux pillages d'affilée, pas de mort définitive, défenses automatiques, bâtiment endommagé improductif).
+> - ✅ **Renforts** : les alliés (via les contrats de diplomatie) peuvent envoyer des troupes en renfort dans le quartier d'un ami.
+> - ✅ **Replay et vengeance** : le défenseur peut revoir l'attaque et lancer une contre-attaque.
+> - ❓ **Construire ses défenses** : transformer des bâtiments du quartier en tours ou en défenses, et faire apparaître des tours sur les routes (chantier à traiter).
 
 ## 10. Les guerres (long terme, façon CK3)
 
