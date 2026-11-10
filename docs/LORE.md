@@ -58,6 +58,11 @@ En fonction du choix du joueur, des guerriers différents apparaîtront.
 - ✅ **L'autre voie** (« prêt à tout ») fait apparaître des hommes prêts à tout pour la victoire : par exemple **Alexandre** ou **Hannibal** (plutôt pas Gengis Khan).
 - ✅ **Les personnages du lore restent tirables au gacha** (sauveurs, guerriers de l'autre voie, Grands Généraux Sous les Cieux, Napoléon…), même s'ils apparaissent dans l'histoire. Exception : les grands méchants (Griffith est retiré du gacha).
 - 💡 Autres guerriers possibles pour la voie « prêt à tout » : César, Mehmed II, Napoléon, Scipion, Takeda Shingen.
+- ✅ **Les deux voies ont chacune un sabre et un sabreur** (inspiré de la légende de Masamune et Muramasa et des écrits de Yagyū Munenori, histoire arrangée pour le jeu) :
+  - **« Prêt à tout, même au pire »** = le **satsujinken**, « le sabre qui tue ». Son sabreur est **Sasaki Kojirō**, qui manie **Muramasa**, la lame maudite qui coupe tout ce qui passe, sans distinction. Kojirō n'est pas cruel : il est obsédé par l'idée d'être la meilleure lame, à n'importe quel prix (peut-être poussé par la lame).
+  - **« La vie des hommes vaut plus que les objectifs »** = le **katsujinken**, « le sabre qui donne la vie ». Son sabreur est **Miyamoto Musashi**, qui manie **Masamune**, la lame qui ne frappe pas l'innocent (les feuilles glissent autour d'elle dans la rivière). Jeune, Musashi a gagné « comme Muramasa » (il a triché contre Kojirō à Ganryūjima), puis il a choisi Masamune : une rédemption de plus.
+  - Le duel de Ganryūjima (1612) devient le symbole des deux voies.
+  - Vrais faits, pour mémoire : les deux forgerons ont vécu à deux siècles d'écart (Masamune vers 1300, Muramasa vers 1500) ; ni Musashi ni Kojirō n'ont possédé ces sabres (Kojirō avait une très longue lame, « la perche à sécher le linge ») ; les sabres Muramasa étaient dits maudits par les Tokugawa.
 - ✅ **Le choix de philosophie est définitif**, et **chaque joueur fait le sien** (les trois peuvent choisir des voies différentes).
 
 ## Décisions (10/11)
