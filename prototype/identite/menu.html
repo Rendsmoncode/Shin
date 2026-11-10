@@ -6,105 +6,123 @@
 <title>Menu principal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=IM+Fell+DW+Pica:ital@0;1&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
-/* Menu principal modifiable : chaque élément se déplace et se redimensionne (mode « Modifier »).
-   Positions en % de l'écran 16:9 ; textes proportionnels à la largeur de l'écran (unités cqw).
-   Matière : documents anciens du domaine public (matiere/). */
+/* Menu principal modifiable, style « Jarvis » : verre sombre (bleu marine / noir transparent),
+   traits fins, un seul accent cyan discret. La carte de Cassini (1778) d'Aubagne reste en fond.
+   Positions en % de l'écran 16:9 ; textes proportionnels à sa largeur (unités cqw). */
 :root{
   --img-cassini:url("matiere/cassini.jpg");
-  --img-velin:url("matiere/velin_c.jpg");
-  --img-reliure:url("matiere/reliure_c.jpg");
-  --img-sceau:url("matiere/sceau.jpg");
-  --or:#e3c27a;--or-vif:#f6dfa0;--creme:#efe2c6;--encre:#2a1a0d;--sang:#7d1d14;--edit:#4fc3f7;
+  --verre:rgba(7,16,34,.62);--verre-fort:rgba(5,11,24,.78);--verre-noir:rgba(4,6,10,.66);
+  --ligne:rgba(130,200,255,.22);--ligne-fort:rgba(130,200,255,.45);
+  --accent:#62d6ff;--accent-doux:rgba(98,214,255,.16);--texte:#e6f1fb;--doux:#8ea6bd;--hausse:#6be0a6;--baisse:#ffb05c;
+  --edit:#ffcf5a;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
-body{margin:0;background:#0d0a07;color:var(--creme);font-family:"EB Garamond",Georgia,serif;font-size:16px}
+body{margin:0;background:#04070d;color:var(--texte);font-family:"Rajdhani",system-ui,sans-serif;font-size:16px}
 .page{max-width:1500px;margin:0 auto;padding:16px 16px 40px;display:grid;gap:12px}
-h1{margin:0;font-family:"IM Fell DW Pica",serif;font-style:italic;font-weight:400;font-size:clamp(24px,3.4vw,36px)}
+h1{margin:0;font-weight:600;font-size:clamp(22px,3vw,32px);letter-spacing:.14em;text-transform:uppercase}
+h1 span{color:var(--accent)}
 
 /* ----- Barre de l'éditeur ----- */
-.outils{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px;background:#1b140e;border:1px solid #3a2c1e;border-radius:8px;font-family:system-ui,sans-serif;font-size:14px}
-.outils button{font:inherit;cursor:pointer;border:1px solid #4a3a28;background:#2a2016;color:#efe2c6;border-radius:6px;padding:7px 11px;min-height:36px}
-.outils button:hover{border-color:var(--or)}
-.outils button[aria-pressed="true"]{background:var(--edit);color:#04222e;border-color:var(--edit);font-weight:600}
-.outils button.principal{background:#8a2e1c;border-color:#8a2e1c;font-weight:600}
-.outils .sep{width:1px;align-self:stretch;background:#3a2c1e}
-.outils .info{color:#b9a07c;min-width:180px}
-.outils .etat{color:#8fd19e}
+.outils{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px;background:rgba(10,20,38,.7);border:1px solid var(--ligne);font-size:15px}
+.outils button{font:inherit;font-weight:600;letter-spacing:.06em;cursor:pointer;border:1px solid var(--ligne);background:rgba(98,214,255,.05);color:var(--texte);padding:6px 12px;min-height:36px}
+.outils button:hover{border-color:var(--accent)}
+.outils button[aria-pressed="true"]{background:var(--edit);color:#1b1400;border-color:var(--edit)}
+.outils button.principal{background:var(--accent);color:#021520;border-color:var(--accent)}
+.outils .sep{width:1px;align-self:stretch;background:var(--ligne)}
+.outils .info{font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--doux);min-width:180px}
+.outils .etat{color:var(--hausse)}
 .outils .mode-edit{display:none}
 body.edition .outils .mode-edit{display:inline-flex}
-.aide{margin:0;color:#b9a07c;font-family:system-ui,sans-serif;font-size:14px}
+.aide{margin:0;color:var(--doux);font-size:15px}
 
 /* ----- L'écran ----- */
 .ecran{position:relative;overflow:hidden;width:min(100%,calc((100vh - 230px)*16/9));margin:0 auto;aspect-ratio:16/9;container-type:inline-size;
-  background:#cdb68a var(--img-cassini) center/cover;border:1px solid #000;isolation:isolate;user-select:none}
+  background:#0b1424 var(--img-cassini) center/cover;border:1px solid #000;isolation:isolate;user-select:none}
 .ecran::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
-  background:radial-gradient(ellipse at 50% 45%,transparent 35%,rgba(25,14,5,.45) 80%,rgba(10,6,3,.8) 100%)}
+  background:
+    repeating-linear-gradient(0deg,transparent 0 3.2cqw,rgba(120,190,255,.06) 3.2cqw calc(3.2cqw + 1px)),
+    repeating-linear-gradient(90deg,transparent 0 3.2cqw,rgba(120,190,255,.06) 3.2cqw calc(3.2cqw + 1px)),
+    radial-gradient(ellipse at 50% 45%,rgba(4,10,22,.05) 30%,rgba(3,7,16,.55) 75%,rgba(2,4,9,.88) 100%),
+    linear-gradient(rgba(6,16,36,.28),rgba(6,16,36,.28))}
 .el{position:absolute}
 .el.cache{display:none}
 body.edition .el.cache{display:block;opacity:.3}
 
-/* Tentures */
-.tenture{background:linear-gradient(rgba(14,9,5,.62),rgba(14,9,5,.8)),#3a2414 var(--img-reliure) center/cover;
-  box-shadow:0 0 0 1px rgba(0,0,0,.7),0 0 2cqw rgba(0,0,0,.75),inset 0 0 3cqw rgba(0,0,0,.7)}
-.tenture::before{content:"";position:absolute;inset:.5cqw;border:1px solid rgba(227,194,122,.35);pointer-events:none}
-.tenture::after{content:"";position:absolute;bottom:0;width:4.4cqw;height:4.4cqw;pointer-events:none;box-shadow:0 0 .8cqw rgba(0,0,0,.6)}
-.tenture.g::after{left:0;background:linear-gradient(45deg,#0d0a07 0 50%,#c9b08a 50%,#8a6f4c 70%,#3a2a1a 100%)}
-.tenture.d::after{right:0;background:linear-gradient(-45deg,#0d0a07 0 50%,#c9b08a 50%,#8a6f4c 70%,#3a2a1a 100%)}
+/* Panneau de verre, avec ses crochets d'angle */
+.verre{background:
+    linear-gradient(var(--accent),var(--accent)) top left/1.1cqw 1.5px no-repeat,
+    linear-gradient(var(--accent),var(--accent)) top left/1.5px 1.1cqw no-repeat,
+    linear-gradient(var(--accent),var(--accent)) bottom right/1.1cqw 1.5px no-repeat,
+    linear-gradient(var(--accent),var(--accent)) bottom right/1.5px 1.1cqw no-repeat,
+    var(--fond-verre,var(--verre));
+  border:1px solid var(--ligne);-webkit-backdrop-filter:blur(10px) saturate(1.15);backdrop-filter:blur(10px) saturate(1.15)}
 
-/* Personnage */
+/* Bandes latérales */
+.bande{--fond-verre:linear-gradient(180deg,rgba(6,14,30,.72),rgba(4,8,16,.82))}
+.bande .entete{position:absolute;top:1.2cqw;left:1.4cqw;right:1.4cqw;display:flex;justify-content:space-between;font-family:"JetBrains Mono",monospace;font-size:.72cqw;letter-spacing:.18em;color:var(--doux);text-transform:uppercase}
+.bande .entete b{color:var(--accent);font-weight:500}
+.bande .filet{position:absolute;top:3.2cqw;left:1.4cqw;right:1.4cqw;height:1px;background:linear-gradient(90deg,var(--ligne-fort),transparent)}
+.bande.d .filet{background:linear-gradient(270deg,var(--ligne-fort),transparent)}
+.bande .pied{position:absolute;bottom:1.2cqw;left:1.4cqw;right:1.4cqw;font-family:"JetBrains Mono",monospace;font-size:.62cqw;letter-spacing:.14em;color:rgba(142,166,189,.6)}
+
+/* Personnage (hologramme en attendant la 3D) */
 .personnage{display:grid;place-items:end center}
-.personnage::before{content:"";position:absolute;left:10%;right:10%;bottom:0;height:8%;border-radius:50%;background:radial-gradient(ellipse,rgba(227,194,122,.3),transparent 70%)}
-.personnage svg{width:100%;height:100%;fill:rgba(227,194,122,.12);stroke:rgba(227,194,122,.6);stroke-width:1.3}
-.personnage span{position:absolute;top:28%;left:0;right:0;text-align:center;font-family:"IM Fell English SC",serif;font-size:1cqw;letter-spacing:.12em;color:rgba(239,226,198,.65);line-height:1.3}
+.personnage .anneau{position:absolute;left:8%;right:8%;bottom:0;height:9%;border-radius:50%;border:1px solid var(--ligne-fort);box-shadow:0 0 1.2cqw rgba(98,214,255,.25),inset 0 0 1cqw rgba(98,214,255,.18)}
+.personnage .anneau::after{content:"";position:absolute;inset:18% 14%;border-radius:50%;border:1px dashed rgba(98,214,255,.4);animation:pulse 3s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.25;transform:scale(1.06)}}
+.personnage svg{position:relative;width:100%;height:100%;fill:rgba(98,214,255,.07);stroke:rgba(98,214,255,.7);stroke-width:1.1}
+.personnage .balayage{position:absolute;inset:0 8% 9%;background:linear-gradient(180deg,transparent 0 45%,rgba(98,214,255,.16) 50%,transparent 55% 100%) 0 0/100% 220%;animation:balaye 4s linear infinite;mix-blend-mode:screen;pointer-events:none}
+@keyframes balaye{from{background-position:0 100%}to{background-position:0 -120%}}
+.personnage span{position:absolute;top:30%;left:0;right:0;text-align:center;font-family:"JetBrains Mono",monospace;font-size:.72cqw;letter-spacing:.2em;color:rgba(230,241,251,.6);text-transform:uppercase;line-height:1.5}
 
-/* Banderole du nom */
-.banderole{display:grid;place-content:center;text-align:center;color:var(--encre);
-  background:#e3d2ae var(--img-velin) center/cover;box-shadow:0 .6cqw 1cqw rgba(0,0,0,.65),inset 0 0 1cqw rgba(90,50,15,.4);
-  clip-path:polygon(0 0,100% 0,94% 50%,100% 100%,0 100%,6% 50%)}
-.banderole b{font-family:"IM Fell DW Pica",serif;font-weight:400;font-size:2.3cqw;line-height:1}
-.banderole small{font-family:"IM Fell English",serif;font-style:italic;font-size:1.05cqw;color:#6d543b}
+/* Plaque du nom */
+.banderole{--fond-verre:var(--verre-fort);display:grid;align-content:center;padding:0 1.4cqw 0 1.8cqw;border-left:3px solid var(--accent)}
+.banderole b{font-weight:700;font-size:2.1cqw;letter-spacing:.16em;text-transform:uppercase;line-height:1}
+.banderole small{font-family:"JetBrains Mono",monospace;font-size:.78cqw;letter-spacing:.12em;color:var(--doux);margin-top:.35cqw;text-transform:uppercase}
+.banderole .niv{position:absolute;right:1.2cqw;top:50%;transform:translateY(-50%);font-family:"JetBrains Mono",monospace;font-size:.75cqw;color:var(--accent);border:1px solid var(--ligne-fort);padding:.2cqw .5cqw}
 
 /* Onglets */
-.onglet{cursor:pointer;display:flex;align-items:center;gap:1cqw;padding:0 1.4cqw;border:0;text-align:left;
-  font-family:"IM Fell English SC",serif;font-size:1.75cqw;letter-spacing:.03em;color:var(--or);
-  background:linear-gradient(rgba(22,13,6,.62),rgba(22,13,6,.62)),#3a2414 var(--img-reliure) var(--bp,center)/300% auto;text-shadow:0 1px 2px #000,0 0 6px rgba(0,0,0,.8);box-shadow:inset 0 0 0 1px rgba(0,0,0,.6),inset 0 0 1.2cqw rgba(0,0,0,.6);
-  clip-path:polygon(1% 4%,99% 0,100% 92%,2% 100%);filter:brightness(.78)}
-.onglet:nth-of-type(2n){clip-path:polygon(0 0,97% 3%,100% 100%,3% 96%)}
-.onglet:hover{filter:brightness(.95)}
-.onglet.actif{filter:none;color:var(--or-vif)}
-.onglet.actif::after{content:"";position:absolute;right:1cqw;top:50%;width:2.8cqw;height:2.8cqw;transform:translateY(-50%);border-radius:50%;background:#7a1c12 var(--img-sceau) center/140%;box-shadow:0 .2cqw .4cqw rgba(0,0,0,.7)}
-.ombre-onglet{filter:drop-shadow(0 .5cqw .8cqw rgba(0,0,0,.65))}
+.onglet{cursor:pointer;display:flex;align-items:center;gap:1.1cqw;padding:0 1.4cqw;text-align:left;color:var(--texte);
+  font-family:"Rajdhani",sans-serif;font-weight:600;font-size:1.55cqw;letter-spacing:.14em;text-transform:uppercase;
+  --fond-verre:rgba(7,16,34,.58);clip-path:polygon(0 0,calc(100% - 1.2cqw) 0,100% 1.2cqw,100% 100%,1.2cqw 100%,0 calc(100% - 1.2cqw));transition:background-color .15s}
+.onglet svg{flex:0 0 2cqw;width:2cqw;height:2cqw;fill:none;stroke:var(--accent);stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+.onglet .num{margin-left:auto;font-family:"JetBrains Mono",monospace;font-weight:400;font-size:.75cqw;letter-spacing:.1em;color:var(--doux)}
+.onglet:hover{--fond-verre:rgba(14,32,62,.7)}
+.onglet.actif{--fond-verre:linear-gradient(90deg,rgba(98,214,255,.2),rgba(7,16,34,.72) 60%);border-color:var(--ligne-fort);box-shadow:inset 3px 0 0 var(--accent)}
+.onglet.actif .num{color:var(--accent)}
+.onglet:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
-/* Infos */
-.infos{display:flex;align-items:center;gap:2cqw;padding:0 2cqw;color:var(--encre);overflow:hidden;
-  background:#e3d2ae var(--img-velin) center/cover;box-shadow:0 -.6cqw 1.4cqw rgba(0,0,0,.55),inset 0 0 1.6cqw rgba(90,50,15,.4);border-top:3px double rgba(42,26,13,.55)}
-.res{display:grid;line-height:1.05}
-.res small{font-family:"IM Fell English SC",serif;font-size:.95cqw;color:#6d543b}
-.res b{font-family:"IM Fell DW Pica",serif;font-weight:400;font-size:1.7cqw}
-.res em{font-style:italic;font-size:.9cqw;color:#2f6b3a}
-.date{margin-left:auto;text-align:right;line-height:1.15}
-.date b{display:block;font-family:"IM Fell DW Pica",serif;font-weight:400;font-size:1.4cqw}
-.date small{font-family:"IM Fell English",serif;font-style:italic;font-size:1cqw;color:#6d543b}
+/* Bande d'infos */
+.infos{--fond-verre:linear-gradient(180deg,rgba(6,14,30,.7),rgba(4,8,16,.84));display:flex;align-items:stretch;overflow:hidden}
+.res{display:grid;align-content:center;gap:.2cqw;padding:0 1.5cqw;border-right:1px solid var(--ligne)}
+.res small{font-family:"JetBrains Mono",monospace;font-size:.68cqw;letter-spacing:.18em;color:var(--doux);text-transform:uppercase}
+.res b{font-weight:600;font-size:1.75cqw;letter-spacing:.04em;line-height:1}
+.res em{font-family:"JetBrains Mono",monospace;font-style:normal;font-size:.68cqw;color:var(--hausse)}
+.res em.baisse{color:var(--baisse)}
+.date{margin-left:auto;display:grid;align-content:center;text-align:right;padding:0 1.6cqw}
+.date b{font-family:"JetBrains Mono",monospace;font-weight:500;font-size:1.45cqw;color:var(--accent);letter-spacing:.06em}
+.date small{font-family:"JetBrains Mono",monospace;font-size:.68cqw;letter-spacing:.16em;color:var(--doux);text-transform:uppercase}
 
 /* ----- Mode modification ----- */
-body.edition .el{cursor:move;outline:1px dashed rgba(79,195,247,.8);outline-offset:-1px}
+body.edition .el{cursor:move;outline:1px dashed rgba(255,207,90,.8);outline-offset:-1px}
 body.edition .el.choisi{outline:2px solid var(--edit);outline-offset:-2px;z-index:999!important}
 body.edition .el .etiq{display:block}
-.etiq{display:none;position:absolute;top:0;left:0;z-index:5;padding:1px 6px;background:var(--edit);color:#04222e;font:600 11px/1.4 system-ui,sans-serif;pointer-events:none;white-space:nowrap}
+.etiq{display:none;position:absolute;top:0;left:0;z-index:5;padding:1px 6px;background:var(--edit);color:#1b1400;font:600 11px/1.4 system-ui,sans-serif;pointer-events:none;white-space:nowrap}
 .poignee{display:none;position:absolute;right:0;bottom:0;width:16px;height:16px;z-index:6;background:var(--edit);cursor:nwse-resize;clip-path:polygon(100% 0,100% 100%,0 100%)}
 body.edition .el.choisi .poignee{display:block}
-body.edition .onglet,body.edition .banderole{clip-path:none}
+body.edition .onglet{clip-path:none}
+@media (prefers-reduced-motion:reduce){.personnage .anneau::after,.personnage .balayage{animation:none}}
 </style>
 </head>
 <body>
 <div class="page">
-  <h1>Menu principal · à toi de le disposer</h1>
+  <h1>Menu principal <span>//</span> à toi de le disposer</h1>
 
   <div class="outils" role="toolbar" aria-label="Éditeur">
-    <button id="b-edit" aria-pressed="false">✋ Modifier la disposition</button>
+    <button id="b-edit" aria-pressed="false">Modifier la disposition</button>
     <span class="mode-edit" style="gap:8px;align-items:center;flex-wrap:wrap">
       <span class="sep"></span>
       <button id="b-ajout">+ Onglet</button>
@@ -121,7 +139,7 @@ body.edition .onglet,body.edition .banderole{clip-path:none}
     <button class="principal" id="b-envoyer">Envoyer à Claude</button>
     <span class="etat" id="etat" role="status"></span>
   </div>
-  <p class="aide">Clique sur « Modifier la disposition », puis : glisse un élément pour le déplacer, tire le coin bleu en bas à droite pour changer sa taille. Les flèches du clavier déplacent l'élément choisi (Maj + flèches pour aller plus vite). Ta disposition est gardée dans ton navigateur ; « Envoyer à Claude » me la transmet.</p>
+  <p class="aide">Clique sur « Modifier la disposition », puis glisse un élément pour le déplacer et tire le coin jaune en bas à droite pour changer sa taille. Les flèches du clavier déplacent l'élément choisi (Maj + flèches pour aller plus vite). Ta disposition est gardée dans ton navigateur ; « Envoyer à Claude » me la transmet.</p>
 
   <div class="ecran" id="ecran"></div>
 </div>
@@ -129,48 +147,48 @@ body.edition .onglet,body.edition .banderole{clip-path:none}
 <script>
 const DEFAUT={
   elements:[
-    {id:'tg',type:'tentureG',nom:'Tenture du personnage',x:0,y:0,w:23.75,h:100,z:1},
-    {id:'perso',type:'personnage',nom:'Personnage (3D)',x:3,y:4,w:18,h:78,z:2},
-    {id:'nom',type:'banderole',nom:'Banderole du nom',x:1.2,y:51,w:21,h:10,z:3,texte:'Ayoub',sous:'Seigneur du Pin Vert'},
-    {id:'td',type:'tentureD',nom:'Tenture des boutons',x:82.5,y:0,w:17.5,h:100,z:1},
+    {id:'tg',type:'tentureG',nom:'Bande du personnage',x:0,y:0,w:23.75,h:100,z:1},
+    {id:'perso',type:'personnage',nom:'Personnage (3D)',x:3,y:6,w:18,h:76,z:2},
+    {id:'nom',type:'banderole',nom:'Plaque du nom',x:1.2,y:51,w:21,h:10,z:3,texte:'Ayoub',sous:'Seigneur du Pin Vert'},
+    {id:'td',type:'tentureD',nom:'Bande des boutons',x:82.5,y:0,w:17.5,h:100,z:1},
     {id:'o1',type:'onglet',nom:'Onglet',x:73.4,y:9,w:21.6,h:12.3,z:4,texte:'Le Monde',actif:true},
     {id:'o2',type:'onglet',nom:'Onglet',x:73.6,y:26.2,w:20.8,h:12.8,z:4,texte:'Mon quartier'},
     {id:'o3',type:'onglet',nom:'Onglet',x:73.5,y:45,w:20.3,h:15.6,z:4,texte:'Armées'},
     {id:'infos',type:'infos',nom:"Bande d'infos",x:23.75,y:86,w:58.75,h:14,z:2}
   ]};
-const ICONES={'Le Monde':'M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z M9 4v14 M15 6v14','Mon quartier':'M4 21V9l8-6 8 6v12 M9 21v-6h6v6','Armées':'M5 19L19 5 M15 5h4v4 M9 19H5v-4 M5 5l5 5 M19 19l-5-5','Diplomatie':'M4 12l4-4 4 3 4-3 4 4-8 8z M8 8l4 5'};
+const ICONES={'Le Monde':'M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z M9 4v14 M15 6v14','Mon quartier':'M4 21V9l8-6 8 6v12 M9 21v-6h6v6','Armées':'M5 19L19 5 M15 5h4v4 M9 19H5v-4 M5 5l5 5 M19 19l-5-5','Diplomatie':'M4 12l4-4 4 3 4-3 4 4-8 8z M8 8l4 5','Personnages':'M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6z M3 20c0-4 3-6 6-6s6 2 6 6 M17 11a2.5 2.5 0 1 0 0-5 M15 15c3 0 6 1.5 6 5','Journal':'M6 3h11l2 3v15H6z M9 8h7 M9 12h7 M9 16h5'};
 const CLE='shin-menu-disposition-v1';
 let etat=charger(),choisi=null,edition=false;
 function charger(){try{const s=localStorage.getItem(CLE);if(s)return JSON.parse(s);}catch(e){}return JSON.parse(JSON.stringify(DEFAUT));}
 function garder(){try{localStorage.setItem(CLE,JSON.stringify(etat));}catch(e){}}
 const ecran=document.getElementById('ecran');
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-function contenu(e){
+function contenu(e,i){
   switch(e.type){
-    case 'tentureG':return ['tenture g',''];
-    case 'tentureD':return ['tenture d',''];
-    case 'personnage':return ['personnage','<svg viewBox="0 0 200 400" preserveAspectRatio="xMidYMax meet" aria-hidden="true"><circle cx="100" cy="50" r="30"/><path d="M56 100 Q100 82 144 100 L160 210 L148 214 L140 152 L138 270 L126 392 L106 392 L100 290 L94 392 L74 392 L62 270 L60 152 L52 214 L40 210 Z"/><path d="M152 118 L182 30" stroke-width="3"/></svg><span>Ton personnage<br>en 3D ici</span>'];
-    case 'banderole':return ['banderole',`<b>${esc(e.texte||'')}</b><small>${esc(e.sous||'')}</small>`];
-    case 'onglet':{const p=ICONES[e.texte]||'M5 12h14 M12 5v14';return ['onglet'+(e.actif?' actif':''),`<svg viewBox="0 0 24 24" style="flex:0 0 2.2cqw;width:2.2cqw;height:2.2cqw;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><path d="${p}"/></svg><span>${esc(e.texte||'')}</span>`];}
-    case 'infos':return ['infos','<div class="res"><small>Or</small><b>12 400</b><em>+320/h</em></div><div class="res"><small>Vivres</small><b>3 210</b><em>+85/h</em></div><div class="res"><small>Matériaux</small><b>860</b><em>+40/h</em></div><div class="res"><small>Hommes</small><b>1 450</b><em>/ 2 000</em></div><div class="date"><b>Jour 214 de l\'an I</b><small>Printemps</small></div>'];
+    case 'tentureG':return ['verre bande g','<div class="entete"><span>Commandant</span><b>● En ligne</b></div><div class="filet"></div><div class="pied">ID 0001 · PIN-VERT · AUBAGNE</div>'];
+    case 'tentureD':return ['verre bande d','<div class="entete"><span>Commandes</span><b>SYS OK</b></div><div class="filet"></div><div class="pied">43.29N · 5.57E</div>'];
+    case 'personnage':return ['personnage','<div class="anneau"></div><svg viewBox="0 0 200 400" preserveAspectRatio="xMidYMax meet" aria-hidden="true"><circle cx="100" cy="50" r="30"/><path d="M56 100 Q100 82 144 100 L160 210 L148 214 L140 152 L138 270 L126 392 L106 392 L100 290 L94 392 L74 392 L62 270 L60 152 L52 214 L40 210 Z"/></svg><div class="balayage"></div><span>Personnage 3D<br>en chargement</span>'];
+    case 'banderole':return ['verre banderole',`<b>${esc(e.texte||'')}</b><small>${esc(e.sous||'')}</small><span class="niv">NIV 12</span>`];
+    case 'onglet':{const p=ICONES[e.texte]||'M5 12h14 M12 5v14';const n=etat.elements.filter(x=>x.type==='onglet').indexOf(e)+1;
+      return ['verre onglet'+(e.actif?' actif':''),`<svg viewBox="0 0 24 24"><path d="${p}"/></svg><span>${esc(e.texte||'')}</span><span class="num">${String(n).padStart(2,'0')}</span>`];}
+    case 'infos':return ['verre infos','<div class="res"><small>Or</small><b>12 400</b><em>▲ 320/h</em></div><div class="res"><small>Vivres</small><b>3 210</b><em>▲ 85/h</em></div><div class="res"><small>Matériaux</small><b>860</b><em class="baisse">▼ 12/h</em></div><div class="res"><small>Hommes</small><b>1 450</b><em>/ 2 000</em></div><div class="date"><b id="heure">--:--:--</b><small>Jour 214 · Printemps</small></div>'];
   }
 }
 function rendre(){
   ecran.querySelectorAll('.el').forEach(n=>n.remove());
   etat.elements.forEach((e,i)=>{
-    const [cls,html]=contenu(e);const n=document.createElement(e.type==='onglet'?'button':'div');
+    const [cls,html]=contenu(e,i);const n=document.createElement(e.type==='onglet'?'button':'div');
     n.className='el '+cls+(e.cache?' cache':'')+(choisi===e.id?' choisi':'');n.dataset.id=e.id;
-    if(e.type==='onglet'){n.type='button';n.style.setProperty('--bp',['20% 70%','80% 30%','30% 80%','60% 20%','10% 50%'][i%5]);}
+    if(e.type==='onglet')n.type='button';
     Object.assign(n.style,{left:e.x+'%',top:e.y+'%',width:e.w+'%',height:e.h+'%',zIndex:e.z});
     n.innerHTML=html+`<span class="etiq">${esc(e.type==='onglet'?'Onglet « '+(e.texte||'')+' »':e.nom)}</span><span class="poignee"></span>`;
     ecran.appendChild(n);
   });
-  afficherInfo();
+  afficherInfo();tic();
 }
 function el(id){return etat.elements.find(e=>e.id===id);}
 function afficherInfo(){const e=choisi&&el(choisi);document.getElementById('info').textContent=e?`${e.type==='onglet'?'Onglet « '+e.texte+' »':e.nom} · x ${e.x.toFixed(1)} % · y ${e.y.toFixed(1)} % · ${e.w.toFixed(1)} × ${e.h.toFixed(1)} %`:'Clique sur un élément';}
 const arr=v=>Math.round(v*4)/4;
-// Glisser / redimensionner
 let geste=null;
 ecran.addEventListener('pointerdown',ev=>{
   const n=ev.target.closest('.el');
@@ -192,28 +210,28 @@ document.addEventListener('keydown',ev=>{
   ev.preventDefault();const e=el(choisi),p=ev.shiftKey?2:.25;
   if(ev.key==='ArrowLeft')e.x-=p;if(ev.key==='ArrowRight')e.x+=p;if(ev.key==='ArrowUp')e.y-=p;if(ev.key==='ArrowDown')e.y+=p;garder();rendre();
 });
-// Boutons de l'éditeur
 const bEdit=document.getElementById('b-edit');
-bEdit.onclick=()=>{edition=!edition;document.body.classList.toggle('edition',edition);bEdit.setAttribute('aria-pressed',edition);bEdit.textContent=edition?'✓ Terminer':'✋ Modifier la disposition';if(!edition)choisi=null;rendre();};
+bEdit.onclick=()=>{edition=!edition;document.body.classList.toggle('edition',edition);bEdit.setAttribute('aria-pressed',edition);bEdit.textContent=edition?'✓ Terminer':'Modifier la disposition';if(!edition)choisi=null;rendre();};
 document.getElementById('b-ajout').onclick=()=>{const t=prompt("Texte du nouvel onglet :",'Diplomatie');if(!t)return;const ong=etat.elements.filter(e=>e.type==='onglet');const der=ong[ong.length-1]||{x:73,y:0,w:21,h:12};
   const id='o'+Date.now();etat.elements.push({id,type:'onglet',nom:'Onglet',x:der.x,y:Math.min(85,der.y+der.h+4),w:der.w,h:der.h,z:4,texte:t});choisi=id;garder();rendre();};
-document.getElementById('b-texte').onclick=()=>{const e=choisi&&el(choisi);if(!e||!(e.type==='onglet'||e.type==='banderole'))return alert('Choisis d\'abord un onglet ou la banderole.');
+document.getElementById('b-texte').onclick=()=>{const e=choisi&&el(choisi);if(!e||!(e.type==='onglet'||e.type==='banderole'))return alert("Choisis d'abord un onglet ou la plaque du nom.");
   const t=prompt('Texte :',e.texte||'');if(t===null)return;e.texte=t;if(e.type==='banderole'){const s=prompt('Titre sous le nom :',e.sous||'');if(s!==null)e.sous=s;}garder();rendre();};
 document.getElementById('b-avant').onclick=()=>{const e=choisi&&el(choisi);if(!e)return;e.z=Math.max(...etat.elements.map(x=>x.z))+1;garder();rendre();};
 document.getElementById('b-arriere').onclick=()=>{const e=choisi&&el(choisi);if(!e)return;e.z=Math.max(0,Math.min(...etat.elements.map(x=>x.z))-1);garder();rendre();};
 document.getElementById('b-cacher').onclick=()=>{const e=choisi&&el(choisi);if(!e)return;e.cache=!e.cache;garder();rendre();};
-document.getElementById('b-suppr').onclick=()=>{const e=choisi&&el(choisi);if(!e||e.type!=='onglet')return alert('Choisis d\'abord un onglet.');etat.elements=etat.elements.filter(x=>x!==e);choisi=null;garder();rendre();};
+document.getElementById('b-suppr').onclick=()=>{const e=choisi&&el(choisi);if(!e||e.type!=='onglet')return alert("Choisis d'abord un onglet.");etat.elements=etat.elements.filter(x=>x!==e);choisi=null;garder();rendre();};
 document.getElementById('b-reset').onclick=()=>{if(!confirm('Revenir à la disposition de départ ?'))return;etat=JSON.parse(JSON.stringify(DEFAUT));choisi=null;garder();rendre();};
-// Envoi à Claude
 const etatTxt=document.getElementById('etat');let db=null;
 (async()=>{try{db=await window.claude?.use('db');}catch(e){}})();
 document.getElementById('b-envoyer').onclick=async function(){
-  if(!db){etatTxt.style.color='#e8a07a';etatTxt.textContent="L'envoi n'est possible que dans l'artefact sur claude.ai.";return;}
+  if(!db){etatTxt.style.color='var(--baisse)';etatTxt.textContent="L'envoi n'est possible que dans l'artefact sur claude.ai.";return;}
   this.disabled=true;etatTxt.style.color='';etatTxt.textContent='Envoi…';
   try{await db.collection('dispositions').add({quand:Date.now(),elements:etat.elements});etatTxt.textContent='Envoyé ! Dis-le-moi dans la conversation.';}
-  catch(e){etatTxt.style.color='#e8a07a';etatTxt.textContent="L'envoi a échoué ("+(e&&e.code||'erreur')+'), réessaie.';}
+  catch(e){etatTxt.style.color='var(--baisse)';etatTxt.textContent="L'envoi a échoué ("+(e&&e.code||'erreur')+'), réessaie.';}
   this.disabled=false;
 };
+function tic(){const h=document.getElementById('heure');if(!h)return;const d=new Date();h.textContent=[d.getHours(),d.getMinutes(),d.getSeconds()].map(n=>String(n).padStart(2,'0')).join(':');}
+setInterval(tic,1000);
 rendre();
 </script>
 </body>
