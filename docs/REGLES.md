@@ -125,7 +125,7 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 ## 7. Les généraux et les grades
 
 - ✅ **Échelle des effectifs** : 5 → 10 → 20 → 100 → 1 000 → 3 000 → 5 000 → sans limite (ou limite lointaine).
-- 💡 **Noms des grades** (proposition inspirée de Kingdom) : 5 Chef de bande · 10 Chef d'escouade · 20 Sergent · 100 Centurion · 1 000 Commandant de mille · 3 000 Commandant de trois mille · 5 000 Commandant de cinq mille · sans limite **Général** (grade final).
+- ✅ **Noms des grades** (inspirés de Kingdom) : 5 Chef de bande · 10 Chef d'escouade · 20 Sergent · 100 Centurion · 1 000 Commandant de mille · 3 000 Commandant de trois mille · 5 000 Commandant de cinq mille · sans limite **Général** (grade final).
 - ✅ **Grand Général Sous les Cieux** : ce n'est pas un grade mais une **rareté**, la plus haute pour un général (comme un LR dans Dokkan Battle). On l'obtient, on ne l'atteint pas avec de l'XP. Il prend la place d'un général et possède un effet en plus, par exemple une **attaque spéciale** activable en bataille.
 - ✅ Le Grand Général Sous les Cieux est **rare mais pas unique** : plusieurs joueurs peuvent en avoir un.
 - ✅ **Rareté** : de commun à légendaire.
@@ -138,7 +138,8 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 
 ## 8. Les personnages du gacha
 
-- ✅ **Catégories** : Général, Soldat d'élite, Soignant, Espion, Architecte, Ingénieur, Économiste, Archéologue (très rare).
+- ✅ **Catégories** : Général, Soldat d'élite, Soignant, Espion, Architecte, Ingénieur, Économiste, Explorateur.
+- ✅ **Archéologue** : ce n'est plus une catégorie à part. C'est une **capacité rare** de certains explorateurs (un explorateur-archéologue), qui permet de **déterrer des trésors pendant les parties**.
 - ✅ **Guerrier Mystique** : catégorie à part, uniquement des légendaires (voire au-delà), capables de battre une armée entière à eux seuls.
 - ✅ **Stats** : ATK, DEF, END, INT, VIT, Mana (peut-être d'autres).
 - ✅ **Aptitudes** :
@@ -271,7 +272,7 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 - ✅ **Pas de mort définitive pour les soldats** : les hommes sont liés à leurs lieux de vie (la population des quartiers). Un soldat tombé au combat n'est pas perdu : il est indisponible pendant un certain temps, puis il revient. Ça évite qu'un joueur plus nombreux gagne des batailles en boucle contre un adversaire qui n'a pas eu le temps de se refaire.
 - ✅ **Stat de soin** : chaque soignant a une stat de soin, qui correspond au nombre de soldats qu'il remet sur pied par tour pendant la bataille. Ces hommes reviennent dans leur régiment.
 - ✅ **L'hôpital (lieu majeur)** soigne immédiatement les personnages importants (généraux, personnages rares), même pendant une guerre, et soigne progressivement les soldats, même pendant les guerres.
-- 💡 **Deux niveaux d'indisponibilité** : les « tombés » sont indisponibles longtemps (piste : 24 h), les « blessés » moins longtemps (piste : 6 h). Les soignants remettent une partie des blessés sur pied pendant la bataille, et l'infirmerie ou l'hôpital raccourcit les durées. Proportions et durées à régler à l'équilibrage.
+- ✅ **Deux niveaux d'indisponibilité** : les « tombés » sont indisponibles **3 h**, les « blessés » **1 h**. Les soignants remettent une partie des blessés sur pied pendant la bataille, et l'infirmerie ou l'hôpital raccourcit les durées. Proportions tombés / blessés à régler à l'équilibrage.
 - ✅ **Le terrain dépend du type d'unité** : chaque type a un terrain favori et un terrain difficile.
 
   | Unité | Terrain favori | Terrain difficile |
@@ -349,7 +350,8 @@ On reprend les mécaniques de Clash of Clans (pas ses noms ni ses visuels).
 ## 12. Les trésors et l'exploration
 
 - ✅ Un trésor est un coffre trouvé quelque part. Il peut contenir des ressources, des personnages, des objets, des titres ou des bonus.
-- ❓ Où les trouver et comment, trésors uniques ou non.
+- ✅ **Pendant les parties**, un explorateur qui a la capacité Archéologue peut déterrer des trésors. Ces trésors peuvent **soigner**, **rendre plus fort temporairement**, ou même **faire apparaître un monstre qui aide son camp**.
+- ❓ Où ils se trouvent exactement sur la carte, trésors uniques ou non.
 
 ## 13. Les références et les événements
 

@@ -214,7 +214,7 @@ Raretés : rare et épique (environ 30 épiques). Les guerriers mystiques sont a
 ## Explorateurs
 
 - Leif Erikson
-- ❓ « Explorateur » devient une catégorie à part, ou on la fusionne avec « Archéologue » ?
+- ✅ Explorateur et Archéologue sont fusionnés : « Archéologue » est une capacité rare de certains explorateurs, qui permet de déterrer des trésors pendant les parties (soin, bonus temporaire, monstre allié).
 
 ## Généraux rares (à faire plus tard)
 
