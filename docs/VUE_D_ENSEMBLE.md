@@ -22,7 +22,7 @@ Ce document explique comment les parties du jeu s'emboîtent. Le détail des rè
 ### 3. La bataille rangée (tour par tour, façon Warhammer / Total War)
 - Un **affrontement entre joueurs connectés**, sur un **champ de bataille séparé**, tiré au hasard (pas sur la carte d'Aubagne).
 - Tour par tour : général dans son quartier général caché, sous-généraux, unités, 5 actions maximum par tour, brouillard de guerre, formations, terrain et relief.
-- Jouable **dès 300 hommes**, sur une carte plus petite pour les petites armées (en dessous de 300, les combats se règlent automatiquement).
+- Jouable **dès 500 hommes**, sur une carte plus petite pour les petites armées (en dessous de 500, les combats se règlent automatiquement).
 - Le vainqueur remporte la **mise ou l'objectif** (pas de pillage), tout le monde gagne de l'XP.
 - **C'est ce que montre le prototype `prototype/champ-3d/`** : uniquement ce mode de combat, pas le jeu entier.
 

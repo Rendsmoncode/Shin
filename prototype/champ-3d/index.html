@@ -311,7 +311,7 @@ const CHEFS={bleu:['Souvorov','Robin des Bois','Uesugi Kenshin','Jeanne d\'Arc',
   rouge:['Kanki','Ri Boku','Lü Bu','Ousen','Hou Ken','Subötaï','Mehmed II','Harald Hardrada','Shaka Zulu','Baybars']};
 const GENERAUX={bleu:'Koby',rouge:'Shin'};
 const BATAILLES={
-  petite:{nom:'Petite',bleu:[{chef:'Souvorov',kind:'inf',men:200},{chef:'Robin des Bois',kind:'arc',men:100},{chef:'Bayard',kind:'ecl',men:30}],rouge:[{chef:'Kanki',kind:'inf',men:200},{chef:'Ri Boku',kind:'arc',men:100},{chef:'Hou Ken',kind:'ecl',men:30}]},
+  petite:{nom:'Petite',bleu:[{chef:'Souvorov',kind:'inf',men:300},{chef:'Robin des Bois',kind:'arc',men:150},{chef:'Bayard',kind:'ecl',men:50}],rouge:[{chef:'Kanki',kind:'inf',men:300},{chef:'Ri Boku',kind:'arc',men:150},{chef:'Hou Ken',kind:'ecl',men:50}]},
   moyenne:{nom:'Moyenne',bleu:[{chef:'Souvorov',kind:'inf',men:500},{chef:'Robin des Bois',kind:'arc',men:400},{chef:'Uesugi Kenshin',kind:'cav',men:168},{chef:'Bayard',kind:'ecl',men:40},{chef:'Sun Tzu',kind:'esp',men:10}],rouge:[{chef:'Kanki',kind:'inf',men:450},{chef:'Ri Boku',kind:'arc',men:350},{chef:'Lü Bu',kind:'cav',men:144},{chef:'Hou Ken',kind:'ecl',men:40}]},
   grande:{nom:'Grande',bleu:[{chef:'Souvorov',kind:'inf',men:1500},{chef:'Robin des Bois',kind:'arc',men:900},{chef:'Jeanne d\'Arc',kind:'inf',men:600},{chef:'Uesugi Kenshin',kind:'cav',men:550},{chef:'Bayard',kind:'ecl',men:100},{chef:'Sun Tzu',kind:'esp',men:10}],rouge:[{chef:'Kanki',kind:'inf',men:1400},{chef:'Ri Boku',kind:'arc',men:800},{chef:'Ousen',kind:'inf',men:500},{chef:'Lü Bu',kind:'cav',men:350},{chef:'Hou Ken',kind:'ecl',men:100}]}
 };
@@ -322,7 +322,7 @@ function loadBattle(){try{const c=JSON.parse(localStorage.getItem('shin-bataille
   return{bleu:BATAILLES.moyenne.bleu,rouge:BATAILLES.moyenne.rouge,enjeu:cleanEnjeu(null)};}
 const CONF=loadBattle();
 const effectifOf=army=>army.reduce((a,u)=>a+u.men,0)+Math.round(REGLAGES.garnisonQG);   // garde du QG comprise
-// règles (proposition, à ajuster) : 300 à 999 hommes → petite carte ; 1 000 à 2 999 → moyenne ; 3 000 et plus → grande. La plus grande armée choisit.
+// règles (proposition, à ajuster) : 500 à 999 hommes → petite carte ; 1 000 à 2 999 → moyenne ; 3 000 et plus → grande. La plus grande armée choisit.
 const CARTES=[{nom:'petite',W:1050,D:700,max:999},{nom:'moyenne',W:1950,D:1300,max:2999},{nom:'grande',W:3000,D:2000,max:Infinity}];
 const carteFor=n=>CARTES.find(m=>n<=m.max);
 const BIG=Math.max(effectifOf(CONF.bleu),effectifOf(CONF.rouge)),CARTE=carteFor(BIG);
@@ -1169,7 +1169,7 @@ function renderSetup(){
   for(const side of ['bleu','rouge']){const who=side==='bleu'?'Ton armée':'L\'armée adverse',names=draft[side].map(u=>u.chef);
     if(new Set(names).size<names.length)errs.push(`${who} a deux fois le même chef.`);
     if(draft[side].some(u=>!(u.men>=10&&u.men<=5000)))errs.push(`${who} : chaque unité doit avoir de 10 à 5 000 hommes.`);}
-  if(big<300)errs.push('En dessous de 300 hommes, pas de bataille rangée : le combat se règle automatiquement.');
+  if(big<500)errs.push('En dessous de 500 hommes, pas de bataille rangée : le combat se règle automatiquement.');
   const km=v=>(v/1000).toLocaleString('fr-FR',{maximumFractionDigits:2});
   SB.innerHTML=`<h2 id="setup-t">Nouvelle bataille</h2>
     <div class="row">${Object.entries(BATAILLES).map(([k,b])=>`<button type="button" data-preset="${k}">${b.nom} (${fmtMen(effectifOf(b.bleu))} contre ${fmtMen(effectifOf(b.rouge))})</button>`).join('')}</div>
@@ -1281,7 +1281,7 @@ function renderLivret(){
     'Un <b>sous-général</b> dirige de 500 à 5 000 hommes ; en dessous de 500, c\'est un <b>chef d\'unité</b> (10 hommes au moins).',
     `La plus grande armée choisit la carte : jusqu'à 999 hommes, petite (${km(CARTES[0].W)} × ${km(CARTES[0].D)} km) ; jusqu'à 2 999, moyenne (${km(CARTES[1].W)} × ${km(CARTES[1].D)} km) ; au-delà, grande (${km(CARTES[2].W)} × ${km(CARTES[2].D)} km).`,
     '1 soldat affiché = 2 hommes (4 à partir de 3 000 hommes). La bannière montre toujours l\'effectif réel.',
-    'En dessous de 300 hommes, pas de bataille rangée : le combat se règle automatiquement.'])}
+    'En dessous de 500 hommes, pas de bataille rangée : le combat se règle automatiquement.'])}
   ${sec('Placement de départ',[
     `Au début de la bataille, chacun a ${v('placement',' s')} pour placer ses armées et son QG où il veut dans sa zone (le cadre bleu, sa moitié de carte).`,
     'Clic droit dans la zone pour y mettre les armées choisies, <kbd>R</kbd> pour les tourner (<kbd>Maj</kbd>+<kbd>R</kbd> dans l\'autre sens), puis <b>Prêt</b> (ou <kbd>Entrée</kbd>).',

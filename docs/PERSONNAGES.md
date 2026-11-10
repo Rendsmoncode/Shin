@@ -71,7 +71,6 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 - Baybars, « Le Père des conquêtes »
 - Trần Hưng Đạo, « Le Saint Trần »
 - Soundiata Keïta, « Le Lion du Mali »
-- Griffith (Berserk), « Le Faucon blanc »
 - Erwin Smith (L'Attaque des Titans), « Le 13ᵉ Major du Bataillon d'exploration »
 - Maximus (Gladiator), « L'Espagnol »
 - Aragorn (Le Seigneur des Anneaux), « Grands-Pas »
@@ -103,7 +102,7 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 
 - Le créateur du jeu : **Ouki** (Kingdom), le mentor de Shin
 - Mathieu : **Garp** (One Piece), le mentor de Koby
-- Nicolas : **le Chevalier squelette** (Berserk), qui sauve Guts pendant l'Éclipse et le guide ensuite par ses conseils. Mentor mystérieux (personnage non jouable dans ce rôle). Griffith reste un général du gacha : c'est le rival et le frère d'armes de Guts, pas son mentor.
+- Nicolas : **le Chevalier squelette** (Berserk), qui sauve Guts pendant l'Éclipse et le guide ensuite par ses conseils. Mentor mystérieux (personnage non jouable dans ce rôle). Griffith n'est pas son mentor (c'est son rival et frère d'armes) : il est retiré du gacha et devient l'un des grands méchants (voir `LORE.md`).
 - 💡 Idée : le mentor tombe à la fin du tutoriel ou à la première guerre, tué par un lieutenant du grand méchant ; le joueur hérite de son arme ou de son titre.
 
 - 💡 Idée de personnage rare : Adolphe Sax, inventeur du saxophone, qui l'a créé pour les musiques militaires (bonus aux troupes)

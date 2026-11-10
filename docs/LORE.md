@@ -45,6 +45,6 @@ Le plus important : que les joueurs accrochent au jeu, et que les différents ty
 
 ## Points à préciser (notés par Claude)
 
-- ❓ **Griffith** : il était prévu comme général tirable au gacha. S'il fait partie de l'alliance du grand méchant, on le retire du gacha ?
-- ❓ **Le tutoriel et les 500 contre 500** : la bataille rangée est jouable dès 300 hommes. La bataille perdue du tuto et l'arrivée du mentor ont-elles lieu au déblocage des 500 contre 500 (les 3 joueurs ensemble), ou avant ?
+- ✅ **Griffith** est retiré du gacha : il fait partie de l'alliance des grands méchants.
+- ✅ **Bataille rangée dès 500 hommes** (avant : 300). Le déblocage du 500 contre 500 amène la bataille perdue du tuto, puis le mentor et son cadeau.
 - ❓ **Les messagers** : nouvelle règle à écrire dans `REGLES.md` (vitesse des messages entre alliés pendant une guerre).
