@@ -21,6 +21,8 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 
 - ✅ **Joueurs** : uniquement nous 3 pour l'instant. Les nouveaux joueurs arrivent sur invitation.
 - ✅ **Liberté totale entre joueurs** (10/11) : chacun fait ce qu'il veut. On peut s'allier, se faire la guerre, se trahir. Les tyrans (PNJ) tiennent la plupart des quartiers, les joueurs peuvent aussi s'attaquer entre eux.
+  - ✅ **Trêve forcée** : pendant les moments de l'histoire qui réunissent les 3 joueurs (déblocage du 500 contre 500 et tutoriel, première guerre en 3 contre 3), toutes les guerres entre joueurs sont suspendues. Après l'événement, chacun reprend sa liberté.
+  - ✅ **Protection au début** : pas d'attaque entre joueurs pendant le début du jeu, on commence contre les tyrans. 💡 Fin de la protection : au déblocage du 500 contre 500 (à confirmer).
 - ✅ **Monde persistant** : la partie ne s'arrête jamais. Des événements par saison pourront être ajoutés plus tard.
 - ✅ **Rythme** : en temps réel, comme Rise of Kingdoms.
 - ✅ **Plateforme** : navigateur (pas d'application mobile pour l'instant).
