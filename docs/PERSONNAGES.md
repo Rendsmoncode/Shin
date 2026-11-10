@@ -184,6 +184,8 @@ Raretés : rare et épique (environ 30 épiques). Les guerriers mystiques sont a
 - Surcouf, « Le Roi des corsaires »
 - Georges Guynemer, « L'As des as »
 - Guillaume le Maréchal, « Le Meilleur Chevalier du monde »
+- Cheok Jun-gyeong (척준경, Corée, dynastie Goryeo, XIIᵉ siècle), « L'Armée d'un seul homme »
+  - Lore : pendant les guerres contre les Jurchens (vers 1107-1108), il charge presque seul dans les lignes ennemies, tue leurs chefs et dégage avec une poignée d'hommes des généraux coréens encerclés (faits rapportés par la chronique officielle de Goryeo). En Corée, il est devenu une légende de l'homme invincible.
 - Léonidas
 - Hector, « Le Dompteur de chevaux »
 - Le Cid, « El Campeador »
