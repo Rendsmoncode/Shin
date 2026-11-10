@@ -51,6 +51,8 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
   - Lore : il a vaincu deux des cinq plus grandes puissances militaires de son temps (la France, puis les États-Unis). On parle encore du « syndrome du Vietnam » aux États-Unis et du « traumatisme de Diên Biên Phu » en France.
 - Sun Tzu, « Le Père de la guerre »
 - Alexandre Souvorov, « Le Soldat »
+- Attila, « Le Fléau de Dieu »
+  - Lore : roi des Huns (Vᵉ siècle), il fait trembler les deux empires romains, ravage les Balkans, rançonne Constantinople, envahit la Gaule puis l'Italie ; en 452, le pape vient en personne le supplier d'épargner Rome. Arrêté aux Champs Catalauniques (451). Aussi tyran dans le lore (il ouvre le jeu) : recrutable une fois vaincu, comme Lü Bu.
 
 ## Généraux épiques
 
@@ -158,6 +160,8 @@ Deux généraux invaincus, absents de la légende des 7, uniques dans tout le je
 - Kyoukai, « L'Ombre dansante du champ de bataille »
 - Ragnar, « Lodbrok »
 - Lü Bu, « Le Général volant »
+- Guan Yu, « Le Dieu de la guerre »
+  - Lore : général des Trois Royaumes (IIIᵉ siècle). À Baima, il fonce seul au milieu de l'armée ennemie, tue le général Yan Liang devant ses troupes et rapporte sa tête. Il aurait joué aux échecs sans broncher pendant qu'on lui grattait l'os du bras empoisonné. Divinisé après sa mort : il est encore aujourd'hui le dieu de la guerre et de la loyauté en Chine. Détail signature : longue barbe, visage rouge, hallebarde en lame de lune.
 - Jeanne d'Arc, « La Pucelle d'Orléans »
 - Thorfinn, « Le Guerrier de la paix »
 - Hou Ken, « Le Bushin »
