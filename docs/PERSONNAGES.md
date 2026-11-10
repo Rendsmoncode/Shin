@@ -53,6 +53,8 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 - Alexandre Souvorov, « Le Soldat »
 - Attila, « Le Fléau de Dieu »
   - Lore : roi des Huns (Vᵉ siècle), il fait trembler les deux empires romains, ravage les Balkans, rançonne Constantinople, envahit la Gaule puis l'Italie ; en 452, le pape vient en personne le supplier d'épargner Rome. Arrêté aux Champs Catalauniques (451). Aussi tyran dans le lore (il ouvre le jeu) : recrutable une fois vaincu, comme Lü Bu.
+- Yi Sun-sin (Corée, XVIᵉ siècle), « L'Amiral invaincu »
+  - Lore : face à l'invasion japonaise (1592-1598), il remporte toutes ses batailles navales, dont Myeongnyang (1597) avec 13 navires contre plus de 130. Il meurt à sa dernière bataille, en demandant qu'on cache sa mort pour ne pas briser le moral de ses hommes. Détail signature : les « bateaux-tortues » cuirassés.
 
 ## Généraux épiques
 
