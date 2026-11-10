@@ -131,6 +131,19 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 - ✅ **Les défenses du quartier comptent dans toutes les batailles**, pas seulement en défense. Exemple : une tour donne **+10 % aux archers**.
 - ✅ **Les liens entre personnages** : réunir certains personnages dans la même armée donne un bonus. Exemple : **Thorfinn + Knut + Thorkell** dans la même équipe → **toute l'armée +50 % de puissance**.
 - Autres facteurs déjà prévus ailleurs : rareté et grade du général, formations, terrain, soignants, stratégies, effets des mentors et des sauveurs, hasard de ±10 %.
+- 💡 **Proposition de formule (Claude, 10/11, à valider)** :
+  - **Deux valeurs par armée**, comme dans Dokkan : une **attaque** et une **défense**. Les pertes infligées dépendent de l'attaque de l'un face à la défense de l'autre.
+  - **Base** = nombre d'hommes (+ les hommes ajoutés par les garnisons) × valeur d'un homme selon sa troupe (fantassin, archer, cavalier…, + les améliorations d'époque).
+  - **Les bonus sont rangés par catégorie.** Dans une catégorie, les pourcentages **s'additionnent**. Les catégories **se multiplient** entre elles :
+    1. **Commandement** : stats du général (ATK pour l'attaque, DEF pour la défense), sa rareté, son grade ;
+    2. **Quartier** : tours, garnisons, bâtiments (ex. tour +10 % aux archers) ;
+    3. **Liens** : personnages réunis (ex. Thorfinn + Knut + Thorkell +50 %) ;
+    4. **Effets** : cadeaux des mentors, effets des sauveurs, trésors, attaques spéciales ;
+    5. **Situation** : terrain, formation, flanc ou dos, charge (déjà dans le prototype).
+  - **Plafond** : chaque catégorie plafonnée (piste : +100 % maximum), pour qu'aucune combinaison ne rende une armée invincible.
+  - Puis le **hasard de ±10 %**, et les pertes calculées comme dans le prototype (courbe progressive, écrasement à partir d'un rapport de 3).
+  - **Les autres stats** : END réduit les pertes subies, INT renforce les stratégies et la vision, VIT la vitesse de déplacement, Mana les attaques spéciales.
+  - Exemple : 1 000 fantassins → base 1 000. Général +20 %, quartier +15 %, lien +50 %, mentor +10 % → 1 000 × 1,2 × 1,15 × 1,5 × 1,1 ≈ **2 280**. En forêt (×1,2) → **2 730**, puis ±10 % de hasard.
 - ❓ **Comment les bonus se combinent** : additions d'abord puis multiplications ? Les pourcentages de même type s'additionnent entre eux (+10 % et +20 % = +30 %) ou se multiplient (×1,1 × 1,2 = +32 %) ? Plafond éventuel ? (à fixer avec la formule de puissance, tâche 21)
 
 ## 7. Les généraux et les grades
