@@ -22,6 +22,12 @@ Liste de travail des personnages du gacha. Stats et aptitudes à définir ensemb
 - Pas d'animation propre à chaque personnage pour les attaques spéciales.
 - 💡 Voix du narrateur (à décider après l'écriture du lore) : une voix de synthèse sous licence (ElevenLabs), dans l'esprit d'un narrateur épique. Pas d'imitation de la voix d'un vrai comédien sans son accord.
 
+## Identité visuelle des personnages
+
+- ✅ **Approche réinterprétée façon manga** (comme *Kingdom*, *Fate/Grand Order*, *Record of Ragnarok*) : on garde l'époque et les éléments historiques reconnaissables, mais on exagère pour donner du charisme à chacun. Les personnages historiques doivent tenir à côté d'Ouki, Guts ou Garp.
+- ✅ **Un détail signature par personnage**, reconnaissable au premier coup d'œil (ex. : l'étendard à queues de cheval de Gengis Khan, le bicorne de Napoléon).
+- Les fiches visuelles (époque, armure, arme, couleurs, détail signature, références) sont à faire personnage par personnage (tâche 223).
+
 ## Raretés
 
 Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
