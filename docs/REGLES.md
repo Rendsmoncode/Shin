@@ -127,7 +127,7 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 - ✅ **Échelle des effectifs** : 5 → 10 → 20 → 100 → 1 000 → 3 000 → 5 000 → sans limite (ou limite lointaine).
 - ✅ **Noms des grades** (inspirés de Kingdom) : 5 Chef de bande · 10 Chef d'escouade · 20 Sergent · 100 Centurion · 1 000 Commandant de mille · 3 000 Commandant de trois mille · 5 000 Commandant de cinq mille · sans limite **Général** (grade final).
 - ✅ **Grand Général Sous les Cieux** : ce n'est pas un grade mais une **rareté**, la plus haute pour un général (comme un LR dans Dokkan Battle). On l'obtient, on ne l'atteint pas avec de l'XP. Il prend la place d'un général et possède un effet en plus, par exemple une **attaque spéciale** activable en bataille.
-- ✅ **Exception, les généraux de départ** (Shin, Koby, Guts) évoluent en rareté pendant la partie : Shin et Koby de commun jusqu'à Sous les Cieux, Guts d'enfant jusqu'à guerrier mystique (seul général à l'être, peut-être avec Kyoukai). Voir `PERSONNAGES.md`.
+- ✅ **Exception, les généraux de départ** (Shin, Koby, Guts) évoluent en rareté pendant la partie : Shin et Koby de commun jusqu'à Sous les Cieux, Guts d'enfant jusqu'à guerrier mystique (seul général à pouvoir l'être, peut-être avec Kyoukai ; Nicolas choisit en début de partie s'il joue Guts en général ou en guerrier mystique). Pour monter de rareté, il faut atteindre deux seuils : un niveau d'XP et un nombre de soldats dans l'armée. Voir `PERSONNAGES.md`.
 - ✅ Le Grand Général Sous les Cieux est **rare mais pas unique** : plusieurs joueurs peuvent en avoir un.
 - ✅ **Rareté** : de commun à légendaire.
 - ✅ **Expérience** : en améliorant son armée, en gagnant des batailles et des guerres, ou directement avec de l'argent.
