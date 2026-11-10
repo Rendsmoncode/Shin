@@ -36,6 +36,22 @@ Combat après combat, bataille après bataille, et après avoir fait tomber plus
 
 Le plus important : que les joueurs accrochent au jeu, et que les différents tyrans soient assez dispersés pour qu'on veuille aller les affronter. Par exemple, à côté de mon quartier il y a Ray Dark : si je veux prendre son territoire, je dois l'affronter et gagner. Pour cela il faudra que je nourrisse mes hommes et que je les arme. Si je le bats, il y aura un autre adversaire au quartier suivant, etc.
 
+## Deuxième partie (Ayoub, 10/11)
+
+### Les sauveurs
+
+Personnages qui doivent absolument être dans le lore : **Khalid ibn al-Walid, Knut, Musashi, Saladin, Toussaint Louverture, Thorfinn, Abd el-Kader**.
+
+Ils pourront venir en aide pour **sauver les joueurs de la défaite**. Scène semblable à celle de Goku qui sauve Gohan et Goten contre Broly. Par exemple, lors d'un combat contre Richard Cœur de Lion, Saladin apparaît pour filer un coup de main dans une cinématique, tout en enseignant une leçon de vie au joueur.
+
+### Les deux philosophies
+
+Les joueurs devront choisir entre **2 philosophies** au début du jeu :
+- **« Pour atteindre son objectif, il faut être prêt à tout, même au pire. »**
+- **« La vie des hommes vaut plus que le prix des objectifs. »**
+
+En fonction du choix du joueur, des guerriers différents apparaîtront.
+
 ## Décisions (10/11)
 
 - ✅ **Les joueurs sont eux-mêmes** (Ayoub, Mathieu, Nicolas). En arrivant en ville depuis l'extérieur, l'**âme d'un personnage de fiction s'est liée à chacun** : Shin pour Ayoub, Koby pour Mathieu, Guts pour Nicolas. Ils sont eux et leur personnage à la fois.
@@ -44,6 +60,10 @@ Le plus important : que les joueurs accrochent au jeu, et que les différents ty
 - ✅ **Quartiers** : seulement quelques quartiers neutres au début, pour aider à démarrer. Tous les autres sont **dirigés par un tyran**, qu'il faut battre pour prendre le quartier.
 
 ## Points à préciser (notés par Claude)
+
+- ❓ **Les sauveurs** : à quel moment ils apparaissent (défaite précise prévue dans l'histoire, ou n'importe quelle défaite contre un tyran ?), une seule fois chacun ? Ils rejoignent ensuite le joueur, ou repartent ?
+- ❓ **Les sauveurs et la philosophie** : les sept sauveurs vont plutôt avec « la vie des hommes vaut plus » (Musashi et Knut par leur rédemption). Qui sont les sauveurs ou guerriers de l'autre voie (par exemple Gengis Khan, César, Napoléon) ?
+- ❓ **Les philosophies** : le choix est-il définitif ? Change-t-il autre chose que les guerriers qui apparaissent (gacha, bonus, fin de l'histoire) ? Les trois joueurs peuvent-ils choisir différemment ?
 
 - ✅ **Griffith** est retiré du gacha : il fait partie de l'alliance des grands méchants.
 - ✅ **Bataille rangée dès 500 hommes** (avant : 300). Le déblocage du 500 contre 500 amène la bataille perdue du tuto, puis le mentor et son cadeau.
