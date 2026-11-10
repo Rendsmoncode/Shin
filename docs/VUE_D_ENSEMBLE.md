@@ -26,6 +26,11 @@ Ce document explique comment les parties du jeu s'emboîtent. Le détail des rè
 - Le vainqueur remporte la **mise ou l'objectif** (pas de pillage), tout le monde gagne de l'XP.
 - **C'est ce que montre le prototype `prototype/champ-3d/`** : uniquement ce mode de combat, pas le jeu entier.
 
+### En plus : l'histoire, façon visual novel
+- ✅ **Le jeu est aussi un visual novel** : l'histoire se raconte par des scènes de dialogue (personnages dessinés, bulles de texte, décors), en plus des trois niveaux ci-dessus.
+- Exemples : le tutoriel avec les mentors (Ouki, Garp, le Chevalier squelette), la montée en rareté des généraux de départ, les révélations sur le grand méchant.
+- ❓ À définir : à quels moments les scènes arrivent, si les joueurs font des choix qui changent la suite, et si l'histoire est commune à tous ou propre à chaque joueur.
+
 ### Comment ils se relient
 - Une **guerre** (niveau 1) se joue sur la carte d'Aubagne et se compose de plusieurs combats.
 - Quand deux armées ou un joueur et un quartier s'affrontent : si les deux joueurs sont connectés → **bataille rangée** (niveau 3) ; sinon → **raid** façon Clash of Clans (niveau 2).
