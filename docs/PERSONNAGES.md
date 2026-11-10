@@ -86,8 +86,16 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 ## Généraux de départ (un par joueur)
 
 - Le créateur du jeu : **Shin** (général lambda)
-- Nicolas : **Gustave** (Clair Obscur : Expedition 33), le chef de l'expédition, ingénieur au bras mécanique
+- Nicolas : **Guts** (Berserk), le mercenaire à l'épée géante qui se bat seul contre tout (remplace Gustave). Ici en général de départ, pas en guerrier mystique : il part d'en bas, sans pouvoirs.
 - Mathieu : **Koby** (One Piece), l'élève formé par Garp qui part de tout en bas et devient un héros
+
+### Mentors du tutoriel (un par joueur)
+
+- Le créateur du jeu : **Ouki** (Kingdom), le mentor de Shin
+- Mathieu : **Garp** (One Piece), le mentor de Koby
+- 💡 Nicolas : **Griffith** (Berserk) ? Chef de la Troupe du Faucon, il recrute Guts… puis le trahit. Mentor qui devient un ennemi (déjà prévu comme général du gacha : à trancher).
+- 💡 Idée : le mentor tombe à la fin du tutoriel ou à la première guerre, tué par un lieutenant du grand méchant ; le joueur hérite de son arme ou de son titre.
+
 - 💡 Idée de personnage rare : Adolphe Sax, inventeur du saxophone, qui l'a créé pour les musiques militaires (bonus aux troupes)
 
 ## Légendaires dédiés (gacha arrangé, à garder secret)
