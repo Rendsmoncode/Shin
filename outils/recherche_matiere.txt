@@ -1,7 +1,14 @@
 # clé|recherche Wikimedia Commons (une par ligne). Modifier ce fichier relance la recherche sur GitHub.
-mosaique|Byzantine mosaic gold tesserae
-email|champlevé enamel Limoges
-cloisonne|cloisonné enamel medieval
-astrolabe|astrolabe medieval
-entrelacs|Book of Kells
-damasquine|damascened inlay silver iron
+# Références d'art historique pour l'emblème (guandao), le 10/11/2026.
+chine-bronze|Warring States bronze taotie vessel
+chine-qin|Qin dynasty bronze weapon
+chine-laque|Chinese lacquer dragon red
+japon-tsuba|tsuba sword guard Edo period
+japon-estampe|Hokusai warrior woodblock
+islam-geometrie|Islamic geometric star tile mosaic
+islam-metal|Mamluk inlaid brass basin
+pirate|Jolly Roger flag
+scythe|Scythian gold animal style
+azteque|Aztec Codex Borgia
+egypte|Tutankhamun pectoral
+perse|Achaemenid gold griffin

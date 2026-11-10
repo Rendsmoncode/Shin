@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Essais d'emblème</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Uncial+Antiqua&display=swap" rel="stylesheet">
+<style>
+/* Essais d'emblème autour d'une guandao (grand sabre à long manche), inspirée de celle du général Ouki (Kingdom),
+   dans la direction « le futur fabriqué au Moyen Âge » : or, émail turquoise, lapis, grenat, verre sombre. */
+:root{--fond:#070b16;--carte:#0c1426;--ligne:rgba(201,162,78,.22);--or:#c9a24e;--texte:#efe7d4;--doux:#a59e8c;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at 50% 0%,#101a33,var(--fond) 60%);color:var(--texte);font-family:"Cinzel",serif}
+.page{max-width:1200px;margin:0 auto;padding:32px 16px 56px;display:grid;gap:28px}
+h1{margin:0;font-family:"Uncial Antiqua",serif;font-weight:400;font-size:clamp(30px,5vw,46px)}
+.intro p{margin:6px 0 0;color:var(--doux);font-family:system-ui,sans-serif;font-size:15px;line-height:1.5;max-width:760px}
+.grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:18px}
+.essai{background:var(--carte);border:1px solid var(--ligne);display:grid;grid-template-rows:auto auto 1fr auto}
+.essai .scene{display:grid;place-items:center;padding:26px 0 10px;background:radial-gradient(circle at 50% 45%,rgba(58,166,173,.07),transparent 60%)}
+.essai .scene svg{width:240px;height:240px}
+.essai h2{margin:0;padding:0 18px;font-weight:500;font-size:18px;letter-spacing:.06em;display:flex;gap:10px;align-items:baseline}
+.essai h2 span{font-family:"Uncial Antiqua",serif;color:var(--or);font-size:22px}
+.essai p{margin:6px 0 0;padding:0 18px;color:var(--doux);font-family:system-ui,sans-serif;font-size:14px;line-height:1.45}
+.tailles{display:flex;align-items:center;gap:14px;padding:14px 18px;margin-top:14px;border-top:1px solid var(--ligne)}
+.tailles small{font-family:system-ui,sans-serif;font-size:12px;color:var(--doux);margin-right:auto}
+.tailles .clair{background:#efe7d4;padding:6px;border-radius:6px;display:flex;gap:8px;align-items:center}
+.tailles svg{display:block}
+.fin{border:1px solid var(--ligne);padding:18px 20px;background:var(--carte);font-family:system-ui,sans-serif;font-size:15px;line-height:1.5;color:var(--doux)}
+.fin b{color:var(--texte)}
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="intro">
+    <h1>Essais d'emblème · la guandao</h1>
+    <p>Six premières pistes autour d'une guandao inspirée de celle du général Ouki : notre propre dessin de l'arme, pas une copie du manga. Matière : or, émail turquoise et lapis, cordon grenat. Chaque emblème est montré en grand, puis en icône (64, 32 et 16 pixels) sur fond sombre et sur fond clair.</p>
+  </header>
+
+  <!-- Formes communes -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <linearGradient id="or" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3dc98"/><stop offset=".45" stop-color="#c9a24e"/><stop offset="1" stop-color="#7d5f24"/></linearGradient>
+      <linearGradient id="email" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5cc3c4"/><stop offset="1" stop-color="#1d6f86"/></linearGradient>
+      <linearGradient id="lapis" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2f56a8"/><stop offset="1" stop-color="#15295c"/></linearGradient>
+      <linearGradient id="grenat" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b13a45"/><stop offset="1" stop-color="#6d1d27"/></linearGradient>
+      <!-- Tête de la guandao (lame + garde), pointe vers le haut, garde vers y=150 -->
+      <symbol id="tete" viewBox="0 0 200 175" overflow="visible">
+        <path d="M89 150 C88 110 88 82 92 56 L83 49 L92 43 C96 32 100 22 102 10 C114 20 126 40 132 64 C140 96 132 128 113 150 Z" fill="url(#or)"/>
+        <path d="M97 140 C96 110 97 86 101 62 C104 46 107 36 106 28 C116 42 124 62 126 84 C128 106 121 126 108 140 Z" fill="url(#email)"/>
+        <path d="M101 66 C104 52 107 44 107 36" stroke="#f3dc98" stroke-width="1.2" fill="none" opacity=".7"/>
+        <path d="M82 150 Q101 141 120 150 L116 162 Q101 156 86 162 Z" fill="url(#or)"/>
+        <circle cx="101" cy="153" r="4" fill="url(#grenat)"/>
+      </symbol>
+      <!-- Guandao entière : tête, hampe, pommeau, cordon -->
+      <symbol id="guandao" viewBox="0 0 200 400" overflow="visible">
+        <use href="#tete" x="0" y="0" width="200" height="175"/>
+        <rect x="97.5" y="161" width="7" height="206" rx="2" fill="url(#lapis)"/>
+        <g fill="url(#or)"><rect x="95.5" y="200" width="11" height="5" rx="1"/><rect x="95.5" y="290" width="11" height="5" rx="1"/></g>
+        <path d="M95 366 h12 l-6 28 z" fill="url(#or)"/>
+        <path d="M88 162 C80 176 78 192 82 206 M92 163 C88 178 88 194 92 208 M84 162 C74 172 70 186 72 200" stroke="url(#grenat)" stroke-width="3" fill="none" stroke-linecap="round"/>
+      </symbol>
+      <symbol id="anneau-gradue" viewBox="0 0 240 240" overflow="visible">
+        <circle cx="120" cy="120" r="104" fill="none" stroke="url(#or)" stroke-width="3"/>
+        <circle cx="120" cy="120" r="94" fill="none" stroke="url(#or)" stroke-width="1"/>
+        <g stroke="#c9a24e" stroke-width="1.4" id="graduations"></g>
+      </symbol>
+    </defs>
+  </svg>
+
+  <div class="grille" id="grille"></div>
+
+  <div class="fin">
+    <b>Comment on avance :</b> dis-moi quels essais te parlent (même un seul détail : la forme de la lame, le cercle, le cordon rouge, les couleurs…) et ce que tu enlèverais. Tu peux aussi dessiner une idée dans l'outil de dessin et me l'envoyer. Je refais une série plus ciblée à partir de tes retours.
+  </div>
+</div>
+
+<script>
+// Graduations de l'anneau
+const g=document.getElementById('graduations');
+for(let a=0;a<360;a+=6){const long=a%30===0;const l=document.createElementNS('http://www.w3.org/2000/svg','line');
+  l.setAttribute('x1',120);l.setAttribute('y1',16);l.setAttribute('x2',120);l.setAttribute('y2',long?27:22);l.setAttribute('transform',`rotate(${a} 120 120)`);if(!long)l.setAttribute('stroke-width','.8');g.appendChild(l);}
+
+const rete=()=>{let s='';for(let i=0;i<12;i++){s+=`<path d="M120 26 Q126 40 120 52 Q114 40 120 26z" fill="url(#or)" transform="rotate(${i*30+15} 120 120)"/>`;}return s;};
+const perles=(r,n)=>{let s='';for(let i=0;i<n;i++){const a=i/n*2*Math.PI;s+=`<circle cx="${(120+r*Math.cos(a)).toFixed(1)}" cy="${(120+r*Math.sin(a)).toFixed(1)}" r="2.2" fill="url(#or)"/>`;}return s;};
+
+const ESSAIS=[
+ {n:'I',titre:'La lame dans le cercle',idee:"Seule la tête de la guandao, penchée, qui traverse un anneau gradué d'astrolabe. Simple et fort, se lit bien en petit.",
+  svg:`<use href="#anneau-gradue" x="0" y="0" width="240" height="240"/><use href="#tete" x="10" y="8" width="230" height="201" transform="rotate(-18 120 120)"/>`},
+ {n:'II',titre:"L'astrolabe de guerre",idee:"La guandao entière sert d'aiguille à un astrolabe ajouré : deux anneaux et des pointes en flammes, comme la vraie araignée d'astrolabe du menu.",
+  svg:`<circle cx="120" cy="120" r="100" fill="none" stroke="url(#or)" stroke-width="4"/><circle cx="120" cy="120" r="70" fill="none" stroke="url(#or)" stroke-width="2"/>${rete()}<circle cx="120" cy="120" r="12" fill="#0c1426" stroke="url(#or)" stroke-width="3"/><use href="#guandao" x="60" y="4" width="120" height="240" transform="rotate(32 120 120)"/>`},
+ {n:'III',titre:'Le sceau',idee:"Un médaillon rond en émail lapis, bordé d'un rang de perles d'or, avec la guandao en diagonale et son cordon rouge. Le plus « royal ».",
+  svg:`<circle cx="120" cy="120" r="108" fill="url(#or)"/><circle cx="120" cy="120" r="100" fill="url(#lapis)"/>${perles(92,40)}<circle cx="120" cy="120" r="84" fill="none" stroke="url(#or)" stroke-width="1.2"/><use href="#guandao" x="56" y="-4" width="128" height="256" transform="rotate(-40 120 120)"/>`},
+ {n:'IV',titre:"L'écu",idee:"Un bouclier émaillé coupé en deux (turquoise et lapis), traversé de haut en bas par la guandao. Classique de blason, mais en émail de Limoges.",
+  svg:`<path d="M30 22 H210 V110 C210 170 168 206 120 226 C72 206 30 170 30 110 Z" fill="url(#or)"/><path d="M40 32 H120 V214 C80 196 40 164 40 110 Z" fill="url(#email)"/><path d="M120 32 H200 V110 C200 164 160 196 120 214 Z" fill="url(#lapis)"/><use href="#guandao" x="62" y="0" width="116" height="232"/>`},
+ {n:'V',titre:'Le glyphe',idee:"La guandao réduite à un signe : la courbe de la lame, la hampe, un point d'or. Presque une lettre. Le plus lisible en icône, à décliner partout.",
+  svg:`<path d="M112 34 C142 60 156 98 144 132 C136 152 124 162 112 166" fill="none" stroke="url(#or)" stroke-width="12" stroke-linecap="round"/><path d="M112 34 C110 60 108 96 110 166" fill="none" stroke="url(#email)" stroke-width="7" stroke-linecap="round"/><path d="M90 166 H134" stroke="url(#or)" stroke-width="8" stroke-linecap="round"/><path d="M112 172 V214" stroke="url(#or)" stroke-width="6" stroke-linecap="round"/><circle cx="112" cy="222" r="5" fill="url(#grenat)"/>`},
+ {n:'VI',titre:'La lune de guerre',idee:"La courbe tranchante de la lame se prolonge en croissant de lune, avec une étoile : la guerre et le ciel des astrolabes réunis.",
+  svg:`<path d="M168 48 A84 84 0 1 0 172 196 A70 70 0 1 1 168 48 Z" fill="url(#or)"/><path d="M162 62 A72 72 0 1 0 164 182 A62 62 0 1 1 162 62 Z" fill="url(#email)" opacity=".85"/><path d="M168 108 l5 11 12 1 -9 8 3 12 -11 -6 -11 6 3 -12 -9 -8 12 -1z" fill="url(#or)"/><use href="#guandao" x="66" y="6" width="108" height="216" transform="rotate(12 120 120)"/>`}
+];
+const grille=document.getElementById('grille');
+ESSAIS.forEach(e=>{
+  const svg=s=>`<svg viewBox="0 0 240 240" width="${s}" height="${s}" aria-hidden="true">${e.svg}</svg>`;
+  const d=document.createElement('article');d.className='essai';
+  d.innerHTML=`<div class="scene"><svg viewBox="0 0 240 240" role="img" aria-label="Essai ${e.n} : ${e.titre}">${e.svg}</svg></div>
+    <h2><span>${e.n}</span>${e.titre}</h2><p>${e.idee}</p>
+    <div class="tailles"><small>En icône</small>${svg(64)}${svg(32)}${svg(16)}<span class="clair">${svg(32)}${svg(16)}</span></div>`;
+  grille.appendChild(d);
+});
+</script>
+</body>
+</html>

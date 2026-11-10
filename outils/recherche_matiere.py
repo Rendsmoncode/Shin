@@ -37,6 +37,6 @@ for ligne in open("outils/recherche_matiere.txt", encoding="utf-8"):
         index.append({"fichier": nom, "titre": pg["title"][5:], "licence": lic, "auteur": auteur, "page": ii.get("descriptionurl")})
         print(nom, lic, pg["title"][5:][:70])
         time.sleep(1)
-        if n >= 6: break
+        if n >= int(os.environ.get("PAR_RECHERCHE", "4")): break
     time.sleep(3)
 json.dump(index, open(os.path.join(dossier, "index.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
