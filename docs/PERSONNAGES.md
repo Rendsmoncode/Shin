@@ -162,7 +162,8 @@ Deux généraux invaincus, absents de la légende des 7, uniques dans tout le je
 - Kyoukai, « L'Ombre dansante du champ de bataille »
 - Ragnar, « Lodbrok »
 - Lü Bu, « Le Général volant »
-- Guan Yu, « Le Dieu de la guerre »
+- Guan Yu, « Le Deuxième Démon »
+  - Surnom : clin d'œil à son surnom chinois « Second Seigneur Guan » (关二爷, deuxième des trois frères jurés avec Liu Bei et Zhang Fei), et à sa rivalité avec Lü Bu (dans le roman, les trois frères affrontent Lü Bu ensemble à la passe de Hulao ; il hérite ensuite de son cheval, Lièvre Rouge). Lien possible : bonus avec Liu Bei et Zhang Fei, rivalité avec Lü Bu.
   - Lore : général des Trois Royaumes (IIIᵉ siècle). À Baima, il fonce seul au milieu de l'armée ennemie, tue le général Yan Liang devant ses troupes et rapporte sa tête. Il aurait joué aux échecs sans broncher pendant qu'on lui grattait l'os du bras empoisonné. Divinisé après sa mort : il est encore aujourd'hui le dieu de la guerre et de la loyauté en Chine. Détail signature : longue barbe, visage rouge, hallebarde en lame de lune.
 - Jeanne d'Arc, « La Pucelle d'Orléans »
 - Thorfinn, « Le Guerrier de la paix »
