@@ -317,13 +317,13 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
   | Stratégie | Condition | Effet | Exemple historique |
   |---|---|---|---|
   | **Embuscade** | armée cachée (forêt, crête) | la première manche frappe ×1,5 et l'ennemi ne peut pas changer de formation ce tour-là | Hannibal au lac Trasimène (217 av. J.-C.), Teutobourg (9 apr. J.-C.) |
-  | **Nuage de poussière** | cavaliers dans l'armée | l'armée est difficile à repérer pendant un tour, et son nombre paraît plus grand | les Mongols traînaient des branches derrière leurs chevaux |
+  | **Nuage de poussière** | cavaliers dans l'armée | l'ennemi ne voit plus le nombre exact de soldats, mais une **fourchette** (ex. « entre 600 et 1 400 ») ; plus le nuage est efficace (nombre de cavaliers, INT du général), plus la fourchette est large | les Mongols traînaient des branches derrière leurs chevaux |
   | **Flèches enflammées** | archers du niveau voulu | tir +30 %, met le feu à une forêt ou à un bâtiment (la zone brûle quelques tours) | sièges de l'Antiquité et du Moyen Âge |
   | **Fausse retraite** | cavalerie | l'armée recule ; si l'ennemi la poursuit, il perd sa formation et prend un contre-coup ×1,5 | les Mongols, les Normands à Hastings (1066) |
   | **Marteau et enclume** | deux armées : une qui tient de face, une qui charge de flanc ou de dos le même tour | bonus de flanc ou de dos renforcé | Alexandre à Gaugamèles (331 av. J.-C.) |
   | **Tir en retraite** (tir parthe) | archers à cheval | tir sans entrer au contact, puis l'armée s'éloigne | les Parthes à Carrhes (53 av. J.-C.) |
   | **Dos à la rivière** | armée adossée à une rivière | attaque +30 %, mais impossible de se replier | Han Xin à la bataille de la rivière Jing (205 av. J.-C.) |
-  | **Rupture de barrage** | rivière sur la carte + ingénieur | les armées dans le gué ou au bord perdent beaucoup d'hommes, le gué devient infranchissable quelques tours | Han Xin à la rivière Wei (204 av. J.-C.) |
+  | **Rupture de barrage** | rivière sur la carte + ingénieur | les armées dans le gué ou au bord perdent beaucoup d'hommes, le gué devient infranchissable quelques tours (version simplifiée : l'eau monte et change de couleur, pas de vraie simulation de l'eau) | Han Xin à la rivière Wei (204 av. J.-C.) |
   | **Feux trompeurs** | n'importe quelle armée | crée de fausses armées (leurres) visibles par l'ennemi pendant quelques tours | Hannibal et les bœufs aux torches (217 av. J.-C.) |
   | **Ville vide** | quartier général | l'ennemi qui voit le QG le croit piégé : il hésite (ses armées proches perdent un tour) | Zhuge Liang (légende des Trois Royaumes) |
   | **Pieux** | archers | les charges contre eux ne marchent pas pendant quelques tours | les archers anglais à Azincourt (1415) |
