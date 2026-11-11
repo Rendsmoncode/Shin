@@ -132,7 +132,8 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 - ✅ **Les liens entre personnages** : réunir certains personnages dans la même armée donne un bonus. Exemple : **Thorfinn + Knut + Thorkell** dans la même équipe → **toute l'armée +50 % de puissance**.
 - Autres facteurs déjà prévus ailleurs : rareté et grade du général, formations, terrain, soignants, stratégies, effets des mentors et des sauveurs, hasard de ±10 %.
 - 💡 **Proposition de formule (Claude, 10/11, à valider)** :
-  - **Deux valeurs par armée**, comme dans Dokkan : une **attaque** et une **défense**. Les pertes infligées dépendent de l'attaque de l'un face à la défense de l'autre.
+  - ✅ **Deux valeurs par armée** (validé le 11/11) : une **attaque** (combien d'ennemis on met hors de combat) et une **défense** (combien d'hommes on perd sous les coups). Les deux armées se frappent en même temps ; chacune perd des hommes selon l'attaque de l'adversaire face à sa propre défense. Les formations déplacent l'équilibre (ex. tortue : défense +40 %, attaque −30 %), ce qui donne des profils variés (cavalerie lourde, phalange, archers…).
+  - ✅ **Les valeurs chiffrées** (stats des troupes, des personnages, des bonus) seront fixées par Claude, équilibrées par simulation.
   - **Base** = nombre d'hommes (+ les hommes ajoutés par les garnisons) × valeur d'un homme selon sa troupe (fantassin, archer, cavalier…, + les améliorations d'époque).
   - **Les bonus sont rangés par catégorie.** Dans une catégorie, les pourcentages **s'additionnent**. Les catégories **se multiplient** entre elles :
     1. **Commandement** : stats du général (ATK pour l'attaque, DEF pour la défense), sa rareté, son grade ;
