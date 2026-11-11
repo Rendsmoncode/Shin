@@ -142,7 +142,7 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
     5. **Situation** : terrain, formation, flanc ou dos, charge (déjà dans le prototype).
   - **Plafond** : chaque catégorie plafonnée (piste : +100 % maximum), pour qu'aucune combinaison ne rende une armée invincible.
   - Puis le **hasard de ±10 %**, et les pertes calculées comme dans le prototype (courbe progressive, écrasement à partir d'un rapport de 3).
-  - **Les autres stats** : END réduit les pertes subies, INT renforce les stratégies et la vision, VIT la vitesse de déplacement, Mana les attaques spéciales.
+  - **Les autres stats** : END réduit les pertes subies, INT renforce les stratégies et la vision, VIT la vitesse de déplacement, Aura les attaques spéciales.
   - Exemple : 1 000 fantassins → base 1 000. Général +20 %, quartier +15 %, lien +50 %, mentor +10 % → 1 000 × 1,2 × 1,15 × 1,5 × 1,1 ≈ **2 280**. En forêt (×1,2) → **2 730**, puis ±10 % de hasard.
 - ❓ **Comment les bonus se combinent** : additions d'abord puis multiplications ? Les pourcentages de même type s'additionnent entre eux (+10 % et +20 % = +30 %) ou se multiplient (×1,1 × 1,2 = +32 %) ? Plafond éventuel ? (à fixer avec la formule de puissance, tâche 21)
 
@@ -166,7 +166,7 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 - ✅ **Catégories** : Général, Soldat d'élite, Soignant, Espion, Architecte, Ingénieur, Économiste, Explorateur.
 - ✅ **Archéologue** : ce n'est plus une catégorie à part. C'est une **capacité rare** de certains explorateurs (un explorateur-archéologue), qui permet de **déterrer des trésors pendant les parties**.
 - ✅ **Guerrier Mystique** : catégorie à part, uniquement des légendaires (voire au-delà), capables de battre une armée entière à eux seuls.
-- ✅ **Stats** : ATK, DEF, END, INT, VIT, Mana (peut-être d'autres).
+- ✅ **Stats** : ATK, DEF, END, INT, VIT, Aura (remplace « Mana », 11/11 : la présence du personnage sur le champ de bataille, qui sert aux attaques spéciales), peut-être d'autres.
 - ✅ **Aptitudes** :
   - tout le monde a une **aptitude passive**. Elle peut agir sur lui-même, lui et ses alliés, uniquement ses alliés, son général, le lieu de la bataille, le lieu où il campe, les commerces autour de lui, etc. ;
   - un général a en plus une **aptitude de leader**.
