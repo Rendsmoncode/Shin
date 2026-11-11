@@ -312,6 +312,28 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
   - ✅ **Qui les maîtrise** : **tous les généraux maîtrisent les formations de base** (ligne, colonne, ordre dispersé). Certains maîtrisent des **formations spéciales**, selon leur **niveau et/ou leur histoire**. **Les formations les plus fortes** (double enveloppement, ordre oblique…) **sont réservées aux généraux les plus forts**. Idées : Alexandre (phalange, coin), Léonidas (phalange), Hannibal (croissant, double enveloppement), Épaminondas et Frédéric le Grand s'ils entrent au jeu (ordre oblique), Scipion et César (légion), César et Scipion (tortue), Knut et Harald Hardrada (mur de boucliers), Napoléon (carré, colonne), Gengis Khan et Subötaï (volées à cheval).
   - **Changer de formation** est un ordre rapide (règle déjà fixée).
   - Le « marteau et l'enclume » d'Alexandre (l'infanterie bloque, la cavalerie frappe de flanc) n'est pas une formation : il ira dans les stratégies ou les liens.
+- 💡 **Liste des stratégies (proposition de Claude, 11/11, à valider)**. Une stratégie est un **ordre rapide**. Chiffres indicatifs, à régler par simulation.
+
+  | Stratégie | Condition | Effet | Exemple historique |
+  |---|---|---|---|
+  | **Embuscade** | armée cachée (forêt, crête) | la première manche frappe ×1,5 et l'ennemi ne peut pas changer de formation ce tour-là | Hannibal au lac Trasimène (217 av. J.-C.), Teutobourg (9 apr. J.-C.) |
+  | **Nuage de poussière** | cavaliers dans l'armée | l'armée est difficile à repérer pendant un tour, et son nombre paraît plus grand | les Mongols traînaient des branches derrière leurs chevaux |
+  | **Flèches enflammées** | archers du niveau voulu | tir +30 %, met le feu à une forêt ou à un bâtiment (la zone brûle quelques tours) | sièges de l'Antiquité et du Moyen Âge |
+  | **Fausse retraite** | cavalerie | l'armée recule ; si l'ennemi la poursuit, il perd sa formation et prend un contre-coup ×1,5 | les Mongols, les Normands à Hastings (1066) |
+  | **Marteau et enclume** | deux armées : une qui tient de face, une qui charge de flanc ou de dos le même tour | bonus de flanc ou de dos renforcé | Alexandre à Gaugamèles (331 av. J.-C.) |
+  | **Tir en retraite** (tir parthe) | archers à cheval | tir sans entrer au contact, puis l'armée s'éloigne | les Parthes à Carrhes (53 av. J.-C.) |
+  | **Dos à la rivière** | armée adossée à une rivière | attaque +30 %, mais impossible de se replier | Han Xin à la bataille de la rivière Jing (205 av. J.-C.) |
+  | **Rupture de barrage** | rivière sur la carte + ingénieur | les armées dans le gué ou au bord perdent beaucoup d'hommes, le gué devient infranchissable quelques tours | Han Xin à la rivière Wei (204 av. J.-C.) |
+  | **Feux trompeurs** | n'importe quelle armée | crée de fausses armées (leurres) visibles par l'ennemi pendant quelques tours | Hannibal et les bœufs aux torches (217 av. J.-C.) |
+  | **Ville vide** | quartier général | l'ennemi qui voit le QG le croit piégé : il hésite (ses armées proches perdent un tour) | Zhuge Liang (légende des Trois Royaumes) |
+  | **Pieux** | archers | les charges contre eux ne marchent pas pendant quelques tours | les archers anglais à Azincourt (1415) |
+  | **Attaque de nuit** | n'importe quelle armée | vision de tous réduite pendant un tour, l'ennemi surpris ne peut pas changer de formation | courante dans l'histoire |
+  | **Désinformation** | espion | l'ennemi voit de fausses positions de vos armées pendant un tour | espions de toutes les époques |
+  | **Terre brûlée** | n'importe quelle armée, sur son propre terrain | une zone devient impraticable ; sur la carte du monde, l'ennemi qui la traverse perd des hommes faute de nourriture | Vercingétorix (52 av. J.-C.), Koutouzov (1812) |
+
+  - **Qui peut les utiliser** : comme les formations, certaines sont accessibles à tous si l'armée remplit la condition (embuscade, nuage de poussière, pieux, attaque de nuit) ; les autres sont des **stratégies spéciales** maîtrisées par certains généraux selon leur niveau et leur histoire (ex. Hannibal : feux trompeurs ; Zhuge Liang : ville vide ; Alexandre : marteau et enclume ; Gengis Khan et Subötaï : fausse retraite, tir en retraite ; Koutouzov : terre brûlée).
+  - **Usage limité** : une stratégie a un temps de recharge (piste : une fois tous les 3 tours) ou un nombre d'usages par bataille. L'**INT** du général renforce l'effet ou raccourcit la recharge.
+  - **Contres** : les éclaireurs et les espions démasquent les leurres, les embuscades et la désinformation ; un général à forte INT résiste mieux aux ruses (« ville vide », « désinformation »).
 - ✅ **Courbe progressive** : plus l'écart de puissance grandit, plus les pertes deviennent déséquilibrées, jusqu'à l'écrasement (pas de paliers brutaux).
 - ✅ **Hasard** : ±10 % sur le résultat d'un affrontement.
 - ✅ **Pas de mort définitive pour les soldats** : les hommes sont liés à leurs lieux de vie (la population des quartiers). Un soldat tombé au combat n'est pas perdu : il est indisponible pendant un certain temps, puis il revient. Ça évite qu'un joueur plus nombreux gagne des batailles en boucle contre un adversaire qui n'a pas eu le temps de se refaire.
