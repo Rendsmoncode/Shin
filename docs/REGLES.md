@@ -289,6 +289,24 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
   - **Marche** : le bloc glisse, les rangs ondulent légèrement avec un décalage (effet de pas), de la poussière se lève, et le bloc pivote pour changer de direction.
   - Les joueurs se distinguent par leurs bannières (pas de recoloration des soldats).
 - ✅ **Formations** : les armées peuvent prendre des formations, selon celles que maîtrisent leurs généraux et sous-généraux. Elles fonctionnent en pierre-feuille-ciseaux : chacune a une force et une faiblesse.
+- 💡 **Liste des formations (proposition de Claude, 11/11, à valider)**. Les chiffres sont indicatifs : ils seront réglés par simulation.
+
+  | Formation | Troupes | Effets | Forte contre | Faible contre |
+  |---|---|---|---|---|
+  | **Ligne** (de base) | toutes | aucun | — | — |
+  | **Colonne de marche** | toutes | vitesse +30 %, attaque et défense −20 % | — | tout, surtout les embuscades |
+  | **Ordre dispersé** | infanterie légère, archers, éclaireurs | flèches reçues −50 %, vitesse +10 %, défense au corps à corps −20 %, charges reçues ×1,3 | archers | cavalerie |
+  | **Phalange** | infanterie (piques, lances) | de face : défense +30 %, attaque +10 %, les charges ne marchent pas ; vitesse −30 % ; flancs et dos plus vulnérables | cavalerie de face | archers, attaques de flanc |
+  | **Mur de boucliers** | infanterie (boucliers) | défense +40 %, attaque −20 %, vitesse −40 % | infanterie, charges | coin, archers |
+  | **Tortue** | infanterie (boucliers) | flèches reçues −70 %, défense +20 %, attaque −40 %, vitesse −50 % | archers | infanterie au corps à corps (elle frappe peu) |
+  | **Carré** | infanterie | pas de flanc ni de dos (tout compte comme de face), défense +20 % contre la cavalerie, vitesse −60 %, flèches reçues +50 % | cavalerie, encerclement | archers |
+  | **Coin** | infanterie ou cavalerie | attaque +30 % (percée), défense −20 % | mur de boucliers, ligne | croissant, attaques de flanc |
+  | **Croissant** | infanterie (armée plus nombreuse) | attaque +20 %, prend l'ennemi de flanc automatiquement s'il est moins nombreux, défense du centre −20 % | coin, ligne | cavalerie (ailes minces) |
+  | **Volées** | archers | attaque à distance +20 %, défense −10 % | formations serrées et lentes | cavalerie, ordre dispersé |
+
+  - **Le cycle principal** : la cavalerie bat les archers et l'ordre dispersé ; la phalange et le carré battent la cavalerie ; les archers battent les formations serrées et lentes ; la tortue bat les archers ; le coin perce le mur et la ligne ; le croissant enveloppe le coin.
+  - **Qui les maîtrise** : la ligne, la colonne et l'ordre dispersé sont connus de tous. Les autres sont maîtrisées par certains généraux et sous-généraux, et se débloquent avec le grade. Idées : Alexandre (phalange, coin), Léonidas (phalange), Hannibal (croissant), César et Scipion (tortue), Knut et Harald Hardrada (mur de boucliers), Napoléon (carré, colonne), Gengis Khan et Subötaï (volées à cheval).
+  - **Changer de formation** est un ordre rapide (règle déjà fixée).
 - ✅ **Courbe progressive** : plus l'écart de puissance grandit, plus les pertes deviennent déséquilibrées, jusqu'à l'écrasement (pas de paliers brutaux).
 - ✅ **Hasard** : ±10 % sur le résultat d'un affrontement.
 - ✅ **Pas de mort définitive pour les soldats** : les hommes sont liés à leurs lieux de vie (la population des quartiers). Un soldat tombé au combat n'est pas perdu : il est indisponible pendant un certain temps, puis il revient. Ça évite qu'un joueur plus nombreux gagne des batailles en boucle contre un adversaire qui n'a pas eu le temps de se refaire.
