@@ -95,7 +95,7 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 ## 4. L'économie
 
 - ✅ **Ressources de départ** : Argent, Nourriture, Matériaux, Population, et la monnaie du gacha.
-- ✅ **Ressources des époques suivantes** : Mana (mages), Munitions et Carburant (armes à feu et véhicules), objets spéciaux (accélérateurs, livres d'XP…).
+- ✅ **Objets spéciaux** : accélérateurs, livres d'XP… (Mana, Munitions et Carburant sont gardés pour un éventuel DLC.)
 - ✅ **Pas de prestige ni d'influence.**
 - ✅ **Production** :
   - les commerces produisent de l'argent ;
@@ -116,21 +116,17 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 ## 6. Les troupes
 
 - ✅ **On mélange les époques et les mondes** : passé, présent, réel et fiction.
-- ✅ **Progression par époques** :
-  1. au début : infanterie, cavalerie, archers (à pied et à cheval, voire à vélo pour l'humour) ;
-  2. puis armes à feu ;
-  3. puis véhicules ;
-  4. puis mages, etc.
+- ✅ **Une seule époque pour l'instant : les armes blanches** (11/11). Pas de passage aux armes à feu, aux véhicules ni à la magie. Ces époques sont gardées de côté pour un éventuel DLC.
 - ✅ **Recrutement** : les soldats dépendent de la population et de la taille des quartiers (on s'inspire de Rise of Kingdoms et Clash of Clans).
 - ✅ **Soignants** : ils remettent les troupes d'aplomb pendant les batailles et les guerres, et donnent des bonus (par exemple +300 vitalité pour tous les fantassins).
 - ✅ **Ni moral ni fatigue** : une troupe se bat à 100 % tant qu'elle a des soldats (pour ne pas rendre le jeu trop sérieux).
 
-### Les troupes par époque (proposition de Claude, 11/11, à valider)
+### Les troupes (validées le 11/11)
 
 - ✅ **Les conditions ne sont jamais des interdictions** (11/11) : chaque troupe (et chaque stratégie, chaque formation) a des situations **conseillées** et **déconseillées**. Le jeu les signale (par exemple une icône verte ou rouge), mais le joueur reste libre : hors de ses conditions, une troupe se bat simplement moins bien (malus), et une stratégie a un effet réduit.
 - Profils en lettres (ATK / DEF / vitesse) : A = très fort, B = bon, C = moyen, D = faible. Chiffres réels à régler par simulation.
 
-**Époque 1 : armes blanches (au début)**. Ressources : argent, nourriture, matériaux.
+**Les troupes du jeu (armes blanches)**. Ressources : argent, nourriture, matériaux.
 
 | Troupe | ATK / DEF / vitesse | Conseillé | Déconseillé |
 |---|---|---|---|
@@ -149,31 +145,7 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 
 Améliorations (règle déjà fixée) : la cavalerie débloque les chars de guerre ; les archers débloquent les flèches spéciales (enflammées, empoisonnées…) ; l'infanterie gagne de meilleurs équipements.
 
-**Époque 2 : la poudre**. Ressource en plus : munitions.
-
-| Troupe | ATK / DEF / vitesse | Conseillé | Déconseillé |
-|---|---|---|---|
-| **Arquebusier, mousquetaire** | A (courte portée) / D / C | derrière des piquiers (tercio), défendre, tirer en salves | corps à corps sans piques, troupes rapides (recharge lente) |
-| **Fusilier à baïonnette** (fin de l'époque) | B / C / C | ligne, carré contre la cavalerie | artillerie, formations trop serrées |
-| **Grenadier** | A contre les formations serrées / C / C | contre la phalange, la tortue, le carré, les bâtiments | ordre dispersé (peu de cibles) |
-| **Dragon** (infanterie montée) | B / C / A | arriver vite, puis combattre à pied, tenir un point | charges contre de la cavalerie lourde |
-| **Cuirassier, hussard** | A (charge) / B / A | flancs, poursuite, contre l'artillerie isolée | carrés, mitraille de l'artillerie |
-| **Artillerie** (canons) | A (très longue portée) / D / D | contre les formations serrées et les bâtiments, depuis une colline | être exposée sans escorte, terrain accidenté |
-
-**Époque 3 : les véhicules**. Ressource en plus : carburant.
-
-| Troupe | ATK / DEF / vitesse | Conseillé | Déconseillé |
-|---|---|---|---|
-| **Fantassin moderne** | B / C / C | forêts, ruines, bâtiments, tenir un point | plaine face aux blindés |
-| **Mitrailleur** | A (défense) / B / D | défendre un passage, briser une charge | avancer, artillerie et mortiers |
-| **Moto, véhicule de reconnaissance** | C / D / A | éclairer, harceler, poursuivre | combat frontal |
-| **Blindé, char d'assaut** | A / A / B | percer une ligne, plaine | forêts denses, ruines, marais, sans infanterie autour |
-| **Mortier, artillerie lourde** | A (très longue portée) / D / D | contre les formations groupées et les bâtiments | être exposé sans escorte |
-
-**Époque 4 : la magie**. Ressource en plus : mana. À définir plus tard (mages, créatures, monstres libérés par les trésors…).
-
-- ❓ **Lien avec le lore** : le soir de la faille, toutes les armes modernes de la ville sont tombées en poussière. Les époques 2 et 3 sont donc des armes à **reconstruire** (forger, fabriquer), pas à trouver. Faut-il une explication dans l'histoire (par exemple : la faille ne détruit que les armes qui existaient ce jour-là) ?
-- ❓ **Mélange des époques** : un joueur à l'époque 2 garde ses troupes de l'époque 1 (on mélange les époques, règle déjà fixée).
+**Époques suivantes (armes à feu, véhicules, magie)** : mises de côté pour un éventuel DLC, voir la section « De côté : DLC » en fin de document.
 
 ## 6 bis. Le calcul de la puissance (façon Dokkan Battle)
 
@@ -356,7 +328,7 @@ Améliorations (règle déjà fixée) : la cavalerie débloque les chars de guer
   | **Légion** (manipules, cohortes) | infanterie | petits bonus partout (attaque et défense +10 %), changement de formation plus rapide, meilleure en terrain accidenté ; aucune grosse faiblesse | phalange en terrain accidenté | cavalerie lourde en masse |
   | **Ordre oblique** | toutes | une aile renforcée (attaque +40 % de ce côté), l'autre aile recule (défense −30 % de l'autre côté) | ligne, armée qui s'étire | armée qui attaque l'aile faible |
   | **Double enveloppement** (Cannes) | infanterie + cavalerie sur les ailes | encercle l'ennemi : attaque de flanc et de dos sur tout le front, pertes ennemies très lourdes ; demande un centre discipliné et une cavalerie supérieure sur les ailes, sinon le centre cède | presque tout, si les conditions sont réunies | coin qui perce le centre, cavalerie ennemie supérieure |
-  | **Tercio** (époque des armes à feu, plus tard) | piques + arquebuses | défense contre la cavalerie comme la phalange, plus tir à distance | cavalerie, infanterie | artillerie, armées plus mobiles |
+  | **Tercio** (armes à feu, DLC éventuel) | piques + arquebuses | défense contre la cavalerie comme la phalange, plus tir à distance | cavalerie, infanterie | artillerie, armées plus mobiles |
 
   - **Le cycle principal** : la cavalerie bat les archers et l'ordre dispersé ; la phalange et le carré battent la cavalerie ; les archers battent les formations serrées et lentes ; la tortue bat les archers ; le coin perce le mur et la ligne ; le croissant enveloppe le coin. Historiquement, aucune formation n'a dominé pour toujours : chacune a trouvé son contre.
   - ✅ **Qui les maîtrise** : **tous les généraux maîtrisent les formations de base** (ligne, colonne, ordre dispersé). Certains maîtrisent des **formations spéciales**, selon leur **niveau et/ou leur histoire**. **Les formations les plus fortes** (double enveloppement, ordre oblique…) **sont réservées aux généraux les plus forts**. Idées : Alexandre (phalange, coin), Léonidas (phalange), Hannibal (croissant, double enveloppement), Épaminondas et Frédéric le Grand s'ils entrent au jeu (ordre oblique), Scipion et César (légion), César et Scipion (tortue), Knut et Harald Hardrada (mur de boucliers), Napoléon (carré, colonne), Gengis Khan et Subötaï (volées à cheval).
@@ -516,3 +488,31 @@ Améliorations (règle déjà fixée) : la cavalerie débloque les chars de guer
 ## Prochaines étapes
 
 On reprend les thèmes un par un pour remplacer les ❓ et valider les 💡. Thèmes bouclés : 1 à 7.
+
+## De côté : DLC (époques suivantes, proposition du 11/11)
+
+**Époque 2 : la poudre**. Ressource en plus : munitions.
+
+| Troupe | ATK / DEF / vitesse | Conseillé | Déconseillé |
+|---|---|---|---|
+| **Arquebusier, mousquetaire** | A (courte portée) / D / C | derrière des piquiers (tercio), défendre, tirer en salves | corps à corps sans piques, troupes rapides (recharge lente) |
+| **Fusilier à baïonnette** (fin de l'époque) | B / C / C | ligne, carré contre la cavalerie | artillerie, formations trop serrées |
+| **Grenadier** | A contre les formations serrées / C / C | contre la phalange, la tortue, le carré, les bâtiments | ordre dispersé (peu de cibles) |
+| **Dragon** (infanterie montée) | B / C / A | arriver vite, puis combattre à pied, tenir un point | charges contre de la cavalerie lourde |
+| **Cuirassier, hussard** | A (charge) / B / A | flancs, poursuite, contre l'artillerie isolée | carrés, mitraille de l'artillerie |
+| **Artillerie** (canons) | A (très longue portée) / D / D | contre les formations serrées et les bâtiments, depuis une colline | être exposée sans escorte, terrain accidenté |
+
+**Époque 3 : les véhicules**. Ressource en plus : carburant.
+
+| Troupe | ATK / DEF / vitesse | Conseillé | Déconseillé |
+|---|---|---|---|
+| **Fantassin moderne** | B / C / C | forêts, ruines, bâtiments, tenir un point | plaine face aux blindés |
+| **Mitrailleur** | A (défense) / B / D | défendre un passage, briser une charge | avancer, artillerie et mortiers |
+| **Moto, véhicule de reconnaissance** | C / D / A | éclairer, harceler, poursuivre | combat frontal |
+| **Blindé, char d'assaut** | A / A / B | percer une ligne, plaine | forêts denses, ruines, marais, sans infanterie autour |
+| **Mortier, artillerie lourde** | A (très longue portée) / D / D | contre les formations groupées et les bâtiments | être exposé sans escorte |
+
+**Époque 4 : la magie**. Ressource en plus : mana. À définir plus tard (mages, créatures, monstres libérés par les trésors…).
+
+- Lien avec le lore, si un DLC arrive : le soir de la faille, toutes les armes modernes de la ville sont tombées en poussière. Les époques 2 et 3 sont donc des armes à **reconstruire** (forger, fabriquer), pas à trouver. Faut-il une explication dans l'histoire (par exemple : la faille ne détruit que les armes qui existaient ce jour-là) ?
+- Mélange des époques : un joueur à l'époque 2 garde ses troupes de l'époque 1 (on mélange les époques, règle déjà fixée).
