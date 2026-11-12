@@ -187,11 +187,9 @@ Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de
   | **Les Francs** | Clovis, Charles Martel, Charlemagne | défense +20 % |
   | **Les héros de l'Iliade** | Achille, Ulysse | attaque +15 %, stratégies renforcées |
   | **La résistance amérindienne** | Tecumseh, Crazy Horse | embuscades renforcées |
-  | **Les rois d'Afrique** | 3 parmi Shaka Zulu, Soundiata Keïta, la reine Nzinga, Samori Touré, Ménélik II | +20 % |
   | **Les tireurs d'élite** | Simo Häyhä, Vassili Zaïtsev | portée et tir des archers +20 % |
   | **Les sauveurs** | 3 parmi Khalid, Knut, Musashi, Saladin, Toussaint Louverture, Thorfinn, Abd el-Kader | défense +20 %, soins renforcés |
-  | **Real Madrid** 😄 | Zidane, Cristiano Ronaldo | +10 % |
-  | **Barça** 😄 | Guardiola, Messi (et Luis Enrique) | +10 % (+15 % avec les trois) |
+  | **Le foot** 😄 | 2 ou plus parmi Zidane, Cristiano Ronaldo, Messi, Guardiola, Mourinho, Luis Enrique | +10 % à deux, +15 % à trois ou plus |
 
   | Rivalité (camps opposés) | Personnages |
   |---|---|
