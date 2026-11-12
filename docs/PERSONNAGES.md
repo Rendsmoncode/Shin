@@ -313,8 +313,7 @@ Raretés : rare et épique (environ 30 épiques). Les guerriers mystiques sont a
 ## Ingénieurs
 
 - Épiques : Léonard de Vinci, Archimède, Gustave Eiffel, Lu Ban, Al-Jazari, Héron d'Alexandrie, Su Song, Taqi al-Din, Nikola Tesla, Hedy Lamarr, Lloyd Frontera (The Greatest Estate Developer)
-- Rares : le tonton qui répare tout au scotch, le mécano du quartier, le vendeur de Darty
-- Non retenus (fiction) : Senku, MacGyver, Doc Brown, Géo Trouvetou.
+- Non retenus : Senku, MacGyver, Doc Brown, Géo Trouvetou (fiction) ; le tonton au scotch, le mécano, le vendeur de Darty (blagues pas drôles).
 
 ## Généraux rares (à faire plus tard)
 
