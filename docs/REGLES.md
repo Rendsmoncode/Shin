@@ -193,19 +193,15 @@ Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de
 
   - ✅ **L'ascendant de Ri Boku** (12/11) : face à une armée commandée par un général de Qin (Ouki, Ousen, Kanki ; **pas Shin ni Kyoukai**), Ri Boku gagne un bonus (piste : attaque et défense +20 %). Historiquement, Li Mu a écrasé Huan Yi (Kanki) deux fois et Wang Jian (Ousen) n'a pu le vaincre qu'après son exécution. C'est le seul « ascendant » : les autres duels historiques (Scipion-Hannibal, Richard-Saladin…) ne sont pas assez nets. Pas de bonus de rivalité (supprimé le 12/11).
 
-- 💡 **À quoi servent les stats (proposition de Claude, 12/11, à valider)** :
-  - **Échelle** : de 1 à 1 000 environ pour les personnages (un Sous les Cieux approche 1 000) ; **bien au-delà** pour les guerriers mystiques.
-  - **Deux usages pour chaque stat** :
-    1. **Quand le personnage se bat lui-même** (général sorti de son QG, guerrier mystique, soldat d'élite) : ATK, DEF et END (ses points de vie) font sa force au combat. Un personnage « vaut » un certain nombre d'hommes : quelques dizaines pour un grand général, un millier pour un guerrier mystique.
-    2. **Quand il commande** : ses stats se transforment en bonus pour les hommes sous ses ordres (catégorie Commandement). Piste : stat ÷ 20 = % de bonus (ATK 800 → attaque +40 % pour ses hommes).
-  - **Ce que fait chaque stat quand il commande** :
-    - **ATK** → attaque de ses hommes ;
-    - **DEF** → défense de ses hommes ;
-    - **END** → ses hommes perdent moins de soldats et consomment moins de vivres ;
-    - **INT** → stratégies plus fortes et rechargées plus vite, vision, résistance aux ruses ennemies ;
-    - **VIT** → vitesse de déplacement de son armée ;
-    - **Aura** → vitesse de remplissage de sa jauge d'attaque spéciale.
-  - **Hiérarchie** : comme l'aptitude de leader, les stats d'un chef ne profitent qu'aux hommes placés sous lui. Les stats du général profitent à toute l'armée (piste : à moitié), celles d'un sous-général à son armée.
+- ✅ **À quoi servent les stats** (validé le 12/11) : comme dans Dokkan, **les stats sont celles du personnage lui-même** ; ce qui renforce l'armée, ce sont **uniquement ses effets écrits en clair** (aptitude de leader, passifs : « toutes ses troupes ATK +25 % »). Pas de calcul caché.
+  - **Échelle** : de 1 à 1 000 environ (un Sous les Cieux approche 1 000) ; bien au-delà pour les guerriers mystiques.
+  - **ATK, DEF, END** (END = ses points de vie) : sa force quand il se bat **en personne**.
+  - **INT** : ses ruses. Stratégies plus fortes et plus fréquentes, meilleure vision, résistance aux ruses ennemies.
+  - **VIT** : sa vitesse, et celle de l'armée qu'il mène.
+  - **Aura** : la vitesse de remplissage de sa jauge d'attaque spéciale.
+  - **Deux profils de généraux** : les **combattants** (ex. Saladin : grosse ATK, INT moyenne) et les **stratèges** (ex. Sun Tzu : faible ATK, grosse INT).
+  - **Qui peut aller au front** : seulement certains généraux, grâce à une aptitude. Ce sont d'abord **ceux qui étaient des guerriers à la base** ; quelques autres pourront s'y ajouter selon leur **Aura**.
+  - **Le risque** : un général qui va au front peut **mourir** (il vaut 3 points de vie de l'armée). Le stratège reste à l'abri dans son QG : chaque profil garde son intérêt.
 - ✅ **Comment les bonus se combinent** (12/11) : dans une catégorie, les pourcentages s'additionnent ; les catégories se multiplient entre elles ; pas de plafond (l'équilibre passe par la valeur des pourcentages).
 
 ## 7. Les généraux et les grades
