@@ -202,6 +202,8 @@ Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de
   | Le ciel de 1917 | Georges Guynemer et le Baron rouge |
   | Le Clásico 😄 | Messi et Cristiano Ronaldo ; Guardiola et Mourinho |
 
+  - ✅ **L'ascendant de Ri Boku** (12/11) : face à une armée commandée par un général de Qin (Ouki, Ousen, Kanki ; **pas Shin ni Kyoukai**), Ri Boku gagne un bonus (piste : attaque et défense +20 %). Historiquement, Li Mu a écrasé Huan Yi (Kanki) deux fois et Wang Jian (Ousen) n'a pu le vaincre qu'après son exécution. C'est le seul « ascendant » : les autres duels historiques (Scipion-Hannibal, Richard-Saladin…) ne sont pas assez nets.
+
 - ❓ **Comment les bonus se combinent** : additions d'abord puis multiplications ? Les pourcentages de même type s'additionnent entre eux (+10 % et +20 % = +30 %) ou se multiplient (×1,1 × 1,2 = +32 %) ? Plafond éventuel ? (à fixer avec la formule de puissance, tâche 21)
 
 ## 7. Les généraux et les grades
