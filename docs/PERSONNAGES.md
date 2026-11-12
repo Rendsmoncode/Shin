@@ -60,7 +60,7 @@ Les fiches remplies sont dans le jeu (onglet **Fiches**), fichier de référence
 
 **Place dans les calculs** (voir REGLES.md, 6 bis) :
 - l'**aptitude de leader** et les **aptitudes passives** qui renforcent les troupes vont dans la catégorie **Commandement** ;
-- les **attaques spéciales**, cadeaux des mentors, sauveurs et trésors vont dans **Effets** ;
+- les **attaques spéciales**, objets, sauveurs et trésors vont dans **Effets** ;
 - les bonus de terrain ou de formation vont dans **Situation**.
 
 **Limites** :

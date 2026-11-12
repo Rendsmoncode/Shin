@@ -163,7 +163,7 @@ Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de
     1. **Commandement** : stats du général (ATK pour l'attaque, DEF pour la défense), sa rareté, son grade ;
     2. **Quartier** : tours, garnisons, bâtiments (ex. tour +10 % aux archers) ;
     3. **Liens** : personnages réunis (ex. Thorfinn + Knut + Thorkell +50 %) ;
-    4. **Effets** : cadeaux des mentors, effets des sauveurs, trésors, attaques spéciales ;
+    4. **Effets** : objets (dont ceux des mentors, léger bonus), effets des sauveurs, trésors, attaques spéciales ;
     5. **Situation** : terrain, formation, flanc ou dos, charge (déjà dans le prototype).
   - ✅ **Pas de plafond** (12/11) : les bonnes combinaisons doivent récompenser le joueur. L'équilibre se règle par la **valeur des pourcentages** de chaque effet : c'est ce qui permet de contrôler la méta, de décider quelles combinaisons sont les meilleures, et d'ajouter de nouveaux éléments pour la rendre plus amusante.
   - Puis le **hasard de ±10 %**, et les pertes calculées comme dans le prototype (courbe progressive, écrasement à partir d'un rapport de 3).
@@ -209,7 +209,7 @@ Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de
 - ✅ **Échelle des effectifs** : 5 → 10 → 20 → 100 → 1 000 → 3 000 → 5 000 → sans limite (ou limite lointaine).
 - ✅ **Noms des grades** (inspirés de Kingdom) : 5 Chef de bande · 10 Chef d'escouade · 20 Sergent · 100 Centurion · 1 000 Commandant de mille · 3 000 Commandant de trois mille · 5 000 Commandant de cinq mille · sans limite **Général** (grade final).
 - ✅ **Grand Général Sous les Cieux** : ce n'est pas un grade mais une **rareté**, la plus haute pour un général (comme un LR dans Dokkan Battle). On l'obtient, on ne l'atteint pas avec de l'XP. Il prend la place d'un général et possède un effet en plus, par exemple une **attaque spéciale** activable en bataille.
-- ✅ **Exception, les généraux de départ** (Shin, Koby, Guts) évoluent en rareté pendant la partie : Shin et Koby de commun jusqu'à Sous les Cieux, Guts d'enfant jusqu'à guerrier mystique (il garde la rareté guerrier mystique mais a le **trait Général** : il commande une armée comme un général ; seul dans ce cas, peut-être avec Kyoukai). Pour monter de rareté, il faut atteindre deux seuils : un niveau d'XP et un nombre de soldats dans l'armée. Voir `PERSONNAGES.md`.
+- ✅ **Exception, les généraux de départ** (Shin, Koby, Guts) évoluent en rareté pendant la partie (12/11 : chaque évolution est une **nouvelle fiche** qui se débloque ; les joueurs ne savent pas à l'avance qu'ils évoluent, la fiche de base ne donne aucun indice) : Shin et Koby de commun jusqu'à Sous les Cieux, Guts d'enfant jusqu'à guerrier mystique (il garde la rareté guerrier mystique mais a le **trait Général** : il commande une armée comme un général ; seul dans ce cas, peut-être avec Kyoukai). Pour monter de rareté, il faut atteindre deux seuils : un niveau d'XP et un nombre de soldats dans l'armée. Voir `PERSONNAGES.md`.
 - ✅ Le Grand Général Sous les Cieux est **rare mais pas unique** : plusieurs joueurs peuvent en avoir un.
 - ✅ **Rareté** : de commun à légendaire.
 - ✅ **Expérience** : en améliorant son armée, en gagnant des batailles et des guerres, ou directement avec de l'argent.
