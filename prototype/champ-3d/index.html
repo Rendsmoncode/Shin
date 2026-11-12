@@ -23,7 +23,7 @@ button{font:inherit;font-weight:600;letter-spacing:.04em;color:var(--fg);backgro
 button:hover{border-color:var(--gold)}
 button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 #status{color:var(--gold)}
-#sel{border-top:1px solid var(--line);padding-top:8px;display:grid;gap:3px}
+#sel{padding:8px 12px;display:grid;gap:3px}
 #sel:empty{display:none}
 #sel b{font-size:17px;letter-spacing:.03em}
 #sel .k{color:var(--muted)}
@@ -77,15 +77,59 @@ kbd{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:3px;p
 #sel .form{display:flex;gap:4px;flex-wrap:wrap;margin-top:2px}
 #sel .form button{padding:2px 8px;font-size:14px}
 #sel .form button.on{border-color:var(--gold);color:var(--gold)}
+/* volets : à gauche notre camp, à droite les ordres et les notifications */
+.volet{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));width:min(320px,calc(100vw - 24px));overflow:auto;box-sizing:border-box;
+  background:linear-gradient(180deg,rgba(28,35,30,.95),rgba(16,21,18,.95));border:1px solid #7a6531;border-radius:4px;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.6),inset 0 0 0 3px rgba(122,101,49,.25),0 8px 26px rgba(0,0,0,.5);font-size:15px;line-height:1.35}
+#gauche{left:max(12px,env(safe-area-inset-left,0px));max-height:calc(100vh - 36px - var(--mmhl,0px))}
+#droite{right:max(12px,env(safe-area-inset-right,0px));max-height:calc(100vh - 36px - var(--mmh,0px))}
+.volet .head{position:sticky;top:0;z-index:1;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 12px;
+  background:linear-gradient(180deg,#2d2717,#1b1911);border-bottom:1px solid #7a6531}
+.volet h1{margin:0;font-size:19px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+.volet .head button{padding:0 9px;font-size:18px;line-height:1.3}
+.volet.ferme>:not(.head){display:none}
+.volet.ferme .head{border-bottom:0}
+.volet p{margin:0;color:var(--muted)}
+.volet .k{color:var(--muted);font-size:13px}
+.volet .warn{color:var(--red)}
+.volet .hid,.volet .ok{color:#9fd18b}
+.sec{padding:8px 12px;border-top:1px solid #2c362f;display:grid;gap:6px}
+.sec:first-of-type{border-top:0}
+.sec h3{margin:0;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:8px}
+.sec h3::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,#7a6531,transparent)}
+.sec h3 em{order:2;font-style:normal;font-size:11px;letter-spacing:.04em;text-transform:none;color:var(--muted)}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.tile{background:#18201b;border:1px solid #34413a;border-radius:3px;padding:3px 6px;display:grid;min-width:0}
+.tile b{font-size:18px;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tile span{color:var(--muted);font-size:12px;line-height:1.15}
+.carte{display:grid;grid-template-columns:58px 1fr;gap:10px;align-items:center}
+.carte>div{display:grid;gap:1px}
+.carte .nom{font-size:20px;letter-spacing:.04em}
+.portrait{width:54px;height:54px;border-radius:50%;border:2px solid var(--gold);display:grid;place-items:center;font-size:26px;font-weight:700;color:#fff;
+  background:radial-gradient(circle at 40% 35%,#4c79b8,#1c2f4c);box-shadow:0 0 0 3px rgba(0,0,0,.5)}
+.jauge{height:9px;background:#18201b;border:1px solid #34413a;border-radius:5px;overflow:hidden}
+.jauge i{display:block;height:100%;background:linear-gradient(90deg,#8a6a1e,var(--gold))}
+.sec .row button{padding:3px 8px;font-size:14px}
+.sec button.off{opacity:.42;cursor:help}
+.sec button.off:hover{border-color:var(--line)}
+.sec button .ok{font-style:normal}
+#opts summary{cursor:pointer;color:var(--muted)}
+#opts[open]{display:grid;gap:6px}
+#notifs{display:grid;gap:3px}
+#notifs .n{display:grid;grid-template-columns:30px 1fr;gap:6px;padding:4px 6px;border-left:3px solid var(--line);background:#151c17;font-size:14px}
+#notifs .n b{color:var(--muted);font-size:12px;font-weight:600}
+#notifs .n.bad{border-color:var(--red)}#notifs .n.good{border-color:#6fae5f}#notifs .n.info{border-color:var(--blue)}#notifs .n.alerte{border-color:var(--gold)}
+#notifs .n[data-n]{cursor:pointer}#notifs .n[data-n]:hover{background:#1d2620}
+#reglages{z-index:6}
 /* séparer ou transférer des hommes */
-#split{border-top:1px solid var(--line);padding-top:8px;display:grid;gap:6px}
+#split{border-top:1px solid #2c362f;padding:8px 12px;display:grid;gap:6px}
 #split:empty{display:none}
 #split b{color:var(--gold)}
 #split label{display:grid;gap:2px}
 #split input,#split select{font:inherit;color:var(--fg);background:#1b241e;border:1px solid var(--line);border-radius:3px;padding:2px 4px;max-width:100%;box-sizing:border-box}
 #split .k{color:var(--muted);font-size:13px}
 /* panneau d'armée */
-#armee{border-top:1px solid var(--line);padding-top:8px;display:grid;gap:2px}
+#armee{border-top:1px solid #2c362f;padding:8px 12px;display:grid;gap:2px}
 #armee:empty{display:none}
 #armee .t{display:flex;justify-content:space-between;gap:8px;color:var(--gold);font-weight:600}
 #armee .r{display:grid;grid-template-columns:1fr auto auto;gap:8px;padding:2px 6px;border-radius:3px;cursor:pointer;align-items:baseline}
@@ -130,9 +174,12 @@ kbd{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:3px;p
 </style>
 
 <div id="scene" aria-label="Champ de bataille en 3D avec relief, rivière, forêts et deux armées. Les armées bleues se commandent à la souris."></div>
-<div class="panel">
-  <div class="head"><h1>Champ de bataille 3D</h1><button type="button" id="b-help" aria-expanded="true" aria-controls="aide">Masquer l'aide</button></div>
-  <p id="aide"><b>Clic gauche</b> sur une armée bleue pour la choisir (<kbd>Maj</kbd> pour en ajouter, touches <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd>). <b>Clic droit</b> sur le terrain pour l'y envoyer, sur une armée rouge pour marcher sur elle. Glisser pour se déplacer, molette pour zoomer, glisser avec le clic droit pour pivoter. <kbd>Espace</kbd> centre la vue, <kbd>Échap</kbd> désélectionne. <b>Mini-carte</b> : clic ou glisser pour y aller, clic droit pour y envoyer les armées choisies ; ses boutons la réduisent, l'agrandissent, la changent de côté ou la masquent. <b>Combat</b> : une armée qui entre au contact d'une armée ennemie se bat ; lui donner un ordre de marche dans l'autre sens la fait se replier. <b>Tour par tour</b> : chacun son tour, le premier est tiré à pile ou face. Pendant ton tour (sans limite de temps), donne tes ordres (1 par armée, 5 au plus), puis <b>Fin du tour</b> (ou <kbd>Entrée</kbd>) : tes armées bougent, les combats se calculent, puis l'adversaire joue. Météo, nuit et vivres sont dans la barre du bas. Une marche longue continue seule aux tours suivants, sans coûter d'action. <b>Quartier général</b> : ton général (Koby) reste dans sa tente à l'arrière, protégé par sa garde ; le déplacer (lentement) coûte une action. Le QG ennemi reste invisible tant que tes soldats n'en sont pas tout près. <b>Points</b> : général 3, chaque sous-général (une armée) 1 ; à 0 point, la bataille est perdue. <b>Nouvelle bataille</b> : choisis tes chefs et tes effectifs ; la taille de la carte suit la plus grande armée. <kbd>F</kbd> change la formation des armées choisies, <kbd>Z</kbd> le niveau de zoom ; le panneau « Ton armée » liste tes troupes (clic pour choisir, double-clic pour y aller).</p>
+<div class="volet" id="gauche">
+  <div class="head"><h1>Notre camp</h1><button type="button" id="b-gauche" aria-expanded="true" aria-controls="gauche" title="Replier ou déplier le volet">−</button></div>
+  <div id="camp"></div>
+  <div id="armee"></div>
+  <div class="sec"><p id="status">Chargement…</p>
+  <details id="opts"><summary>Options, aide et réglages</summary>
   <div class="row">
     <button type="button" id="b-fog" aria-pressed="true">Brouillard : oui</button>
     <button type="button" id="b-ai" aria-pressed="true">Rouges : en patrouille</button>
@@ -145,10 +192,16 @@ kbd{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:3px;p
     <button type="button" id="b-rules">Livret de règles</button>
   </div>
   <p id="carte-info"></p>
-  <p id="status">Chargement…</p>
+  <span class="row"><button type="button" id="b-help" aria-expanded="true" aria-controls="aide">Masquer l'aide</button></span>
+  <p id="aide"><b>Clic gauche</b> sur une armée bleue pour la choisir (<kbd>Maj</kbd> pour en ajouter, touches <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd>). <b>Clic droit</b> sur le terrain pour l'y envoyer, sur une armée rouge pour marcher sur elle. Glisser pour se déplacer, molette pour zoomer, glisser avec le clic droit pour pivoter. <kbd>Espace</kbd> centre la vue, <kbd>Échap</kbd> désélectionne. <b>Mini-carte</b> : clic ou glisser pour y aller, clic droit pour y envoyer les armées choisies ; ses boutons la réduisent, l'agrandissent, la changent de côté ou la masquent. <b>Combat</b> : une armée qui entre au contact d'une armée ennemie se bat ; lui donner un ordre de marche dans l'autre sens la fait se replier. <b>Tour par tour</b> : chacun son tour, le premier est tiré à pile ou face. Pendant ton tour (sans limite de temps), donne tes ordres (1 par armée, 5 au plus), puis <b>Fin du tour</b> (ou <kbd>Entrée</kbd>) : tes armées bougent, les combats se calculent, puis l'adversaire joue. Météo, nuit et vivres sont dans la barre du bas. Une marche longue continue seule aux tours suivants, sans coûter d'action. <b>Quartier général</b> : ton général (Koby) reste dans sa tente à l'arrière, protégé par sa garde ; le déplacer (lentement) coûte une action. Le QG ennemi reste invisible tant que tes soldats n'en sont pas tout près. <b>Points</b> : général 3, chaque sous-général (une armée) 1 ; à 0 point, la bataille est perdue. <b>Nouvelle bataille</b> : choisis tes chefs et tes effectifs ; la taille de la carte suit la plus grande armée. <kbd>F</kbd> change la formation des armées choisies, <kbd>Z</kbd> le niveau de zoom ; le panneau « Ton armée » liste tes troupes (clic pour choisir, double-clic pour y aller).</p>
+  </details></div>
+</div>
+<div class="volet" id="droite">
+  <div class="head"><h1>Ordres</h1><button type="button" id="b-droite" aria-expanded="true" aria-controls="droite" title="Replier ou déplier le volet">−</button></div>
   <div id="sel" aria-live="polite"></div>
   <div id="split"></div>
-  <div id="armee"></div>
+  <div id="actions"></div>
+  <div class="sec"><h3>Notifications</h3><div id="notifs"></div></div>
 </div>
 <div id="toast" role="status"></div>
 <div id="tour" hidden><span id="tour-t"></span><span id="tour-c"></span><span id="tour-a"></span><span id="tour-p"></span><button type="button" id="b-end">Fin du tour</button></div>
@@ -874,7 +927,8 @@ function updateFog(){
   regs.filter(g=>g.side==='rouge').forEach(e=>{
     // un QG n'est repéré que par des soldats assez proches (règles : éclaireurs ou soldats proches)
     const v=placing?!fogOn:(!fogOn||(spotted(e,blues)&&(e.kind!=='qg'||blues.some(b=>Math.hypot(b.x-e.x,b.z-e.z)<(b.kind==='ecl'?REGLAGES.visionEclaireur:REGLAGES.vueQG)))));   // placement : rien ne se voit ; éclaireurs : QG repéré de loin
-    if(v&&fogOn&&!known.has(e)){known.add(e);toast(`Ennemi repéré : ${e.name} (${fmtMen(e.men)} hommes)`);}
+    if(v&&fogOn&&!known.has(e)){known.add(e);const by=blues.slice().sort((a,b)=>Math.hypot(a.x-e.x,a.z-e.z)-Math.hypot(b.x-e.x,b.z-e.z))[0];
+      toast(`${e.kind==='qg'?'Quartier général ennemi repéré':'Troupe ennemie repérée'}${by?` par ${by.kind==='esp'?'ton espion ':by.kind==='ecl'?'ton éclaireur ':''}${by.name}`:''} : ${e.name} (${fmtMen(e.men)} ${KIND_HOMMES[e.kind]||'hommes'})`,undefined,{x:e.x,z:e.z});}
     if(!v)known.delete(e);
     showReg(e,v);});
 }
@@ -960,8 +1014,14 @@ function centerOn(list){
 }
 
 // ---------- affichage des infos ----------
+// notifications (volet de droite) : tout ce qui se passe, le plus récent en haut ; clic sur une notification avec un lieu = y aller
+const NOTIFS=[],notEl=document.getElementById('notifs');
+function notify(msg,type='info',pos=null){NOTIFS.unshift({t:typeof turn==='number'&&!placing?turn:null,msg,type,pos});if(NOTIFS.length>80)NOTIFS.pop();
+  notEl.innerHTML=NOTIFS.map((n,i)=>`<div class="n ${n.type}"${n.pos?` data-n="${i}" title="Clic : y aller"`:''}><b>${n.t?'T'+n.t:''}</b><span>${String(n.msg).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'})[c])}</span></div>`).join('');}
+notEl.innerHTML='<p class="k">Rien pour l\'instant.</p>';
+notEl.addEventListener('click',e=>{const d=e.target.closest('[data-n]');if(!d)return;const n=NOTIFS[+d.dataset.n];if(n&&n.pos)lookAt(n.pos.x,n.pos.z);});
 const selEl=document.getElementById('sel'),toastEl=document.getElementById('toast');let toastT=0,toastAt=0,lastSel='';
-function toast(msg,bg){const now=performance.now();if(toastEl.classList.contains('on')&&now-toastAt<400&&toastEl.textContent)msg=toastEl.textContent+' · '+msg;toastAt=now;toastEl.textContent=msg;toastEl.style.background=bg?bg+'ee':'';toastEl.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>toastEl.classList.remove('on'),3200);}
+function toast(msg,bg,pos){if(bg!=='#5a4a16')notify(msg,bg==='#5a1a16'?'bad':bg==='#1d4a2a'?'good':bg==='#3a4a5a'?'info':'alerte',pos);const now=performance.now();if(toastEl.classList.contains('on')&&now-toastAt<400&&toastEl.textContent)msg=toastEl.textContent+' · '+msg;toastAt=now;toastEl.textContent=msg;toastEl.style.background=bg?bg+'ee':'';toastEl.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>toastEl.classList.remove('on'),3200);}
 const fmt=n=>String(Math.round(n)).replace('.',',');
 function renderSel(force){
   let h='';
@@ -978,14 +1038,15 @@ function renderSel(force){
     const extra=(g.kind==='arc'?`<span><span class="k">Portée :</span> ${fmt(REGLAGES.porteeArc*(isHill(g.x,g.z)?1.3:1))} m${isHill(g.x,g.z)?' (colline : +30 %)':''}${g.target&&!g.target.dead&&g.target.shown?` · <span class="k">tire sur</span> ${g.target.name}`:''}</span>`:'')
       +(g.kind==='esp'?`<span class="hid">Repère les armées cachées en forêt jusqu'à ${fmt(REGLAGES.espionForet)} m</span>`:'')
       +(g.kind==='ecl'?`<span class="hid">Repère les QG ennemis jusqu'à ${fmt(REGLAGES.visionEclaireur)} m</span>`:'');
-    h=`<b>${g.name}</b><span>${q?`Général ${g.general} · garde : ${fmtMen(q.garnison)} hommes · gardes rapprochés : ${q.gardes}/3 · PV du général : ${fmtMen(q.pv)}/${fmtMen(g.pvGen)}`:g.kind==='gm'?`Guerrier mystique (se bat en personne) · PV ${fmtMen(g.men)} · ATK ${g.atk} · DEF ${g.def}`:`${KINDS[g.kind]} · ${fmtMen(g.men)} hommes · END du chef ${g.end} (dispersée sous ${fmtMen(Math.ceil(seuilDispersion(g)))})`}</span>${fz}${extra}${auraInfo(g)}<span>${etat}</span>${nearInfo}${tourInfo}
+    h=`<b>${g.name}</b><span>${q?`Général ${g.general} · garde : ${fmtMen(q.garnison)} hommes · gardes rapprochés : ${q.gardes}/3 · PV du général : ${fmtMen(q.pv)}/${fmtMen(g.pvGen)}`:g.kind==='gm'?`Guerrier mystique (se bat en personne) · PV ${fmtMen(g.men)} · ATK ${g.atk} · DEF ${g.def}`:`${KINDS[g.kind]} · ${fmtMen(g.men)} hommes · END du chef ${g.end} (dispersée sous ${fmtMen(Math.ceil(seuilDispersion(g)))})`}</span>${extra}${auraInfo(g)}<span>${etat}</span>${nearInfo}${tourInfo}
       <span><span class="k">Terrain :</span> ${t}${g.tx!==null?` · <span class="k">vitesse</span> ×${(terrainMult(g.kind,g.x,g.z,ux,uz)).toFixed(2).replace('.',',')}`:''}</span>
       <span><span class="k">Vision :</span> ${fmt(g.range||VISION)} m${isHill(g.x,g.z)?' (colline : +50 %)':''}</span>
       ${isHidden(g)?'<span class="hid">Caché dans la forêt : invisible à plus de 50 m</span>':''}`;
   }else if(selected.length>1){
-    h=`<b>${selected.length} armées</b><span>${selected.map(g=>g.name).join(', ')}</span><span>${fmtMen(selected.reduce((s,g)=>s+g.men,0))} hommes au total</span>${formButtons(selected.filter(g=>g.side==='bleu'&&g.kind!=='qg'))}`;
+    h=`<b>${selected.length} armées</b><span>${selected.map(g=>g.name).join(', ')}</span><span>${fmtMen(selected.reduce((s,g)=>s+g.men,0))} hommes au total</span>`;
   }
   if(force||h!==lastSel){selEl.innerHTML=h;lastSel=h;}
+  renderActions(force);
 }
 function renderStatus(){
   const reds=regs.filter(g=>g.side==='rouge'),vis=reds.filter(g=>g.shown);
@@ -1017,7 +1078,42 @@ function animateForms(dt,t){
     g.fcur+=(g.ftarget-g.fcur)*Math.min(1,dt*3);if(Math.abs(g.ftarget-g.fcur)<.01)g.fcur=g.ftarget;
     g.hw=g.hw0*g.fcur;g.hd=g.hd0*g.fcur;g.soldiers.forEach(s=>{s.lx=s.bx*g.fcur;s.lz=s.bz*g.fcur;});place(g,t);}
 }
-selEl.addEventListener('click',e=>{const b=e.target.closest('[data-form]');if(b)setFormation(selected,b.dataset.form);if(e.target.closest('[data-special]')&&selected.length===1)specialBleu(selected[0]);if(e.target.closest('[data-split]')&&selected.length===1){splitFor=selected[0];renderSplit();}});
+const onPanelClick=e=>{const b=e.target.closest('[data-form]');if(b)setFormation(selected,b.dataset.form);if(e.target.closest('[data-special]')&&selected.length===1)specialBleu(selected[0]);if(e.target.closest('[data-split]')&&selected.length===1){splitFor=selected[0];renderSplit();}};
+selEl.addEventListener('click',onPanelClick);
+// ---------- volet « Ordres » : tout ce que l'armée choisie peut faire (ce qui n'est pas encore en jeu est grisé) ----------
+const actEl=document.getElementById('actions');let lastAct='';actEl.addEventListener('click',onPanelClick);
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
+const sec=(t,body,note='')=>`<div class="sec"><h3>${t}${note?`<em>${note}</em>`:''}</h3>${body}</div>`;
+const soon=(nom,tip,ok)=>`<button type="button" class="off" aria-disabled="true" title="${esc(tip)} (pas encore dans le prototype)">${nom}${ok?' <i class="ok">✓</i>':''}</button>`;
+const f1=x=>(Math.round(x*10)/10).toLocaleString('fr-FR');
+const FUTURE_FORMS=[['Phalange','infanterie : de face DEF +30 %, les charges ne marchent pas ; vitesse −30 %'],['Mur de boucliers','DEF +40 %, ATK −20 %, vitesse −40 %'],['Tortue','flèches reçues −70 %, DEF +20 %, ATK −40 %'],['Carré','pas de flanc ni de dos, DEF +20 % contre la cavalerie, vitesse −60 %'],['Coin','ATK +30 % (percée), DEF −20 %'],['Croissant','ATK +20 %, prend de flanc un ennemi moins nombreux'],['Volées','archers : tir +20 %, DEF −10 %'],['Légion','ATK et DEF +10 %, meilleure en terrain accidenté'],['Ordre oblique','une aile ATK +40 %, l\'autre DEF −30 % (grands généraux)'],['Double enveloppement','encercle l\'ennemi : flanc et dos sur tout le front (grands généraux)']];
+const STRATS=[['Embuscade','armée cachée (forêt, crête)',g=>isHidden(g),'la première manche frappe ×1,5, l\'ennemi ne peut pas changer de formation'],['Nuage de poussière','cavaliers dans l\'armée',g=>mounted(g.kind),'l\'ennemi ne voit qu\'une fourchette de tes effectifs'],['Flèches enflammées','archers du niveau voulu',g=>g.kind==='arc','tir +30 %, met le feu à une forêt ou un bâtiment'],['Pieux','archers',g=>g.kind==='arc','les charges contre eux ne marchent pas pendant quelques tours'],['Fausse retraite','cavalerie',g=>mounted(g.kind),'l\'armée recule ; l\'ennemi qui poursuit prend un contre-coup ×1,5'],['Tir en retraite','archers à cheval',null,'tir sans entrer au contact, puis l\'armée s\'éloigne'],['Marteau et enclume','deux armées : une de face, une de flanc ou de dos',null,'bonus de flanc ou de dos renforcé'],['Dos à la rivière','armée adossée à la rivière',g=>Math.abs(g.x-riverX(g.z))<90,'ATK +30 %, impossible de se replier'],['Attaque de nuit','n\'importe quelle armée',g=>true,'vision réduite, l\'ennemi surpris ne change pas de formation ; plus forte la nuit'],['Feux trompeurs','n\'importe quelle armée (général spécial)',null,'crée de fausses armées visibles par l\'ennemi'],['Désinformation','espion',g=>g.kind==='esp','l\'ennemi voit de fausses positions de tes armées'],['Terre brûlée','sur son propre terrain',g=>g.z>0,'une zone devient impraticable'],['Rupture de barrage','rivière + ingénieur',null,'les armées dans le gué perdent beaucoup d\'hommes'],['Ville vide','quartier général',g=>g.kind==='qg','l\'ennemi qui voit le QG hésite et perd un tour','qg']];
+const BUILDS=[['Palissade','1 tour','DEF +30 % de face, les charges ne passent pas'],['Fossé','2 tours','l\'ennemi qui le traverse : vitesse −50 %, plus de charge'],['Tour de guet','2 tours','vision étendue, révèle les embuscades'],['Pont de fortune','2 tours','traverser la rivière hors du gué'],['Camp fortifié','3 tours','autour du QG : DEF du QG +50 %'],['Chausse-trappes','1 tour','piège caché : la cavalerie perd des hommes et sa charge'],['Fosse camouflée','2 tours','piège caché : pertes et étourdi un tour'],['Éboulement','2 tours','piège caché sur une pente : grosses pertes']];
+function renderActions(force){let h='';const list=selected;
+  if(!list.length)h=`<div class="sec"><p>Choisis une armée (clic gauche, ou touches <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd>…) pour voir tout ce qu'elle peut faire.</p></div>`;
+  else if(list.length===1&&list[0].side!=='bleu')h=sec('Armée ennemie','<p>Choisis une de tes armées, puis clic droit sur celle-ci pour marcher sur elle et l\'attaquer.</p>');
+  else if(list.length>1)h=sec('Mouvement','<p><b>Clic droit</b> sur le terrain : les armées choisies y vont en gardant leurs places.</p>')+sec('Formation',formButtons(list.filter(g=>g.side==='bleu'&&g.kind!=='qg'&&g.kind!=='gm')),'ordre rapide');
+  else{const g=list[0],qg=g.kind==='qg',gm=g.kind==='gm',a=Math.floor(g.aura||0);
+    const etat=g.stun>0?'<span class="warn">Étourdi : ne peut rien jouer</span>':g.newTurn===turn?'Unité toute neuve : elle joue au tour suivant':!turnMode||placing?'':cur!=='bleu'||phase!=='ordres'?'Attends ton tour':g.acted===turn?'<span class="ok">Ordre donné ce tour</span> (le changer ne coûte rien)':actionsLeft()>0?`${actionsLeft()} action(s) restante(s) ce tour`:'<span class="warn">Plus d\'action ce tour</span>';
+    h=(etat?`<div class="sec"><p>${etat}</p></div>`:'')
+      +sec('Mouvement',`<p>${qg?'<b>Clic droit</b> sur le terrain : déplacer le QG (lentement).':'<b>Clic droit</b> sur le terrain : marcher. Sur une armée rouge : l\'attaquer. Dans l\'autre sens : se replier.'}</p><span class="k">Portée ce tour : ${fmt(reachOf(g))} m (cercle vert)${g.tx!==null?` · arrivée dans ${Math.max(1,Math.ceil(Math.hypot(g.tx-g.x,g.tz-g.z)/reachOf(g)))} tour(s)`:''}</span>`,'1 action')
+      +(!qg&&!gm?sec('Formation',formButtons([g])+`<div class="row">${FUTURE_FORMS.map(([n,t])=>soon(n,t)).join('')}</div>`,'ordre rapide'):'')
+      +(!qg?sec('Attaque spéciale',`<div class="jauge" title="Jauge d'Aura : ${a}/100"><i style="width:${a}%"></i></div><span class="k">Jauge d'Aura ${a}/100 · +${f1((g.auraStat||REGLAGES.auraDefaut)/300)} par tour, ×${f1(REGLAGES.auraCombat)} au combat, +${fmt(REGLAGES.auraTombe)} quand un homme clé ennemi tombe</span>${a>=100?`<span class="row"><button type="button" data-special="1">Lancer : ATK +${fmt(REGLAGES.auraBonus)} % pendant ${fmt(REGLAGES.auraDuree)} tours${gm?', étourdit ses adversaires':''}</button></span>`:''}`,'ordre rapide'):'')
+      +(!gm?sec('Hommes',`<span class="row"><button type="button" data-split="1">Séparer / transférer</button></span><span class="k">Créer une unité (ordre lourd) ou donner des hommes à une armée proche ou au QG (ordre rapide).</span>`):'')
+      +sec('Stratégies',`<div class="row">${STRATS.filter(x=>qg?x[4]==='qg':x[4]!=='qg').map(([n,c,f,t])=>soon(n,`Condition : ${c}. Effet : ${t}`,f&&f(g))).join('')}</div><span class="k">✓ = condition remplie ici. Recharge : 10 tours, 1 de moins par tranche de 200 d'INT du général.</span>`,'ordre rapide · bientôt')
+      +(!gm&&!qg?sec('Construire et piéger',`<div class="row">${BUILDS.map(([n,d,t])=>soon(`${n} (${d})`,t)).join('')}</div><span class="k">Avec un architecte dans l'armée. Toute l'armée est étourdie pendant les travaux.</span>`,'ordre lourd · bientôt'):'');}
+  if(force||h!==lastAct){actEl.innerHTML=h;lastAct=h;}}
+// ---------- volet « Notre camp » : le général, le score, les ressources ----------
+const campEl=document.getElementById('camp');let lastCamp='';
+function renderCamp(force){
+  const mine=regs.filter(g=>g.side==='bleu'),qg=mine.find(g=>g.kind==='qg'),q=qg?qgParts(qg):null,cnt=k=>fmtMen(mine.filter(g=>g.kind===k).reduce((s,g)=>s+g.men,0));
+  const men=mine.filter(g=>g.kind!=='gm').reduce((s,g)=>s+(g.kind==='qg'?qgParts(g).garnison:g.men),0);
+  const kills=allRegs.filter(g=>g.side==='bleu').reduce((s,g)=>s+(g.kills||0),0),lost=allRegs.filter(g=>g.side==='rouge').reduce((s,g)=>s+(g.kills||0),0);
+  const tile=(v,l,t='')=>`<div class="tile"${t?` title="${esc(t)}"`:''}><b>${v}</b><span>${l}</span></div>`;
+  const h=`<div class="sec carte"><div class="portrait" aria-hidden="true">${GENERAUX.bleu[0]}</div><div><b class="nom">${GENERAUX.bleu}</b><span class="k">Général · ${qg?'dans son quartier général':'tombé'}</span>${q?`<span class="k">Garde ${fmtMen(q.garnison)} · gardes rapprochés ${q.gardes}/3 · PV ${fmtMen(q.pv)}/${fmtMen(qg.pvGen)}</span>`:''}</div></div>`
+    +sec('Score',`<div class="tiles">${tile(pointsOf('bleu'),'tes points','Général 3, chaque homme clé 1. À 0, la bataille est perdue.')}${tile(pointsOf('rouge'),'points adverses')}${tile(placing?'—':turn,'tour')}${tile(fmtMen(kills),'ennemis hors de combat')}${tile(fmtMen(lost),'tes pertes')}${tile(isNight()?'Nuit':'Jour',METEO_NOM[meteo]+(boue>0&&meteo!=='pluie'?', boue':''))}</div>`)
+    +sec('Ressources',`<div class="tiles">${tile(fmtMen(men),'hommes')}${tile(vivresTours('bleu'),'tours de vivres','Sans vivres, chaque armée perd des hommes à chaque tour.')}${tile(turnMode&&!placing?`${actionsLeft()}/${maxActions()}`:'—','actions')}${tile(cnt('inf'),'fantassins')}${tile(cnt('cav'),'cavaliers')}${tile(cnt('arc'),'archers')}${tile(cnt('ecl'),'éclaireurs')}${tile(cnt('esp'),'espions')}${tile(mine.filter(g=>g.kind==='gm').length,'guerriers mystiques')}${tile(0,'médecins','Soignants : bientôt')}${tile(0,'architectes','Constructions et pièges : bientôt')}${tile(RESERVE.bleu.length,'chefs au QG',RESERVE.bleu.join(', ')||'aucun')}</div><span class="k">${CONF.enjeu.mise?`Enjeu : ${esc(CONF.enjeu.texte||'une mise')}`:'Bataille amicale : pas d\'enjeu'}</span>`);
+  if(force||h!==lastCamp){campEl.innerHTML=h;lastCamp=h;}}
 // ---------- séparer une armée, transférer des hommes, regrouper (règles : créer une unité = ordre lourd ; transférer = ordre rapide) ----------
 const splitEl=document.getElementById('split');let splitFor=null,splitDests=[];
 const splitMax=g=>g.kind==='qg'?qgParts(g).garnison:g.men;
@@ -1070,8 +1166,7 @@ function rebuildBlock(g){
 }
 // ---------- jauge d'Aura, attaque spéciale et étourdi ----------
 function auraInfo(g){if(g.kind==='qg')return'';const a=Math.floor(g.aura||0);
-  return`<span><span class="k">Jauge d'Aura :</span> ${a}/100${g.boost>0?` · <span class="hid">ATK +${fmt(REGLAGES.auraBonus)} % (${g.boost} tour(s))</span>`:''}${g.stun>0?` · <span class="warn">étourdi (${g.stun} tour(s)) : ne joue pas, DEF −${fmt(REGLAGES.etourdiDef)} %</span>`:''}</span>`+
-    (g.side==='bleu'&&a>=100?`<span class="form"><button type="button" data-special="1" title="Ordre rapide : ATK +${fmt(REGLAGES.auraBonus)} % pendant ${fmt(REGLAGES.auraDuree)} tours${g.kind==='gm'?', et ses adversaires au contact sont étourdis 1 tour':''}">Attaque spéciale</button></span>`:'');}
+  return`<span><span class="k">Jauge d'Aura :</span> ${a}/100${g.boost>0?` · <span class="hid">ATK +${fmt(REGLAGES.auraBonus)} % (${g.boost} tour(s))</span>`:''}${g.stun>0?` · <span class="warn">étourdi (${g.stun} tour(s)) : ne joue pas, DEF −${fmt(REGLAGES.etourdiDef)} %</span>`:''}</span>`;}
 function special(g){g.aura=0;g.boost=Math.round(REGLAGES.auraDuree);const msgs=[`${g.name} lance son attaque spéciale : ATK +${fmt(REGLAGES.auraBonus)} % pendant ${g.boost} tours`];
   if(g.kind==='gm')for(const e of regs)if(e.side!==g.side&&e.kind!=='qg'&&contactDist(g,e)){e.stun=Math.max(e.stun||0,1);msgs.push(`${e.name} est étourdi 1 tour`);}
   toast(msgs.join(' · '),g.side==='bleu'?'#1d4a2a':'#5a1a16');}
@@ -1277,7 +1372,9 @@ function debutTour(side){const r=REGLAGES,msgs=[];
 function finTour(side){const r=REGLAGES;
   for(const g of regs)if(g.side===side&&g.stun>0)g.stun--;
   const arm=regs.filter(g=>g.side===side&&g.kind!=='gm'),men=arm.reduce((s,g)=>s+(g.kind==='qg'?qgParts(g).garnison:g.men),0);
-  const avant=VIVRES[side];VIVRES[side]=Math.max(0,VIVRES[side]-men);if(VIVRES[side]>0)return;
+  const avant=VIVRES[side];VIVRES[side]=Math.max(0,VIVRES[side]-men);
+  if(side==='bleu'&&VIVRES.bleu>0){const vt=vivresTours('bleu');if(vt===10||vt===5||vt===2)toast(`Vivres : plus que ${vt} tours`,'#5a1a16');}
+  if(VIVRES[side]>0)return;
   const msgs=[avant>0?(side==='bleu'?'Tes vivres sont épuisés':'L\'adversaire n\'a plus de vivres'):(side==='bleu'?'Sans vivres, tes armées perdent des hommes':'')];
   for(const g of arm){if(g.dead)continue;
     if(g.kind==='qg'){const ga=qgParts(g).garnison;if(ga>0)g.men-=Math.max(1,Math.round(ga*r.faim/100));}   // la faim touche la garde, pas le général
@@ -1378,7 +1475,7 @@ function finish(winner,why){
 // les armées de départ : composition choisie dans « Nouvelle bataille », placées par planSide()
 const ARMEES=PLAN;
 function deploy(){
-  select([]);regs.slice().forEach(removeReg);allRegs.length=0;RESERVE.bleu.length=RESERVE.rouge.length=0;splitFor=null;floats.forEach(f=>f.el.remove());floats.length=0;
+  select([]);regs.slice().forEach(removeReg);NOTIFS.length=0;notEl.innerHTML='<p class="k">Rien pour l\'instant.</p>';allRegs.length=0;RESERVE.bleu.length=RESERVE.rouge.length=0;splitFor=null;floats.forEach(f=>f.el.remove());floats.length=0;
   ARMEES.forEach(o=>regiment(o.kind==='qg'?{...o,rows:Math.max(1,Math.ceil(REGLAGES.garnisonQG/HPS/o.cols))}:{...o}));known.clear();ended=false;finEl.hidden=true;combatAcc=0;
   turn=1;phase='ordres';phaseT=REGLAGES.dureeTour;cur='bleu';wasNight=false;meteo=METEOS[Math.floor(Math.random()*METEOS.length)];boue=meteo==='pluie'?Math.round(REGLAGES.boueTours):0;
   VIVRES.bleu=VIVRES.rouge=REGLAGES.vivres*1000;ambiance();startPlacement();regs.forEach(applyVis);renderArmy(true);
@@ -1718,7 +1815,7 @@ function sizeMini(){
   const r=mm.getBoundingClientRect(),k=Math.min(2,window.devicePixelRatio||1);
   if(r.width){mm.width=Math.round(r.width*k);mm.height=Math.round(r.height*k);}
   const wr=mmWrap.getBoundingClientRect();
-  document.documentElement.style.setProperty('--mmh',(!mmPref.hidden&&!mmPref.left?wr.height+12:0)+'px');   // le panneau des réglages laisse la place
+  document.documentElement.style.setProperty('--mmh',(!mmPref.hidden&&!mmPref.left?wr.height+12:0)+'px');document.documentElement.style.setProperty('--mmhl',(!mmPref.hidden&&mmPref.left?wr.height+12:0)+'px');   // le panneau des réglages laisse la place
 }
 function applyMini(){
   mmPref.size=Math.max(0,Math.min(MM_SIZES.length-1,mmPref.size|0));
@@ -1735,6 +1832,11 @@ document.getElementById('mm-side').addEventListener('click',()=>{mmPref.left=!mm
 document.getElementById('mm-hide').addEventListener('click',()=>{mmPref.hidden=true;applyMini();});
 mmShow.addEventListener('click',()=>{mmPref.hidden=false;applyMini();});
 // aide du panneau : masquable, choix gardé
+function volet(id,def){const el=document.getElementById(id),b=document.getElementById('b-'+id),key='shin-volet-'+id;let f=def;
+  try{const v=localStorage.getItem(key);if(v!==null)f=v==='1';}catch(e){}
+  const ap=()=>{el.classList.toggle('ferme',f);b.setAttribute('aria-expanded',!f);b.textContent=f?'+':'−';try{localStorage.setItem(key,f?'1':'0');}catch(e){}};
+  b.addEventListener('click',()=>{f=!f;ap();});ap();}
+volet('gauche',window.innerWidth<700);volet('droite',window.innerWidth<700);
 const aideEl=document.getElementById('aide'),bHelp=document.getElementById('b-help');
 function applyAide(hide){aideEl.hidden=hide;bHelp.textContent=hide?'Aide':'Masquer l\'aide';bHelp.setAttribute('aria-expanded',!hide);try{localStorage.setItem('shin-aide-masquee',hide?'1':'0');}catch(e){}}
 bHelp.addEventListener('click',()=>applyAide(!aideEl.hidden));
@@ -1748,7 +1850,7 @@ function loop(now){const dt=Math.min(.1,(now-last)/1000),t=now/1000;last=now;
     else if(ended){for(const g of regs)if(g.contact)place(g,t);}
     else if(turnMode)turnTick(dt,t);
     else{for(const g of regs){if(g.side==='rouge')ai(g,dt);const was=g.moving;step(g,dt);if(g.moving||was||g.contact)place(g,t);}combatTick(dt);}
-    if((acc+=dt)>.2){acc=0;updatePaths();updateFog();renderStatus();renderSel(false);renderTour();renderArmy(false);
+    if((acc+=dt)>.2){acc=0;updatePaths();renderCamp(false);updateFog();renderStatus();renderSel(false);renderTour();renderArmy(false);
       if((shAcc+=1)>=10){shAcc=0;renderer.shadowMap.needsUpdate=true;}
       updatePaths();}
   }catch(err){showErr(err);}
