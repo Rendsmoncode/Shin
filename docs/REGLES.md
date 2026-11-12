@@ -194,13 +194,13 @@ Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de
   | **Le chirurgien de Napoléon** | Larrey, Napoléon | blessés remis sur pied +20 % |
   | **Le Hokage** | 2 ou plus parmi Tsunade, Shikamaru, Itachi | stratégies et soins +10 % |
   | **Les Mugiwara** | 2 ou plus parmi Chopper, Nico Robin, Franky | soins, constructions et exploration +15 % |
-  | **Les parents de Mathieu** | Claude et Régis, Koby | Koby DEF +15 %, et son armée ne fatigue jamais |
+  | **Les parents de Mathieu** | Claude et Régis, Koby | Koby DEF +15 %, et son armée VIT +10 % |
 
   - ✅ **L'ascendant de Ri Boku** (12/11) : face à une armée commandée par un général de Qin (Ouki, Ousen, Kanki ; **pas Shin ni Kyoukai**), Ri Boku gagne un bonus (piste : attaque et défense +20 %). Historiquement, Li Mu a écrasé Huan Yi (Kanki) deux fois et Wang Jian (Ousen) n'a pu le vaincre qu'après son exécution. C'est le seul « ascendant » : les autres duels historiques (Scipion-Hannibal, Richard-Saladin…) ne sont pas assez nets. Pas de bonus de rivalité (supprimé le 12/11).
 
 - ✅ **À quoi servent les stats** (validé le 12/11) : comme dans Dokkan, **les stats sont celles du personnage lui-même** ; ce qui renforce l'armée, ce sont **uniquement ses effets écrits en clair** (aptitude de leader, passifs : « toutes ses troupes ATK +25 % »). Pas de calcul caché.
   - **Échelle** : de 1 à 1 000 environ (un Sous les Cieux approche 1 000) ; bien au-delà pour les guerriers mystiques.
-  - **ATK, DEF, END** (END = ses points de vie) : sa force quand il se bat **en personne**.
+  - **ATK, DEF, END** (END = ses points de vie) : sa force quand il se bat **en personne** (seulement les guerriers mystiques, et le combat du quartier général : voir « Se battre en personne », section 9 bis).
   - **INT** : ses ruses. Stratégies plus fortes et plus fréquentes, meilleure vision, résistance aux ruses ennemies.
   - **VIT** : sa vitesse, et celle de l'armée qu'il mène.
   - **Aura** : la vitesse de remplissage de sa jauge d'attaque spéciale.
@@ -272,7 +272,7 @@ Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de
   - ✅ **Renforts** : un joueur peut rejoindre une bataille déjà commencée pour aider un allié. Il entre **par le bord de la carte** de son allié, après quelques tours de marche. Un 1v1 peut ainsi devenir un 2v1.
 - ✅ **Terrain tiré au hasard** : désert, montagne, champ, ruines…
 - ✅ **Tour par tour** : à chaque tour, on déplace ses troupes, on attaque ou non, etc.
-  - ✅ **Les joueurs jouent en même temps** (choix de Mathieu, 9/11/2026) : pendant la minute du tour, chacun donne ses ordres sans voir ceux des autres, puis toutes les armées bougent et se battent ensemble. Personne n'attend son tour, même en 2v2 ou 1v1v1.
+  - ✅ **Chacun son tour** (12/11, décision d'Ayoub, remplace le « tous en même temps » choisi par Mathieu le 9/11) : **le joueur qui commence est tiré à pile ou face**. Ensuite on alterne : chaque joueur joue son tour entier (ses actions, voir « Déroulement d'un tour »), puis c'est à l'autre. À plusieurs (1v1v1, 2v1, 2v2), l'ordre est tiré au hasard au début ; en équipe, les camps alternent (A1, B1, A2, B2).
   - ✅ **Une marche longue continue gratuitement** (choix de Mathieu, 9/11/2026) : une armée envoyée à plusieurs tours de marche poursuit seule aux tours suivants, sans utiliser d'action. Une action ne sert qu'à donner un nouvel ordre.
 - ✅ Les aptitudes spéciales s'y utilisent (par exemple, l'attaque spéciale d'un Grand Général Sous les Cieux).
 - ✅ **Quand** : tout combat de 500 hommes ou plus se joue en bataille rangée. **Si un joueur n'est pas connecté quand on l'attaque, une IA joue à sa place** (la même IA que celle des tyrans). **S'il se connecte pendant la bataille, il peut reprendre la main** et remplacer l'IA.
@@ -282,7 +282,7 @@ Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de
 - ✅ **Bataille en suspens** (12/11) : on peut quitter une bataille en cours et y revenir plus tard. Si un joueur s'absente, la bataille reste en suspens ; l'autre peut retourner en ville et même jouer d'autres batailles pendant ce temps.
   - **Un joueur qui ne revient pas avant 48 h perd la bataille.** ❓ En guerre, c'est différent (règle à fixer).
   - **Contre un autre joueur**, la bataille ne bloque pas le reste du jeu : les armées restent libres. **Contre un tyran** (IA), les armées engagées sont bloquées jusqu'à la fin de la bataille.
-- ✅ **Seuil de la bataille rangée** : la bataille rangée se joue **dès 500 hommes** (changé le 10/11, avant 300), sur une carte plus petite quand les armées sont petites (500 contre 500 est le premier palier, débloqué par les 3 joueurs en même temps que le cadeau des mentors). En dessous de 500 hommes, les combats se règlent automatiquement (même formule de puissance, courte scène de résultat). Les raids façon Clash of Clans fonctionnent quel que soit l'effectif.
+- ✅ **Seuil de la bataille rangée** : la bataille rangée se joue **dès 500 hommes** (changé le 10/11, avant 300), sur une carte plus petite quand les armées sont petites (500 contre 500 est le premier palier, débloqué par les 3 joueurs en même temps que le cadeau des mentors). En dessous de 500 hommes, les combats se règlent automatiquement (même formule de puissance, courte scène de résultat).
 - ✅ **Taille de la carte selon l'effectif** (validé temporairement) : de 500 à 999 hommes, environ 1 km × 0,7 km ; de 1 000 à 2 999 hommes, environ 2 km × 1,3 km ; à partir de 3 000 hommes, la grande carte de 3 km × 2 km. Les tailles définitives seront fixées par Claude en simulant des parties, une fois tous les paramètres réglés.
 - ✅ **Distances réelles sur toutes les cartes** : vision, vitesses et portées ne changent pas sur une petite carte. Une petite carte est simplement vue de plus près (la caméra zoome pour qu'elle remplisse l'écran comme la grande).
 - ✅ **Hommes clés d'une petite armée** : un sous-général dirige 500 hommes minimum, donc une petite armée en a peu ou pas. Avant la bataille, le joueur choisit lui-même les hommes clés qui lui manquent parmi ses personnages : chacun prend la tête d'une unité (10 hommes minimum). Ces hommes clés n'ont pas le droit d'entrer dans le quartier général : ils doivent rester sur le terrain avec leurs hommes. La limite reste de 5 actions par tour.
@@ -353,20 +353,37 @@ Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de
   - **Chaque personnage se place où on veut**, et chaque personnage sur la carte est un élément de jeu. Exemples : des médecins au milieu des guerriers pour soigner sur place, ou dans de petits groupes à cheval qui vont de troupe en troupe pour que tout le monde soit soigné ; pareil pour les architectes, les ingénieurs, etc.
   - Les **économistes** servent surtout en ville.
 - ✅ **Structure d'une armée** : le général est le cœur de l'armée. Il a des sous-généraux, qui dirigent chacun un certain nombre d'hommes.
-- ✅ **Points de vie de l'armée** : le général vaut 3 points, chaque sous-général vaut 1 point. Un joueur qui tombe à 0 point perd la bataille.
+- ✅ **Points de vie de l'armée** : le général vaut 3 points ; chaque sous-général, chef d'unité et guerrier mystique vaut 1 point (un guerrier mystique vaut toujours 1 point). Un joueur qui tombe à 0 point perd la bataille.
   - ✅ **Une armée détruite** (écrasée ou dispersée) **= son sous-général tombé** : le joueur perd 1 point (choix de Mathieu, 9/11/2026). Le général, lui, ne tombe que si son quartier général est pris (garde, puis 3 gardes rapprochés, puis ses PV).
 - ✅ **Quartier général** : le général a un quartier général, invisible pour l'adversaire. Pour le voir, il faut envoyer des éclaireurs, ou avoir des soldats assez proches. Le quartier général peut se déplacer, mais lentement.
 - ✅ **Le général reste dans son quartier général.** Certains généraux ont une aptitude qui leur permet d'en sortir (par exemple Kanki pour la ruse, ou Souvorov pour rejoindre la bataille).
 - ✅ **Défense du quartier général** : le général a une barre de vie bien plus grande que les autres, et des soldats restent forcément au quartier général pour le protéger. Il peut résister un temps à une attaque trop nombreuse, mais pas longtemps.
-- ✅ **Hommes clés** : le général, les sous-généraux et les guerriers mystiques (2 emplacements maximum par général). C'est tout.
+- ✅ **Hommes clés** : le général, les sous-généraux, les chefs d'unité et les guerriers mystiques (2 guerriers mystiques maximum par général). C'est tout.
 - ✅ **Actions** : chaque homme clé peut réaliser 1 action par tour, dans la limite d'actions par tour.
 - ✅ **Mort d'un sous-général** : ses hommes perdent la raison et sont étourdis pendant un temps (durée en tours à fixer). Ensuite, le joueur choisit de les renvoyer au quartier général ou de les envoyer dans une autre armée, et répartit le nombre d'hommes comme il veut.
-- ✅ **Résolution d'un affrontement** : on compare la puissance des deux armées.
-  - Si l'attaquant est bien plus fort, il écrase l'ennemi et le combat se termine dans le tour.
-  - Si l'attaquant est bien plus faible, il se fait écraser, et le combat se termine aussi dans le tour.
-  - Si les puissances sont proches, les deux armées restent au contact. À chaque tour, le calcul se refait et chacune perd des hommes en fonction de la puissance de l'autre.
-  - Les écarts doivent être bien réglés : les écrasements doivent rester minoritaires (pas 80 % des affrontements).
-- ✅ **Calcul de puissance** : chaque armée a une puissance de base, multipliée par tous ses effets (général, sous-généraux, aptitudes, formation…), puis ajustée selon le terrain (formule à définir).
+- ✅ **Déroulement d'un tour** (12/11) : un tour, c'est le moment où un joueur joue (puis vient le tour de l'autre).
+  1. **Début du tour** : les jauges d'Aura montent, les effets qui durent « X tours » perdent 1 tour, les armées étourdies comptent leur tour.
+  2. **Les actions** (5 au maximum, une par homme clé) : le joueur les joue **une par une, dans l'ordre qu'il veut**. Chaque action se règle tout de suite : l'ordre rapide (formation, stratégie, attaque spéciale) s'applique, puis l'armée se déplace ; si elle entre au contact d'une armée ennemie, le **premier choc** se calcule immédiatement.
+  3. **Les marches longues** continuent seules, sans utiliser d'action.
+  4. **Fin du tour** : tous les combats déjà au contact (où le joueur est engagé) se calculent une fois, puis les vivres sont consommés et les soignants remettent des hommes sur pied.
+  - **Rien ne s'annule pendant le tour de l'adversaire** : un effet qui protège d'une stratégie ou d'une attaque se prépare à l'avance (« la prochaine stratégie lancée contre lui ne marche pas »).
+- ✅ **Le calcul des pertes** (12/11, réglé par simulation, chiffres à affiner) :
+  - **Valeur d'un soldat** selon les lettres de sa troupe : A = 1,6 · B = 1,3 · C = 1,0 · D = 0,7 (en attaque et en défense).
+  - **Puissance d'attaque** d'une armée = nombre d'hommes × ATK de la troupe × tous ses bonus d'attaque (catégories multipliées, section 6 bis) ; **puissance de défense** = pareil avec la DEF.
+  - **À chaque combat**, l'armée A fait perdre à l'armée B : **15 % × hommes de A × (ATK de A avec bonus) ÷ (DEF de B avec bonus)**, puis ±10 % de hasard. Les deux armées frappent en même temps.
+  - **Exemple** : 1 000 fantassins lourds contre 1 000 fantassins lourds, sans bonus → chacun perd environ 120 hommes par combat. Avec +30 % de bonus, une armée gagne en 7 tours en gardant 600 hommes.
+  - **Écrasement** : au **premier choc**, si une armée est **2,5 fois plus forte** que l'autre (force = hommes × racine de ATK × DEF, bonus compris), elle l'écrase d'un coup. En simulation, ça arrive dans **6 % des combats** (3 000 hommes contre 1 000, par exemple), pas plus.
+  - **Armée dispersée** : sous **10 % de ses hommes de départ**, une armée est dispersée : elle compte comme détruite (son homme clé tombe), ses derniers hommes rentrent comme blessés.
+  - **Durée** : un combat dure en général **5 tours** (de 1 à une quinzaine quand les forces sont égales).
+- ✅ **Ni moral ni fatigue** (règle déjà fixée, section 6) : aucun effet ne parle de fuite, de moral ou de fatigue. Une armée se bat à 100 % jusqu'à être dispersée.
+- ✅ **Étourdi** (12/11) : une armée ou un personnage étourdi **ne peut rien jouer pendant X tours** (ni bouger, ni ordre). S'il est attaqué, le combat se calcule quand même (il se défend avec sa DEF normale).
+- ✅ **Se battre en personne** (12/11) : les stats ATK, DEF et END d'un personnage ne servent que dans deux cas :
+  - **Les guerriers mystiques**, qui se battent toujours en personne. Un guerrier mystique compte comme une armée : il fait perdre **15 % × (ATK × 0,3) ÷ DEF de la troupe adverse** hommes par combat ; il a **END × 0,4** points de vie ; l'armée qui le frappe lui retire **15 % × hommes × ATK de la troupe ÷ (sa DEF ÷ 1 000)** points de vie. Les flèches ne lui font que 30 % de leurs dégâts. En simulation : Musashi bat 1 000 fantassins lourds en 14 tours, tient contre 1 200, et tombe face à 1 500 ou face à 1 000 bien commandés (+40 %).
+  - **Le combat du quartier général** : quand la garde du QG est tombée, le général et ses 3 gardes rapprochés se battent avec leurs propres stats, de la même façon.
+  - Partout ailleurs, un personnage ne se bat pas « en personne » : ses effets s'appliquent à **l'armée ou l'unité qu'il mène**.
+- ✅ **Météo et nuit** (12/11) :
+  - **La météo est tirée au hasard** au début de chaque bataille : **soleil, pluie, froid ou brouillard**. Pluie : tirs −20 % ; froid : vitesse −10 % ; brouillard : vision −50 %. Elle peut changer en cours de bataille (piste : une chance sur 10 à chaque tour).
+  - **Jour et nuit** : 8 tours de jour, puis 4 tours de nuit, et ainsi de suite. La nuit, la vision de tous est réduite de moitié. La stratégie « Attaque de nuit » reste possible de jour (elle crée une nuit locale d'un tour), et elle est plus forte la nuit.
 - ✅ **Soldats affichés** : 1 soldat à l'écran pour 2 hommes (réglable). La bannière affiche toujours l'effectif réel.
 - ✅ **Échelle (réglable)** :
   | Réglage | Valeur |

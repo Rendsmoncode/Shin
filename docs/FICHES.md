@@ -6,6 +6,7 @@
 - **Modifier une fiche** : sur le site, bouton « Modifier ». Les modifications sont gardées dans le navigateur ; le bouton « Exporter mes modifications » les copie (et télécharge un fichier) pour les envoyer à Claude, qui les intègre dans `fiches.json`. Une fois intégrées, « Effacer mes modifications ».
 - Règles des stats et des effets : `REGLES.md` (sections 6 bis et 7) et `PERSONNAGES.md` (« La fiche d'un personnage »).
 - Tous les chiffres sont indicatifs : ils seront réglés par simulation.
+- **Une fiche ne contient que des effets** (12/11) : pas d'explication historique dans les textes (elle va dans l'histoire, derrière le 📜). Pas d'effet de moral, de fuite ou de fatigue (ces règles n'existent pas). « En personne » ne vaut que pour les guerriers mystiques et le combat du quartier général ; sinon l'effet touche l'armée ou l'unité que le personnage mène.
 
 
 ---
@@ -38,9 +39,9 @@ Dans le jeu, chacun n'a que sa **fiche de base** (commun), sans aucun indice qu'
 
 | Fiche | Ce qu'elle ajoute | Stats |
 |---|---|---|
-| Commun (enfant) | Leader : Ses hommes ATK +5 %. ; Passif « Une épée trop grande » : quand il se bat en personne, ATK +25 % mais VIT −10 %. | ATK 280 · DEF 220 · END 300 · INT 120 · VIT 250 · Aura 200 |
+| Commun (enfant) | Leader : Ses hommes ATK +5 %. ; Passif « Une épée trop grande » : L'armée qu'il mène ATK +10 %, mais VIT −10 %. | ATK 280 · DEF 220 · END 300 · INT 120 · VIT 250 · Aura 200 |
 | Rare | Effet « Le canon du bras » (Jauge d'Aura) : Un tir à distance qui fait de grosses pertes dans une armée ennemie. | ATK 420 · DEF 330 · END 450 · INT 180 · VIT 380 · Aura 300 |
-| Épique | Passif « Le Dragon Slayer » : Ses coups ignorent 30 % de la DEF ennemie. ; Formation : Coin | ATK 600 · DEF 460 · END 630 · INT 250 · VIT 520 · Aura 420 |
+| Épique | Passif « Le Dragon Slayer » : L'armée qu'il mène ignore 15 % de la DEF ennemie. ; Formation : Coin | ATK 600 · DEF 460 · END 630 · INT 250 · VIT 520 · Aura 420 |
 | Légendaire | Leader : Ses hommes ATK +20 %. ; Stratégie : Attaque de nuit (renforcée) | ATK 820 · DEF 640 · END 850 · INT 330 · VIT 700 · Aura 580 |
 | Guerrier mystique (trait Général) | Leader : Ses hommes ATK +30 %. ; Passif « Cent hommes » : Il peut tenir seul contre une armée entière. ; Attaque spéciale « Furie du Guerrier noir » (Jauge d'Aura) : Attaque très puissante (à définir). | ATK 2600 · DEF 2000 · END 2800 · INT 450 · VIT 900 · Aura 1000 |
 
@@ -50,6 +51,6 @@ Reçus au déblocage du 500 contre 500. Un objet **débloque la fiche épique** 
 
 | Objet | Pour | Léger bonus (piste) |
 |---|---|---|
-| Le guandao d'Ouki | Shin | quand il se bat en personne, ATK +10 % |
-| Le Haki de l'armement | Koby | quand il se bat en personne, DEF +10 % |
-| L'armure du Berserker | Guts | quand ses points de vie passent sous 50 %, ATK +15 % |
+| Le guandao d'Ouki | Shin | l'armée qu'il mène ATK +5 % |
+| Le Haki de l'armement | Koby | l'armée qu'il mène DEF +5 % |
+| L'armure du Berserker | Guts | quand son armée a perdu la moitié de ses hommes, ATK +10 % |
