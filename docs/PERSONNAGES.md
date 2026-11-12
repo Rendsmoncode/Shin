@@ -299,6 +299,11 @@ Raretés : rare et épique (environ 30 épiques). Les guerriers mystiques sont a
 - Rares : Médecin de MSF, Pharmacien du coin (« Prenez un Doliprane »), Infirmière de l'hôpital d'Aubagne
 - Non retenue : Mère Teresa.
 
+## Espions
+
+- Épiques : Hattori Hanzō, Fūma Kotarō, Juan Pujol (« Garbo »), Joséphine Baker, Noor Inayat Khan, Virginia Hall, Harriet Tubman, Richard Sorge, Edward Snowden, Varys (Game of Thrones), Loid Forger (Spy × Family), Itachi (Naruto), OSS 117, Solid Snake (Metal Gear)
+- Rares : la concierge de l'immeuble, le papi à la fenêtre, le commère du PMU
+
 ## Généraux rares (à faire plus tard)
 
 Des personnages modernes ou historiques, et des blagues : un PDG, un entraîneur de foot…
