@@ -193,6 +193,19 @@ Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de
 
   - ✅ **L'ascendant de Ri Boku** (12/11) : face à une armée commandée par un général de Qin (Ouki, Ousen, Kanki ; **pas Shin ni Kyoukai**), Ri Boku gagne un bonus (piste : attaque et défense +20 %). Historiquement, Li Mu a écrasé Huan Yi (Kanki) deux fois et Wang Jian (Ousen) n'a pu le vaincre qu'après son exécution. C'est le seul « ascendant » : les autres duels historiques (Scipion-Hannibal, Richard-Saladin…) ne sont pas assez nets. Pas de bonus de rivalité (supprimé le 12/11).
 
+- 💡 **À quoi servent les stats (proposition de Claude, 12/11, à valider)** :
+  - **Échelle** : de 1 à 1 000 environ pour les personnages (un Sous les Cieux approche 1 000) ; **bien au-delà** pour les guerriers mystiques.
+  - **Deux usages pour chaque stat** :
+    1. **Quand le personnage se bat lui-même** (général sorti de son QG, guerrier mystique, soldat d'élite) : ATK, DEF et END (ses points de vie) font sa force au combat. Un personnage « vaut » un certain nombre d'hommes : quelques dizaines pour un grand général, un millier pour un guerrier mystique.
+    2. **Quand il commande** : ses stats se transforment en bonus pour les hommes sous ses ordres (catégorie Commandement). Piste : stat ÷ 20 = % de bonus (ATK 800 → attaque +40 % pour ses hommes).
+  - **Ce que fait chaque stat quand il commande** :
+    - **ATK** → attaque de ses hommes ;
+    - **DEF** → défense de ses hommes ;
+    - **END** → ses hommes perdent moins de soldats et consomment moins de vivres ;
+    - **INT** → stratégies plus fortes et rechargées plus vite, vision, résistance aux ruses ennemies ;
+    - **VIT** → vitesse de déplacement de son armée ;
+    - **Aura** → vitesse de remplissage de sa jauge d'attaque spéciale.
+  - **Hiérarchie** : comme l'aptitude de leader, les stats d'un chef ne profitent qu'aux hommes placés sous lui. Les stats du général profitent à toute l'armée (piste : à moitié), celles d'un sous-général à son armée.
 - ✅ **Comment les bonus se combinent** (12/11) : dans une catégorie, les pourcentages s'additionnent ; les catégories se multiplient entre elles ; pas de plafond (l'équilibre passe par la valeur des pourcentages).
 
 ## 7. Les généraux et les grades
@@ -215,6 +228,10 @@ Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de
 - ✅ **Catégories** : Général, Soldat d'élite, Soignant, Espion, Architecte, Ingénieur, Économiste, Explorateur.
 - ✅ **Archéologue** : ce n'est plus une catégorie à part. C'est une **capacité rare** de certains explorateurs (un explorateur-archéologue), qui permet de **déterrer des trésors pendant les parties**.
 - ✅ **Guerrier Mystique** : catégorie à part, uniquement des légendaires (voire au-delà), capables de battre une armée entière à eux seuls.
+  - ✅ **Sur le champ de bataille** (12/11) : il est seul (ou accompagné) quelque part sur la carte et **se déplace comme une armée**. Ses stats (ATK, DEF, END…) sont **excessives**.
+  - ✅ **Une dissuasion à lui seul** : il doit pouvoir se battre seul contre **1 000 hommes** et potentiellement ne pas perdre.
+  - ✅ **Seul un autre guerrier mystique peut vraiment l'arrêter.** Les tyrans en auront aussi quand le jeu deviendra plus dur.
+  - ✅ **Les flèches** lui font perdre des points de vie, mais très peu : ce ne doit pas être un vrai souci pour celui qui l'utilise.
 - ✅ **Stats** : ATK, DEF, END, INT, VIT, Aura (remplace « Mana », 11/11 : la présence du personnage sur le champ de bataille, qui sert aux attaques spéciales), peut-être d'autres.
 - ✅ **Aptitudes** :
   - tout le monde a une **aptitude passive**. Elle peut agir sur lui-même, lui et ses alliés, uniquement ses alliés, son général, le lieu de la bataille, le lieu où il campe, les commerces autour de lui, etc. ;
@@ -319,6 +336,10 @@ Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de
   - la cavalerie peut devenir des **chars de guerre** (chars antiques et médiévaux tirés par des chevaux, pas de chars d'assaut) ;
   - les archers débloquent les **flèches enflammées** (et peut-être une ou deux autres flèches spéciales, pas plus) ;
   - toutes les troupes peuvent obtenir de **meilleurs équipements** (armures, armes, boucliers), par paliers.
+- ✅ **Organiser ses armées** (12/11) : depuis Aubagne, un bouton permet d'organiser ses armées. On peut préparer **plusieurs armées types** et choisir celle qu'on veut avant chaque guerre ou bataille.
+  - On crée **autant d'escouades, d'armées, de groupes, d'unités et de soldats uniques** qu'on veut.
+  - **Chaque personnage se place où on veut**, et chaque personnage sur la carte est un élément de jeu. Exemples : des médecins au milieu des guerriers pour soigner sur place, ou dans de petits groupes à cheval qui vont de troupe en troupe pour que tout le monde soit soigné ; pareil pour les architectes, les ingénieurs, etc.
+  - Les **économistes** servent surtout en ville.
 - ✅ **Structure d'une armée** : le général est le cœur de l'armée. Il a des sous-généraux, qui dirigent chacun un certain nombre d'hommes.
 - ✅ **Points de vie de l'armée** : le général vaut 3 points, chaque sous-général vaut 1 point. Un joueur qui tombe à 0 point perd la bataille.
   - ✅ **Une armée détruite** (écrasée ou dispersée) **= son sous-général tombé** : le joueur perd 1 point (choix de Mathieu, 9/11/2026). Le général, lui, ne tombe que si son quartier général est pris (garde, puis 3 gardes rapprochés, puis ses PV).
