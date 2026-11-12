@@ -213,7 +213,9 @@ Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de
 - ✅ Le Grand Général Sous les Cieux est **rare mais pas unique** : plusieurs joueurs peuvent en avoir un.
 - ✅ **Rareté** : de commun à légendaire.
 - ✅ **Expérience** : en améliorant son armée, en gagnant des batailles et des guerres, ou directement avec de l'argent.
-- ✅ **Le grade débloque tout le reste** (effectifs, stratégies, aptitudes), comme dans Rise of Kingdoms.
+- ✅ **Les grades ne concernent que Shin, Koby et Guts** (12/11) : eux seuls montent de grade (Chef de bande → … → Général), et leur grade débloque le reste (effectifs, stratégies, aptitudes), en plus de leur montée en rareté.
+- ✅ **Les généraux du gacha sont d'office Généraux** : ils ont dès le départ le grade final, tous leurs effets, leurs formations et leurs stratégies.
+- ✅ **L'XP n'augmente que les stats** des personnages du gacha (généraux et autres catégories). Elle ne débloque rien d'autre.
 - ✅ **Nombre de généraux** : 1 général pour 3 quartiers, plus le roi (toujours général dès le départ).
 - ✅ **Blessures** : un général peut être blessé, et le temps le soigne (par exemple 3 jours).
 - ✅ **Les joueurs ne créent rien** : ni personnages, ni cartes.
