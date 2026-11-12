@@ -77,6 +77,13 @@ kbd{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:3px;p
 #sel .form{display:flex;gap:4px;flex-wrap:wrap;margin-top:2px}
 #sel .form button{padding:2px 8px;font-size:14px}
 #sel .form button.on{border-color:var(--gold);color:var(--gold)}
+/* séparer ou transférer des hommes */
+#split{border-top:1px solid var(--line);padding-top:8px;display:grid;gap:6px}
+#split:empty{display:none}
+#split b{color:var(--gold)}
+#split label{display:grid;gap:2px}
+#split input,#split select{font:inherit;color:var(--fg);background:#1b241e;border:1px solid var(--line);border-radius:3px;padding:2px 4px;max-width:100%;box-sizing:border-box}
+#split .k{color:var(--muted);font-size:13px}
 /* panneau d'armée */
 #armee{border-top:1px solid var(--line);padding-top:8px;display:grid;gap:2px}
 #armee:empty{display:none}
@@ -140,6 +147,7 @@ kbd{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:3px;p
   <p id="carte-info"></p>
   <p id="status">Chargement…</p>
   <div id="sel" aria-live="polite"></div>
+  <div id="split"></div>
   <div id="armee"></div>
 </div>
 <div id="toast" role="status"></div>
@@ -682,7 +690,8 @@ function bannerTex(r,sel){
 // le total d'un QG = garde + 3 gardes rapprochés + PV du général ; les pertes tombent dans cet ordre
 function qgParts(g){const pvG=g.pvGen||REGLAGES.pvGeneral,pvA=g.pvGar||REGLAGES.pvGarde,res=pvG+3*pvA,garnison=Math.max(0,g.men-res),rest=Math.min(g.men,res);
   return{garnison,gardes:Math.max(0,Math.min(3,Math.ceil((rest-pvG)/pvA))),pv:Math.max(0,Math.min(rest,pvG))};}
-const pointsOf=side=>regs.filter(g=>g.side===side).reduce((s,g)=>s+(g.kind==='qg'?3:1),0);   // général 3, sous-général 1
+const RESERVE={bleu:[],rouge:[]};   // chefs rentrés au QG après avoir donné tous leurs hommes
+const pointsOf=side=>regs.filter(g=>g.side===side).reduce((s,g)=>s+(g.kind==='qg'?3:1),0)+(regs.some(g=>g.side===side&&g.kind==='qg')?RESERVE[side].length:0);   // général 3, homme clé 1 (au QG aussi, tant qu'il tient)
 function setMen(g,n){
   g.men=Math.max(0,Math.round(n));g.texN.dispose();g.texS.dispose();
   g.texN=bannerTex(g,false);g.texS=bannerTex(g,true);g.banner.material.map=selected.includes(g)?g.texS:g.texN;
@@ -876,7 +885,7 @@ function select(list){
   selected.forEach(g=>{g.banner.material.map=g.texN;g.outline.visible=false;});
   selected=list;
   selected.forEach(g=>{g.banner.material.map=g.texS;g.outline.visible=true;drawOutline(g);});
-  renderSel(true);drawReach();renderArmy(true);
+  renderSel(true);drawReach();renderArmy(true);renderSplit();
 }
 function order(tx,tz,target){
   if(!selected.length)return;
@@ -885,9 +894,10 @@ function order(tx,tz,target){
   if(turnMode){
     if(phase!=='ordres'||cur!=='bleu'){toast('Attends ton tour pour donner des ordres','#5a4a16');return;}
     if(list.some(g=>g.stun>0)){list=list.filter(g=>!(g.stun>0));toast('Une armée étourdie ne peut rien jouer','#5a4a16');if(!list.length)return;}
+    if(list.some(g=>g.newTurn===turn)){list=list.filter(g=>g.newTurn!==turn);toast('Une unité qui vient d\'être créée joue au tour suivant','#5a4a16');if(!list.length)return;}
     // changer l'ordre d'une armée déjà commandée ce tour ne coûte rien de plus
-    let left=actionsLeft();list=selected.filter(g=>g.acted===turn||(left>0&&left--));
-    if(list.length<selected.length)toast(`Plus d'action disponible ce tour (${maxActions()} au maximum)`,'#5a4a16');
+    let left=actionsLeft();const asked=list.length;list=list.filter(g=>g.acted===turn||(left>0&&left--));
+    if(list.length<asked)toast(`Plus d'action disponible ce tour (${maxActions()} au maximum)`,'#5a4a16');
     if(!list.length)return;
     list.forEach(g=>g.acted=turn);
   }
@@ -964,7 +974,7 @@ function renderSel(force){
     const dist=g.tx!==null?Math.hypot(g.tx-g.x,g.tz-g.z):0;
     const tourInfo=!turnMode?'':`<span><span class="k">Ce tour :</span> ${g.acted===turn?'ordre donné':actionsLeft()>0?'peut recevoir un ordre':'plus d\'action disponible'}${dist>2?` · <span class="k">arrivée dans</span> ${Math.max(1,Math.ceil(dist/reachOf(g)))} tour(s) environ`:''}</span>`;
     const q=g.kind==='qg'?qgParts(g):null;
-    const fz=g.side==='bleu'&&g.kind!=='qg'&&g.kind!=='gm'?formButtons([g]):'';
+    const fz=(g.side==='bleu'&&g.kind!=='qg'&&g.kind!=='gm'?formButtons([g]):'')+(g.side==='bleu'&&g.kind!=='gm'&&!ended?'<span class="form"><button type="button" data-split="1" title="Créer une nouvelle unité avec une partie des hommes, ou en donner à une armée proche du même type">Séparer / transférer</button></span>':'');
     const extra=(g.kind==='arc'?`<span><span class="k">Portée :</span> ${fmt(REGLAGES.porteeArc*(isHill(g.x,g.z)?1.3:1))} m${isHill(g.x,g.z)?' (colline : +30 %)':''}${g.target&&!g.target.dead&&g.target.shown?` · <span class="k">tire sur</span> ${g.target.name}`:''}</span>`:'')
       +(g.kind==='esp'?`<span class="hid">Repère les armées cachées en forêt jusqu'à ${fmt(REGLAGES.espionForet)} m</span>`:'')
       +(g.kind==='ecl'?`<span class="hid">Repère les QG ennemis jusqu'à ${fmt(REGLAGES.visionEclaireur)} m</span>`:'');
@@ -1007,7 +1017,57 @@ function animateForms(dt,t){
     g.fcur+=(g.ftarget-g.fcur)*Math.min(1,dt*3);if(Math.abs(g.ftarget-g.fcur)<.01)g.fcur=g.ftarget;
     g.hw=g.hw0*g.fcur;g.hd=g.hd0*g.fcur;g.soldiers.forEach(s=>{s.lx=s.bx*g.fcur;s.lz=s.bz*g.fcur;});place(g,t);}
 }
-selEl.addEventListener('click',e=>{const b=e.target.closest('[data-form]');if(b)setFormation(selected,b.dataset.form);if(e.target.closest('[data-special]')&&selected.length===1)specialBleu(selected[0]);});
+selEl.addEventListener('click',e=>{const b=e.target.closest('[data-form]');if(b)setFormation(selected,b.dataset.form);if(e.target.closest('[data-special]')&&selected.length===1)specialBleu(selected[0]);if(e.target.closest('[data-split]')&&selected.length===1){splitFor=selected[0];renderSplit();}});
+// ---------- séparer une armée, transférer des hommes, regrouper (règles : créer une unité = ordre lourd ; transférer = ordre rapide) ----------
+const splitEl=document.getElementById('split');let splitFor=null,splitDests=[];
+const splitMax=g=>g.kind==='qg'?qgParts(g).garnison:g.men;
+function findDests(g){const kind=g.kind==='qg'?'inf':g.kind,used=new Set(regs.filter(e=>e.side==='bleu').map(e=>e.name)),out=[];
+  [...RESERVE.bleu,...CHEFS.bleu.filter(c=>!RESERVE.bleu.includes(c))].filter(c=>!used.has(c)).forEach(c=>out.push({type:'new',chef:c,label:`Nouvelle unité menée par ${c}${RESERVE.bleu.includes(c)?' (au QG)':''}`}));
+  regs.filter(e=>e!==g&&e.side==='bleu'&&e.kind!=='gm'&&(e.kind==='qg'||e.kind===kind)&&gap(g,e)<100).forEach(e=>out.push({type:'army',g:e,label:e.kind==='qg'?'Renvoyer au QG (garde)':`Rejoindre ${e.name} (${fmtMen(e.men)} ${KIND_HOMMES[e.kind]})`}));
+  return out;}
+function renderSplit(){const g=splitFor;if(!g||g.dead||ended||!selected.includes(g)||selected.length!==1){splitFor=null;splitEl.innerHTML='';return;}
+  const max=splitMax(g);splitDests=findDests(g);
+  splitEl.innerHTML=`<b>Séparer ou transférer · ${g.kind==='qg'?'garde du QG':g.name}</b>
+    <label>Hommes à déplacer (sur ${fmtMen(max)}) <input id="sp-n" type="number" min="1" max="${max}" step="10" value="${Math.max(10,Math.floor(max/20)*10)}"></label>
+    <label>Vers <select id="sp-d">${splitDests.length?splitDests.map((d,i)=>`<option value="${i}">${d.label}</option>`).join(''):'<option value="">Aucune destination possible</option>'}</select></label>
+    <span class="k">Nouvelle unité (10 hommes au moins) : ordre lourd, l'armée ne bouge plus ce tour et la nouvelle unité joue au tour suivant. Rejoindre une armée du même type à moins de 100 m : ordre rapide. Une armée qui donne tous ses hommes disparaît : son chef rentre au QG, où il compte toujours 1 point.</span>
+    <span class="row"><button type="button" id="sp-ok">Valider</button><button type="button" id="sp-x">Annuler</button></span>`;}
+splitEl.addEventListener('keydown',e=>e.stopPropagation());   // taper un nombre ne commande pas les armées
+splitEl.addEventListener('click',e=>{if(e.target.id==='sp-x'){splitFor=null;renderSplit();}else if(e.target.id==='sp-ok')doSplit();});
+function doSplit(){const g=splitFor;if(!g||g.dead)return;const max=splitMax(g),n=Math.round(+document.getElementById('sp-n').value||0),d=splitDests[+document.getElementById('sp-d').value],no=m=>toast(m,'#5a4a16');
+  if(!d)return no('Aucune destination : pas de chef libre ni d\'armée du même type à moins de 100 m');
+  if(!(n>=1&&n<=max))return no(`Choisis entre 1 et ${fmtMen(max)} hommes`);
+  const rest=max-n,qg=g.kind==='qg';
+  if(d.type==='new'&&n<10)return no('Une unité a au moins 10 hommes');
+  if(d.type==='new'&&!qg&&rest<10)return no('Garde au moins 10 hommes dans l\'armée de départ');
+  if(!qg&&rest>0&&rest<10)return no('Il doit rester au moins 10 hommes, ou donne-les tous');
+  if(d.type==='army'&&d.g.kind!=='qg'&&d.g.men+n>5000)return no('Une armée a 5 000 hommes au maximum');
+  if(turnMode&&!placing){if(phase!=='ordres'||cur!=='bleu')return no('Attends ton tour');if(g.stun>0)return no('Une armée étourdie ne peut rien jouer');
+    if(g.newTurn===turn)return no('Cette unité vient d\'être créée : elle joue au tour suivant');
+    if(g.acted!==turn&&actionsLeft()<=0)return no(`Plus d'action disponible ce tour (${maxActions()} au maximum)`);g.acted=turn;}
+  g.men-=n;if(!qg)g.startMen=Math.max(g.men,(g.startMen||g.men)-n);let msg,ng=null;
+  if(d.type==='new'){
+    const kind=qg?'inf':g.kind,f=formation(kind,n),off=g.hw+f.cols*f.dx/2+15,ok=([x,z])=>Math.abs(x)<W/2-60&&Math.abs(z)<D/2-60&&!blocked(x,z)&&hAt(x,z)>WATER+.3;
+    let p=toWorld(g,off,0);if(!ok(p))p=toWorld(g,-off,0);if(!ok(p))p=toWorld(g,0,g.hd+f.rows*f.dz/2+15);
+    const ri=RESERVE.bleu.indexOf(d.chef);if(ri>=0)RESERVE.bleu.splice(ri,1);
+    regiment({kind,side:'bleu',name:d.chef,men:n,color:g.color,x:Math.max(-W/2+60,Math.min(W/2-60,p[0])),z:Math.max(-D/2+60,Math.min(D/2-60,p[1])),cols:f.cols,rows:f.rows,dx:f.dx,dz:f.dz,heading:g.heading});
+    ng=regs[regs.length-1];ng.newTurn=turn;ng.wait=0;if(turnMode&&!placing){g.tx=null;g.chase=null;}
+    msg=`${d.chef} prend la tête d'une nouvelle unité de ${fmtMen(n)} ${KIND_HOMMES[kind]} (+1 point)`;
+  }else{const e=d.g;e.men+=n;if(e.kind!=='qg')e.startMen=(e.startMen||e.men-n)+n;rebuildBlock(e);
+    msg=e.kind==='qg'?`${fmtMen(n)} hommes rentrent au QG`:`${fmtMen(n)} hommes rejoignent ${e.name}`;
+    if(!qg&&g.men<=0){RESERVE.bleu.push(g.name);g.merged=true;msg+=` · ${g.name} rentre au QG (il compte toujours 1 point)`;removeReg(g);}}
+  if(!g.dead)rebuildBlock(g);
+  splitFor=null;toast(msg,'#1d4a2a');updateFog();if(ng)select([ng]);else select(g.dead?[d.g]:[g]);renderTour();renderStatus();
+}
+// refait le bloc de soldats d'une armée après un changement d'effectif (largeur selon le nombre d'hommes, comme au départ)
+function rebuildBlock(g){
+  const want=g.kind==='gm'?1:Math.ceil((g.kind==='qg'?qgParts(g).garnison:g.men)/HPS),f=g.kind==='qg'?{cols:15,dx:2.2,dz:3}:formation(g.kind,g.men),pk=mounted(g.kind)?'cav':'inf',h=mounted(g.kind)?7:4.5;
+  g.soldiers.forEach(freeSoldier);g.soldiers=[];g.cols=f.cols;g.rows=Math.max(1,Math.ceil(want/f.cols));g.dx=f.dx;g.dz=f.dz;
+  for(let i=0;i<want;i++){const r=Math.floor(i/g.cols),k=i%g.cols,s=addSoldier(pk,h,(k-(g.cols-1)/2)*g.dx+(R()-.5)*.8,(r-(g.rows-1)/2)*g.dz+(R()-.5)*.8);s.lx=s.bx*g.fcur;s.lz=s.bz*g.fcur;g.soldiers.push(s);}
+  g.hw0=g.cols*g.dx/2;g.hd0=g.rows*g.dz/2;g.hw=g.hw0*g.fcur;g.hd=g.hd0*g.fcur;
+  scene.remove(g.shadows);g.shadows.dispose();g.shadows=new THREE.InstancedMesh(shadowG,shadowMat,Math.max(1,want));g.shadows.frustumCulled=false;g.shadows.count=want;scene.add(g.shadows);
+  g.sv=undefined;applyVis(g);setMen(g,g.men);place(g,performance.now()/1000);if(g.outline&&g.outline.visible)drawOutline(g);
+}
 // ---------- jauge d'Aura, attaque spéciale et étourdi ----------
 function auraInfo(g){if(g.kind==='qg')return'';const a=Math.floor(g.aura||0);
   return`<span><span class="k">Jauge d'Aura :</span> ${a}/100${g.boost>0?` · <span class="hid">ATK +${fmt(REGLAGES.auraBonus)} % (${g.boost} tour(s))</span>`:''}${g.stun>0?` · <span class="warn">étourdi (${g.stun} tour(s)) : ne joue pas, DEF −${fmt(REGLAGES.etourdiDef)} %</span>`:''}</span>`+
@@ -1064,7 +1124,7 @@ function renderArmy(force){
   if(!list.length){if(lastArm){armEl.innerHTML='';lastArm='';}return;}
   let h=`<div class="t"><span>Ton armée · général ${GENERAUX.bleu}</span><span>${pointsOf('bleu')} points${turnMode&&!placing&&!ended?` · ${actionsLeft()}/${maxActions()} actions`:''}</span></div>`;
   for(const g of list){const i=allRegs.indexOf(g);
-    if(g.dead){h+=`<div class="r dead"><span>${g.kind==='qg'?`QG · ${g.general}`:g.name}</span><span class="k">${g.kind==='qg'?'QG pris':'tombé'}</span><span></span></div>`;continue;}
+    if(g.dead){h+=`<div class="r dead"><span>${g.kind==='qg'?`QG · ${g.general}`:g.name}</span><span class="k">${g.kind==='qg'?'QG pris':g.merged?'au QG':'tombé'}</span><span></span></div>`;continue;}
     const fight=regs.some(e=>e.side!==g.side&&contactDist(g,e)),q=g.kind==='qg'?qgParts(g):null;
     const etat=fight?'<span class="c">au combat</span>':g.kind==='arc'&&g.target&&!g.target.dead?'tire':g.tx!==null?'en marche':'à l\'arrêt';
     const men=q?`garde ${fmtMen(q.garnison)} · PV ${fmtMen(q.pv)}`:`${fmtMen(g.men)} ${KIND_HOMMES[g.kind]}${g.form!=='normale'?' · '+FORM_NOM[g.form].toLowerCase():''}`;
@@ -1308,7 +1368,7 @@ function finish(winner,why){
   const side=sd=>allRegs.filter(g=>g.side===sd),start=sd=>side(sd).reduce((a,g)=>a+(g.kind==='qg'?Math.round(g.startMen-3*g.pvGar-g.pvGen):g.kind==='gm'?0:g.startMen),0),
     left=sd=>side(sd).filter(g=>!g.dead&&g.kind!=='gm').reduce((a,g)=>a+(g.kind==='qg'?qgParts(g).garnison:g.men),0);
   const row=g=>{const alive=!g.dead,men=g.kind==='qg'?(alive?qgParts(g).garnison:0):(alive?g.men:0);
-    return`<tr><td>${g.kind==='qg'?`${g.general} (général)`:g.name}</td><td>${g.side==='bleu'?'toi':'adversaire'}</td><td class="n">${fmtMen(men)}</td><td class="n">${fmtMen(Math.round(g.kills||0))}</td><td${alive?'':' class="tombe"'}>${alive?'en vie':'tombé'}</td></tr>`;};
+    return`<tr><td>${g.kind==='qg'?`${g.general} (général)`:g.name}</td><td>${g.side==='bleu'?'toi':'adversaire'}</td><td class="n">${fmtMen(men)}</td><td class="n">${fmtMen(Math.round(g.kills||0))}</td><td${alive||g.merged?'':' class="tombe"'}>${alive?'en vie':g.merged?'regroupé, au QG':'tombé'}</td></tr>`;};
   const e=CONF.enjeu,enjeu=!e.mise?'Bataille amicale : pas d\'enjeu.':winner?`Mise${e.texte?` (${e.texte})`:''} remportée par ${winner==='bleu'?'toi':'l\'adversaire'}.`:`Égalité : la mise${e.texte?` (${e.texte})`:''} n'est remportée par personne.`;
   document.getElementById('fin-bilan').innerHTML=`<p>Bataille en ${turn} tour(s). Toi : ${fmtMen(left('bleu'))} hommes sur ${fmtMen(start('bleu'))}. Adversaire : ${fmtMen(left('rouge'))} sur ${fmtMen(start('rouge'))}.</p>
     <table><tr><th>Homme clé</th><th>Camp</th><th>Hommes restants</th><th>Ennemis mis hors de combat</th><th>État</th></tr>${allRegs.map(row).join('')}</table>
@@ -1318,7 +1378,7 @@ function finish(winner,why){
 // les armées de départ : composition choisie dans « Nouvelle bataille », placées par planSide()
 const ARMEES=PLAN;
 function deploy(){
-  select([]);regs.slice().forEach(removeReg);allRegs.length=0;floats.forEach(f=>f.el.remove());floats.length=0;
+  select([]);regs.slice().forEach(removeReg);allRegs.length=0;RESERVE.bleu.length=RESERVE.rouge.length=0;splitFor=null;floats.forEach(f=>f.el.remove());floats.length=0;
   ARMEES.forEach(o=>regiment(o.kind==='qg'?{...o,rows:Math.max(1,Math.ceil(REGLAGES.garnisonQG/HPS/o.cols))}:{...o}));known.clear();ended=false;finEl.hidden=true;combatAcc=0;
   turn=1;phase='ordres';phaseT=REGLAGES.dureeTour;cur='bleu';wasNight=false;meteo=METEOS[Math.floor(Math.random()*METEOS.length)];boue=meteo==='pluie'?Math.round(REGLAGES.boueTours):0;
   VIVRES.bleu=VIVRES.rouge=REGLAGES.vivres*1000;ambiance();startPlacement();regs.forEach(applyVis);renderArmy(true);
@@ -1404,6 +1464,7 @@ function renderLivret(){
   ${sec('Les ordres',[
     `<b>1 ordre par homme clé et par tour</b>, ${v('actionsMax')} au maximum. Le général compte : déplacer le QG coûte une action.`,
     'Changer l\'ordre d\'une armée déjà commandée ce tour ne coûte rien de plus.',
+    '<b>Séparer / transférer</b> (bouton du panneau) : créer une nouvelle unité avec une partie des hommes et un chef libre (ordre lourd : l\'armée ne bouge plus ce tour, la nouvelle unité joue au tour suivant), ou donner des hommes à une armée du même type à moins de 100 m ou au QG (ordre rapide). Une armée qui donne tous ses hommes disparaît : son chef rentre au QG et compte toujours 1 point.',
     'Une <b>marche longue continue toute seule</b> aux tours suivants, sans coûter d\'action.',
     'Clic droit sur le terrain pour y aller, sur une armée ennemie pour marcher sur elle.',
     '<b>Rien ne s\'annule pendant le tour de l\'adversaire</b> : une protection se prépare à l\'avance.'])}
@@ -1490,7 +1551,7 @@ function renderLivret(){
     'Effets des généraux autres que l\'attaque spéciale, stratégies (recharge : 10 tours, 1 de moins par tranche de 200 d\'INT du général), soignants.',
     'END et Aura propres à chaque personnage (pour l\'instant les mêmes pour tous, dans les réglages).',
     'Combat du QG avec les vraies stats du général, garde rapprochée à composer, hommes d\'un sous-général tombé (étourdis 2 tours puis répartis).',
-    'Formations et stratégies de la liste complète, pièges et constructions, créer une unité en cours de bataille.',
+    'Formations et stratégies de la liste complète, pièges et constructions.',
     'Images propres aux archers, aux espions et aux guerriers mystiques.',
     'Bataille à deux joueurs en ligne, à plusieurs, calcul de l\'XP.'])}
   </div>`;
