@@ -451,9 +451,9 @@ const scene=new THREE.Scene();
 scene.background=new THREE.Color(0x9fb4c2);
 scene.fog=new THREE.Fog(0x9fb4c2,3400,7500);
 const renderer=new THREE.WebGLRenderer({antialias:true});
-renderer.setPixelRatio(Math.min(2,window.devicePixelRatio||1));
+renderer.setPixelRatio(Math.min(1.5,window.devicePixelRatio||1));
 renderer.outputEncoding=THREE.sRGBEncoding;
-renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap; renderer.shadowMap.autoUpdate=false; renderer.shadowMap.needsUpdate=true;   // ombres recalculées de temps en temps seulement
 document.getElementById('scene').appendChild(renderer.domElement);
 
 const camera=new THREE.PerspectiveCamera(40,1,1,12000);
@@ -692,8 +692,11 @@ function groundLine(color,opacity){
   const l=new THREE.Line(new THREE.BufferGeometry(),new THREE.LineBasicMaterial({color,transparent:true,opacity,depthTest:false}));
   l.renderOrder=9;l.frustumCulled=false;l.visible=false;scene.add(l);return l;
 }
-function setLine(line,pts){const a=new Float32Array(pts.length*3);pts.forEach((p,i)=>{a[i*3]=p[0];a[i*3+1]=Math.max(hAt(p[0],p[1]),WATER)+1.2;a[i*3+2]=p[1];});
-  line.geometry.setAttribute('position',new THREE.BufferAttribute(a,3));line.geometry.computeBoundingSphere();}
+// la ligne garde le même tampon (agrandi si besoin) : on n'en change que le contenu et la longueur affichée
+function setLine(line,pts){const geo=line.geometry;let at=geo.getAttribute('position');
+  if(!at||at.count<pts.length){at=new THREE.BufferAttribute(new Float32Array(Math.max(256,pts.length*2)*3),3).setUsage(THREE.DynamicDrawUsage);geo.setAttribute('position',at);}
+  const a=at.array;pts.forEach((p,i)=>{a[i*3]=p[0];a[i*3+1]=Math.max(hAt(p[0],p[1]),WATER)+1.2;a[i*3+2]=p[1];});
+  at.needsUpdate=true;geo.setDrawRange(0,pts.length);}
 const ringG=new THREE.RingGeometry(5,7,32);ringG.rotateX(-Math.PI/2);
 
 function makeTent(color){
@@ -705,17 +708,48 @@ function makeTent(color){
   add(new THREE.BoxGeometry(.4,7,.4),cloth,0,13,0);add(new THREE.BoxGeometry(4,2.2,.2),team,2.2,15.4,0);
   scene.add(grp);return grp;
 }
+// ---------- soldats : tous ceux d'une même série d'images (fantassins, cavaliers) sont dessinés d'un seul coup ----------
+// (avant : un objet 3D par soldat, soit des milliers de dessins par image : c'est ce qui faisait ramer)
+const POOLS={},poolU={shade:{value:1}};
+function makePool(k){
+  const set=mats[k];if(!set.length)return;const T=256,cols=4,rows=Math.ceil(set.length/cols);
+  const cv=document.createElement('canvas');cv.width=cols*T;cv.height=rows*T;const c2=cv.getContext('2d');
+  set.forEach((m,i)=>{const im=m.mat.map.image,sc=T/Math.max(im.width,im.height),w=im.width*sc,h=im.height*sc;
+    c2.drawImage(im,(i%cols)*T+(T-w)/2,(Math.floor(i/cols))*T+(T-h),w,h);m.tile=i;m.k=T/h;});   // image posée en bas de sa case
+  const atlas=new THREE.CanvasTexture(cv);atlas.anisotropy=4;   // comme les arbres : couleurs de l'image telles quelles
+  const mat=new THREE.ShaderMaterial({uniforms:{map:{value:atlas},...poolU},side:THREE.DoubleSide,
+    vertexShader:`attribute vec3 iPos;attribute vec2 iSize;attribute float iTile;varying vec2 vUv;
+      void main(){vec4 mv=modelViewMatrix*vec4(iPos,1.0);vec2 p=position.xy;p.y+=0.5;mv.xy+=p*iSize;gl_Position=projectionMatrix*mv;
+      float c=mod(iTile,${cols}.0),r=floor(iTile/${cols}.0);vUv=vec2((c+uv.x)/${cols}.0,1.0-(r+1.0-uv.y)/${rows}.0);}`,
+    fragmentShader:`uniform sampler2D map;uniform float shade;varying vec2 vUv;
+      void main(){vec4 c=texture2D(map,vUv);if(c.a<0.5)discard;gl_FragColor=vec4(c.rgb*shade,1.0);}`});
+  POOLS[k]={k,set,mat,cap:0,free:[],mesh:null};growPool(POOLS[k],4000);
+}
+function growPool(p,cap){
+  const base=new THREE.PlaneGeometry(1,1),geo=new THREE.InstancedBufferGeometry();
+  geo.index=base.index;geo.setAttribute('position',base.attributes.position);geo.setAttribute('uv',base.attributes.uv);
+  const ip=new Float32Array(cap*3),is=new Float32Array(cap*2),it=new Float32Array(cap);
+  if(p.mesh){ip.set(p.ip);is.set(p.is);it.set(p.it);scene.remove(p.mesh);p.mesh.geometry.dispose();}
+  for(let i=cap-1;i>=p.cap;i--)p.free.push(i);
+  Object.assign(p,{cap,ip,is,it});
+  p.aP=new THREE.InstancedBufferAttribute(ip,3).setUsage(THREE.DynamicDrawUsage);p.aS=new THREE.InstancedBufferAttribute(is,2).setUsage(THREE.DynamicDrawUsage);p.aT=new THREE.InstancedBufferAttribute(it,1);
+  geo.setAttribute('iPos',p.aP);geo.setAttribute('iSize',p.aS);geo.setAttribute('iTile',p.aT);geo.instanceCount=cap;
+  p.mesh=new THREE.Mesh(geo,p.mat);p.mesh.frustumCulled=false;scene.add(p.mesh);
+}
+function addSoldier(k,h,lx,lz){const p=POOLS[k];if(!p.free.length)growPool(p,p.cap*2);
+  const m=p.set[Math.floor(R()*p.set.length)],slot=p.free.pop(),q=h*m.k;
+  const s={p,slot,w:q*(R()<.5?-1:1),h:q,lx,lz,bx:lx,bz:lz,ph:R()*6.28};p.it[slot]=m.tile;p.aT.needsUpdate=true;soldierVis(s,true);return s;}
+function soldierVis(s,v){const p=s.p;p.is[s.slot*2]=v?s.w:0;p.is[s.slot*2+1]=v?s.h:0;p.dS=true;}
+function freeSoldier(s){soldierVis(s,false);s.p.free.push(s.slot);}
+function flushPools(){for(const k in POOLS){const p=POOLS[k];if(p.dP){p.aP.needsUpdate=true;p.dP=false;}if(p.dS){p.aS.needsUpdate=true;p.dS=false;}}}
 function regiment(o){
-  const set=mats[mounted(o.kind)?'cav':'inf']; if(!set.length) return;   // archers et espions : images de fantassins (provisoire)
+  const pk=mounted(o.kind)?'cav':'inf'; if(!POOLS[pk]) return;   // archers et espions : images de fantassins (provisoire)
   const h=mounted(o.kind)?7:4.5;
   const g={...o,men:o.men||o.cols*o.rows*HPS,soldiers:[],tx:null,tz:null,chase:null,contact:null,moving:false,foes:[],charge:false,nouveau:false,lastLoss:null,dead:false,kills:0,wait:2+R()*6,shown:true,
     hw:o.cols*o.dx/2,hd:o.rows*o.dz/2,form:'normale',fcur:1,ftarget:1};g.hw0=g.hw;g.hd0=g.hd;
   for(let r=0;r<o.rows;r++)for(let k=0;k<o.cols;k++){
-    const m=set[Math.floor(R()*set.length)];
-    const sp=new THREE.Sprite(m.mat);sp.center.set(.5,0);
-    sp.scale.set(h*m.aspect*(R()<.5?-1:1),h,1);scene.add(sp);
     const lx=(k-(o.cols-1)/2)*o.dx+(R()-.5)*.8,lz=(r-(o.rows-1)/2)*o.dz+(R()-.5)*.8;
-    g.soldiers.push({sp,lx,lz,bx:lx,bz:lz,ph:R()*6.28});
+    g.soldiers.push(addSoldier(pk,h,lx,lz));
   }
   g.shadows=new THREE.InstancedMesh(shadowG,shadowMat,g.soldiers.length);g.shadows.frustumCulled=false;scene.add(g.shadows);
   g.texN=bannerTex(g,false);g.texS=bannerTex(g,true);
@@ -740,7 +774,7 @@ function place(g,t){
   const bob=(g.moving||g.contact)&&walkAnim, sx=mounted(g.kind)?1.6:1.1, sz=mounted(g.kind)?2.6:1.1;
   Q.setFromAxisAngle(UP,-g.heading);S.set(sx,1,sz);
   g.soldiers.forEach((s,i)=>{const [x,z]=toWorld(g,s.lx,s.lz),y=hAt(x,z);
-    s.sp.position.set(x,Math.max(y,WATER-1.3)+(bob?Math.abs(Math.sin(t*6+s.ph))*.25:0),z);
+    const a=s.p.ip,i3=s.slot*3;a[i3]=x;a[i3+1]=Math.max(y,WATER-1.3)+(bob?Math.abs(Math.sin(t*6+s.ph))*.25:0);a[i3+2]=z;s.p.dP=true;
     P.set(x+.8,y+.25,z+.6);M.compose(P,Q,S);g.shadows.setMatrixAt(i,M);});
   g.shadows.instanceMatrix.needsUpdate=true;
   g.banner.position.set(g.x,Math.max(hAt(g.x,g.z),WATER),g.z);
@@ -758,7 +792,7 @@ function drawOutline(g){
 function showReg(g,v){if(g.shown===v)return;g.shown=v;applyVis(g);}
 // vue stratégique (très loin) : les armées deviennent des bannières, les soldats sont masqués
 let bannersOnly=false;
-function applyVis(g){const v=g.shown,sv=v&&!bannersOnly;g.soldiers.forEach(s=>s.sp.visible=sv);g.shadows.visible=sv;g.banner.visible=v;if(g.tent)g.tent.visible=v;}
+function applyVis(g){const v=g.shown,sv=v&&!bannersOnly;if(g.sv!==sv){g.sv=sv;g.soldiers.forEach(s=>soldierVis(s,sv));}g.shadows.visible=sv;g.banner.visible=v;if(g.tent)g.tent.visible=v;}
 const corners=g=>[[g.x,g.z],toWorld(g,-g.hw,-g.hd),toWorld(g,g.hw,-g.hd),toWorld(g,g.hw,g.hd),toWorld(g,-g.hw,g.hd)];
 const isHidden=g=>corners(g).every(([x,z])=>inForest(x,z));
 // écart en mètres entre un point et le bloc d'une armée (0 si le point est dedans)
@@ -865,7 +899,7 @@ function order(tx,tz,target){
     x=Math.max(-W/2+40,Math.min(W/2-40,x));z=Math.max(-D/2+40,Math.min(D/2-40,z));
     g.tx=x;g.tz=z;
   });
-  renderSel(true);renderTour();
+  updatePaths();renderSel(true);renderTour();renderArmy(true);
 }
 const ray=new THREE.Raycaster(),ndc=new THREE.Vector2();
 function pick(ev){
@@ -1062,10 +1096,10 @@ const combatObj=g=>({men:g.men,kind:g.kind,terrain:terrainCombat(g.x,g.z),charge
 function rapport(g,foes){const mine=puissanceBase(combatObj(g))*foes.reduce((s,e)=>s+angleMult(g,e),0)/foes.length;
   const theirs=foes.reduce((s,e)=>s+puissanceBase(combatObj(e))*angleMult(e,g)/Math.max(1,regs.filter(f=>f.side!==e.side&&contactDist(e,f)).length),0);
   return theirs>0?mine/theirs:99;}
-function trimSoldiers(g){const want=g.kind==='gm'?1:Math.ceil((g.kind==='qg'?qgParts(g).garnison:g.men)/HPS);while(g.soldiers.length>want){const s=g.soldiers.pop();scene.remove(s.sp);}g.shadows.count=g.soldiers.length;}
+function trimSoldiers(g){const want=g.kind==='gm'?1:Math.ceil((g.kind==='qg'?qgParts(g).garnison:g.men)/HPS);while(g.soldiers.length>want)freeSoldier(g.soldiers.pop());g.shadows.count=g.soldiers.length;}
 function removeReg(g){
   if(selected.includes(g))select(selected.filter(x=>x!==g));
-  g.soldiers.forEach(s=>scene.remove(s.sp));[g.shadows,g.banner,g.outline,g.path,g.mark,g.reach,g.tent].forEach(o=>{if(o)scene.remove(o);});
+  g.soldiers.forEach(freeSoldier);g.soldiers=[];[g.shadows,g.banner,g.outline,g.path,g.mark,g.reach,g.tent].forEach(o=>{if(o)scene.remove(o);});
   g.texN.dispose();g.texS.dispose();g.dead=true;known.delete(g);
   const i=regs.indexOf(g);if(i>=0)regs.splice(i,1);
   regs.forEach(e=>{if(e.chase===g){e.chase=null;e.tx=null;}if(e.contact===g)e.contact=null;});
@@ -1168,7 +1202,7 @@ const speedMeteo=g=>(inMud(g.x,g.z)?1-REGLAGES.boueVitesse/100:1)*(meteo==='froi
 function ambiance(){const n=isNight(),m=meteo,col=new THREE.Color(m==='pluie'?0x7f8b93:m==='brouillard'?0xb9c0c4:m==='froid'?0xb7c7d6:0x9fb4c2);
   if(n)col.multiplyScalar(.3);scene.background=col;scene.fog.color.copy(col);
   scene.fog.near=m==='brouillard'?250:3400;scene.fog.far=m==='brouillard'?2200:7500;
-  sun.intensity=(n?.22:1)*(m==='soleil'?1.15:m==='froid'?.95:.7);hemi.intensity=n?.3:.65;}
+  poolU.shade.value=n?.45:m==='soleil'?1:.85;sun.intensity=(n?.22:1)*(m==='soleil'?1.15:m==='froid'?.95:.7);hemi.intensity=n?.3:.65;}
 const vivresTours=side=>{const men=regs.filter(g=>g.side===side&&g.kind!=='gm').reduce((s,g)=>s+(g.kind==='qg'?qgParts(g).garnison:g.men),0);return men?Math.floor(VIVRES[side]/men):99;};
 // début du tour d'un camp : la météo peut changer, le jour ou la nuit, les effets « X tours », les jauges d'Aura montent
 function debutTour(side){const r=REGLAGES,msgs=[];
@@ -1600,7 +1634,7 @@ function forestMesh(){
 }
 let ready=false;
 function build(){
-  forestMesh();
+  forestMesh();makePool('inf');makePool('cav');
   deploy();ready=true;
 }
 function done(){if(++loaded===toLoad)build();}
@@ -1609,7 +1643,11 @@ function done(){if(++loaded===toLoad)build();}
 
 // ---------- boucle ----------
 const walkAnim=!window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-let last=performance.now(),acc=0;
+let last=performance.now(),acc=0,shAcc=0,mmAcc=0;
+// trajet (pointillé blanc) et point d'arrivée (anneau doré) de tes armées en marche
+function updatePaths(){for(const g of regs)if(g.path){const on=g.tx!==null;g.path.visible=g.mark.visible=on;
+  if(on){const d=Math.hypot(g.tx-g.x,g.tz-g.z),n=Math.max(2,Math.ceil(d/10)),pts=[];for(let i=0;i<=n;i++)pts.push([g.x+(g.tx-g.x)*i/n,g.z+(g.tz-g.z)*i/n]);setLine(g.path,pts);
+    g.mark.position.set(g.tx,Math.max(hAt(g.tx,g.tz),WATER)+1,g.tz);}}}
 function resize(){const w=window.innerWidth,h=window.innerHeight;renderer.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix();sizeMini();}
 // mini-carte : taille, côté et affichage choisis par le joueur (gardés dans le navigateur)
 const MM_SIZES=[160,220,280,360,460],mmWrap=document.getElementById('mmwrap'),mmShow=document.getElementById('mm-show');
@@ -1649,19 +1687,18 @@ function loop(now){const dt=Math.min(.1,(now-last)/1000),t=now/1000;last=now;
     else if(ended){for(const g of regs)if(g.contact)place(g,t);}
     else if(turnMode)turnTick(dt,t);
     else{for(const g of regs){if(g.side==='rouge')ai(g,dt);const was=g.moving;step(g,dt);if(g.moving||was||g.contact)place(g,t);}combatTick(dt);}
-    if((acc+=dt)>.2){acc=0;updateFog();renderStatus();renderSel(false);renderTour();renderArmy(false);
-      for(const g of regs)if(g.path){const on=g.tx!==null;g.path.visible=g.mark.visible=on;
-        if(on){const d=Math.hypot(g.tx-g.x,g.tz-g.z),n=Math.max(2,Math.ceil(d/10)),pts=[];for(let i=0;i<=n;i++)pts.push([g.x+(g.tx-g.x)*i/n,g.z+(g.tz-g.z)*i/n]);setLine(g.path,pts);
-          g.mark.position.set(g.tx,Math.max(hAt(g.tx,g.tz),WATER)+1,g.tz);}}}
+    if((acc+=dt)>.2){acc=0;updatePaths();updateFog();renderStatus();renderSel(false);renderTour();renderArmy(false);
+      if((shAcc+=1)>=10){shAcc=0;renderer.shadowMap.needsUpdate=true;}
+      updatePaths();}
   }catch(err){showErr(err);}
   controls.update();updateBannerMode();
   for(const g of regs){const k=Math.min(4,Math.max(.45,camera.position.distanceTo(g.banner.position)/650));g.banner.scale.set(BH*k*g.texN.userData.aspect,BH*k,1);}
-  renderer.render(scene,camera);drawMini();drawFloats(now);drawArrows(now);requestAnimationFrame(loop);}
+  flushPools();renderer.render(scene,camera);if((mmAcc+=dt)>.066){mmAcc=0;drawMini();}drawFloats(now);drawArrows(now);requestAnimationFrame(loop);}
 requestAnimationFrame(loop);
 
 document.getElementById('b-fog').addEventListener('click',e=>{fogOn=!fogOn;fogU.fogOn.value=fogOn?1:0;updateFog();renderStatus();e.currentTarget.textContent='Brouillard : '+(fogOn?'oui':'non');e.currentTarget.setAttribute('aria-pressed',fogOn);});
 document.getElementById('b-ai').addEventListener('click',e=>{aiOn=!aiOn;if(!aiOn)regs.forEach(g=>{if(g.side==='rouge')g.tx=null;});e.currentTarget.textContent='Rouges : '+(aiOn?'en patrouille':'immobiles');e.currentTarget.setAttribute('aria-pressed',aiOn);});
-document.getElementById('b-shadow').addEventListener('click',e=>{renderer.shadowMap.enabled=!renderer.shadowMap.enabled;scene.traverse(o=>{if(o.material)o.material.needsUpdate=true});e.currentTarget.textContent='Ombres : '+(renderer.shadowMap.enabled?'oui':'non');});
+document.getElementById('b-shadow').addEventListener('click',e=>{renderer.shadowMap.enabled=!renderer.shadowMap.enabled;renderer.shadowMap.needsUpdate=true;scene.traverse(o=>{if(o.material)o.material.needsUpdate=true});e.currentTarget.textContent='Ombres : '+(renderer.shadowMap.enabled?'oui':'non');});
 bView.addEventListener('click',()=>setZoom(ZOOMS[(ZOOMS.indexOf(zoomLvl)+1)%3]));
 window.__shin={regs,select,order,setMen,REGLAGES,resoudreManche,simuler,deploy,startMove,get turn(){return turn},get phase(){return phase},get selected(){return selected},seen,forest};   // pour les tests
 })();
