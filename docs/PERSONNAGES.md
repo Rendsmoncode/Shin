@@ -310,6 +310,12 @@ Raretés : rare et épique (environ 30 épiques). Les guerriers mystiques sont a
 - Rares : Bob le bricoleur, l'artisan qui dit « je passe lundi », le chef de chantier de la mairie, le client de Leroy Merlin
 - Léonard de Vinci, Archimède et Eiffel : gardés pour les ingénieurs.
 
+## Ingénieurs
+
+- Épiques : Léonard de Vinci, Archimède, Gustave Eiffel, Lu Ban, Al-Jazari, Héron d'Alexandrie, Su Song, Taqi al-Din, Nikola Tesla, Hedy Lamarr, Lloyd Frontera (The Greatest Estate Developer)
+- Rares : le tonton qui répare tout au scotch, le mécano du quartier, le vendeur de Darty
+- Non retenus (fiction) : Senku, MacGyver, Doc Brown, Géo Trouvetou.
+
 ## Généraux rares (à faire plus tard)
 
 Des personnages modernes ou historiques, et des blagues : un PDG, un entraîneur de foot…
