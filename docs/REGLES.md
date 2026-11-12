@@ -261,6 +261,25 @@ Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de
   - **ordres rapides** (changer de formation, lancer une stratégie, transférer des hommes, utiliser une attaque spéciale) : on peut en faire un et se déplacer dans la même action ;
   - **ordres lourds** (construire, poser un piège, créer une unité) : ils prennent toute l'action.
 - ✅ **Construction et pièges** : pendant une construction ou la pose d'un piège, toute l'armée est étourdie jusqu'à la fin des travaux. La durée dépend du niveau de la construction et du niveau de l'architecte.
+- 💡 **Constructions et pièges des architectes (proposition de Claude, 12/11, à valider)**. Peu d'éléments, tout médiéval. Une construction se fait là où se trouve l'armée, reste toute la bataille et peut être détruite. Chiffres indicatifs.
+
+  | Construction | Durée | Effet |
+  |---|---|---|
+  | **Palissade** (ligne de pieux) | 1 tour | défense +30 % pour l'armée derrière, face aux attaques de face ; les charges ne passent pas |
+  | **Fossé** | 2 tours | l'ennemi qui le traverse est ralenti (vitesse −50 %) et perd son bonus de charge |
+  | **Tour de guet** | 2 tours | vision étendue autour d'elle, révèle les embuscades proches |
+  | **Pont de fortune** | 2 tours | permet de traverser une rivière hors du gué |
+  | **Camp fortifié** (architecte de haut niveau) | 3 tours | autour du quartier général : défense du QG +50 %, soins plus rapides |
+
+  | Piège (invisible pour l'ennemi) | Durée | Effet |
+  |---|---|---|
+  | **Chausse-trappes** | 1 tour | la cavalerie qui passe perd des hommes et son bonus de charge |
+  | **Fosse camouflée** | 2 tours | l'armée qui tombe dedans perd des hommes et reste étourdie un tour |
+  | **Éboulement** (sur une pente) | 2 tours | déclenché quand une armée passe en contrebas : grosses pertes |
+
+  - **Contres** : les éclaireurs et les espions repèrent les pièges à courte portée ; les engins de siège détruisent vite les constructions ; les flèches enflammées brûlent la palissade et la tour de guet.
+  - **Limite** : un architecte peut faire un nombre limité de constructions et de pièges par bataille (piste : 3), selon son niveau. Le niveau débloque aussi les constructions les plus fortes.
+  - **Ingénieur** : il ne construit pas de défenses, il s'occupe des machines (engins de siège, rupture de barrage).
 - ✅ **Amélioration des troupes (hors bataille)**, sans abuser et en restant **médiéval** (12/11) : peu d'éléments, pour ne pas surcharger le jeu.
   - la cavalerie peut devenir des **chars de guerre** (chars antiques et médiévaux tirés par des chevaux, pas de chars d'assaut) ;
   - les archers débloquent les **flèches enflammées** (et peut-être une ou deux autres flèches spéciales, pas plus) ;
