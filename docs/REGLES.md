@@ -216,10 +216,19 @@ Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de
 - ✅ **Les grades ne concernent que Shin, Koby et Guts** (12/11) : eux seuls montent de grade (Chef de bande → … → Général), et leur grade débloque le reste (effectifs, stratégies, aptitudes), en plus de leur montée en rareté.
 - ✅ **Les généraux du gacha sont d'office Généraux** : ils ont dès le départ le grade final, tous leurs effets, leurs formations et leurs stratégies.
 - ✅ **L'XP n'augmente que les stats** des personnages du gacha (généraux et autres catégories). Elle ne débloque rien d'autre.
+- ✅ **Fourchettes de stats selon la rareté** (12/11), sur une échelle de 1 à 1 000, pour les **points forts** du personnage (un stratège a une grosse INT et une petite ATK) :
+  | Rareté | Stats principales (au maximum) |
+  |---|---|
+  | Commun | 100 à 300 |
+  | Rare | 250 à 450 |
+  | Épique | 400 à 650 |
+  | Légendaire | 600 à 850 |
+  | Sous les Cieux | 800 à 1 000 |
+  | Guerrier mystique | 2 000 et plus (attaque, défense, points de vie) |
 - ✅ **Nombre de généraux** : 1 général pour 3 quartiers, plus le roi (toujours général dès le départ).
 - ✅ **Blessures** : un général peut être blessé, et le temps le soigne (par exemple 3 jours).
 - ✅ **Les joueurs ne créent rien** : ni personnages, ni cartes.
-- ✅ **Les joueurs sont des rois de quartier.** Un roi est automatiquement général et possède un passif offensif et un passif défensif.
+- ✅ **Les joueurs** sont eux-mêmes, liés à l'âme de Shin, Koby ou Guts (voir `LORE.md`) : leur général, c'est ce personnage. Pas de passifs de « roi » à part (supprimé le 12/11).
 
 ## 8. Les personnages du gacha
 
