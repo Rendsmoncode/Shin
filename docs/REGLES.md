@@ -446,6 +446,10 @@ Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de
   - ✅ **Le blocage** (deux camps qui restent en défense indéfiniment) : réglé par le ravitaillement. Les vivres s'épuisent, d'autant plus vite que l'armée est grande, ce qui oblige à agir.
 - ✅ **Champ de bataille à part** : la bataille rangée ne se joue pas autour d'un quartier. Les deux camps sont à égalité, chacun attaque et se défend (comme une petite guerre).
 - ✅ **Pillage** (10/11) : le perdant d'une bataille se fait piller une partie de ses ressources (pas tout), en plus de la mise ou de l'objectif que remporte le vainqueur. Pas de pillage ni d'enjeu dans une bataille amicale.
+- ✅ **Fin de bataille** (12/11) :
+  - **Tombés ou blessés, selon le combat** : une armée écrasée ou achevée par un coup de grâce a surtout des **tombés** (indisponibles 3 h) ; des pertes progressives donnent surtout des **blessés** (1 h). Les soignants augmentent la part de blessés.
+  - **Pillage selon l'écrasement** : une défaite serrée coûte peu, une défaite écrasante coûte plus. **Au maximum 25 % des ressources** peuvent être pillées, jamais la totalité (les banques et entrepôts protègent en plus une partie des réserves).
+  - **XP** : tous les personnages engagés gagnent de l'XP, le vainqueur davantage. Bonus pour ceux qui ont fait tomber un homme clé ou lancé un coup de grâce.
 - ✅ **XP** : en bataille rangée, même amicale, tout le monde gagne de l'XP.
 
 ## 9 bis (suite). Les combats contre les tyrans
