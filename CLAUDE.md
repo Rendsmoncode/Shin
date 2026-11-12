@@ -4,6 +4,13 @@
 
 - **Toujours demander l'accord de l'utilisateur avant toute génération payante** (Meshy, Gemini, ou tout autre service qui consomme des crédits), en annonçant le coût prévu. Ne jamais enchaîner plusieurs générations payantes sans accord explicite pour chacune.
 - L'utilisateur surveille ses crédits Claude : éviter les itérations inutiles, faire une seule passe quand c'est possible, et prévenir avant un travail coûteux.
+- **Économiser les crédits Claude** (règles d'Ayoub) :
+  - ne lire que les fichiers et les sections utiles à la tâche (avec `grep` ou `sed -n`), jamais tous les docs ni un gros fichier en entier sans raison ;
+  - ne pas relire un fichier qu'on vient de modifier ;
+  - regrouper les commandes et les modifications, et envoyer sur `main` une seule fois à la fin (sauf le passage de la tâche à « En cours ») ;
+  - faire des réponses courtes : ce qui a changé, ce qu'il faut tester, et la suite en une phrase ;
+  - ne pas lancer de sous-agents ;
+  - pour un gros travail, conseiller une nouvelle session plutôt que de continuer une conversation déjà longue.
 - Répondre en français, simplement : l'utilisateur n'est pas développeur.
 - **Équilibrage** : Claude peut modifier ou supprimer les éléments de règles qu'il a lui-même proposés s'ils bloquent un élément important ou déséquilibrent le jeu (accord d'Ayoub, voir le début de `docs/REGLES.md`), en informant toujours l'utilisateur de ce qui a changé et pourquoi.
 - Les règles du jeu sont dans `docs/REGLES.md`, les personnages dans `docs/PERSONNAGES.md`, le style visuel dans le skill `style-visuel`.
