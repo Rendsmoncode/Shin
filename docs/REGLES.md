@@ -190,6 +190,10 @@ Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de
   | **Les sauveurs** | 3 parmi les sauveurs (liste pas encore définitive : pour l'instant Khalid, Knut, Musashi, Saladin, Toussaint Louverture, Thorfinn, Abd el-Kader) | défense +20 %, soins renforcés |
   | **Les Briseurs de chaînes** | 2 ou plus parmi ceux qui ont combattu la colonisation et l'esclavage : Toussaint Louverture, Abd el-Kader, Ménélik II, Samori Touré, la reine Nzinga, Rani Lakshmibai, Tecumseh, Crazy Horse, Lapu-Lapu, Võ Nguyên Giáp, Muhammad Ali | +15 % à deux, +25 % à trois ou plus ; bonus en plus quand leur armée est moins nombreuse que l'ennemi |
   | **Le foot** 😄 | 2 ou plus parmi Zidane, Cristiano Ronaldo, Messi, Guardiola, Mourinho, Luis Enrique | +10 % à deux, +15 % à trois ou plus |
+  | **Le médecin de Guan Yu** | Hua Tuo, Guan Yu | Guan Yu récupère 10 % de points de vie par tour |
+  | **Le chirurgien de Napoléon** | Larrey, Napoléon | blessés remis sur pied +20 % |
+  | **Le Hokage** | Tsunade, Shikamaru | stratégies et soins +10 % |
+  | **Les parents de Mathieu** | Claude et Régis, Koby | Koby DEF +15 %, et son armée ne fatigue jamais |
 
   - ✅ **L'ascendant de Ri Boku** (12/11) : face à une armée commandée par un général de Qin (Ouki, Ousen, Kanki ; **pas Shin ni Kyoukai**), Ri Boku gagne un bonus (piste : attaque et défense +20 %). Historiquement, Li Mu a écrasé Huan Yi (Kanki) deux fois et Wang Jian (Ousen) n'a pu le vaincre qu'après son exécution. C'est le seul « ascendant » : les autres duels historiques (Scipion-Hannibal, Richard-Saladin…) ne sont pas assez nets. Pas de bonus de rivalité (supprimé le 12/11).
 

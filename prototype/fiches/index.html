@@ -136,6 +136,7 @@ dialog textarea{width:100%;min-height:45vh;background:#0f1411;border:1px solid v
 // Un objet (ex. le guandao d'Ouki) n'apparaît que s'il est marqué comme obtenu dans l'aperçu.
 const CLE='shin-fiches-modifs';
 const STATS=['ATK','DEF','END','INT','VIT','Aura'];
+const STATS_F=[...STATS,'Soin'];
 const ORDRE=['caché','mystique','cieux','légend','épique','rare','commun'];
 let base=[],modifs={},courant=null,edition=false;
 const etape={},objetObtenu={};
@@ -210,7 +211,7 @@ function dessinerFiche(){
   const v=vue(f),[c,t,etoiles]=couleur(v.rarete);
   const portrait=f.image?`<img src="${esc(f.image)}" alt="Portrait de ${esc(f.nom)}">`:`<span class="initiales">${esc(initiales(f.nom))}</span><span class="sansimage">Portrait à venir</span>`;
   const actions=`<div class="actions"><button type="button" data-act="histoire" title="Histoire du personnage">📜</button><button type="button" data-act="modifier">Modifier</button>${estModifiee(f.id)?`<button type="button" data-act="annuler">${estNouvelle(f.id)?'Supprimer':'Revenir à l\'original'}</button>`:''}</div>`;
-  const stats=STATS.map(k=>{const x=+((v.stats||{})[k])||0;return `<div class="stat"><b>${k==='Aura'?'AURA':k}</b><span>${x||'—'}</span><span class="barre"><i class="${x>1000?'exces':''}" style="width:${Math.min(100,x/10)}%"></i></span></div>`;}).join('');
+  const stats=(((v.stats||{}).Soin)?STATS_F:STATS).map(k=>{const x=+((v.stats||{})[k])||0;return `<div class="stat"><b>${k==='Aura'?'AURA':k}</b><span>${x||'—'}</span><span class="barre"><i class="${x>1000?'exces':''}" style="width:${Math.min(100,x/10)}%"></i></span></div>`;}).join('');
   let h=barreApercu(f)+`<article class="fiche"><div class="bandeau" style="background:${c};color:${t}"><span class="etoiles">${etoiles}</span><span>${esc(v.rarete||'')}</span>${actions}</div>
     <div class="tete"><div class="portrait">${portrait}</div><div class="ident"><h2>${esc(f.nom)}</h2>${f.surnom?`<div class="surnom">« ${esc(f.surnom)} »</div>`:''}
     <dl><dt>Catégorie</dt><dd>${esc(f.categorie||'—')}</dd><dt>Profil</dt><dd>${esc(f.profil||'—')}</dd>${f.joueur?`<dt>Joueur</dt><dd>${esc(f.joueur)}</dd>`:''}</dl>
@@ -232,7 +233,7 @@ function rangeeAttaque(a={}){return `<div class="rangee" data-r="attaque"><div c
 
 // partie « effets » du formulaire : la fiche entière, ou le palier en cours pour un personnage qui évolue
 function blocEffets(src){
-  return `<fieldset><legend>Stats</legend><div class="six">${STATS.map(k=>`<label>${k}<input name="stat_${k}" type="number" min="0" step="10" value="${esc((src.stats||{})[k]??'')}"></label>`).join('')}</div></fieldset>
+  return `<fieldset><legend>Stats</legend><div class="six">${STATS_F.map(k=>`<label>${k}<input name="stat_${k}" type="number" min="0" step="10" value="${esc((src.stats||{})[k]??'')}"></label>`).join('')}</div></fieldset>
     ${champ('👑 Aptitude de leader','leader',src.leader||'','area')}
     <fieldset><legend>✦ Aptitudes passives</legend><div id="passifs">${(src.passifs||[]).map(rangeePassif).join('')}</div><button type="button" data-act="ajouter" data-quoi="passif">+ Passif</button></fieldset>
     <fieldset><legend>⚔ Attaques spéciales</legend><div id="attaques">${(src.attaques||[]).map(rangeeAttaque).join('')}</div><button type="button" data-act="ajouter" data-quoi="attaque">+ Attaque</button></fieldset>
@@ -267,7 +268,7 @@ function enregistrer(ancienne){
   f.liens=lignes(g('liens'));
   const ev=evolue(f),dest=ev?f.paliers[idxEtape(f)]:f;
   if(ev)dest.rarete=g('rarete')||dest.rarete;else{f.rarete=g('rarete');f.statsNote=g('statsNote');}
-  dest.stats={};for(const k of STATS){const v=g('stat_'+k);if(v!=='')dest.stats[k]=+v;}
+  dest.stats={};for(const k of STATS_F){const v=g('stat_'+k);if(v!=='')dest.stats[k]=+v;}
   dest.leader=g('leader');dest.passifs=lireRangees('#passifs');dest.attaques=lireRangees('#attaques');
   dest.formations=lignes(g('formations'));dest.strategies=lignes(g('strategies'));
   if(g('objet_nom')||g('objet_texte'))f.objet={nom:g('objet_nom'),obtention:g('objet_obtention'),texte:g('objet_texte')};else delete f.objet;

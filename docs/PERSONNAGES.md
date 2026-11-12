@@ -293,6 +293,12 @@ Raretés : rare et épique (environ 30 épiques). Les guerriers mystiques sont a
 - Non retenus : Christophe Colomb, Cortés, Pizarro (massacres et esclavage), Armin.
 - ✅ Explorateur et Archéologue sont fusionnés : « Archéologue » est une capacité rare de certains explorateurs, qui permet de déterrer des trésors pendant les parties (soin, bonus temporaire, monstre allié).
 
+## Soignants
+
+- Épiques : Hua Tuo, Dominique-Jean Larrey, Ambroise Paré, Florence Nightingale, Mary Seacole, Rufaida al-Aslamia, Avicenne, Al-Zahrawi, Henri Dunant, Marie Curie, Tony Tony Chopper (One Piece), Tsunade (Naruto), Claude et Régis (les parents de Mathieu, podologues)
+- Rares : Médecin de MSF, Pharmacien du coin (« Prenez un Doliprane »), Infirmière de l'hôpital d'Aubagne
+- Non retenue : Mère Teresa.
+
 ## Généraux rares (à faire plus tard)
 
 Des personnages modernes ou historiques, et des blagues : un PDG, un entraîneur de foot…
