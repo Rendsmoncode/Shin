@@ -435,7 +435,9 @@ Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de
     - **Le coup de grâce** : le jeu le propose quand l'armée visée est assez affaiblie pour être achevée d'un coup (rapport de force suffisant). L'armée visée est détruite d'un coup, comme un écrasement. Il ne peut pas viser directement un général dans son quartier général.
     - **L'effet** : un bonus ou un malus pendant quelques tours. Exemples : toute l'armée attaque +30 % pendant 2 tours ; une armée ennemie est étourdie un tour ; des blessés sont remis sur pied ; une zone de la carte est révélée.
     - **Contre** : l'Aura du général ennemi réduit les effets qui le visent (malus, étourdissement).
-- 💡 **Aperçu avant l'attaque** (à décider en travaillant sur les calculs) : pas de chiffres exacts, seulement une estimation (« écrasant », « avantage », « équilibré », « désavantage », « suicide »), et seulement si l'armée ennemie est visible. Un espion rend l'estimation plus précise.
+- ✅ **Aperçu avant l'attaque** (validé le 12/11) : pas de chiffres exacts, seulement une estimation (« écrasant », « avantage », « équilibré », « désavantage », « suicide »), et seulement si l'armée ennemie est visible. Un espion rend l'estimation plus précise.
+  - Un nuage de poussière rend l'estimation floue (fourchette du nombre d'ennemis).
+  - **Contact par surprise** : si une armée entre dans une zone invisible et touche une armée ennemie qu'elle ne voyait pas, le combat se calcule normalement, mais **aucun mot n'est affiché avant** : le joueur ne devait pas savoir qu'il y avait une armée.
 - ✅ **Le mouvement crée l'attaque** : entrer dans la zone d'une armée ennemie déclenche le combat. Selon l'angle (de face, de flanc, de dos), ça donne un affrontement de face, une attaque surprise, etc.
 - ✅ **Brouillard de guerre** : une armée n'est visible que si elle est dans la portée visuelle de soldats adverses. Une armée cachée derrière une montagne ou une forêt reste invisible, même toute proche.
 - ✅ **Placement de départ** : chaque joueur place ses forces où il veut, dans une large zone de sa moitié de la carte. Il a 59 secondes pour se placer.

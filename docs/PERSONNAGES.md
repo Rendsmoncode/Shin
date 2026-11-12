@@ -28,6 +28,41 @@ Liste de travail des personnages du gacha. Stats et aptitudes à définir ensemb
 - ✅ **Un détail signature par personnage**, reconnaissable au premier coup d'œil (ex. : l'étendard à queues de cheval de Gengis Khan, le bicorne de Napoléon).
 - Les fiches visuelles (époque, armure, arme, couleurs, détail signature, références) sont à faire personnage par personnage (tâche 223).
 
+## La fiche d'un personnage (proposition de Claude, 12/11, à valider)
+
+**Contenu d'une fiche** : nom, surnom, catégorie (général, soldat d'élite, soignant, espion, architecte, ingénieur, économiste, explorateur, guerrier mystique), rareté, stats (ATK, DEF, END, INT, VIT, Aura ; + soin pour les soignants), effets, formations et stratégies spéciales maîtrisées, liens.
+
+**Nombre d'effets selon la rareté** (chaque personnage a au moins un effet) :
+
+| Rareté | Aptitudes passives | En plus pour un général | En plus |
+|---|---|---|---|
+| Commun | 1 | aptitude de leader (faible) | — |
+| Rare | 1 | aptitude de leader + attaque spéciale (un type) | — |
+| Épique | 2 | idem | 1 formation ou stratégie spéciale |
+| Légendaire | 2 | idem, en plus fort | 2 formations ou stratégies spéciales |
+| Sous les Cieux | 3 | attaque spéciale des **deux** types (coup de grâce et effet) | 2 ou plus |
+| Guerrier mystique | 2 | — | attaque spéciale très puissante (capable de battre une armée seul) |
+
+**Les types d'effets** (catalogue de départ, peu d'éléments) :
+- **Bonus de stat** : +% ou +valeur à ATK, DEF, END, INT, VIT ou Aura ;
+- **Bonus conditionnel** : seulement sur un terrain, dans une formation, contre un type de troupe, en infériorité numérique, quand l'armée a perdu beaucoup d'hommes… ;
+- **Pertes réduites** ou **soins** (blessés remis sur pied) ;
+- **Vision, vitesse, discrétion** ;
+- **Jauge d'Aura plus rapide**, **stratégies renforcées** ou recharge plus courte ;
+- **Règle spéciale** : sortir du quartier général (Kanki, Souvorov), ne pas pouvoir être étourdi, etc. ;
+- **Hors bataille** : économie, recrutement, construction (pour les économistes, architectes…).
+
+**Place dans les calculs** (voir REGLES.md, 6 bis) :
+- l'**aptitude de leader** et les **aptitudes passives** qui renforcent les troupes vont dans la catégorie **Commandement** ;
+- les **attaques spéciales**, cadeaux des mentors, sauveurs et trésors vont dans **Effets** ;
+- les bonus de terrain ou de formation vont dans **Situation**.
+
+**Limites** :
+- chaque catégorie est plafonnée (piste : +100 %) ;
+- deux effets **identiques** ne se cumulent pas (on garde le plus fort) ;
+- l'aptitude de leader ne touche que les soldats placés en dessous dans la hiérarchie (règle déjà fixée) ;
+- un bonus conditionnel reste modeste (piste : +30 % maximum).
+
 ## Raretés
 
 Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
