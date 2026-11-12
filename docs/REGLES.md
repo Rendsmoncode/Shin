@@ -243,8 +243,8 @@ Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de
   - ✅ **Les joueurs jouent en même temps** (choix de Mathieu, 9/11/2026) : pendant la minute du tour, chacun donne ses ordres sans voir ceux des autres, puis toutes les armées bougent et se battent ensemble. Personne n'attend son tour, même en 2v2 ou 1v1v1.
   - ✅ **Une marche longue continue gratuitement** (choix de Mathieu, 9/11/2026) : une armée envoyée à plusieurs tours de marche poursuit seule aux tours suivants, sans utiliser d'action. Une action ne sert qu'à donner un nouvel ordre.
 - ✅ Les aptitudes spéciales s'y utilisent (par exemple, l'attaque spéciale d'un Grand Général Sous les Cieux).
-- ✅ **Quand** : tout combat de 500 hommes ou plus se joue en bataille rangée. **Si un joueur n'est pas connecté, une IA joue à sa place** (la même IA que celle des tyrans).
-- ✅ **Inactivité** : sans aucune action sur le jeu pendant 3 minutes, le joueur passe hors ligne (l'IA joue à sa place).
+- ✅ **Quand** : tout combat de 500 hommes ou plus se joue en bataille rangée. **Si un joueur n'est pas connecté quand on l'attaque, une IA joue à sa place** (la même IA que celle des tyrans). **S'il se connecte pendant la bataille, il peut reprendre la main** et remplacer l'IA.
+- ✅ **Inactivité** : sans aucune action sur le jeu pendant 3 minutes, le joueur passe hors ligne : une attaque lancée contre lui à ce moment-là est jouée par l'IA. Une bataille qu'il avait déjà commencée, elle, reste en suspens (voir plus bas).
 - ✅ **Alerte d'attaque** : le défenseur connecté choisit entre jouer la bataille lui-même ou laisser l'IA jouer. Sans réponse au bout de 30 secondes, l'IA joue à sa place.
 - ✅ **Pas de limite de temps par tour** (12/11, remplace le chrono d'une minute) : un tour se résout quand les deux joueurs ont donné leurs ordres.
 - ✅ **Bataille en suspens** (12/11) : on peut quitter une bataille en cours et y revenir plus tard. Si un joueur s'absente, la bataille reste en suspens ; l'autre peut retourner en ville et même jouer d'autres batailles pendant ce temps.
@@ -439,11 +439,11 @@ Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de
 - ✅ **Placement simultané et caché** : les deux joueurs se placent en même temps, chacun dans sa partie du terrain, sans voir le placement de l'adversaire. Les deux zones de départ sont séparées par un no man's land, pour que les quartiers généraux ne soient pas visibles des troupes adverses dès le début.
 - ✅ **Enjeu d'une bataille** : si la bataille n'est pas amicale, le vainqueur remporte la mise ou l'objectif fixé. Une bataille amicale n'a pas d'enjeu.
 - ✅ **Pas de nombre maximum de tours** (12/11) : une longue bataille peut faire partie du jeu.
-  - ✅ **Ravitaillement** : chaque tour, les armées consomment de la nourriture ; sans vivres, elles perdent des hommes.
+  - ✅ **Ravitaillement** : chaque tour, les armées consomment de la nourriture ; **plus il y a de soldats, plus les vivres s'épuisent vite**. Sans vivres, elles perdent des hommes.
   - ✅ **Retraite générale, sous condition** : le joueur qui la demande doit la faire accepter par l'adversaire.
     - **Si l'adversaire accepte** : c'est la défaite du demandeur.
-    - **S'il refuse** : la bataille continue. Elle se termine quand l'un des deux perd vraiment (tous ses hommes clés tombés), ou quand le demandeur ramène **tous ses soldats encore vivants** à son quartier général.
-  - ❓ **Le blocage** (deux camps qui restent en défense indéfiniment) : solution à trouver.
+    - **S'il refuse** : la bataille continue. Elle se termine quand l'un des deux perd vraiment (tous ses hommes clés tombés), ou quand le demandeur ramène **tous ses soldats encore vivants** à son quartier général. Dans ce dernier cas, c'est une **défaite légère** : il perd la bataille (la mise) mais sauve ses hommes ; il est quand même pillé.
+  - ✅ **Le blocage** (deux camps qui restent en défense indéfiniment) : réglé par le ravitaillement. Les vivres s'épuisent, d'autant plus vite que l'armée est grande, ce qui oblige à agir.
 - ✅ **Champ de bataille à part** : la bataille rangée ne se joue pas autour d'un quartier. Les deux camps sont à égalité, chacun attaque et se défend (comme une petite guerre).
 - ✅ **Pillage** (10/11) : le perdant d'une bataille se fait piller une partie de ses ressources (pas tout), en plus de la mise ou de l'objectif que remporte le vainqueur. Pas de pillage ni d'enjeu dans une bataille amicale.
 - ✅ **XP** : en bataille rangée, même amicale, tout le monde gagne de l'XP.
