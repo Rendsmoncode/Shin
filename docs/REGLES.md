@@ -169,10 +169,9 @@ Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de
   - Puis le **hasard de ±10 %**, et les pertes calculées comme dans le prototype (courbe progressive, écrasement à partir d'un rapport de 3).
   - **Les autres stats** : END réduit les pertes subies, INT renforce les stratégies et la vision, VIT la vitesse de déplacement, Aura les attaques spéciales.
   - Exemple : 1 000 fantassins → base 1 000. Général +20 %, quartier +15 %, lien +50 %, mentor +10 % → 1 000 × 1,2 × 1,15 × 1,5 × 1,1 ≈ **2 280**. En forêt (×1,2) → **2 730**, puis ±10 % de hasard.
-- 💡 **Liste des liens (proposition de Claude, 12/11, à valider)**. Chiffres indicatifs, réglés par simulation.
+- ✅ **Liste des liens** (validée le 12/11). Chiffres indicatifs, réglés par simulation.
   - **Où ils comptent** : les personnages doivent être dans la **même armée** (général, sous-généraux, chefs d'unité, garde rapprochée, guerriers mystiques).
   - **Taille du bonus** : 2 personnages ≈ +10 %, 3 personnages ≈ +20 à 30 %, quelques liens « légendaires » jusqu'à +50 %. Certains liens donnent un bonus particulier plutôt qu'un pourcentage.
-  - **Les rivalités** : deux rivaux historiques qui s'affrontent dans des **camps opposés** gagnent chacun un bonus contre l'autre (ils se surpassent).
 
   | Lien | Personnages | Bonus |
   |---|---|---|
@@ -192,17 +191,7 @@ Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de
   | **Les Briseurs de chaînes** | 2 ou plus parmi ceux qui ont combattu la colonisation et l'esclavage : Toussaint Louverture, Abd el-Kader, Ménélik II, Samori Touré, la reine Nzinga, Rani Lakshmibai, Tecumseh, Crazy Horse, Lapu-Lapu, Võ Nguyên Giáp, Muhammad Ali | +15 % à deux, +25 % à trois ou plus ; bonus en plus quand leur armée est moins nombreuse que l'ennemi |
   | **Le foot** 😄 | 2 ou plus parmi Zidane, Cristiano Ronaldo, Messi, Guardiola, Mourinho, Luis Enrique | +10 % à deux, +15 % à trois ou plus |
 
-  | Rivalité (camps opposés) | Personnages |
-  |---|---|
-  | Le duel de Ganryūjima | Musashi et Sasaki Kojirō |
-  | La troisième croisade | Saladin et Richard Cœur de Lion |
-  | Zama | Hannibal et Scipion l'Africain |
-  | Kawanakajima | Takeda Shingen et Uesugi Kenshin |
-  | La guerre de Troie | Achille et Hector |
-  | Le ciel de 1917 | Georges Guynemer et le Baron rouge |
-  | Le Clásico 😄 | Messi et Cristiano Ronaldo ; Guardiola et Mourinho |
-
-  - ✅ **L'ascendant de Ri Boku** (12/11) : face à une armée commandée par un général de Qin (Ouki, Ousen, Kanki ; **pas Shin ni Kyoukai**), Ri Boku gagne un bonus (piste : attaque et défense +20 %). Historiquement, Li Mu a écrasé Huan Yi (Kanki) deux fois et Wang Jian (Ousen) n'a pu le vaincre qu'après son exécution. C'est le seul « ascendant » : les autres duels historiques (Scipion-Hannibal, Richard-Saladin…) ne sont pas assez nets.
+  - ✅ **L'ascendant de Ri Boku** (12/11) : face à une armée commandée par un général de Qin (Ouki, Ousen, Kanki ; **pas Shin ni Kyoukai**), Ri Boku gagne un bonus (piste : attaque et défense +20 %). Historiquement, Li Mu a écrasé Huan Yi (Kanki) deux fois et Wang Jian (Ousen) n'a pu le vaincre qu'après son exécution. C'est le seul « ascendant » : les autres duels historiques (Scipion-Hannibal, Richard-Saladin…) ne sont pas assez nets. Pas de bonus de rivalité (supprimé le 12/11).
 
 - ❓ **Comment les bonus se combinent** : additions d'abord puis multiplications ? Les pourcentages de même type s'additionnent entre eux (+10 % et +20 % = +30 %) ou se multiplient (×1,1 × 1,2 = +32 %) ? Plafond éventuel ? (à fixer avec la formule de puissance, tâche 21)
 
