@@ -315,9 +315,13 @@ Raretés : rare et épique (environ 30 épiques). Les guerriers mystiques sont a
 - Épiques : Léonard de Vinci, Archimède, Gustave Eiffel, Lu Ban, Al-Jazari, Héron d'Alexandrie, Su Song, Taqi al-Din, Nikola Tesla, Hedy Lamarr, Lloyd Frontera (The Greatest Estate Developer)
 - Non retenus : Senku, MacGyver, Doc Brown, Géo Trouvetou (fiction) ; le tonton au scotch, le mécano, le vendeur de Darty (blagues pas drôles).
 
-## Généraux rares (à faire plus tard)
+## Économistes
 
-Des personnages modernes ou historiques, et des blagues : un PDG, un entraîneur de foot…
+- Épiques : Mansa Moussa, Jacques Cœur, Colbert, Sully, Jakob Fugger, Ibn Khaldoun, Adam Smith, John Maynard Keynes, Kautilya, Wang Anshi, Laurent de Médicis, Khadija, Muhammad Yunus
+
+## Généraux rares
+
+- ❌ Pas de généraux rares (décision du 12/11).
 
 ## De côté (à ressortir si besoin)
 
