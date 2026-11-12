@@ -143,7 +143,7 @@ Les armées s'inspirent du manga **Kingdom** : un général commence avec 5 homm
 | **Engins de siège** (bélier, catapulte, baliste) | A contre les bâtiments / D / D | attaquer un quartier, un rempart, un QG fixe | terrain accidenté, être exposés sans escorte |
 | 😄 **Cavalier à vélo** (humour) | D / D / B | faire rire, poursuivre un piéton | à peu près tout |
 
-Améliorations (règle déjà fixée) : la cavalerie débloque les chars de guerre ; les archers débloquent les flèches spéciales (enflammées, empoisonnées…) ; l'infanterie gagne de meilleurs équipements.
+Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de guerre médiévaux, flèches enflammées, meilleurs équipements. Toujours médiéval, sans multiplier les éléments.
 
 **Époques suivantes (armes à feu, véhicules, magie)** : mises de côté pour un éventuel DLC, voir la section « De côté : DLC » en fin de document.
 
@@ -261,10 +261,10 @@ Améliorations (règle déjà fixée) : la cavalerie débloque les chars de guer
   - **ordres rapides** (changer de formation, lancer une stratégie, transférer des hommes, utiliser une attaque spéciale) : on peut en faire un et se déplacer dans la même action ;
   - **ordres lourds** (construire, poser un piège, créer une unité) : ils prennent toute l'action.
 - ✅ **Construction et pièges** : pendant une construction ou la pose d'un piège, toute l'armée est étourdie jusqu'à la fin des travaux. La durée dépend du niveau de la construction et du niveau de l'architecte.
-- ✅ **Amélioration des troupes (hors bataille)** :
-  - la cavalerie monte de niveau pour débloquer des véhicules (chars de guerre tirés par des chevaux, etc.) ;
-  - les archers montent de niveau pour débloquer des flèches spéciales (enflammées, empoisonnées, etc.) ;
-  - l'infanterie monte de niveau pour obtenir de meilleurs équipements.
+- ✅ **Amélioration des troupes (hors bataille)**, sans abuser et en restant **médiéval** (12/11) : peu d'éléments, pour ne pas surcharger le jeu.
+  - la cavalerie peut devenir des **chars de guerre** (chars antiques et médiévaux tirés par des chevaux, pas de chars d'assaut) ;
+  - les archers débloquent les **flèches enflammées** (et peut-être une ou deux autres flèches spéciales, pas plus) ;
+  - toutes les troupes peuvent obtenir de **meilleurs équipements** (armures, armes, boucliers), par paliers.
 - ✅ **Structure d'une armée** : le général est le cœur de l'armée. Il a des sous-généraux, qui dirigent chacun un certain nombre d'hommes.
 - ✅ **Points de vie de l'armée** : le général vaut 3 points, chaque sous-général vaut 1 point. Un joueur qui tombe à 0 point perd la bataille.
   - ✅ **Une armée détruite** (écrasée ou dispersée) **= son sous-général tombé** : le joueur perd 1 point (choix de Mathieu, 9/11/2026). Le général, lui, ne tombe que si son quartier général est pris (garde, puis 3 gardes rapprochés, puis ses PV).
