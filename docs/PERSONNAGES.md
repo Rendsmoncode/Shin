@@ -304,6 +304,12 @@ Raretés : rare et épique (environ 30 épiques). Les guerriers mystiques sont a
 - Épiques : Hattori Hanzō, Fūma Kotarō, Juan Pujol (« Garbo »), Joséphine Baker, Noor Inayat Khan, Virginia Hall, Harriet Tubman, Richard Sorge, Edward Snowden, Varys (Game of Thrones), Loid Forger (Spy × Family), Itachi (Naruto), OSS 117, Solid Snake (Metal Gear)
 - Rares : la concierge de l'immeuble, le papi à la fenêtre, le commère du PMU
 
+## Architectes
+
+- Épiques : Vauban, Apollodore de Damas, Imhotep, Mimar Sinan, Vitruve, Brunelleschi, le baron Haussmann, Le Corbusier, Gaudí, Steve (Minecraft), Franky (One Piece)
+- Rares : Bob le bricoleur, l'artisan qui dit « je passe lundi », le chef de chantier de la mairie, le client de Leroy Merlin
+- Léonard de Vinci, Archimède et Eiffel : gardés pour les ingénieurs.
+
 ## Généraux rares (à faire plus tard)
 
 Des personnages modernes ou historiques, et des blagues : un PDG, un entraîneur de foot…
