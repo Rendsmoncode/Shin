@@ -32,6 +32,10 @@ Liste de travail des personnages du gacha. Stats et aptitudes à définir ensemb
 
 **Contenu d'une fiche** : nom, surnom, catégorie (général, soldat d'élite, soignant, espion, architecte, ingénieur, économiste, explorateur, guerrier mystique), rareté, stats (ATK, DEF, END, INT, VIT, Aura ; + soin pour les soignants), effets, formations et stratégies spéciales maîtrisées, liens.
 
+**Présentation de la fiche** (12/11) :
+- ✅ **Le portrait est mis en valeur** : grand, bien visible (on soigne les visuels, il faut qu'on les voie). 💡 Piste : le portrait occupe toute la hauteur de la moitié gauche de la fiche, les informations à droite.
+- ✅ **L'histoire du personnage est longue** : elle ne tient pas sur la fiche. Un **logo** (par exemple un parchemin 📜) ouvre une page à part avec toute sa vie.
+
 **Nombre d'effets selon la rareté** (chaque personnage a au moins un effet) :
 
 | Rareté | Aptitudes passives | En plus pour un général | En plus |
