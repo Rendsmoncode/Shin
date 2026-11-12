@@ -7,6 +7,8 @@ Les réponses d'origine au questionnaire sont dans le dossier [`questionnaire/`]
 
 Légende : ✅ décidé · 💡 proposé, à valider · ❓ à décider plus tard
 
+**Liberté d'équilibrage (accord d'Ayoub, 12/11)** : les éléments proposés par Claude (formations, stratégies, troupes, constructions, attaques spéciales, chiffres…) peuvent être modifiés ou supprimés par Claude s'ils bloquent un élément important ou déséquilibrent le jeu, pour améliorer l'expérience de jeu. Claude doit toujours en informer l'utilisateur (ce qui a changé et pourquoi).
+
 ---
 
 ## Le concept
@@ -397,7 +399,7 @@ Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de
   - Chaque général a l'un **ou** l'autre. Les **Grands Généraux Sous les Cieux ont les deux** : c'est ce qui les distingue sur le terrain.
   - Chaque attaque a des conditions de déclenchement, ou une jauge si elle n'en a pas.
   - Pas d'animation propre à chaque général pour les attaques spéciales.
-  - 💡 **Précisions (proposition de Claude, 12/11, à valider)** :
+  - ✅ **Précisions** (proposées par Claude, validées le 12/11) :
     - **La jauge d'Aura** : elle se remplit un peu à chaque tour, plus vite quand l'armée du personnage combat, inflige ou subit des pertes, ou quand un homme clé ennemi tombe. Plus l'**Aura** du personnage est haute, plus elle monte vite. Pleine, elle permet l'attaque spéciale (ordre rapide), puis elle se vide. En pratique : 1 ou 2 attaques par bataille.
     - **Les conditions** (pour les attaques sans jauge) : tirées de l'histoire du personnage, utilisables **une fois par bataille** quand la condition est remplie. Exemples : Hannibal quand une armée ennemie est encerclée ; Léonidas quand son armée tient avec moins d'hommes que l'ennemi ; Khalid quand l'ennemi est plus nombreux.
     - **Le coup de grâce** : le jeu le propose quand l'armée visée est assez affaiblie pour être achevée d'un coup (rapport de force suffisant). L'armée visée est détruite d'un coup, comme un écrasement. Il ne peut pas viser directement un général dans son quartier général.

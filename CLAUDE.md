@@ -5,6 +5,7 @@
 - **Toujours demander l'accord de l'utilisateur avant toute génération payante** (Meshy, Gemini, ou tout autre service qui consomme des crédits), en annonçant le coût prévu. Ne jamais enchaîner plusieurs générations payantes sans accord explicite pour chacune.
 - L'utilisateur surveille ses crédits Claude : éviter les itérations inutiles, faire une seule passe quand c'est possible, et prévenir avant un travail coûteux.
 - Répondre en français, simplement : l'utilisateur n'est pas développeur.
+- **Équilibrage** : Claude peut modifier ou supprimer les éléments de règles qu'il a lui-même proposés s'ils bloquent un élément important ou déséquilibrent le jeu (accord d'Ayoub, voir le début de `docs/REGLES.md`), en informant toujours l'utilisateur de ce qui a changé et pourquoi.
 - Les règles du jeu sont dans `docs/REGLES.md`, les personnages dans `docs/PERSONNAGES.md`, le style visuel dans le skill `style-visuel`.
 - **Ne pas tester le jeu dans la session** (pas de rendu dans un navigateur headless, pas de captures d'écran) sauf si l'utilisateur le demande : coder, envoyer sur `main`, et l'utilisateur teste sur le site publié (`https://rendsmoncode.github.io/Shin/` : page de garde, le jeu dans `jeu/` (onglet Monde = carte de la ville `carte/`), test des batailles dans `champ-3d/`, tâches dans `taches/`).
 
