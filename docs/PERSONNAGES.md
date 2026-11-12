@@ -28,7 +28,7 @@ Liste de travail des personnages du gacha. Stats et aptitudes à définir ensemb
 - ✅ **Un détail signature par personnage**, reconnaissable au premier coup d'œil (ex. : l'étendard à queues de cheval de Gengis Khan, le bicorne de Napoléon).
 - Les fiches visuelles (époque, armure, arme, couleurs, détail signature, références) sont à faire personnage par personnage (tâche 223).
 
-## La fiche d'un personnage (proposition de Claude, 12/11, à valider)
+## La fiche d'un personnage (validée le 12/11)
 
 **Contenu d'une fiche** : nom, surnom, catégorie (général, soldat d'élite, soignant, espion, architecte, ingénieur, économiste, explorateur, guerrier mystique), rareté, stats (ATK, DEF, END, INT, VIT, Aura ; + soin pour les soignants), effets, formations et stratégies spéciales maîtrisées, liens.
 
