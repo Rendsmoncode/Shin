@@ -28,7 +28,7 @@ Dans le jeu, chacun n'a que sa **fiche de base** (commun), sans aucun indice qu'
 
 | Fiche | Ce qu'elle ajoute | Stats |
 |---|---|---|
-| Commun | Leader : Ses hommes DEF +5 %. ; Passif « Haki de l'observation » : Vision +30 %, et il voit les armées cachées à moins de 100 m. | ATK 250 · DEF 280 · END 280 · INT 210 · VIT 260 · Aura 270 |
+| Commun | Leader : Ses hommes ATK +5 %. ; Passif « Haki de l'observation » : Vision +30 %, et il voit les armées cachées à moins de 100 m. | ATK 250 · DEF 280 · END 280 · INT 210 · VIT 260 · Aura 270 |
 | Rare | Effet « Soru » (Jauge d'Aura) : L'armée qu'il mène se déplace deux fois pendant 1 tour. | ATK 370 · DEF 430 · END 410 · INT 320 · VIT 400 · Aura 400 |
 | Épique | Leader : Ses hommes DEF +15 %. ; Passif « Justice » : Contre un tyran (armée du jeu), ATK +20 %. ; Formation : Mur de boucliers | ATK 530 · DEF 620 · END 600 · INT 460 · VIT 570 · Aura 580 |
 | Légendaire | Leader : Ses hommes ATK et DEF +20 %. ; Stratégie : Ville vide | ATK 700 · DEF 810 · END 780 · INT 600 · VIT 750 · Aura 760 |
@@ -38,7 +38,7 @@ Dans le jeu, chacun n'a que sa **fiche de base** (commun), sans aucun indice qu'
 
 | Fiche | Ce qu'elle ajoute | Stats |
 |---|---|---|
-| Commun (enfant) | Leader : Ses hommes perdent 5 % de soldats en moins. ; Passif « Une épée trop grande » : quand il se bat en personne, ATK +25 % mais VIT −10 %. | ATK 280 · DEF 220 · END 300 · INT 120 · VIT 250 · Aura 200 |
+| Commun (enfant) | Leader : Ses hommes ATK +5 %. ; Passif « Une épée trop grande » : quand il se bat en personne, ATK +25 % mais VIT −10 %. | ATK 280 · DEF 220 · END 300 · INT 120 · VIT 250 · Aura 200 |
 | Rare | Effet « Le canon du bras » (Jauge d'Aura) : Un tir à distance qui fait de grosses pertes dans une armée ennemie. | ATK 420 · DEF 330 · END 450 · INT 180 · VIT 380 · Aura 300 |
 | Épique | Passif « Le Dragon Slayer » : Ses coups ignorent 30 % de la DEF ennemie. ; Formation : Coin | ATK 600 · DEF 460 · END 630 · INT 250 · VIT 520 · Aura 420 |
 | Légendaire | Leader : Ses hommes ATK +20 %. ; Stratégie : Attaque de nuit (renforcée) | ATK 820 · DEF 640 · END 850 · INT 330 · VIT 700 · Aura 580 |
