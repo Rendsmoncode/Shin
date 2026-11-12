@@ -43,7 +43,7 @@ Dans le jeu, chacun n'a que sa **fiche de base** (commun), sans aucun indice qu'
 | Rare | Effet « Le canon du bras » (Jauge d'Aura) : Un tir à distance qui fait de grosses pertes dans une armée ennemie. | ATK 420 · DEF 330 · END 450 · INT 180 · VIT 380 · Aura 300 |
 | Épique | Passif « Le Dragon Slayer » : L'armée qu'il mène ignore 15 % de la DEF ennemie. ; Formation : Coin | ATK 600 · DEF 460 · END 630 · INT 250 · VIT 520 · Aura 420 |
 | Légendaire | Leader : Ses hommes ATK +20 %. ; Stratégie : Attaque de nuit (renforcée) | ATK 820 · DEF 640 · END 850 · INT 330 · VIT 700 · Aura 580 |
-| Guerrier mystique (trait Général) | Leader : Ses hommes ATK +30 %. ; Passif « Cent hommes » : Il peut tenir seul contre une armée entière. ; Attaque spéciale « Furie du Guerrier noir » (Jauge d'Aura) : Attaque très puissante (à définir). | ATK 2600 · DEF 2000 · END 2800 · INT 450 · VIT 900 · Aura 1000 |
+| Guerrier mystique (trait Général) | Leader : Ses hommes ATK +30 %. ; Passif « Cent hommes » : Il peut tenir seul contre une armée entière. ; Attaque spéciale « Furie du Guerrier noir » (Jauge d'Aura) : Attaque très puissante (à définir). | ATK 3250 · DEF 2500 · END 3500 · INT 450 · VIT 900 · Aura 1000 (force : environ 1 800 hommes) |
 
 ### Les objets des mentors
 

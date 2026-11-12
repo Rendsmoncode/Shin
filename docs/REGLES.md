@@ -200,7 +200,7 @@ Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de
 
 - ✅ **À quoi servent les stats** (validé le 12/11) : comme dans Dokkan, **les stats sont celles du personnage lui-même** ; ce qui renforce l'armée, ce sont **uniquement ses effets écrits en clair** (aptitude de leader, passifs : « toutes ses troupes ATK +25 % »). Pas de calcul caché.
   - **Échelle** : de 1 à 1 000 environ (un Sous les Cieux approche 1 000) ; bien au-delà pour les guerriers mystiques.
-  - **ATK, DEF, END** (END = ses points de vie) : sa force quand il se bat **en personne** (seulement les guerriers mystiques, et le combat du quartier général : voir « Se battre en personne », section 9 bis).
+  - **ATK, DEF, END** (END = ses points de vie) : sa force quand il se bat **en personne** (les guerriers mystiques et le combat du quartier général ; l'END d'un homme clé décide aussi quand son armée est dispersée : voir « Se battre en personne », section 9 bis).
   - **INT** : ses ruses. Stratégies plus fortes et plus fréquentes, meilleure vision, résistance aux ruses ennemies.
   - **VIT** : sa vitesse, et celle de l'armée qu'il mène.
   - **Aura** : la vitesse de remplissage de sa jauge d'attaque spéciale.
@@ -241,7 +241,7 @@ Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de
 - ✅ **Archéologue** : ce n'est plus une catégorie à part. C'est une **capacité rare** de certains explorateurs (un explorateur-archéologue), qui permet de **déterrer des trésors pendant les parties**.
 - ✅ **Guerrier Mystique** : catégorie à part, uniquement des légendaires (voire au-delà), capables de battre une armée entière à eux seuls.
   - ✅ **Sur le champ de bataille** (12/11) : il est seul (ou accompagné) quelque part sur la carte et **se déplace comme une armée**. Ses stats (ATK, DEF, END…) sont **excessives**.
-  - ✅ **Une dissuasion à lui seul** : il doit pouvoir se battre seul contre **1 000 hommes** et potentiellement ne pas perdre.
+  - ✅ **Une dissuasion à lui seul** : il doit pouvoir se battre seul contre **1 000 hommes** et potentiellement ne pas perdre. Sa force exacte dépend de sa légende (de 1 000 à 2 000 hommes environ, voir 9 bis).
   - ✅ **Seul un autre guerrier mystique peut vraiment l'arrêter.** Les tyrans en auront aussi quand le jeu deviendra plus dur.
   - ✅ **Les flèches** lui font perdre des points de vie, mais très peu : ce ne doit pas être un vrai souci pour celui qui l'utilise.
 - ✅ **Stats** : ATK, DEF, END, INT, VIT, Aura (remplace « Mana », 11/11 : la présence du personnage sur le champ de bataille, qui sert aux attaques spéciales), peut-être d'autres.
@@ -367,22 +367,43 @@ Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de
   3. **Les marches longues** continuent seules, sans utiliser d'action.
   4. **Fin du tour** : tous les combats déjà au contact (où le joueur est engagé) se calculent une fois, puis les vivres sont consommés et les soignants remettent des hommes sur pied.
   - **Rien ne s'annule pendant le tour de l'adversaire** : un effet qui protège d'une stratégie ou d'une attaque se prépare à l'avance (« la prochaine stratégie lancée contre lui ne marche pas »).
-- ✅ **Le calcul des pertes** (12/11, réglé par simulation, chiffres à affiner) :
-  - **Valeur d'un soldat** selon les lettres de sa troupe : A = 1,6 · B = 1,3 · C = 1,0 · D = 0,7 (en attaque et en défense).
-  - **Puissance d'attaque** d'une armée = nombre d'hommes × ATK de la troupe × tous ses bonus d'attaque (catégories multipliées, section 6 bis) ; **puissance de défense** = pareil avec la DEF.
-  - **À chaque combat**, l'armée A fait perdre à l'armée B : **15 % × hommes de A × (ATK de A avec bonus) ÷ (DEF de B avec bonus)**, puis ±10 % de hasard. Les deux armées frappent en même temps.
-  - **Exemple** : 1 000 fantassins lourds contre 1 000 fantassins lourds, sans bonus → chacun perd environ 120 hommes par combat. Avec +30 % de bonus, une armée gagne en 7 tours en gardant 600 hommes.
-  - **Écrasement** : au **premier choc**, si une armée est **2,5 fois plus forte** que l'autre (force = hommes × racine de ATK × DEF, bonus compris), elle l'écrase d'un coup. En simulation, ça arrive dans **6 % des combats** (3 000 hommes contre 1 000, par exemple), pas plus.
-  - **Armée dispersée** : sous **10 % de ses hommes de départ**, une armée est dispersée : elle compte comme détruite (son homme clé tombe), ses derniers hommes rentrent comme blessés.
-  - **Durée** : un combat dure en général **5 tours** (de 1 à une quinzaine quand les forces sont égales).
+- ✅ **Le calcul des pertes** (12/11, version lente demandée par Ayoub, réglée par simulation, chiffres à affiner) : à égalité, une bataille ne se gagne pas en fonçant ; il faut **réfléchir** (flancs, formations, terrain, stratégies, effets) pour faire la différence.
+  - **Valeur d'un soldat** selon les lettres de sa troupe : en attaque A = 1,3 · B = 1,1 · C = 0,9 · D = 0,6 ; en défense A = 1,6 · B = 1,3 · C = 1,1 · D = 0,9.
+  - **À chaque combat**, l'armée A fait perdre à l'armée B : **1,5 % × hommes de A × (ATK de A ÷ DEF de B)²**, bonus compris, puis ±10 % de hasard. Les deux armées frappent en même temps. Le carré rend chaque avantage très payant.
+  - **Repères** (1 000 contre 1 000, par combat) :
+
+  | Situation | Pertes de l'un | Pertes de l'autre |
+  |---|---|---|
+  | Égalité (même troupe, sans bonus) | 7 à 15 | 7 à 15 |
+  | Un camp a +30 % (ATK et DEF) | 4 | 12 |
+  | Attaque de flanc | 8 | 14 |
+  | Flanc + 30 % de bonus | 4 | 26 |
+  | Cavalerie lourde qui charge de l'infanterie légère | 7 | 77 |
+
+  - **Durée** : à égalité, personne ne gagne (près de 300 tours) : c'est le **ravitaillement** qui oblige à bouger. Avec +30 %, il faut environ 85 tours ; en combinant flanc et bonus, environ 35 tours.
+  - **Écrasement** : au **premier choc**, si une armée est **2,5 fois plus forte** que l'autre (force = hommes × racine de ATK × DEF, bonus compris), elle l'écrase d'un coup. Ça reste rare (environ 6 % des combats).
+  - **Armée dispersée, selon l'END** : une armée tient tant qu'elle reste organisée, et c'est l'**END de son homme clé** qui décide. Elle est dispersée (détruite, son homme clé tombe) quand il lui reste moins de **15 % − END ÷ 100** de ses hommes de départ (2 % au minimum). END 200 → 13 % ; END 500 → 10 % ; END 850 → 6,5 % ; END 1 000 → 5 %.
 - ✅ **Ni moral ni fatigue** (règle déjà fixée, section 6) : aucun effet ne parle de fuite, de moral ou de fatigue. Une armée se bat à 100 % jusqu'à être dispersée.
-- ✅ **Étourdi** (12/11) : une armée ou un personnage étourdi **ne peut rien jouer pendant X tours** (ni bouger, ni ordre). S'il est attaqué, le combat se calcule quand même (il se défend avec sa DEF normale).
-- ✅ **Se battre en personne** (12/11) : les stats ATK, DEF et END d'un personnage ne servent que dans deux cas :
-  - **Les guerriers mystiques**, qui se battent toujours en personne. Un guerrier mystique compte comme une armée : il fait perdre **15 % × (ATK × 0,3) ÷ DEF de la troupe adverse** hommes par combat ; il a **END × 0,4** points de vie ; l'armée qui le frappe lui retire **15 % × hommes × ATK de la troupe ÷ (sa DEF ÷ 1 000)** points de vie. Les flèches ne lui font que 30 % de leurs dégâts. En simulation : Musashi bat 1 000 fantassins lourds en 14 tours, tient contre 1 200, et tombe face à 1 500 ou face à 1 000 bien commandés (+40 %).
+- ✅ **Étourdi** (12/11) : une armée ou un personnage étourdi **ne peut rien jouer pendant X tours** (ni bouger, ni ordre). S'il est attaqué, le combat se calcule quand même, avec **DEF −10 %**.
+- ✅ **Se battre en personne** (12/11) : les stats ATK, DEF et END d'un personnage servent dans trois cas :
+  - **L'END de l'homme clé** décide quand son armée est dispersée (voir plus haut).
+  - **Les guerriers mystiques**, qui se battent toujours en personne. Chaque combat, il fait perdre **3 % × ATK ÷ DEF de la troupe adverse** hommes ; il a **END** points de vie ; l'armée lui retire **30 % × hommes × ATK de la troupe ÷ (sa DEF ÷ 1 000)** points de vie. Les flèches ne lui font que 30 % de leurs dégâts. Un combat contre un guerrier mystique dure 10 à 30 tours.
   - **Le combat du quartier général** : quand la garde du QG est tombée, le général et ses 3 gardes rapprochés se battent avec leurs propres stats, de la même façon.
   - Partout ailleurs, un personnage ne se bat pas « en personne » : ses effets s'appliquent à **l'armée ou l'unité qu'il mène**.
+- ✅ **Les guerriers mystiques n'ont pas tous la même force : elle suit leur légende** (12/11). Leurs stats sont réglées pour qu'ils battent seuls environ ce nombre de fantassins lourds sans bonus (à ajuster) :
+
+  | Force | Guerriers mystiques |
+  |---|---|
+  | environ 2 000 | Lü Bu (le plus fort), Hou Ken, le Chevalier squelette |
+  | 1 500 à 1 900 | Achille, Guan Yu, Livaï, Musashi |
+  | 1 200 à 1 300 | Kojirō, Benkei, Kyoukai, Thorfinn |
+  | 1 000 à 1 100 | Ragnar, Vercingétorix, Jeanne d'Arc, Bruce Lee, Muhammad Ali, Cristiano Ronaldo, Messi |
+
 - ✅ **Météo et nuit** (12/11) :
-  - **La météo est tirée au hasard** au début de chaque bataille : **soleil, pluie, froid ou brouillard**. Pluie : tirs −20 % ; froid : vitesse −10 % ; brouillard : vision −50 %. Elle peut changer en cours de bataille (piste : une chance sur 10 à chaque tour).
+  - **La météo change pendant la bataille** : elle est tirée au hasard au début, puis peut changer (piste : une chance sur 8 à chaque tour). Soleil, pluie, froid ou brouillard.
+  - **Le brouillard** est plus fréquent et plus épais **sur les collines et les montagnes** : vision −50 % en plaine, −75 % en hauteur.
+  - **La pluie** : tirs −20 %, et elle crée de la **boue près des forêts** (et dans les zones basses) : les soldats y sont ralentis (vitesse −30 %), et la boue reste quelques tours après la pluie.
+  - **Le froid** : vitesse −10 %.
   - **Jour et nuit** : 8 tours de jour, puis 4 tours de nuit, et ainsi de suite. La nuit, la vision de tous est réduite de moitié. La stratégie « Attaque de nuit » reste possible de jour (elle crée une nuit locale d'un tour), et elle est plus forte la nuit.
 - ✅ **Soldats affichés** : 1 soldat à l'écran pour 2 hommes (réglable). La bannière affiche toujours l'effectif réel.
 - ✅ **Échelle (réglable)** :
