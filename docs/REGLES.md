@@ -169,6 +169,40 @@ Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de
   - Puis le **hasard de ±10 %**, et les pertes calculées comme dans le prototype (courbe progressive, écrasement à partir d'un rapport de 3).
   - **Les autres stats** : END réduit les pertes subies, INT renforce les stratégies et la vision, VIT la vitesse de déplacement, Aura les attaques spéciales.
   - Exemple : 1 000 fantassins → base 1 000. Général +20 %, quartier +15 %, lien +50 %, mentor +10 % → 1 000 × 1,2 × 1,15 × 1,5 × 1,1 ≈ **2 280**. En forêt (×1,2) → **2 730**, puis ±10 % de hasard.
+- 💡 **Liste des liens (proposition de Claude, 12/11, à valider)**. Chiffres indicatifs, réglés par simulation.
+  - **Où ils comptent** : les personnages doivent être dans la **même armée** (général, sous-généraux, chefs d'unité, garde rapprochée, guerriers mystiques).
+  - **Taille du bonus** : 2 personnages ≈ +10 %, 3 personnages ≈ +20 à 30 %, quelques liens « légendaires » jusqu'à +50 %. Certains liens donnent un bonus particulier plutôt qu'un pourcentage.
+  - **Les rivalités** : deux rivaux historiques qui s'affrontent dans des **camps opposés** gagnent chacun un bonus contre l'autre (ils se surpassent).
+
+  | Lien | Personnages | Bonus |
+  |---|---|---|
+  | **Les Vikings de Vinland** (légendaire) | Thorfinn, Knut, Thorkell | toute l'armée +50 % |
+  | **La famille Lodbrok** | Ragnar, Björn Côtes-de-Fer, Lagertha | attaque +20 % |
+  | **Maître et élève** | Ouki et Shin ; Garp et Koby ; le Chevalier squelette et Guts | +20 % aux deux, et la jauge d'Aura de l'élève monte plus vite |
+  | **Les généraux de Qin** | Ouki, Ousen, Kanki | +20 % |
+  | **L'unité de Shin** | Shin, Kyoukai | +15 % |
+  | **Le Bataillon d'exploration** | Erwin Smith, Livaï, Mikasa | vitesse +20 %, attaque +15 % |
+  | **Les Mongols** | Gengis Khan, Subötaï | vitesse de la cavalerie +20 %, fausse retraite renforcée |
+  | **Le maître de Koutouzov** | Souvorov, Koutouzov | défense +15 % |
+  | **Les Francs** | Clovis, Charles Martel, Charlemagne | défense +20 % |
+  | **Les héros de l'Iliade** | Achille, Ulysse | attaque +15 %, stratégies renforcées |
+  | **La résistance amérindienne** | Tecumseh, Crazy Horse | embuscades renforcées |
+  | **Les rois d'Afrique** | 3 parmi Shaka Zulu, Soundiata Keïta, la reine Nzinga, Samori Touré, Ménélik II | +20 % |
+  | **Les tireurs d'élite** | Simo Häyhä, Vassili Zaïtsev | portée et tir des archers +20 % |
+  | **Les sauveurs** | 3 parmi Khalid, Knut, Musashi, Saladin, Toussaint Louverture, Thorfinn, Abd el-Kader | défense +20 %, soins renforcés |
+  | **Real Madrid** 😄 | Zidane, Cristiano Ronaldo | +10 % |
+  | **Barça** 😄 | Guardiola, Messi (et Luis Enrique) | +10 % (+15 % avec les trois) |
+
+  | Rivalité (camps opposés) | Personnages |
+  |---|---|
+  | Le duel de Ganryūjima | Musashi et Sasaki Kojirō |
+  | La troisième croisade | Saladin et Richard Cœur de Lion |
+  | Zama | Hannibal et Scipion l'Africain |
+  | Kawanakajima | Takeda Shingen et Uesugi Kenshin |
+  | La guerre de Troie | Achille et Hector |
+  | Le ciel de 1917 | Georges Guynemer et le Baron rouge |
+  | Le Clásico 😄 | Messi et Cristiano Ronaldo ; Guardiola et Mourinho |
+
 - ❓ **Comment les bonus se combinent** : additions d'abord puis multiplications ? Les pourcentages de même type s'additionnent entre eux (+10 % et +20 % = +30 %) ou se multiplient (×1,1 × 1,2 = +32 %) ? Plafond éventuel ? (à fixer avec la formule de puissance, tâche 21)
 
 ## 7. Les généraux et les grades
