@@ -116,6 +116,10 @@ kbd{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:3px;p
 #opts summary{cursor:pointer;color:var(--muted)}
 #opts[open]{display:grid;gap:6px}
 #notifs{display:grid;gap:3px}
+.onglets{display:flex;flex-wrap:wrap;gap:3px;padding:8px 10px 0;border-bottom:1px solid #7a6531}
+.onglets button{padding:3px 9px;font-size:14px;border-radius:3px 3px 0 0;border-bottom:0;background:#1a211c;color:var(--muted)}
+.onglets button.on{background:#2d2717;color:var(--gold);border-color:#7a6531}
+.onglets+.sec{border-top:0}
 #notifs .n{display:grid;grid-template-columns:30px 1fr;gap:6px;padding:4px 6px;border-left:3px solid var(--line);background:#151c17;font-size:14px}
 #notifs .n b{color:var(--muted);font-size:12px;font-weight:600}
 #notifs .n.bad{border-color:var(--red)}#notifs .n.good{border-color:#6fae5f}#notifs .n.info{border-color:var(--blue)}#notifs .n.alerte{border-color:var(--gold)}
@@ -1083,12 +1087,14 @@ function animateForms(dt,t){
     g.fcur+=(g.ftarget-g.fcur)*Math.min(1,dt*3);if(Math.abs(g.ftarget-g.fcur)<.01)g.fcur=g.ftarget;
     g.hw=g.hw0*g.fcur;g.hd=g.hd0*g.fcur;g.soldiers.forEach(s=>{s.lx=s.bx*g.fcur;s.lz=s.bz*g.fcur;});place(g,t);}
 }
-const onPanelClick=e=>{const ac=e.target.closest('[data-act]');if(ac&&selected.length===1)doAct(selected[0],ac.dataset.act);const b=e.target.closest('[data-form]');if(b)setFormation(selected,b.dataset.form);if(e.target.closest('[data-special]')&&selected.length===1)specialBleu(selected[0]);if(e.target.closest('[data-split]')&&selected.length===1){splitFor=selected[0];renderSplit();}};
+const onPanelClick=e=>{const tb=e.target.closest('[data-tab]');if(tb){actTab=tb.dataset.tab;renderActions(true);return;}const ac=e.target.closest('[data-act]');if(ac&&selected.length===1)doAct(selected[0],ac.dataset.act);const b=e.target.closest('[data-form]');if(b)setFormation(selected,b.dataset.form);if(e.target.closest('[data-special]')&&selected.length===1)specialBleu(selected[0]);if(e.target.closest('[data-split]')&&selected.length===1){splitFor=selected[0];renderSplit();}};
 selEl.addEventListener('click',onPanelClick);
 // ---------- volet « Ordres » : tout ce que l'armée choisie peut faire (ce qui n'est pas encore en jeu est grisé) ----------
 const actEl=document.getElementById('actions');let lastAct='';actEl.addEventListener('click',onPanelClick);
 const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
 const sec=(t,body,note='')=>`<div class="sec"><h3>${t}${note?`<em>${note}</em>`:''}</h3>${body}</div>`;
+const secG=sec;let actTab='Mouvement';
+const TAB_NOM={'Mouvement':'Mouvement','Formation':'Formations','Attaque spéciale':'Spécial','Hommes':'Hommes','Stratégies':'Ruses','Construire et piéger':'Bâtir'};
 const soon=(nom,tip,ok)=>`<button type="button" class="off" aria-disabled="true" title="${esc(tip)} (pas encore dans le prototype)">${nom}${ok?' <i class="ok">✓</i>':''}</button>`;
 const f1=x=>(Math.round(x*10)/10).toLocaleString('fr-FR');
 const FUTURE_FORMS=[['Phalange','infanterie : de face DEF +30 %, les charges ne marchent pas ; vitesse −30 %'],['Mur de boucliers','DEF +40 %, ATK −20 %, vitesse −40 %'],['Tortue','flèches reçues −70 %, DEF +20 %, ATK −40 %'],['Carré','pas de flanc ni de dos, DEF +20 % contre la cavalerie, vitesse −60 %'],['Coin','ATK +30 % (percée), DEF −20 %'],['Croissant','ATK +20 %, prend de flanc un ennemi moins nombreux'],['Volées','archers : tir +20 %, DEF −10 %'],['Légion','ATK et DEF +10 %, meilleure en terrain accidenté'],['Ordre oblique','une aile ATK +40 %, l\'autre DEF −30 % (grands généraux)'],['Double enveloppement','encercle l\'ennemi : flanc et dos sur tout le front (grands généraux)']];
@@ -1123,7 +1129,8 @@ function renderActions(force){let h='';const list=selected;
   if(!list.length)h=`<div class="sec"><p>Choisis une armée (clic gauche, ou touches <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd>…) pour voir tout ce qu'elle peut faire.</p></div>`;
   else if(list.length===1&&list[0].side!=='bleu')h=sec('Armée ennemie','<p>Choisis une de tes armées, puis clic droit sur celle-ci pour marcher sur elle et l\'attaquer.</p>');
   else if(list.length>1)h=sec('Mouvement','<p><b>Clic droit</b> sur le terrain : les armées choisies y vont en gardant leurs places.</p>')+sec('Formation',formButtons(list.filter(g=>g.side==='bleu'&&g.kind!=='qg'&&g.kind!=='gm')),'ordre rapide');
-  else{const g=list[0],qg=g.kind==='qg',gm=g.kind==='gm',a=Math.floor(g.aura||0);
+  else{const T=[],sec=(t,b,n)=>{T.push({t,html:secG(t,b,n)});return'';};   // une section = un onglet
+    const g=list[0],qg=g.kind==='qg',gm=g.kind==='gm',a=Math.floor(g.aura||0);
     const etat=g.stun>0?'<span class="warn">Étourdi : ne peut rien jouer</span>':g.newTurn===turn?'Unité toute neuve : elle joue au tour suivant':!turnMode||placing?'':cur!=='bleu'||phase!=='ordres'?'Attends ton tour':g.acted===turn?'<span class="ok">Ordre donné ce tour</span> (le changer ne coûte rien)':actionsLeft()>0?`${actionsLeft()} action(s) restante(s) ce tour`:'<span class="warn">Plus d\'action ce tour</span>';
     h=(etat?`<div class="sec"><p>${etat}</p></div>`:'')
       +sec('Mouvement',`<p>${qg?'<b>Clic droit</b> sur le terrain : déplacer le QG (lentement).':'<b>Clic droit</b> sur le terrain : marcher. Sur une armée rouge : l\'attaquer. Dans l\'autre sens : se replier.'}</p><span class="row">${qg?'':'<button type="button" data-act="repli" title="Marche vers ton QG ; quitter le contact, c\'est se replier">Se replier vers le QG</button>'}<button type="button" data-act="stop" title="Annule la marche : l\'armée reste sur place et attend l\'ennemi">S'arrêter (attendre en défense)</button></span><span class="k">Portée ce tour : ${fmt(reachOf(g))} m (cercle vert)${g.tx!==null?` · arrivée dans ${Math.max(1,Math.ceil(Math.hypot(g.tx-g.x,g.tz-g.z)/reachOf(g)))} tour(s)`:''}</span>`,'1 action')
@@ -1131,7 +1138,9 @@ function renderActions(force){let h='';const list=selected;
       +(!qg?sec('Attaque spéciale',`<div class="jauge" title="Jauge d'Aura : ${a}/100"><i style="width:${a}%"></i></div><span class="k">Jauge d'Aura ${a}/100 · +${f1((g.auraStat||REGLAGES.auraDefaut)/300)} par tour, ×${f1(REGLAGES.auraCombat)} au combat, +${fmt(REGLAGES.auraTombe)} quand un homme clé ennemi tombe</span>${a>=100?`<span class="row"><button type="button" data-special="1">Lancer : ATK +${fmt(REGLAGES.auraBonus)} % pendant ${fmt(REGLAGES.auraDuree)} tours${gm?', étourdit ses adversaires':''}</button></span>`:''}`,'ordre rapide'):'')
       +(!gm?sec('Hommes',`<span class="row"><button type="button" data-split="1">Séparer / transférer</button></span><span class="k">Créer une unité (ordre lourd) ou donner des hommes à une armée proche ou au QG (ordre rapide).</span>`):'')
       +sec('Stratégies',`<div class="row">${STRATS.filter(x=>qg?x[4]==='qg':x[4]!=='qg').map(([n,c,f,t])=>soon(n,`Condition : ${c}. Effet : ${t}`,f&&f(g))).join('')}</div><span class="k">✓ = condition remplie ici. Recharge : 10 tours, 1 de moins par tranche de 200 d'INT du général.</span>`,'ordre rapide · bientôt')
-      +(!gm&&!qg?sec('Construire et piéger',`<div class="row">${BUILDS.map(([n,d,t])=>soon(`${n} (${d})`,t)).join('')}</div><span class="k">Avec un architecte dans l'armée. Toute l'armée est étourdie pendant les travaux.</span>`,'ordre lourd · bientôt'):'');}
+      +(!gm&&!qg?sec('Construire et piéger',`<div class="row">${BUILDS.map(([n,d,t])=>soon(`${n} (${d})`,t)).join('')}</div><span class="k">Avec un architecte dans l'armée. Toute l'armée est étourdie pendant les travaux.</span>`,'ordre lourd · bientôt'):'');
+    const on=T.find(x=>x.t===actTab)||T[0];
+    h+=`<div class="onglets" role="tablist" aria-label="Catégories d'ordres">${T.map(x=>`<button type="button" role="tab" data-tab="${x.t}" aria-selected="${x===on}"${x===on?' class="on"':''}>${TAB_NOM[x.t]||x.t}</button>`).join('')}</div>`+(on?on.html:'');}
   if(force||h!==lastAct){actEl.innerHTML=h;lastAct=h;}}
 // ---------- volet « Notre camp » : le général, le score, les ressources ----------
 const campEl=document.getElementById('camp');let lastCamp='';
