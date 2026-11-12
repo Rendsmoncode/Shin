@@ -238,6 +238,9 @@ Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de
 
 - ✅ **Le mode de combat principal** dès 500 hommes, contre les joueurs comme contre les tyrans (le mode raid est supprimé).
 - ✅ **Formats** : 1v1, 1v1v1, 2v1, 2v2.
+  - ✅ **Alliances en pleine bataille** (12/11) : dans un 1v1v1, deux joueurs peuvent s'allier en cours de route, puis se trahir (liberté totale, comme dans le reste du jeu).
+  - ✅ **Victoire d'équipe** : une équipe gagne quand tous les hommes clés adverses sont tombés. La mise et le pillage sont **partagés à parts égales** entre les alliés.
+  - ✅ **Renforts** : un joueur peut rejoindre une bataille déjà commencée pour aider un allié. Il entre **par le bord de la carte** de son allié, après quelques tours de marche. Un 1v1 peut ainsi devenir un 2v1.
 - ✅ **Terrain tiré au hasard** : désert, montagne, champ, ruines…
 - ✅ **Tour par tour** : à chaque tour, on déplace ses troupes, on attaque ou non, etc.
   - ✅ **Les joueurs jouent en même temps** (choix de Mathieu, 9/11/2026) : pendant la minute du tour, chacun donne ses ordres sans voir ceux des autres, puis toutes les armées bougent et se battent ensemble. Personne n'attend son tour, même en 2v2 ou 1v1v1.
