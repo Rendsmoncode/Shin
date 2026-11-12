@@ -40,7 +40,7 @@ Le plus important : que les joueurs accrochent au jeu, et que les différents ty
 
 ### Les sauveurs
 
-Personnages qui doivent absolument être dans le lore : **Khalid ibn al-Walid, Knut, Musashi, Saladin, Toussaint Louverture, Thorfinn, Abd el-Kader**.
+Personnages qui doivent absolument être dans le lore : **Khalid ibn al-Walid, Knut, Musashi, Saladin, Toussaint Louverture, Thorfinn, Abd el-Kader**. (Liste des sauveurs pas encore définitive, 12/11.)
 
 Ils pourront venir en aide pour **sauver les joueurs de la défaite**. Scène semblable à celle de Goku qui sauve Gohan et Goten contre Broly. Par exemple, lors d'un combat contre Richard Cœur de Lion, Saladin apparaît pour filer un coup de main dans une cinématique, tout en enseignant une leçon de vie au joueur.
 
