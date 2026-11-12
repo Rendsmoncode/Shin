@@ -125,7 +125,7 @@ kbd{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:3px;p
 <div id="scene" aria-label="Champ de bataille en 3D avec relief, rivière, forêts et deux armées. Les armées bleues se commandent à la souris."></div>
 <div class="panel">
   <div class="head"><h1>Champ de bataille 3D</h1><button type="button" id="b-help" aria-expanded="true" aria-controls="aide">Masquer l'aide</button></div>
-  <p id="aide"><b>Clic gauche</b> sur une armée bleue pour la choisir (<kbd>Maj</kbd> pour en ajouter, touches <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd>). <b>Clic droit</b> sur le terrain pour l'y envoyer, sur une armée rouge pour marcher sur elle. Glisser pour se déplacer, molette pour zoomer, glisser avec le clic droit pour pivoter. <kbd>Espace</kbd> centre la vue, <kbd>Échap</kbd> désélectionne. <b>Mini-carte</b> : clic ou glisser pour y aller, clic droit pour y envoyer les armées choisies ; ses boutons la réduisent, l'agrandissent, la changent de côté ou la masquent. <b>Combat</b> : une armée qui entre au contact d'une armée ennemie se bat ; lui donner un ordre de marche dans l'autre sens la fait se replier. <b>Tour par tour</b> : pendant la minute du tour, donne tes ordres (1 par armée, 5 au plus), puis <b>Fin du tour</b> (ou <kbd>Entrée</kbd>) : toutes les armées bougent et se battent en même temps. Une marche longue continue seule aux tours suivants, sans coûter d'action. <b>Quartier général</b> : ton général (Koby) reste dans sa tente à l'arrière, protégé par sa garde ; le déplacer (lentement) coûte une action. Le QG ennemi reste invisible tant que tes soldats n'en sont pas tout près. <b>Points</b> : général 3, chaque sous-général (une armée) 1 ; à 0 point, la bataille est perdue. <b>Nouvelle bataille</b> : choisis tes chefs et tes effectifs ; la taille de la carte suit la plus grande armée. <kbd>F</kbd> change la formation des armées choisies, <kbd>Z</kbd> le niveau de zoom ; le panneau « Ton armée » liste tes troupes (clic pour choisir, double-clic pour y aller).</p>
+  <p id="aide"><b>Clic gauche</b> sur une armée bleue pour la choisir (<kbd>Maj</kbd> pour en ajouter, touches <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd>). <b>Clic droit</b> sur le terrain pour l'y envoyer, sur une armée rouge pour marcher sur elle. Glisser pour se déplacer, molette pour zoomer, glisser avec le clic droit pour pivoter. <kbd>Espace</kbd> centre la vue, <kbd>Échap</kbd> désélectionne. <b>Mini-carte</b> : clic ou glisser pour y aller, clic droit pour y envoyer les armées choisies ; ses boutons la réduisent, l'agrandissent, la changent de côté ou la masquent. <b>Combat</b> : une armée qui entre au contact d'une armée ennemie se bat ; lui donner un ordre de marche dans l'autre sens la fait se replier. <b>Tour par tour</b> : chacun son tour, le premier est tiré à pile ou face. Pendant ton tour (sans limite de temps), donne tes ordres (1 par armée, 5 au plus), puis <b>Fin du tour</b> (ou <kbd>Entrée</kbd>) : tes armées bougent, les combats se calculent, puis l'adversaire joue. Météo, nuit et vivres sont dans la barre du bas. Une marche longue continue seule aux tours suivants, sans coûter d'action. <b>Quartier général</b> : ton général (Koby) reste dans sa tente à l'arrière, protégé par sa garde ; le déplacer (lentement) coûte une action. Le QG ennemi reste invisible tant que tes soldats n'en sont pas tout près. <b>Points</b> : général 3, chaque sous-général (une armée) 1 ; à 0 point, la bataille est perdue. <b>Nouvelle bataille</b> : choisis tes chefs et tes effectifs ; la taille de la carte suit la plus grande armée. <kbd>F</kbd> change la formation des armées choisies, <kbd>Z</kbd> le niveau de zoom ; le panneau « Ton armée » liste tes troupes (clic pour choisir, double-clic pour y aller).</p>
   <div class="row">
     <button type="button" id="b-fog" aria-pressed="true">Brouillard : oui</button>
     <button type="button" id="b-ai" aria-pressed="true">Rouges : en patrouille</button>
@@ -172,19 +172,20 @@ if(!window.THREE){status.textContent='La bibliothèque 3D n\'a pas pu se charger
 // gardées dans le navigateur, et le bouton « Copier les valeurs » permet de les partager.
 // =====================================================================================
 const REGLAGES_DEFAUT={
-  dureeTour:60,        // secondes pour donner ses ordres à chaque tour (règles : 1 minute)
+  dureeTour:0,         // secondes pour donner ses ordres (règles du 12/11 : pas de limite) ; 0 = pas de limite
   dureeMouvement:4,    // secondes pendant lesquelles on voit les armées bouger après la fin du tour
   marcheTour:250,      // mètres parcourus en un tour par l'infanterie sur terrain plat (la cavalerie va 2 fois plus loin)
   actionsMax:5,        // actions par tour au maximum (règles : 5) ; une armée = un homme clé = 1 action
-  manchesParTour:3,    // manches de combat calculées à chaque tour
   placement:59,        // secondes pour placer ses armées au début de la bataille (règles : 59 s) ; 0 = pas de placement
-  toursMax:30,         // au bout de ce nombre de tours, le camp qui a le plus de points gagne (règles : à fixer en simulant)
-  manche:3,            // en temps réel seulement : secondes entre deux manches de combat
-  valeurFantassin:1,   // puissance d'un fantassin
-  valeurCavalier:2.5,  // puissance d'un cavalier
-  valeurArcher:.6,     // puissance d'un archer au corps à corps
-  valeurEclaireur:1.2, // puissance d'un éclaireur (cavalerie légère)
-  valeurEspion:.5,     // puissance d'un espion
+  toursMax:0,          // règles : pas de nombre maximum de tours (0) ; sinon le camp qui a le plus de points gagne
+  manche:3,            // en temps réel seulement : secondes entre deux combats
+  // ATK et DEF d'un soldat selon les lettres de sa troupe (règles : attaque A 1,3 · B 1,1 · C 0,9 · D 0,6 ; défense A 1,6 · B 1,3 · C 1,1 · D 0,9)
+  atkInf:1.1, defInf:1.3,   // infanterie lourde : B / B
+  atkCav:1.3, defCav:1.3,   // cavalerie lourde : A / B
+  atkArc:.9,  defArc:.9,    // archers au corps à corps : C / D
+  tirArc:1.3,               // attaque des archers au tir : A
+  atkEcl:.9,  defEcl:1.1,   // éclaireurs (cavalerie légère) : C / C
+  atkEsp:.6,  defEsp:.9,    // espions : D / D
   cavPlaine:1.3,       // cavalerie en terrain découvert (règles : ×1,3 en plaine)
   cavForet:.6,         // cavalerie en forêt (règles : ×0,6)
   cavPente:.7,         // cavalerie sur une colline ou une pente (règles : ×0,7 en montagne)
@@ -193,26 +194,48 @@ const REGLAGES_DEFAUT={
   arcForet:.7,         // archers en forêt (règles : ×0,7)
   gue:.8,              // toute armée qui se bat dans la rivière (proposition, pas dans les règles)
   contact:15,          // mètres entre les deux blocs à partir desquels deux armées ennemies se battent
-  charge:1,            // bonus de l'armée qui attaque, à la première manche seulement (1 = pas de bonus)
-  flanc:1.3,           // attaquer une armée par le côté multiplie la puissance (proposition, pas dans les règles)
-  dos:1.6,             // attaquer une armée par derrière multiplie la puissance (proposition)
-  retournement:2,      // manches au contact avant que l'armée attaquée se retourne face à son principal assaillant
-  hasard:10,           // ± % de hasard sur la puissance à chaque manche (règles : ±10 %)
-  pertes:7,            // % de son effectif qu'une armée perd par manche quand les puissances sont égales
-  courbe:1.5,          // plus c'est grand, plus un écart de puissance rend les pertes inégales
-  ecrasement:3,        // rapport de puissance à partir duquel le plus faible est écrasé d'un coup (testé seulement quand une attaque arrive)
-  deroute:10,          // en dessous de ce nombre d'hommes, l'armée est dispersée et quitte le champ de bataille
-  chargeDescente:1.2,  // bonus de charge en plus pour un attaquant qui arrive d'en haut (règles : bonus aux charges en descente)
-  porteeArc:150,       // portée des archers en mètres (+30 % depuis une colline : règles « portée plus longue »)
-  degatsArc:4,         // % de leur nombre que les archers mettent hors de combat à chaque manche de tir
+  coefPertes:1.5,      // règles : A fait perdre à B 1,5 % × hommes de A × (ATK de A ÷ DEF de B)² à chaque combat
+  hasard:10,           // ± % de hasard sur les pertes à chaque combat (règles : ±10 %)
+  flanc:1.3,           // règles : de flanc, attaque ×1,3
+  dos:1.6,             // règles : de dos, attaque ×1,6
+  retournement:2,      // règles : une armée prise de flanc ou de dos se retourne au bout de 2 tours (combats)
+  chargeLourde:1.5,    // règles : charge de la cavalerie lourde ×1,5 (premier choc seulement)
+  chargeLegere:1.3,    // règles : charge de la cavalerie légère (éclaireurs) ×1,3
+  chargeDescente:1.2,  // règles : +20 % en plus en descente
+  chargeDispersee:1.3, // une charge contre une armée dispersée frappe plus fort
+  ecrasement:2.5,      // règles : au premier choc, une armée 2,5 fois plus forte écrase l'autre d'un coup
+  dispBase:15,         // règles : dispersée sous 15 % − END ÷ 100 de ses hommes de départ...
+  dispMin:2,           // ... 2 % au minimum
+  endDefaut:500,       // END des hommes clés (en attendant les fiches de chaque personnage)
+  auraDefaut:800,      // Aura des hommes clés (en attendant les fiches)
+  auraCombat:1.5,      // règles : la jauge monte ×1,5 quand l'armée combat
+  auraTombe:10,        // règles : +10 quand un homme clé ennemi tombe
+  auraBonus:30,        // attaque spéciale (effet) : ATK +30 %...
+  auraDuree:2,         // ... pendant 2 tours
+  etourdiDef:10,       // règles : une armée étourdie se défend avec DEF −10 %
+  porteeArc:150,       // portée des archers en mètres (+30 % depuis une colline)
   flechesForet:.5,     // une cible dans une forêt ne reçoit que cette part des flèches
-  serreeMelee:1.2,     // formation serrée : plus solide au corps à corps (règles)
-  serreeFleches:1.5,   // ... plus vulnérable aux flèches (règles)
-  serreeVitesse:.85,   // ... plus lente (règles)
-  disperseeMelee:.8,   // formation dispersée : plus fragile au corps à corps
-  disperseeFleches:.5, // ... moins touchée par les flèches (règles)
-  disperseeVitesse:1.1,// ... plus rapide (règles)
-  chargeDispersee:1.3, // une charge contre une armée dispersée frappe plus fort (règles : plus fragile face à une charge)
+  pluieTir:20,         // règles : la pluie réduit les tirs de 20 %
+  serreeMelee:1.2,     // formation serrée : plus solide au corps à corps (DEF)
+  serreeFleches:1.5,   // ... plus vulnérable aux flèches
+  serreeVitesse:.85,   // ... plus lente
+  disperseeMelee:.8,   // formation dispersée : plus fragile au corps à corps (DEF)
+  disperseeFleches:.5, // ... moins touchée par les flèches
+  disperseeVitesse:1.1,// ... plus rapide
+  gmTue:14,            // guerrier mystique : il fait perdre gmTue % × son ATK ÷ DEF de la troupe adverse hommes par combat
+  gmRecu:3.7,          // l'armée lui retire gmRecu % × hommes × ATK de la troupe ÷ (sa DEF ÷ 1 000) PV par combat
+  gmFleches:30,        // règles : les flèches ne lui font que 30 % de leurs dégâts
+  vivres:60,           // règles : vivres pour 60 tours pour 1 000 hommes
+  faim:2,              // règles : sans vivres, chaque armée perd 2 % de ses hommes par tour
+  meteoChange:8,       // règles (piste) : une chance sur 8 à chaque tour que la météo change
+  brouillardPlaine:50, // règles : brouillard, vision −50 % en plaine...
+  brouillardHauteur:75,// ... −75 % en hauteur
+  boueVitesse:30,      // règles : dans la boue, vitesse −30 %
+  boueTours:3,         // la boue reste ce nombre de tours après la pluie
+  froidVitesse:10,     // règles : froid, vitesse −10 %
+  toursJour:8,         // règles : 8 tours de jour...
+  toursNuit:4,         // ... puis 4 tours de nuit
+  nuitVision:50,       // règles : la nuit, vision de tous −50 %
   visionEclaireur:700, // règles : 700 m ; un éclaireur repère aussi les QG ennemis à cette distance
   visionEspion:300,    // règles : 300 m
   espionForet:150,     // règles : un espion repère les armées cachées en forêt jusqu'à 150 m
@@ -220,59 +243,85 @@ const REGLAGES_DEFAUT={
   pvGeneral:200,       // points de vie du général (règles : barre de vie bien plus grande)
   pvGarde:20,          // points de vie de chacun des 3 gardes rapprochés (ils tombent avant le général)
   forceGeneral:50,     // au combat, le général se bat comme ce nombre d'hommes
-  defenseQG:2,       // le quartier général se défend mieux (multiplie sa puissance)
+  defenseQG:2,         // le quartier général se défend mieux (multiplie son ATK et sa DEF)
   vitesseQG:.25,       // vitesse du quartier général par rapport à l'infanterie (règles : lentement)
   vueQG:250            // le QG ennemi n'est repéré que par des soldats à moins de cette distance
 };
 // pour le panneau : [clé, nom affiché, unité, minimum, maximum, pas, explication]
 const REGLAGES_INFO=[
   ['Tour par tour',[
-    ['dureeTour','Temps pour les ordres','secondes',5,600,5,'Temps pour donner ses ordres à chaque tour. À la fin du chrono, le tour passe tout seul.'],
+    ['dureeTour','Temps pour les ordres','secondes',0,600,5,'0 = pas de limite (règles). Sinon, à la fin du chrono, ton tour passe tout seul.'],
     ['dureeMouvement','Animation du mouvement','secondes',.5,20,.5,'Durée pendant laquelle on voit les armées bouger après la fin du tour (ça ne change pas la distance parcourue).'],
-    ['marcheTour','Marche par tour','mètres',20,2000,10,'Distance parcourue en un tour par l\'infanterie sur terrain plat. La cavalerie va 2 fois plus loin ; forêt, pente et rivière ralentissent.'],
+    ['marcheTour','Marche par tour','mètres',20,2000,10,'Distance parcourue en un tour par l\'infanterie sur terrain plat. La cavalerie va 2 fois plus loin ; forêt, pente, rivière, boue et froid ralentissent.'],
     ['actionsMax','Actions par tour','maximum',1,20,1,'Nombre d\'ordres qu\'on peut donner par tour. Une armée ne peut recevoir qu\'un ordre par tour.'],
-    ['manchesParTour','Combat par tour','manches',1,20,1,'Nombre de manches de combat calculées à chaque tour pour les armées au contact.'],
-    ['toursMax','Tours au maximum','tours',1,500,1,'Au bout de ce nombre de tours, le camp qui a le plus de points gagne. Les règles le fixeront à la fin, en simulant des batailles.'],
+    ['toursMax','Tours au maximum','tours',0,2000,1,'0 = pas de limite (règles). Sinon, au bout de ce nombre de tours, le camp qui a le plus de points gagne.'],
     ['placement','Temps de placement','secondes',0,600,1,'Temps pour placer ses armées dans sa zone au début de la bataille (appliqué en recommençant). 0 = pas de placement.']]],
-  ['Temps réel',[['manche','Durée d\'une manche','secondes',.5,30,.5,'Seulement quand le tour par tour est coupé : temps entre deux manches de combat.']]],
-  ['Valeur d\'un homme',[
-    ['valeurFantassin','Fantassin','puissance',.1,20,.1,'Puissance apportée par un fantassin.'],
-    ['valeurCavalier','Cavalier','puissance',.1,20,.1,'Puissance apportée par un cavalier.'],
-    ['valeurArcher','Archer (corps à corps)','puissance',.1,20,.1,'Puissance d\'un archer quand il se bat au corps à corps.'],
-    ['valeurEclaireur','Éclaireur','puissance',.1,20,.1,'Puissance d\'un éclaireur (cavalerie légère).'],
-    ['valeurEspion','Espion','puissance',.1,20,.1,'Puissance d\'un espion.']]],
+  ['Temps réel',[['manche','Durée d\'un combat','secondes',.5,30,.5,'Seulement quand le tour par tour est coupé : temps entre deux combats.']]],
+  ['ATK et DEF d\'un soldat',[
+    ['atkInf','Infanterie : ATK','',.1,5,.05,'Lettre B : 1,1.'],['defInf','Infanterie : DEF','',.1,5,.05,'Lettre B : 1,3.'],
+    ['atkCav','Cavalerie : ATK','',.1,5,.05,'Lettre A : 1,3.'],['defCav','Cavalerie : DEF','',.1,5,.05,'Lettre B : 1,3.'],
+    ['atkArc','Archers : ATK au corps à corps','',.1,5,.05,'Lettre C : 0,9.'],['defArc','Archers : DEF','',.1,5,.05,'Lettre D : 0,9.'],
+    ['tirArc','Archers : ATK au tir','',.1,5,.05,'Lettre A : 1,3.'],
+    ['atkEcl','Éclaireurs : ATK','',.1,5,.05,'Lettre C : 0,9.'],['defEcl','Éclaireurs : DEF','',.1,5,.05,'Lettre C : 1,1.'],
+    ['atkEsp','Espions : ATK','',.1,5,.05,'Lettre D : 0,6.'],['defEsp','Espions : DEF','',.1,5,.05,'Lettre D : 0,9.']]],
   ['Terrain',[
-    ['cavPlaine','Cavalerie, terrain découvert','×',.1,3,.05,'Multiplicateur de la cavalerie hors forêt, colline et rivière.'],
-    ['cavForet','Cavalerie en forêt','×',.1,3,.05,'Multiplicateur de la cavalerie qui se bat en forêt.'],
-    ['cavPente','Cavalerie, colline ou pente','×',.1,3,.05,'Multiplicateur de la cavalerie qui se bat sur une colline ou une pente.'],
-    ['infForet','Infanterie en forêt','×',.1,3,.05,'Multiplicateur de l\'infanterie qui se bat en forêt.'],
-    ['arcColline','Archers, colline ou pente','×',.1,3,.05,'Multiplicateur des archers sur une colline ou une pente (tir et corps à corps).'],
-    ['arcForet','Archers en forêt','×',.1,3,.05,'Multiplicateur des archers en forêt (tir et corps à corps).'],
-    ['gue','Tous, dans la rivière','×',.1,3,.05,'Multiplicateur de toute armée qui se bat dans la rivière (gué).']]],
+    ['cavPlaine','Cavalerie, terrain découvert','×',.1,3,.05,'Multiplie l\'ATK et la DEF de la cavalerie hors forêt, colline et rivière.'],
+    ['cavForet','Cavalerie en forêt','×',.1,3,.05,'Multiplie l\'ATK et la DEF de la cavalerie qui se bat en forêt.'],
+    ['cavPente','Cavalerie, colline ou pente','×',.1,3,.05,'Multiplie l\'ATK et la DEF de la cavalerie sur une colline ou une pente.'],
+    ['infForet','Infanterie en forêt','×',.1,3,.05,'Multiplie l\'ATK et la DEF de l\'infanterie en forêt.'],
+    ['arcColline','Archers, colline ou pente','×',.1,3,.05,'Multiplie les archers sur une colline ou une pente (tir et corps à corps).'],
+    ['arcForet','Archers en forêt','×',.1,3,.05,'Multiplie les archers en forêt (tir et corps à corps).'],
+    ['gue','Tous, dans la rivière','×',.1,3,.05,'Multiplie toute armée qui se bat dans la rivière (gué).']]],
   ['Pertes',[
     ['contact','Distance de contact','mètres',1,100,1,'Écart entre les blocs de deux armées ennemies à partir duquel elles se battent.'],
-    ['charge','Bonus de charge','× (1re manche)',.5,3,.05,'Bonus de l\'armée qui attaque, à la première manche seulement. 1 = pas de bonus.'],
-    ['flanc','Attaque de flanc','×',1,5,.05,'Puissance d\'une armée qui frappe l\'ennemi par le côté.'],
-    ['dos','Attaque de dos','×',1,5,.05,'Puissance d\'une armée qui frappe l\'ennemi par derrière.'],
-    ['retournement','Se retourne après','manches',0,20,1,'Nombre de manches au contact avant que l\'armée attaquée se retourne face à son principal assaillant (le bonus de flanc ou de dos disparaît alors pour lui).'],
-    ['hasard','Hasard','± %',0,50,1,'Variation au hasard de la puissance de chaque armée, à chaque manche.'],
-    ['pertes','Pertes à égalité','% par manche',.5,50,.5,'Part de son effectif qu\'une armée perd par manche quand les deux puissances sont égales.'],
-    ['courbe','Courbe','',.5,5,.1,'Plus c\'est grand, plus un écart de puissance rend les pertes inégales (le plus fort perd moins, le plus faible beaucoup plus).'],
-    ['ecrasement','Écrasement dès','fois plus fort',1.1,20,.1,'Testé seulement quand une attaque arrive (début du combat ou nouvelle armée qui s\'en mêle) : si l\'attaque est autant de fois plus puissante, l\'armée attaquée est écrasée d\'un coup. Sinon le combat dure, manche après manche.'],
-    ['deroute','Dispersée sous','hommes',0,500,1,'Une armée qui tombe sous ce nombre d\'hommes quitte le champ de bataille.'],
-    ['chargeDescente','Charge en descente','×',1,3,.05,'Bonus de charge en plus pour un attaquant qui arrive d\'au moins quelques mètres plus haut que sa cible.']]],
+    ['coefPertes','Pertes','% des hommes',.1,20,.1,'À chaque combat, A fait perdre à B ce % × hommes de A × (ATK de A ÷ DEF de B)².'],
+    ['hasard','Hasard','± %',0,50,1,'Variation au hasard des pertes à chaque combat.'],
+    ['flanc','Attaque de flanc','× ATK',1,5,.05,'ATK d\'une armée qui frappe l\'ennemi par le côté.'],
+    ['dos','Attaque de dos','× ATK',1,5,.05,'ATK d\'une armée qui frappe l\'ennemi par derrière.'],
+    ['retournement','Se retourne après','combats',0,20,1,'Nombre de combats avant que l\'armée prise de flanc ou de dos se retourne face à son principal assaillant.'],
+    ['ecrasement','Écrasement dès','fois plus fort',1.1,20,.1,'Au premier choc seulement : si l\'attaque est autant de fois plus forte (hommes × racine de ATK × DEF), l\'armée attaquée est écrasée d\'un coup.'],
+    ['dispBase','Dispersée sous','% − END ÷ 100',0,50,.5,'Une armée est dispersée quand il lui reste moins de ce % − END de son chef ÷ 100 de ses hommes de départ.'],
+    ['dispMin','Dispersée sous (minimum)','%',0,50,.5,'Seuil de dispersion minimum, même avec une très grosse END.'],
+    ['endDefaut','END des hommes clés','END',0,1500,10,'END de chaque chef (en attendant les fiches des personnages). Plus elle est haute, plus son armée tient.'],
+    ['etourdiDef','Étourdi : DEF','− %',0,90,1,'Une armée étourdie ne joue pas, et se défend avec cette DEF en moins.']]],
+  ['Charge (premier choc)',[
+    ['chargeLourde','Cavalerie lourde','× ATK',1,3,.05,'Charge de la cavalerie.'],
+    ['chargeLegere','Cavalerie légère','× ATK',1,3,.05,'Charge des éclaireurs.'],
+    ['chargeDescente','En descente','× en plus',1,3,.05,'Une charge qui arrive d\'au moins quelques mètres plus haut.'],
+    ['chargeDispersee','Contre dispersée','× en plus',1,3,.05,'Une charge contre une armée en formation dispersée. Une formation serrée de face annule la charge.']]],
+  ['Aura et attaque spéciale',[
+    ['auraDefaut','Aura des hommes clés','Aura',0,1500,10,'La jauge (0 à 100) monte de Aura ÷ 300 par tour.'],
+    ['auraCombat','Jauge au combat','×',1,5,.1,'La jauge monte plus vite quand l\'armée combat.'],
+    ['auraTombe','Homme clé ennemi tombé','+ jauge',0,100,1,'La jauge de tous monte quand un homme clé ennemi tombe.'],
+    ['auraBonus','Attaque spéciale : ATK','+ %',0,200,5,'Jauge pleine : l\'armée attaque plus fort pendant quelques tours (un guerrier mystique étourdit aussi ses adversaires 1 tour).'],
+    ['auraDuree','Attaque spéciale : durée','tours',1,20,1,'Durée de l\'effet.']]],
   ['Archers',[
     ['porteeArc','Portée','mètres',10,1000,10,'Distance de tir des archers. +30 % depuis une colline.'],
-    ['degatsArc','Dégâts','% par manche',.1,50,.1,'Part de leur nombre que les archers mettent hors de combat à chaque manche de tir (500 archers à 4 % = 20 ennemis).'],
-    ['flechesForet','Cible en forêt','×',0,1,.05,'Une armée dans une forêt ne reçoit que cette part des flèches.']]],
+    ['flechesForet','Cible en forêt','×',0,1,.05,'Une armée dans une forêt ne reçoit que cette part des flèches.'],
+    ['pluieTir','Tirs sous la pluie','− %',0,100,5,'La pluie réduit les tirs.']]],
   ['Formations',[
-    ['serreeMelee','Serrée : corps à corps','×',.1,3,.05,'Une formation serrée est plus solide au corps à corps.'],
+    ['serreeMelee','Serrée : DEF','×',.1,3,.05,'Une formation serrée est plus solide au corps à corps.'],
     ['serreeFleches','Serrée : flèches reçues','×',.1,5,.05,'... mais plus vulnérable aux flèches.'],
     ['serreeVitesse','Serrée : vitesse','×',.1,2,.05,'... et plus lente.'],
-    ['disperseeMelee','Dispersée : corps à corps','×',.1,3,.05,'Une formation dispersée est plus fragile au corps à corps.'],
+    ['disperseeMelee','Dispersée : DEF','×',.1,3,.05,'Une formation dispersée est plus fragile au corps à corps.'],
     ['disperseeFleches','Dispersée : flèches reçues','×',0,3,.05,'... mais moins touchée par les flèches.'],
-    ['disperseeVitesse','Dispersée : vitesse','×',.1,2,.05,'... et plus rapide.'],
-    ['chargeDispersee','Charge contre dispersée','×',1,3,.05,'Une charge contre une armée en formation dispersée frappe plus fort.']]],
+    ['disperseeVitesse','Dispersée : vitesse','×',.1,2,.05,'... et plus rapide.']]],
+  ['Guerriers mystiques',[
+    ['gmTue','Hommes qu\'il fait tomber','% × ATK ÷ DEF',0,100,.1,'Par combat : ce % × son ATK ÷ DEF de la troupe adverse.'],
+    ['gmRecu','PV qu\'il perd','% × hommes',0,100,.1,'Par combat : ce % × hommes × ATK de la troupe ÷ (sa DEF ÷ 1 000).'],
+    ['gmFleches','Flèches','% des dégâts',0,100,5,'Les flèches ne lui font que cette part de leurs dégâts.']]],
+  ['Vivres',[
+    ['vivres','Vivres au départ','tours pour 1 000 h.',1,1000,1,'Chaque camp part avec des vivres pour ce nombre de tours pour 1 000 hommes (2 000 hommes : 2 fois moins).'],
+    ['faim','Sans vivres','% par tour',0,50,.5,'Sans vivres, chaque armée perd ce % de ses hommes par tour.']]],
+  ['Météo et nuit',[
+    ['meteoChange','La météo change','1 chance sur',1,100,1,'À chaque tour, une chance sur ce nombre que la météo change.'],
+    ['brouillardPlaine','Brouillard en plaine','vision − %',0,100,5,''],
+    ['brouillardHauteur','Brouillard en hauteur','vision − %',0,100,5,'Sur les collines et les montagnes.'],
+    ['boueVitesse','Boue','vitesse − %',0,100,5,'La pluie crée de la boue près des forêts et dans les zones basses.'],
+    ['boueTours','Boue après la pluie','tours',0,20,1,'La boue reste ce nombre de tours après la pluie.'],
+    ['froidVitesse','Froid','vitesse − %',0,100,5,''],
+    ['toursJour','Jour','tours',1,50,1,''],['toursNuit','Nuit','tours',0,50,1,''],
+    ['nuitVision','Nuit','vision − %',0,100,5,'La nuit, la vision de tous est réduite.']]],
   ['Éclaireurs et espions',[
     ['visionEclaireur','Vision des éclaireurs','mètres',50,2000,10,'Les éclaireurs voient loin et repèrent les QG ennemis jusqu\'à cette distance.'],
     ['visionEspion','Vision des espions','mètres',50,2000,10,'Distance de vision des espions.'],
@@ -282,13 +331,14 @@ const REGLAGES_INFO=[
     ['pvGeneral','PV du général','PV',1,5000,10,'Points de vie du général. Ils ne baissent qu\'une fois la garde et les 3 gardes rapprochés tombés (appliqué en recommençant).'],
     ['pvGarde','PV d\'un garde rapproché','PV',1,500,1,'Points de vie de chacun des 3 gardes rapprochés du général (appliqué en recommençant).'],
     ['forceGeneral','Force du général','hommes',0,1000,1,'Au combat, le général se bat comme ce nombre d\'hommes (ses PV ne servent qu\'à encaisser les coups).'],
-    ['defenseQG','Défense du QG','×',.1,5,.05,'Multiplie la puissance du quartier général quand il est attaqué. Il n\'est jamais écrasé d\'un coup : il résiste un temps.'],
+    ['defenseQG','Défense du QG','×',.1,5,.05,'Multiplie l\'ATK et la DEF du quartier général. Il n\'est jamais écrasé d\'un coup : il résiste un temps.'],
     ['vitesseQG','Vitesse du QG','× infanterie',.05,1,.05,'Vitesse du quartier général par rapport à l\'infanterie.'],
     ['vueQG','QG ennemi repéré à','mètres',50,1000,10,'Le quartier général ennemi n\'est visible que si un de tes soldats est à moins de cette distance (et le voit).']]]
 ];
 const REGLAGES={...REGLAGES_DEFAUT};
-try{const sv=JSON.parse(localStorage.getItem('shin-reglages-combat')||'{}');for(const k in REGLAGES_DEFAUT)if(typeof sv[k]==='number'&&isFinite(sv[k]))REGLAGES[k]=sv[k];}catch(e){}
-const saveReglages=()=>{try{localStorage.setItem('shin-reglages-combat',JSON.stringify(REGLAGES));}catch(e){}};
+try{const sv=JSON.parse(localStorage.getItem('shin-reglages-combat-2')||'{}');for(const k in REGLAGES_DEFAUT)if(typeof sv[k]==='number'&&isFinite(sv[k]))REGLAGES[k]=sv[k];}catch(e){}
+let meteo='soleil',boue=0;   // météo de la bataille et tours de boue restants
+const saveReglages=()=>{try{localStorage.setItem('shin-reglages-combat-2',JSON.stringify(REGLAGES));}catch(e){}};
 
 // ---------- outils ----------
 function rng(a){return function(){a|=0;a=a+0x6D2B79F5|0;let x=Math.imul(a^a>>>15,1|a);x=x+Math.imul(x^x>>>7,61|x)^x;return((x^x>>>14)>>>0)/4294967296}}
@@ -304,19 +354,23 @@ const wrapA=a=>Math.atan2(Math.sin(a),Math.cos(a));
 // ---------- la bataille : composition des armées et taille de la carte ----------
 // chefs proposés (personnages de docs/PERSONNAGES.md) ; le général, lui, reste dans son QG
 // types de troupes
-const KINDS={inf:'Infanterie',cav:'Cavalerie',arc:'Archers',ecl:'Éclaireurs',esp:'Espions'};
-const KIND_HOMMES={inf:'fantassins',cav:'cavaliers',arc:'archers',ecl:'éclaireurs',esp:'espions'};
+const KINDS={inf:'Infanterie',cav:'Cavalerie',arc:'Archers',ecl:'Éclaireurs',esp:'Espions',gm:'Guerrier mystique'};
+const KIND_HOMMES={inf:'fantassins',cav:'cavaliers',arc:'archers',ecl:'éclaireurs',esp:'espions',gm:'PV'};
+// guerriers mystiques (règles du 12/11) : leur force suit leur légende = environ le nombre de fantassins lourds qu'ils battent seuls.
+// ATK et END (= ses PV) suivent cette force (0,45 × force), DEF 900 pour tous : réglé pour qu'un combat dure 10 à 30 tours.
+const GM_FORCE={'Lü Bu':2100,'Hou Ken':2000,'Chevalier squelette':2000,'Achille':1850,'Guan Yu':1750,'Livaï':1650,'Musashi':1550,'Kojirō':1300,'Benkei':1250,'Kyoukai':1250,'Thorfinn':1200,'Ragnar':1100,'Vercingétorix':1050,'Jeanne d\'Arc':1050,'Bruce Lee':1050,'Muhammad Ali':1000,'Cristiano Ronaldo':1000,'Messi':1000};
+const gmStats=name=>{const F=GM_FORCE[name]||1000;return{atk:Math.round(F*.45),def:900,end:Math.round(F*.45)};};
 const mounted=k=>k==='cav'||k==='ecl';
 const CHEFS={bleu:['Souvorov','Robin des Bois','Uesugi Kenshin','Jeanne d\'Arc','Koutouzov','Charles Martel','Richard Cœur de Lion','Takeda Shingen','Vercingétorix','Léonidas','Bayard','Sun Tzu'],
   rouge:['Kanki','Ri Boku','Lü Bu','Ousen','Hou Ken','Subötaï','Mehmed II','Harald Hardrada','Shaka Zulu','Baybars']};
 const GENERAUX={bleu:'Koby',rouge:'Shin'};
 const BATAILLES={
   petite:{nom:'Petite',bleu:[{chef:'Souvorov',kind:'inf',men:300},{chef:'Robin des Bois',kind:'arc',men:150},{chef:'Bayard',kind:'ecl',men:50}],rouge:[{chef:'Kanki',kind:'inf',men:300},{chef:'Ri Boku',kind:'arc',men:150},{chef:'Hou Ken',kind:'ecl',men:50}]},
-  moyenne:{nom:'Moyenne',bleu:[{chef:'Souvorov',kind:'inf',men:500},{chef:'Robin des Bois',kind:'arc',men:400},{chef:'Uesugi Kenshin',kind:'cav',men:168},{chef:'Bayard',kind:'ecl',men:40},{chef:'Sun Tzu',kind:'esp',men:10}],rouge:[{chef:'Kanki',kind:'inf',men:450},{chef:'Ri Boku',kind:'arc',men:350},{chef:'Lü Bu',kind:'cav',men:144},{chef:'Hou Ken',kind:'ecl',men:40}]},
-  grande:{nom:'Grande',bleu:[{chef:'Souvorov',kind:'inf',men:1500},{chef:'Robin des Bois',kind:'arc',men:900},{chef:'Jeanne d\'Arc',kind:'inf',men:600},{chef:'Uesugi Kenshin',kind:'cav',men:550},{chef:'Bayard',kind:'ecl',men:100},{chef:'Sun Tzu',kind:'esp',men:10}],rouge:[{chef:'Kanki',kind:'inf',men:1400},{chef:'Ri Boku',kind:'arc',men:800},{chef:'Ousen',kind:'inf',men:500},{chef:'Lü Bu',kind:'cav',men:350},{chef:'Hou Ken',kind:'ecl',men:100}]}
+  moyenne:{nom:'Moyenne',bleu:[{chef:'Souvorov',kind:'inf',men:500},{chef:'Robin des Bois',kind:'arc',men:400},{chef:'Uesugi Kenshin',kind:'cav',men:168},{chef:'Bayard',kind:'ecl',men:40},{chef:'Sun Tzu',kind:'esp',men:10},{chef:'Musashi',kind:'gm',men:1}],rouge:[{chef:'Kanki',kind:'inf',men:450},{chef:'Ri Boku',kind:'arc',men:350},{chef:'Subötaï',kind:'cav',men:144},{chef:'Hou Ken',kind:'ecl',men:40},{chef:'Lü Bu',kind:'gm',men:1}]},
+  grande:{nom:'Grande',bleu:[{chef:'Souvorov',kind:'inf',men:1500},{chef:'Robin des Bois',kind:'arc',men:900},{chef:'Jeanne d\'Arc',kind:'inf',men:600},{chef:'Uesugi Kenshin',kind:'cav',men:550},{chef:'Bayard',kind:'ecl',men:100},{chef:'Sun Tzu',kind:'esp',men:10},{chef:'Guan Yu',kind:'gm',men:1}],rouge:[{chef:'Kanki',kind:'inf',men:1400},{chef:'Ri Boku',kind:'arc',men:800},{chef:'Ousen',kind:'inf',men:500},{chef:'Subötaï',kind:'cav',men:350},{chef:'Hou Ken',kind:'ecl',men:100},{chef:'Lü Bu',kind:'gm',men:1}]}
 };
 function cleanArmy(list){if(!Array.isArray(list)||!list.length||list.length>8)return null;const out=[];
-  for(const u of list){const men=Math.round(+(u&&u.men));if(!(men>=10&&men<=5000))return null;out.push({chef:String(u.chef||'?').slice(0,40),kind:KINDS[u.kind]?u.kind:'inf',men});}return out;}
+  for(const u of list){const kind=KINDS[u&&u.kind]?u.kind:'inf',men=kind==='gm'?1:Math.round(+(u&&u.men));if(!(kind==='gm'||men>=10&&men<=5000))return null;out.push({chef:String(u.chef||'?').slice(0,40),kind,men});}return out;}
 const cleanEnjeu=e=>({mise:!!(e&&e.mise),texte:String((e&&e.texte)||'').slice(0,80)});
 function loadBattle(){try{const c=JSON.parse(localStorage.getItem('shin-bataille')||'null');if(c){const b=cleanArmy(c.bleu),r=cleanArmy(c.rouge);if(b&&r)return{bleu:b,rouge:r,enjeu:cleanEnjeu(c.enjeu)};}}catch(e){}
   return{bleu:BATAILLES.moyenne.bleu,rouge:BATAILLES.moyenne.rouge,enjeu:cleanEnjeu(null)};}
@@ -413,7 +467,7 @@ function viewArmy(){camera.position.set(BLUE_C[0],300,BLUE_C[1]+480);controls.ta
 function viewAll(){camera.position.set(0,300+1600*KS,200+1950*KS);controls.target.set(0,0,0);controls.update();}
 viewArmy();
 
-scene.add(new THREE.HemisphereLight(0xdfe9f2,0x5a5236,.65));
+const hemi=new THREE.HemisphereLight(0xdfe9f2,0x5a5236,.65);scene.add(hemi);
 const sun=new THREE.DirectionalLight(0xfff1d6,1.15);
 sun.position.set(-1000,1400,600); sun.castShadow=true;
 sun.shadow.mapSize.set(4096,4096);
@@ -499,7 +553,7 @@ const inWater=(x,z)=>hAt(x,z)<WATER-.4&&!onBridge(x,z);
 // ---------- règles de terrain (valeurs de départ, à régler) ----------
 const SPEED={inf:11,cav:22};          // m/s, accéléré environ ×8 pour le prototype
 const VISION=300,HILL=1.5,FOREST_SEE=50,TREE_H=14,VISION_QG=200;   // règles : un quartier général voit à 200 m
-const speedOf=kind=>kind==='qg'?SPEED.inf*REGLAGES.vitesseQG:kind==='ecl'?SPEED.cav*1.15:mounted(kind)?SPEED.cav:SPEED.inf*(kind==='esp'?1.2:1);
+const speedOf=kind=>kind==='gm'?SPEED.inf*1.2:kind==='qg'?SPEED.inf*REGLAGES.vitesseQG:kind==='ecl'?SPEED.cav*1.15:mounted(kind)?SPEED.cav:SPEED.inf*(kind==='esp'?1.2:1);
 const formSpeed=g=>g.form==='serree'?REGLAGES.serreeVitesse:g.form==='dispersee'?REGLAGES.disperseeVitesse:1;
 function isHill(x,z){const h=hAt(x,z);let s=0;for(let k=0;k<8;k++){const a=k*Math.PI/4;s+=hAt(x+Math.cos(a)*200*KS,z+Math.sin(a)*200*KS);}return h-s/8>12*KS;}
 function grade(x,z){const gx=(hAt(x+3,z)-hAt(x-3,z))/6,gz=(hAt(x,z+3)-hAt(x,z-3))/6;return Math.hypot(gx,gz);}
@@ -522,15 +576,22 @@ const TERRAINS={decouvert:'terrain découvert',foret:'forêt',pente:'colline ou 
 function terrainCombat(x,z){if(onBridge(x,z))return'decouvert';if(inWater(x,z))return'gue';if(inForest(x,z))return'foret';if(isHill(x,z)||grade(x,z)>.2)return'pente';return'decouvert';}
 function multTerrain(kind,t){const r=REGLAGES;if(kind==='qg')return r.defenseQG;if(t==='gue')return r.gue;if(mounted(kind))return t==='foret'?r.cavForet:t==='pente'?r.cavPente:r.cavPlaine;
   if(kind==='arc')return t==='foret'?r.arcForet:t==='pente'?r.arcColline:1;return t==='foret'?r.infForet:1;}
-// puissance = hommes × valeur d'un homme × terrain × charge (le hasard s'ajoute à chaque manche)
+// règles du 12/11 : ATK et DEF d'un soldat selon les lettres de sa troupe, × terrain, formation, effets
+// force (pour l'écrasement et l'aperçu) = hommes × racine de ATK × DEF, bonus compris
 // un QG se bat avec sa garde, ses 3 gardes rapprochés et son général (qui vaut « forceGeneral » hommes) ; ses PV ne font qu'encaisser
 const forceQG=a=>{const q=qgParts(a);return q.garnison+q.gardes+(q.pv>0?REGLAGES.forceGeneral:0);};
-const VALEUR=k=>({cav:REGLAGES.valeurCavalier,arc:REGLAGES.valeurArcher,ecl:REGLAGES.valeurEclaireur,esp:REGLAGES.valeurEspion})[k]??REGLAGES.valeurFantassin;
+const STAT=k=>{const r=REGLAGES;return k==='cav'?[r.atkCav,r.defCav]:k==='arc'?[r.atkArc,r.defArc]:k==='ecl'?[r.atkEcl,r.defEcl]:k==='esp'?[r.atkEsp,r.defEsp]:[r.atkInf,r.defInf];};
 const formMelee=a=>a.form==='serree'?REGLAGES.serreeMelee:a.form==='dispersee'?REGLAGES.disperseeMelee:1;
-function puissanceBase(a){return(a.kind==='qg'?forceQG(a):a.men)*VALEUR(a.kind)*multTerrain(a.kind,a.terrain)*formMelee(a)*(a.charge?REGLAGES.charge*(a.descente?REGLAGES.chargeDescente:1):1);}
-// une manche : chaque armée partage sa puissance entre les ennemis qu'elle touche ;
-// chacune perd « pertes % » de son effectif × (puissance reçue / sa puissance) ^ courbe ;
-// l'écrasement n'est possible qu'à l'arrivée d'une attaque (armée « nouveau » au contact), sinon le combat se règle par les pertes
+const hommes=a=>a.kind==='qg'?forceQG(a):a.kind==='gm'?1:a.men;
+const boostOf=a=>a.boost>0?1+REGLAGES.auraBonus/100:1,stunOf=a=>a.stun>0?1-REGLAGES.etourdiDef/100:1;
+function atkOf(a){if(a.kind==='gm')return a.atk*boostOf(a);return STAT(a.kind)[0]*multTerrain(a.kind,a.terrain)*boostOf(a);}
+function defOf(a){if(a.kind==='gm')return a.def*stunOf(a);return STAT(a.kind)[1]*multTerrain(a.kind,a.terrain)*formMelee(a)*stunOf(a);}
+function puissanceBase(a){return a.kind==='gm'?Math.max(1,a.atk*a.men/400):hommes(a)*Math.sqrt(atkOf(a)*defOf(a));}   // guerrier mystique : environ sa force en fantassins
+// charge (premier choc seulement) : annulée par une formation serrée de face (comme la phalange)
+function chargeMult(a,e){if(!a.charge)return 1;const b=a.kind==='cav'?REGLAGES.chargeLourde:a.kind==='ecl'?REGLAGES.chargeLegere:1;
+  if(b===1||(e.form==='serree'&&angleOf(a,e)==='face'))return 1;return b*(a.descente?REGLAGES.chargeDescente:1)*(e.form==='dispersee'?REGLAGES.chargeDispersee:1);}
+// règles : dispersée quand il reste moins de 15 % − END ÷ 100 des hommes de départ (2 % au minimum)
+const seuilDispersion=a=>Math.max(1,(a.startMen||a.men)*Math.max(REGLAGES.dispMin,REGLAGES.dispBase-(a.end||REGLAGES.endDefaut)/100)/100);
 // angle sous lequel « att » frappe « def » : selon où se trouve l'attaquant par rapport à l'avant de la cible
 // (simulateur : angle imposé par att.angleSim)
 function angleOf(att,def){
@@ -540,15 +601,21 @@ function angleOf(att,def){
 }
 const angleMult=(att,def)=>{const a=angleOf(att,def);return a==='dos'?REGLAGES.dos:a==='flanc'?REGLAGES.flanc:1;};
 const ANGLE_MOT={face:'de face',flanc:'de flanc',dos:'de dos'};
+// un combat : A fait perdre à B 1,5 % × hommes de A × (ATK de A ÷ DEF de B)², ± hasard ; les deux frappent en même temps.
+// une armée qui touche plusieurs ennemis partage ses hommes entre eux. Écrasement : seulement au premier choc (armée « nouveau »).
 function resoudreManche(list){
-  const r=REGLAGES,P=new Map(),loss=new Map(),inc=new Map();
-  for(const a of list)P.set(a,Math.max(1e-6,puissanceBase(a)*(1+(Math.random()*2-1)*r.hasard/100)));
-  for(const a of list){if(!a.foes.length)continue;const share=P.get(a)/a.foes.length;
-    for(const e of a.foes){const sh=share*angleMult(a,e)*(a.charge&&e.form==='dispersee'?r.chargeDispersee:1),part=r.pertes/100*e.men*Math.pow(sh/P.get(e),r.courbe);if(!e.by)e.by=new Map();e.by.set(a,(e.by.get(a)||0)+part);loss.set(e,(loss.get(e)||0)+part);inc.set(e,(inc.get(e)||0)+sh);}}
+  const r=REGLAGES,loss=new Map(),inc=new Map(),H=()=>1+(Math.random()*2-1)*r.hasard/100;
+  for(const a of list){if(!a.foes.length)continue;const n=a.foes.length;
+    for(const e of a.foes){const at=atkOf(a)*angleMult(a,e)*chargeMult(a,e),de=defOf(e);let v;
+      if(a.kind==='gm')v=e.kind==='gm'?r.gmTue/100*at*at/de/3/n:r.gmTue/100*at/de/n;      // guerrier mystique : hommes (ou PV d'un autre guerrier)
+      else if(e.kind==='gm')v=r.gmRecu/100*hommes(a)/n*at/(de/1000);                      // une armée contre un guerrier mystique : ses PV
+      else v=r.coefPertes/100*hommes(a)/n*Math.pow(at/de,2);
+      v*=H();if(!e.by)e.by=new Map();e.by.set(a,(e.by.get(a)||0)+v);loss.set(e,(loss.get(e)||0)+v);
+      inc.set(e,(inc.get(e)||0)+puissanceBase(a)/n*Math.sqrt(angleMult(a,e)*chargeMult(a,e)));}}
   return list.filter(a=>a.foes.length).map(a=>{
-    const ratio=(inc.get(a)||0)/P.get(a),crushed=a.kind!=='qg'&&ratio>=r.ecrasement&&(a.nouveau||a.foes.some(e=>e.nouveau));   // un QG résiste : jamais écrasé d'un coup
-    let l=crushed?a.men:Math.min(a.men,Math.max(1,Math.round(loss.get(a)||0)));
-    const out=a.kind==='qg'?a.men-l<=0:a.men-l<Math.max(1,r.deroute);if(out)l=a.men;
+    const ratio=(inc.get(a)||0)/Math.max(1e-6,puissanceBase(a)),crushed=a.kind!=='qg'&&a.kind!=='gm'&&ratio>=r.ecrasement&&(a.nouveau||a.foes.some(e=>e.nouveau));   // un QG résiste : jamais écrasé d'un coup
+    const x=loss.get(a)||0;let l=crushed?a.men:Math.min(a.men,Math.floor(x+Math.random()));
+    const out=a.kind==='qg'||a.kind==='gm'?a.men-l<=0:a.men-l<seuilDispersion(a);if(out)l=a.men;
     const by=a.by||new Map(),tb=[...by.values()].reduce((x,y)=>x+y,0)||1;a.by=null;
     return{a,loss:l,crushed,out,ratio,by:[...by].map(([att,v])=>[att,v/tb])};});
 }
@@ -558,7 +625,7 @@ function rapportMot(x){const e=REGLAGES.ecrasement;return x>=e?'écrasant':x>=1.
 function simuler(A,B,n){
   let winA=0,winB=0,crush=0,rounds=0,lossA=0,lossB=0;
   for(let k=0;k<n;k++){
-    const a={...A,charge:true,nouveau:true,foes:[],angleSim:A.angle&&A.angle!=='face'?A.angle:null},b={...B,charge:false,nouveau:true,foes:[]};a.foes=[b];b.foes=[a];let t=0,cr=false;
+    const a={...A,startMen:A.men,charge:true,nouveau:true,foes:[],angleSim:A.angle&&A.angle!=='face'?A.angle:null},b={...B,startMen:B.men,charge:false,nouveau:true,foes:[]};a.foes=[b];b.foes=[a];let t=0,cr=false;
     while(a.men>0&&b.men>0&&t<1000){t++;for(const x of resoudreManche([a,b])){x.a.men-=x.loss;if(x.crushed)cr=true;}a.charge=a.nouveau=b.nouveau=false;if(t>=REGLAGES.retournement)a.angleSim=null;}
     if(cr)crush++;rounds+=t;lossA+=A.men-a.men;lossB+=B.men-b.men;
     if(b.men<=0&&a.men>0)winA++;else if(a.men<=0&&b.men>0)winB++;
@@ -664,6 +731,8 @@ function regiment(o){
     g.general=o.general;g.pvGen=REGLAGES.pvGeneral;g.pvGar=REGLAGES.pvGarde;g.men=Math.round(REGLAGES.garnisonQG)+3*g.pvGar+g.pvGen;
     g.tent=makeTent(PLAYERS[o.side].couleur);trimSoldiers(g);setMen(g,g.men);
   }
+  if(o.kind==='gm'){const st=gmStats(o.name);g.atk=st.atk;g.def=st.def;g.end=st.end;setMen(g,st.end);}   // ses PV = son END
+  g.aura=0;g.stun=0;g.boost=0;g.auraStat=REGLAGES.auraDefaut;if(!g.end)g.end=REGLAGES.endDefaut;
   g.startMen=g.men;place(g,0);regs.push(g);allRegs.push(g);
 }
 const toWorld=(g,lx,lz)=>{const c=Math.cos(g.heading),s=Math.sin(g.heading);return[g.x+lx*c-lz*s,g.z+lx*s+lz*c];};
@@ -711,13 +780,13 @@ function step(g,dt){
   // entrer au contact arrête la marche et lance le combat ; marcher dans l'autre sens, c'est se replier
   else if(g.tx!==null){const toward=(g.tx-g.x)*(g.contact.x-g.x)+(g.tz-g.z)*(g.contact.z-g.z)>0;
     if(toward||g.side==='rouge'){if(!was){g.charge=true;g.descente=hAt(g.x,g.z)-hAt(g.contact.x,g.contact.z)>4*KS;}g.tx=null;g.chase=null;}}
-  if(g.tx===null){g.moving=false;return;}
+  if(g.tx===null||(turnMode&&g.side!==cur)||g.stun>0){g.moving=false;return;}   // chacun son tour ; étourdi : ne bouge pas
   const dx=g.tx-g.x,dz=g.tz-g.z,dist=Math.hypot(dx,dz);
   if(dist<1.5){g.tx=null;g.moving=false;return;}
   const want=Math.atan2(dx,-dz),diff=wrapA(want-g.heading),tr=TURN*dt;
   g.heading+=Math.max(-tr,Math.min(tr,diff));g.moving=true;
   if(Math.abs(diff)>.6)return;                                   // pivote d'abord sur place
-  const ux=dx/dist,uz=dz/dist,v=speedOf(g.kind)*formSpeed(g)*terrainMult(g.kind,g.x,g.z,ux,uz),d=Math.min(dist,v*dt);
+  const ux=dx/dist,uz=dz/dist,v=speedOf(g.kind)*formSpeed(g)*terrainMult(g.kind,g.x,g.z,ux,uz)*speedMeteo(g),d=Math.min(dist,v*dt);
   const nx=g.x+ux*d,nz=g.z+uz*d;
   if(blocked(nx,nz)){g.tx=null;g.chase=null;g.moving=false;if(g.side==='bleu')toast(`${g.name} : passage impossible (falaise)`,'#5a4a16');return;}
   g.x=nx;g.z=nz;
@@ -725,7 +794,7 @@ function step(g,dt){
 // les rouges patrouillent au hasard autour d'eux
 let aiOn=true;
 function ai(g,dt){
-  if(!aiOn||g.kind==='qg'||g.tx!==null||g.contact)return;     // le QG rouge ne bouge pas
+  if(!aiOn||g.kind==='qg'||g.tx!==null||g.contact||g.stun>0)return;     // le QG rouge ne bouge pas
   if((g.wait-=dt)>0)return;
   for(let k=0;k<12;k++){const a=R()*6.28,d=(150+R()*350)*Math.max(.4,KS)*(g.kind==='ecl'?2:1),x=Math.max(-(W/2-100),Math.min(W/2-100,g.x+Math.cos(a)*d)),z=Math.max(-(D/2-60),Math.min(D/2-60,g.z+Math.sin(a)*d));
     if(hAt(x,z)>WATER+1&&!blocked(x,z)){g.tx=x;g.tz=z;break;}}
@@ -737,7 +806,7 @@ const seen=new Uint8Array(FW*FD),blur=new Float32Array(FW*FD),disp=new Float32Ar
 function viewshed(g){
   const h0=Math.max(hAt(g.x,g.z),WATER),eye=h0+(mounted(g.kind)?3.2:2.2);
   const base=g.kind==='qg'?VISION_QG:g.kind==='ecl'?REGLAGES.visionEclaireur:g.kind==='esp'?REGLAGES.visionEspion:VISION;
-  const Rv=base*(isHill(g.x,g.z)?HILL:1);g.range=Rv;
+  const Rv=base*(isHill(g.x,g.z)?HILL:1)*visionMult(g);g.range=Rv;
   const N=Math.ceil(2*Math.PI*Rv/6);
   for(let k=0;k<N;k++){const a=k/N*Math.PI*2,ca=Math.cos(a),sa=Math.sin(a);let maxS=-1e9;
     for(let d=5;d<=Rv;d+=5){const x=g.x+ca*d,z=g.z+sa*d;if(x<-W/2||x>W/2||z<-D/2||z>D/2)break;
@@ -780,7 +849,8 @@ function order(tx,tz,target){
   if(placing){placeSelected(tx,tz,0);return;}
   let list=selected;
   if(turnMode){
-    if(phase!=='ordres'){toast('Les armées bougent : attends le tour suivant pour donner des ordres','#5a4a16');return;}
+    if(phase!=='ordres'||cur!=='bleu'){toast('Attends ton tour pour donner des ordres','#5a4a16');return;}
+    if(list.some(g=>g.stun>0)){list=list.filter(g=>!(g.stun>0));toast('Une armée étourdie ne peut rien jouer','#5a4a16');if(!list.length)return;}
     // changer l'ordre d'une armée déjà commandée ce tour ne coûte rien de plus
     let left=actionsLeft();list=selected.filter(g=>g.acted===turn||(left>0&&left--));
     if(list.length<selected.length)toast(`Plus d'action disponible ce tour (${maxActions()} au maximum)`,'#5a4a16');
@@ -838,7 +908,7 @@ window.addEventListener('keydown',e=>{
   else if(e.key===' '&&selected.length){e.preventDefault();centerOn(selected);}
   else if(e.key==='Enter'&&placing&&ready){e.preventDefault();endPlacement();}
   else if((e.key==='r'||e.key==='R')&&placing&&selected.length){placeSelected(null,null,e.shiftKey?-Math.PI/4:Math.PI/4);}
-  else if(e.key==='Enter'&&turnMode&&phase==='ordres'&&ready&&!ended){e.preventDefault();startMove();}
+  else if(e.key==='Enter'&&turnMode&&phase==='ordres'&&cur==='bleu'&&ready&&!ended){e.preventDefault();startMove();}
 });
 function centerOn(list){
   const x=list.reduce((s,g)=>s+g.x,0)/list.length,z=list.reduce((s,g)=>s+g.z,0)/list.length;
@@ -846,8 +916,8 @@ function centerOn(list){
 }
 
 // ---------- affichage des infos ----------
-const selEl=document.getElementById('sel'),toastEl=document.getElementById('toast');let toastT=0,lastSel='';
-function toast(msg,bg){toastEl.textContent=msg;toastEl.style.background=bg?bg+'ee':'';toastEl.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>toastEl.classList.remove('on'),3200);}
+const selEl=document.getElementById('sel'),toastEl=document.getElementById('toast');let toastT=0,toastAt=0,lastSel='';
+function toast(msg,bg){const now=performance.now();if(toastEl.classList.contains('on')&&now-toastAt<400&&toastEl.textContent)msg=toastEl.textContent+' · '+msg;toastAt=now;toastEl.textContent=msg;toastEl.style.background=bg?bg+'ee':'';toastEl.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>toastEl.classList.remove('on'),3200);}
 const fmt=n=>String(Math.round(n)).replace('.',',');
 function renderSel(force){
   let h='';
@@ -860,11 +930,11 @@ function renderSel(force){
     const dist=g.tx!==null?Math.hypot(g.tx-g.x,g.tz-g.z):0;
     const tourInfo=!turnMode?'':`<span><span class="k">Ce tour :</span> ${g.acted===turn?'ordre donné':actionsLeft()>0?'peut recevoir un ordre':'plus d\'action disponible'}${dist>2?` · <span class="k">arrivée dans</span> ${Math.max(1,Math.ceil(dist/reachOf(g)))} tour(s) environ`:''}</span>`;
     const q=g.kind==='qg'?qgParts(g):null;
-    const fz=g.side==='bleu'&&g.kind!=='qg'?formButtons([g]):'';
+    const fz=g.side==='bleu'&&g.kind!=='qg'&&g.kind!=='gm'?formButtons([g]):'';
     const extra=(g.kind==='arc'?`<span><span class="k">Portée :</span> ${fmt(REGLAGES.porteeArc*(isHill(g.x,g.z)?1.3:1))} m${isHill(g.x,g.z)?' (colline : +30 %)':''}${g.target&&!g.target.dead&&g.target.shown?` · <span class="k">tire sur</span> ${g.target.name}`:''}</span>`:'')
       +(g.kind==='esp'?`<span class="hid">Repère les armées cachées en forêt jusqu'à ${fmt(REGLAGES.espionForet)} m</span>`:'')
       +(g.kind==='ecl'?`<span class="hid">Repère les QG ennemis jusqu'à ${fmt(REGLAGES.visionEclaireur)} m</span>`:'');
-    h=`<b>${g.name}</b><span>${q?`Général ${g.general} · garde : ${fmtMen(q.garnison)} hommes · gardes rapprochés : ${q.gardes}/3 · PV du général : ${fmtMen(q.pv)}/${fmtMen(g.pvGen)}`:`${KINDS[g.kind]} · ${fmtMen(g.men)} hommes`}</span>${fz}${extra}<span>${etat}</span>${nearInfo}${tourInfo}
+    h=`<b>${g.name}</b><span>${q?`Général ${g.general} · garde : ${fmtMen(q.garnison)} hommes · gardes rapprochés : ${q.gardes}/3 · PV du général : ${fmtMen(q.pv)}/${fmtMen(g.pvGen)}`:g.kind==='gm'?`Guerrier mystique (se bat en personne) · PV ${fmtMen(g.men)} · ATK ${g.atk} · DEF ${g.def}`:`${KINDS[g.kind]} · ${fmtMen(g.men)} hommes · END du chef ${g.end} (dispersée sous ${fmtMen(Math.ceil(seuilDispersion(g)))})`}</span>${fz}${extra}${auraInfo(g)}<span>${etat}</span>${nearInfo}${tourInfo}
       <span><span class="k">Terrain :</span> ${t}${g.tx!==null?` · <span class="k">vitesse</span> ×${(terrainMult(g.kind,g.x,g.z,ux,uz)).toFixed(2).replace('.',',')}`:''}</span>
       <span><span class="k">Vision :</span> ${fmt(g.range||VISION)} m${isHill(g.x,g.z)?' (colline : +50 %)':''}</span>
       ${isHidden(g)?'<span class="hid">Caché dans la forêt : invisible à plus de 50 m</span>':''}`;
@@ -887,9 +957,10 @@ function formButtons(list){if(!list.length)return'';const cur=list[0].form;
   return`<span class="form">${FORMS.map(f=>`<button type="button" data-form="${f}"${cur===f?' class="on" aria-pressed="true"':' aria-pressed="false"'} title="${formInfo(f)}">${FORM_NOM[f]}</button>`).join('')}</span><span class="k">Formation ${FORM_NOM[cur].toLowerCase()} : ${formInfo(cur)}</span>`;}
 // changer de formation = ordre rapide : utilise l'action de l'armée, qui peut encore se déplacer dans le même tour
 function setFormation(list,form){
-  list=list.filter(g=>g.side==='bleu'&&g.kind!=='qg');if(!list.length)return;
+  list=list.filter(g=>g.side==='bleu'&&g.kind!=='qg'&&g.kind!=='gm');if(!list.length)return;
   if(turnMode&&!placing){
-    if(phase!=='ordres'){toast('Les armées bougent : attends le tour suivant pour donner des ordres','#5a4a16');return;}
+    if(phase!=='ordres'||cur!=='bleu'){toast('Attends ton tour pour donner des ordres','#5a4a16');return;}
+    list=list.filter(g=>!(g.stun>0));if(!list.length){toast('Une armée étourdie ne peut rien jouer','#5a4a16');return;}
     let left=actionsLeft();const ok=list.filter(g=>g.acted===turn||(left>0&&left--));
     if(ok.length<list.length)toast(`Plus d'action disponible ce tour (${maxActions()} au maximum)`,'#5a4a16');
     ok.forEach(g=>g.acted=turn);list=ok;}
@@ -902,7 +973,21 @@ function animateForms(dt,t){
     g.fcur+=(g.ftarget-g.fcur)*Math.min(1,dt*3);if(Math.abs(g.ftarget-g.fcur)<.01)g.fcur=g.ftarget;
     g.hw=g.hw0*g.fcur;g.hd=g.hd0*g.fcur;g.soldiers.forEach(s=>{s.lx=s.bx*g.fcur;s.lz=s.bz*g.fcur;});place(g,t);}
 }
-selEl.addEventListener('click',e=>{const b=e.target.closest('[data-form]');if(b)setFormation(selected,b.dataset.form);});
+selEl.addEventListener('click',e=>{const b=e.target.closest('[data-form]');if(b)setFormation(selected,b.dataset.form);if(e.target.closest('[data-special]')&&selected.length===1)specialBleu(selected[0]);});
+// ---------- jauge d'Aura, attaque spéciale et étourdi ----------
+function auraInfo(g){if(g.kind==='qg')return'';const a=Math.floor(g.aura||0);
+  return`<span><span class="k">Jauge d'Aura :</span> ${a}/100${g.boost>0?` · <span class="hid">ATK +${fmt(REGLAGES.auraBonus)} % (${g.boost} tour(s))</span>`:''}${g.stun>0?` · <span class="warn">étourdi (${g.stun} tour(s)) : ne joue pas, DEF −${fmt(REGLAGES.etourdiDef)} %</span>`:''}</span>`+
+    (g.side==='bleu'&&a>=100?`<span class="form"><button type="button" data-special="1" title="Ordre rapide : ATK +${fmt(REGLAGES.auraBonus)} % pendant ${fmt(REGLAGES.auraDuree)} tours${g.kind==='gm'?', et ses adversaires au contact sont étourdis 1 tour':''}">Attaque spéciale</button></span>`:'');}
+function special(g){g.aura=0;g.boost=Math.round(REGLAGES.auraDuree);const msgs=[`${g.name} lance son attaque spéciale : ATK +${fmt(REGLAGES.auraBonus)} % pendant ${g.boost} tours`];
+  if(g.kind==='gm')for(const e of regs)if(e.side!==g.side&&e.kind!=='qg'&&contactDist(g,e)){e.stun=Math.max(e.stun||0,1);msgs.push(`${e.name} est étourdi 1 tour`);}
+  toast(msgs.join(' · '),g.side==='bleu'?'#1d4a2a':'#5a1a16');}
+function specialBleu(g){if(g.side!=='bleu'||(g.aura||0)<100)return;
+  if(turnMode&&!placing){if(phase!=='ordres'||cur!=='bleu'){toast('Attends ton tour','#5a4a16');return;}
+    if(g.stun>0){toast('Une armée étourdie ne peut rien jouer','#5a4a16');return;}
+    if(g.acted!==turn&&actionsLeft()<=0){toast(`Plus d'action disponible ce tour (${maxActions()} au maximum)`,'#5a4a16');return;}g.acted=turn;}
+  special(g);renderSel(true);renderTour();renderArmy(true);}
+// un homme clé ennemi tombe : la jauge de tous ceux d'en face monte
+function fallen(a){for(const g of regs)if(g.side!==a.side&&g.kind!=='qg')g.aura=Math.min(100,(g.aura||0)+REGLAGES.auraTombe);}
 
 // ---------- archers : tir à distance à chaque manche ----------
 const arrows=[],arrowMat=new THREE.LineBasicMaterial({color:0xf3e7c6,transparent:true,opacity:.9});
@@ -921,17 +1006,20 @@ const canShoot=(g,e)=>g.side==='bleu'?e.shown:(!isHidden(e)||gap(g,e)<FOREST_SEE
 function volleys(ctx){
   const shots=[];
   for(const g of regs){if(g.kind!=='arc')continue;g.target=null;
+    if(turnMode&&g.side!==cur)continue;                                             // chacun son tour : on tire pendant son tour
     if(regs.some(e=>e.side!==g.side&&contactDist(g,e)))continue;                     // au corps à corps : pas de tir
     const range=REGLAGES.porteeArc*(isHill(g.x,g.z)?1.3:1);
     const tgt=regs.filter(e=>e.side!==g.side&&canShoot(g,e)).map(e=>[e,gap(g,e)]).filter(x=>x[1]<=range).sort((a,b)=>a[1]-b[1])[0];
     if(tgt){g.target=tgt[0];shots.push([g,tgt[0]]);}}
   for(const [g,e] of shots){if(e.dead||g.dead)continue;
     const fm=e.form==='serree'?REGLAGES.serreeFleches:e.form==='dispersee'?REGLAGES.disperseeFleches:1;
-    let k=g.men*REGLAGES.degatsArc/100*multTerrain('arc',terrainCombat(g.x,g.z))*fm*(inForest(e.x,e.z)?REGLAGES.flechesForet:1)*(1+(Math.random()*2-1)*REGLAGES.hasard/100);
-    k=Math.min(e.men,Math.max(1,Math.round(k)));arrowFx(g,e);
+    // règles : même calcul que le corps à corps, 1,5 % × archers × (ATK ÷ DEF)² ; la cible ne riposte pas
+    const r=REGLAGES,et={...combatObj(e)},at=r.tirArc*multTerrain('arc',terrainCombat(g.x,g.z))*boostOf(g),de=e.kind==='gm'?r.defInf:defOf(et);
+    let k=r.coefPertes/100*g.men*Math.pow(at/de,2)*fm*(inForest(e.x,e.z)?r.flechesForet:1)*(meteo==='pluie'?1-r.pluieTir/100:1)*(e.kind==='gm'?r.gmFleches/100:1)*(1+(Math.random()*2-1)*r.hasard/100);
+    k=Math.min(e.men,Math.floor(k+Math.random()));arrowFx(g,e);if(!k)continue;
     ctx.tot.set(e,(ctx.tot.get(e)||0)+k);g.kills=(g.kills||0)+k;
-    const out=e.kind==='qg'?e.men-k<=0:e.men-k<Math.max(1,REGLAGES.deroute);
-    if(out){ctx.msgs.push(e.kind==='qg'?`Le général ${e.general} est tombé sous les flèches de ${g.name} ! (−3 points)`:`${e.name} est dispersé par les flèches de ${g.name} (−1 point)`);if(e.side==='bleu')ctx.bad=true;removeReg(e);}
+    const out=e.kind==='qg'||e.kind==='gm'?e.men-k<=0:e.men-k<seuilDispersion(e);
+    if(out){fallen(e);ctx.msgs.push(e.kind==='qg'?`Le général ${e.general} est tombé sous les flèches de ${g.name} ! (−3 points)`:`${e.name} est dispersé par les flèches de ${g.name} (−1 point)`);if(e.side==='bleu')ctx.bad=true;removeReg(e);}
     else e.men-=k;}
 }
 
@@ -970,11 +1058,11 @@ function setZoom(lvl){
 function updateBannerMode(){const far=camera.position.distanceTo(controls.target)>controls.maxDistance*.6;if(far!==bannersOnly){bannersOnly=far;regs.forEach(applyVis);}}
 
 // ---------- combat dans la scène ----------
-const combatObj=g=>({men:g.men,kind:g.kind,terrain:terrainCombat(g.x,g.z),charge:false,form:g.form});
+const combatObj=g=>({men:g.men,kind:g.kind,terrain:terrainCombat(g.x,g.z),charge:false,form:g.form,stun:g.stun,boost:g.boost,atk:g.atk,def:g.def,pvGen:g.pvGen,pvGar:g.pvGar});
 function rapport(g,foes){const mine=puissanceBase(combatObj(g))*foes.reduce((s,e)=>s+angleMult(g,e),0)/foes.length;
   const theirs=foes.reduce((s,e)=>s+puissanceBase(combatObj(e))*angleMult(e,g)/Math.max(1,regs.filter(f=>f.side!==e.side&&contactDist(e,f)).length),0);
   return theirs>0?mine/theirs:99;}
-function trimSoldiers(g){const want=Math.ceil((g.kind==='qg'?qgParts(g).garnison:g.men)/HPS);while(g.soldiers.length>want){const s=g.soldiers.pop();scene.remove(s.sp);}g.shadows.count=g.soldiers.length;}
+function trimSoldiers(g){const want=g.kind==='gm'?1:Math.ceil((g.kind==='qg'?qgParts(g).garnison:g.men)/HPS);while(g.soldiers.length>want){const s=g.soldiers.pop();scene.remove(s.sp);}g.shadows.count=g.soldiers.length;}
 function removeReg(g){
   if(selected.includes(g))select(selected.filter(x=>x!==g));
   g.soldiers.forEach(s=>scene.remove(s.sp));[g.shadows,g.banner,g.outline,g.path,g.mark,g.reach,g.tent].forEach(o=>{if(o)scene.remove(o);});
@@ -995,11 +1083,12 @@ function drawFloats(now){
 let combatAcc=0,ended=false;
 function combatTick(dt){if((combatAcc+=dt)<REGLAGES.manche)return;combatAcc=0;combatRound(1);}
 // n manches de suite ; les pertes s'affichent en une fois à la fin
-function combatRound(n){
+// chocs = true : seulement le premier choc des armées qui viennent d'entrer au contact (règles : il se calcule tout de suite)
+function combatRound(n,chocs){
   const ctx={msgs:[],tot:new Map(),bad:false},msgs=ctx.msgs,tot=ctx.tot;
   for(let k=0;k<n;k++){
-    volleys(ctx);   // les archers qui ne sont pas au corps à corps tirent
-    const fighting=regs.filter(g=>(g.foes=regs.filter(e=>e.side!==g.side&&contactDist(g,e))).length);
+    if(!chocs)volleys(ctx);   // les archers qui ne sont pas au corps à corps tirent
+    const fighting=regs.filter(g=>(g.foes=regs.filter(e=>e.side!==g.side&&contactDist(g,e)&&(!chocs||g.nouveau||e.nouveau))).length);
     if(!fighting.length)continue;
     fighting.forEach(g=>g.terrain=terrainCombat(g.x,g.z));
     // annonce des attaques de flanc et de dos au début d'un affrontement
@@ -1012,12 +1101,12 @@ function combatRound(n){
       if(main&&angleOf(main,g)!=='face'){g.heading=Math.atan2(main.x-g.x,-(main.z-g.z));place(g,performance.now()/1000);msgs.push(`${g.name} se retourne face à ${main.name}`);}}
     for(const {a,loss,crushed,out,by} of res){
       tot.set(a,(tot.get(a)||0)+loss);for(const [att,f] of by)att.kills=(att.kills||0)+loss*f;
-      if(out){const by=a.foes.map(e=>e.name).join(' et ');msgs.push(a.kind==='qg'?`Le général ${a.general} est tombé, son quartier général est pris ! (−3 points)`:crushed?`${a.name} est écrasé par ${by} ! (−1 point)`:`${a.name} est dispersé, ses derniers hommes quittent le champ de bataille (−1 point)`);if(a.side==='bleu')ctx.bad=true;removeReg(a);}
+      if(out){const by=a.foes.map(e=>e.name).join(' et ');fallen(a);msgs.push(a.kind==='qg'?`Le général ${a.general} est tombé, son quartier général est pris ! (−3 points)`:a.kind==='gm'?`Le guerrier mystique ${a.name} est tombé (−1 point)`:crushed?`${a.name} est écrasé par ${by} ! (−1 point)`:`${a.name} est dispersé, ses derniers hommes quittent le champ de bataille (−1 point)`);if(a.side==='bleu')ctx.bad=true;removeReg(a);}
       else a.men-=loss;
     }
   }
   if(!tot.size)return;
-  for(const [a,l] of tot){a.lastLoss=l;if(l>0)floatHit(a,l);if(!a.dead){trimSoldiers(a);setMen(a,a.men);}}
+  for(const [a,l] of tot){a.lastLoss=chocs?l:(a.chocLoss||0)+l;a.chocLoss=chocs?l:0;if(l>0)floatHit(a,l);if(!a.dead){trimSoldiers(a);setMen(a,a.men);}}
   if(msgs.length)toast(msgs.join(' · '),ctx.bad?'#5a1a16':'#1d4a2a');
   checkEnd();renderSel(true);renderStatus();renderArmy(true);
 }
@@ -1052,25 +1141,63 @@ function placeReds(){
     done.push(g);place(g,0);}
 }
 function startPlacement(){
-  if(!(REGLAGES.placement>0)){placing=false;zoneLine.visible=false;return;}
+  if(!(REGLAGES.placement>0)){placing=false;zoneLine.visible=false;coinToss();return;}
   placing=true;phaseT=REGLAGES.placement;zoneLine.visible=true;placeReds();
   toast(`Placement : ${Math.round(REGLAGES.placement)} s pour placer tes armées dans le cadre bleu (clic droit, R pour tourner), puis « Prêt »`,'#1d4a2a');
 }
 function endPlacement(){
   if(!placing)return;placing=false;zoneLine.visible=false;
-  phase='ordres';phaseT=REGLAGES.dureeTour;combatAcc=0;regs.forEach(g=>{g.acted=0;g.wait=2+R()*6;});
-  updateFog();renderStatus();renderTour();drawReach();renderSel(true);toast('La bataille commence !','#1d4a2a');
+  combatAcc=0;regs.forEach(g=>{g.acted=0;g.wait=2+R()*6;});
+  updateFog();renderStatus();coinToss('La bataille commence ! ');drawReach();renderSel(true);
 }
 
-// ---------- tour par tour : ordres pendant le chrono, puis tout le monde bouge et se bat en même temps ----------
-let turnMode=true,turn=1,phase='ordres',phaseT=REGLAGES.dureeTour;
+// ---------- tour par tour (règles du 12/11) : chacun son tour, le premier tiré à pile ou face ----------
+// ton tour : tu donnes tes ordres (sans limite de temps), puis « Fin du tour » : tes armées bougent, le premier choc se calcule,
+// puis tous les combats au contact une fois, les vivres sont consommés ; ensuite c'est le tour de l'adversaire (l'IA).
+let turnMode=true,turn=1,phase='ordres',phaseT=REGLAGES.dureeTour,cur='bleu',wasNight=false;
+const VIVRES={bleu:0,rouge:0};
 const maxActions=()=>Math.min(REGLAGES.actionsMax,regs.filter(g=>g.side==='bleu').length);
 const actionsLeft=()=>Math.max(0,maxActions()-regs.filter(g=>g.side==='bleu'&&g.acted===turn).length);
-const reachOf=g=>REGLAGES.marcheTour*speedOf(g.kind)*formSpeed(g)/SPEED.inf;
+// ---------- météo et nuit ----------
+const METEOS=['soleil','pluie','froid','brouillard'],METEO_NOM={soleil:'soleil',pluie:'pluie',froid:'froid',brouillard:'brouillard'};
+const isNight=()=>REGLAGES.toursNuit>0&&((turn-1)%(Math.round(REGLAGES.toursJour)+Math.round(REGLAGES.toursNuit)))>=Math.round(REGLAGES.toursJour);
+function visionMult(g){const r=REGLAGES;return(isNight()?1-r.nuitVision/100:1)*(meteo==='brouillard'?1-(isHill(g.x,g.z)?r.brouillardHauteur:r.brouillardPlaine)/100:1);}
+// la pluie crée de la boue près des forêts et dans les zones basses ; elle reste quelques tours
+const inMud=(x,z)=>boue>0&&(hAt(x,z)<WATER+5*KS||[[0,0],[40,0],[-40,0],[0,40],[0,-40]].some(([a,b])=>forest[cellOf(x+a,z+b)]));
+const speedMeteo=g=>(inMud(g.x,g.z)?1-REGLAGES.boueVitesse/100:1)*(meteo==='froid'?1-REGLAGES.froidVitesse/100:1);
+function ambiance(){const n=isNight(),m=meteo,col=new THREE.Color(m==='pluie'?0x7f8b93:m==='brouillard'?0xb9c0c4:m==='froid'?0xb7c7d6:0x9fb4c2);
+  if(n)col.multiplyScalar(.3);scene.background=col;scene.fog.color.copy(col);
+  scene.fog.near=m==='brouillard'?250:3400;scene.fog.far=m==='brouillard'?2200:7500;
+  sun.intensity=(n?.22:1)*(m==='soleil'?1.15:m==='froid'?.95:.7);hemi.intensity=n?.3:.65;}
+const vivresTours=side=>{const men=regs.filter(g=>g.side===side&&g.kind!=='gm').reduce((s,g)=>s+(g.kind==='qg'?qgParts(g).garnison:g.men),0);return men?Math.floor(VIVRES[side]/men):99;};
+// début du tour d'un camp : la météo peut changer, le jour ou la nuit, les effets « X tours », les jauges d'Aura montent
+function debutTour(side){const r=REGLAGES,msgs=[];
+  if(Math.random()<1/Math.max(1,r.meteoChange)){const autres=METEOS.filter(m=>m!==meteo);meteo=autres[Math.floor(Math.random()*autres.length)];msgs.push(`La météo change : ${METEO_NOM[meteo]}`);}
+  if(meteo==='pluie')boue=Math.round(r.boueTours);else if(boue>0)boue--;
+  const n=isNight();if(n!==wasNight){wasNight=n;msgs.push(n?'La nuit tombe : la vision de tous est réduite':'Le jour se lève');}
+  ambiance();
+  for(const g of regs){if(g.side!==side)continue;if(g.boost>0)g.boost--;
+    if(g.kind!=='qg'){const fight=regs.some(e=>e.side!==g.side&&contactDist(g,e));g.aura=Math.min(100,(g.aura||0)+(g.auraStat||r.auraDefaut)/300*(fight?r.auraCombat:1));}}
+  return msgs;}
+// fin du tour d'un camp : les étourdis comptent leur tour, les vivres sont consommés (sans vivres, chaque armée perd des hommes)
+function finTour(side){const r=REGLAGES;
+  for(const g of regs)if(g.side===side&&g.stun>0)g.stun--;
+  const arm=regs.filter(g=>g.side===side&&g.kind!=='gm'),men=arm.reduce((s,g)=>s+(g.kind==='qg'?qgParts(g).garnison:g.men),0);
+  const avant=VIVRES[side];VIVRES[side]=Math.max(0,VIVRES[side]-men);if(VIVRES[side]>0)return;
+  const msgs=[avant>0?(side==='bleu'?'Tes vivres sont épuisés':'L\'adversaire n\'a plus de vivres'):(side==='bleu'?'Sans vivres, tes armées perdent des hommes':'')];
+  for(const g of arm){if(g.dead)continue;
+    if(g.kind==='qg'){const ga=qgParts(g).garnison;if(ga>0)g.men-=Math.max(1,Math.round(ga*r.faim/100));}   // la faim touche la garde, pas le général
+    else{const l=Math.max(1,Math.round(g.men*r.faim/100));if(g.men-l<seuilDispersion(g)){msgs.push(`${g.name} est dispersé par la faim (−1 point)`);fallen(g);removeReg(g);continue;}g.men-=l;}
+    trimSoldiers(g);setMen(g,g.men);}
+  const m=msgs.filter(Boolean);if(m.length)toast(m.join(' · '),side==='bleu'?'#5a1a16':'#1d4a2a');
+  checkEnd();renderArmy(true);}
+function coinToss(pre=''){cur=Math.random()<.5?'bleu':'rouge';turn=1;phase='ordres';phaseT=REGLAGES.dureeTour;wasNight=false;
+  const msgs=debutTour(cur);toast(pre+`Pile ou face : ${cur==='bleu'?'tu commences':'l\'adversaire commence'}`+(msgs.length?' · '+msgs.join(' · '):''),'#1d4a2a');
+  if(cur==='rouge'&&turnMode)redTurn();else renderTour();}
 function turnTick(dt,t){
   if(phase==='ordres'){
     for(const g of regs)if(g.contact)place(g,t);
-    if((phaseT-=dt)<=0)startMove();
+    if(cur==='bleu'&&REGLAGES.dureeTour>0&&(phaseT-=dt)<=0)startMove();
   }else{
     // le temps du jeu est accéléré pour que l'infanterie parcoure « marcheTour » mètres pendant l'animation
     const f=REGLAGES.marcheTour/(SPEED.inf*Math.max(.5,REGLAGES.dureeMouvement));
@@ -1078,19 +1205,30 @@ function turnTick(dt,t){
     if((phaseT-=dt)<=0)endMove(t);
   }
 }
-function startMove(){
-  if(phase!=='ordres')return;
+function startMove(){if(phase!=='ordres'||cur!=='bleu'||ended)return;beginMove('bleu');}
+function beginMove(side){
   phase='mouvement';phaseT=REGLAGES.dureeMouvement;
-  for(const g of regs)if(g.side==='rouge')ai(g,REGLAGES.marcheTour/SPEED.inf);      // les rouges décident aussi
-  if(!regs.some(g=>g.tx!==null||g.contact))phaseT=.4;                               // rien ne bouge : on passe vite
+  if(!regs.some(g=>g.side===side&&g.tx!==null&&!(g.stun>0)))phaseT=.6;            // rien ne bouge : on passe vite
   drawReach();renderTour();renderSel(true);
 }
+// le tour de l'adversaire (IA) : attaque spéciale si sa jauge est pleine et qu'il combat, sinon patrouille
+function redTurn(){
+  for(const g of regs){if(g.side!=='rouge')continue;if(g.stun>0){g.tx=null;continue;}
+    if((g.aura||0)>=100&&regs.some(e=>e.side!==g.side&&contactDist(g,e)))special(g);
+    ai(g,REGLAGES.marcheTour/SPEED.inf);}
+  beginMove('rouge');
+}
 function endMove(t){
-  for(const g of regs){if(g.moving){g.moving=false;place(g,t);}}
-  combatRound(Math.max(1,Math.round(REGLAGES.manchesParTour)));
+  for(const g of regs){g.chocLoss=0;if(g.moving){g.moving=false;place(g,t);}}
+  combatRound(1,true);                 // le premier choc des armées qui viennent d'entrer au contact
+  if(!ended)combatRound(1,false);      // puis tous les combats au contact, une fois (et les tirs du camp qui joue)
+  if(!ended)finTour(cur);
   checkTurnLimit();
   if(ended){renderTour();return;}
-  turn++;phase='ordres';phaseT=REGLAGES.dureeTour;
+  cur=cur==='bleu'?'rouge':'bleu';turn++;
+  const msgs=debutTour(cur);
+  if(cur==='rouge'){if(msgs.length)toast(msgs.join(' · '),'#3a4a5a');redTurn();return;}
+  phase='ordres';phaseT=REGLAGES.dureeTour;toast(['À toi de jouer',...msgs].join(' · '),'#1d4a2a');
   drawReach();renderTour();renderSel(true);
 }
 const tourEl=document.getElementById('tour'),tourT=document.getElementById('tour-t'),tourC=document.getElementById('tour-c'),tourA=document.getElementById('tour-a'),bEnd=document.getElementById('b-end');
@@ -1099,21 +1237,21 @@ function renderTour(){
   if(placing){const sec=Math.max(0,Math.ceil(phaseT));tourT.textContent='Placement';tourC.textContent=`${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`;tourC.classList.toggle('urgent',sec<=10);
     tourA.textContent='Clic droit dans ta zone · R pour tourner';document.getElementById('tour-p').textContent='';bEnd.textContent='Prêt';bEnd.disabled=false;return;}
   bEnd.textContent='Fin du tour';
-  tourT.textContent=`Tour ${turn} / ${Math.round(REGLAGES.toursMax)}`;
-  document.getElementById('tour-p').textContent=`Points : ${pointsOf('bleu')} – ${pointsOf('rouge')}`;
+  tourT.textContent=`Tour ${turn}${REGLAGES.toursMax>0?` / ${Math.round(REGLAGES.toursMax)}`:''}`;
+  document.getElementById('tour-p').textContent=`Points : ${pointsOf('bleu')} – ${pointsOf('rouge')} · ${isNight()?'nuit':'jour'} · ${METEO_NOM[meteo]}${boue>0&&meteo!=='pluie'?' (boue)':''} · vivres : ${vivresTours('bleu')} tours`;
   if(ended){tourC.textContent='Bataille terminée';tourC.classList.remove('urgent');tourA.textContent='';bEnd.disabled=true;return;}
-  if(phase==='ordres'){const sec=Math.max(0,Math.ceil(phaseT));tourC.textContent=`Ordres · ${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`;tourC.classList.toggle('urgent',sec<=10);
+  if(phase==='ordres'&&cur==='bleu'){const sec=Math.max(0,Math.ceil(phaseT)),lim=REGLAGES.dureeTour>0;tourC.textContent=lim?`Ton tour · ${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`:'Ton tour';tourC.classList.toggle('urgent',lim&&sec<=10);
     tourA.textContent=`Actions : ${actionsLeft()} / ${maxActions()}`;bEnd.disabled=false;}
-  else{tourC.textContent='Mouvement…';tourC.classList.remove('urgent');tourA.textContent='';bEnd.disabled=true;}
+  else{tourC.textContent=cur==='bleu'?'Tes armées bougent…':'L\'adversaire joue…';tourC.classList.remove('urgent');tourA.textContent='';bEnd.disabled=true;}
 }
 // cercle vert : jusqu'où l'armée choisie peut aller ce tour (sur terrain plat)
 function drawReach(){
-  for(const g of regs){if(!g.reach)continue;const on=turnMode&&phase==='ordres'&&!ended&&!placing&&selected.includes(g);g.reach.visible=on;
+  for(const g of regs){if(!g.reach)continue;const on=turnMode&&phase==='ordres'&&cur==='bleu'&&!ended&&!placing&&selected.includes(g);g.reach.visible=on;
     if(on){const r=reachOf(g),pts=[];for(let i=0;i<=72;i++){const a=i/72*Math.PI*2;pts.push([g.x+Math.cos(a)*r,g.z+Math.sin(a)*r]);}setLine(g.reach,pts);}}
 }
 bEnd.addEventListener('click',()=>{if(placing)endPlacement();else startMove();});
 document.getElementById('b-turn').addEventListener('click',e=>{
-  turnMode=!turnMode;phase='ordres';phaseT=REGLAGES.dureeTour;regs.forEach(g=>g.moving=false);
+  turnMode=!turnMode;phase='ordres';cur='bleu';phaseT=REGLAGES.dureeTour;regs.forEach(g=>g.moving=false);
   e.currentTarget.textContent='Tour par tour : '+(turnMode?'oui':'non');e.currentTarget.setAttribute('aria-pressed',turnMode);
   drawReach();renderTour();renderSel(true);
 });
@@ -1126,15 +1264,15 @@ function checkEnd(){
 }
 // nombre maximum de tours atteint : le camp qui a le plus de points gagne
 function checkTurnLimit(){
-  if(ended||turn<REGLAGES.toursMax)return;const pb=pointsOf('bleu'),pr=pointsOf('rouge');
+  if(ended||!(REGLAGES.toursMax>0)||turn<REGLAGES.toursMax)return;const pb=pointsOf('bleu'),pr=pointsOf('rouge');
   finish(pb>pr?'bleu':pr>pb?'rouge':null,`Nombre maximum de tours atteint (${turn}) : ${pb} point(s) contre ${pr}.`);
 }
 function finish(winner,why){
   ended=true;
   document.getElementById('fin-t').textContent=winner==='bleu'?'Victoire':winner==='rouge'?'Défaite':'Égalité';
   document.getElementById('fin-s').textContent=why;
-  const side=sd=>allRegs.filter(g=>g.side===sd),start=sd=>side(sd).reduce((a,g)=>a+(g.kind==='qg'?Math.round(g.startMen-3*g.pvGar-g.pvGen):g.startMen),0),
-    left=sd=>side(sd).filter(g=>!g.dead).reduce((a,g)=>a+(g.kind==='qg'?qgParts(g).garnison:g.men),0);
+  const side=sd=>allRegs.filter(g=>g.side===sd),start=sd=>side(sd).reduce((a,g)=>a+(g.kind==='qg'?Math.round(g.startMen-3*g.pvGar-g.pvGen):g.kind==='gm'?0:g.startMen),0),
+    left=sd=>side(sd).filter(g=>!g.dead&&g.kind!=='gm').reduce((a,g)=>a+(g.kind==='qg'?qgParts(g).garnison:g.men),0);
   const row=g=>{const alive=!g.dead,men=g.kind==='qg'?(alive?qgParts(g).garnison:0):(alive?g.men:0);
     return`<tr><td>${g.kind==='qg'?`${g.general} (général)`:g.name}</td><td>${g.side==='bleu'?'toi':'adversaire'}</td><td class="n">${fmtMen(men)}</td><td class="n">${fmtMen(Math.round(g.kills||0))}</td><td${alive?'':' class="tombe"'}>${alive?'en vie':'tombé'}</td></tr>`;};
   const e=CONF.enjeu,enjeu=!e.mise?'Bataille amicale : pas d\'enjeu.':winner?`Mise${e.texte?` (${e.texte})`:''} remportée par ${winner==='bleu'?'toi':'l\'adversaire'}.`:`Égalité : la mise${e.texte?` (${e.texte})`:''} n'est remportée par personne.`;
@@ -1148,7 +1286,8 @@ const ARMEES=PLAN;
 function deploy(){
   select([]);regs.slice().forEach(removeReg);allRegs.length=0;floats.forEach(f=>f.el.remove());floats.length=0;
   ARMEES.forEach(o=>regiment(o.kind==='qg'?{...o,rows:Math.max(1,Math.ceil(REGLAGES.garnisonQG/HPS/o.cols))}:{...o}));known.clear();ended=false;finEl.hidden=true;combatAcc=0;
-  turn=1;phase='ordres';phaseT=REGLAGES.dureeTour;startPlacement();regs.forEach(applyVis);renderArmy(true);
+  turn=1;phase='ordres';phaseT=REGLAGES.dureeTour;cur='bleu';wasNight=false;meteo=METEOS[Math.floor(Math.random()*METEOS.length)];boue=meteo==='pluie'?Math.round(REGLAGES.boueTours):0;
+  VIVRES.bleu=VIVRES.rouge=REGLAGES.vivres*1000;ambiance();startPlacement();regs.forEach(applyVis);renderArmy(true);
   updateFog();renderStatus();renderSel(true);renderTour();
 }
 
@@ -1158,22 +1297,23 @@ let draft=null;
 const copyArmy=a=>a.map(u=>({...u}));
 function openSetup(){draft={bleu:copyArmy(CONF.bleu),rouge:copyArmy(CONF.rouge),enjeu:{...CONF.enjeu}};SETUP.hidden=false;renderSetup();}
 function unitRow(side,u,i){
-  const opts=CHEFS[side].concat(CHEFS[side].includes(u.chef)?[]:[u.chef]).map(c=>`<option${c===u.chef?' selected':''}>${c}</option>`).join('');
+  const L=u.kind==='gm'?Object.keys(GM_FORCE):CHEFS[side],opts=L.concat(L.includes(u.chef)?[]:[u.chef]).map(c=>`<option${c===u.chef?' selected':''}>${c}</option>`).join('');
   return `<div class="unit" data-side="${side}" data-i="${i}"><select data-f="chef" aria-label="Chef de l'unité">${opts}</select>`+
     `<select data-f="kind" aria-label="Type">${Object.entries(KINDS).map(([k,n])=>`<option value="${k}"${u.kind===k?' selected':''}>${n}</option>`).join('')}</select>`+
-    `<input data-f="men" type="number" min="10" max="5000" step="10" value="${u.men}" aria-label="Hommes">`+
-    `<span class="role">${u.men>=500?'sous-général':'chef d\'unité'}</span><button type="button" data-f="del" aria-label="Retirer cette unité"${draft[side].length<2?' disabled':''}>×</button></div>`;
+    (u.kind==='gm'?`<span class="role">PV ${gmStats(u.chef).end} · ATK ${gmStats(u.chef).atk}</span>`:`<input data-f="men" type="number" min="10" max="5000" step="10" value="${u.men}" aria-label="Hommes">`)+
+    `<span class="role">${u.kind==='gm'?'en personne':u.men>=500?'sous-général':'chef d\'unité'}</span><button type="button" data-f="del" aria-label="Retirer cette unité"${draft[side].length<2?' disabled':''}>×</button></div>`;
 }
 function renderSetup(){
   const eb=effectifOf(draft.bleu),er=effectifOf(draft.rouge),big=Math.max(eb,er),m=carteFor(big),hps=big>=3000?4:2,errs=[];
   for(const side of ['bleu','rouge']){const who=side==='bleu'?'Ton armée':'L\'armée adverse',names=draft[side].map(u=>u.chef);
     if(new Set(names).size<names.length)errs.push(`${who} a deux fois le même chef.`);
-    if(draft[side].some(u=>!(u.men>=10&&u.men<=5000)))errs.push(`${who} : chaque unité doit avoir de 10 à 5 000 hommes.`);}
+    if(draft[side].some(u=>u.kind!=='gm'&&!(u.men>=10&&u.men<=5000)))errs.push(`${who} : chaque unité doit avoir de 10 à 5 000 hommes.`);
+    if(draft[side].filter(u=>u.kind==='gm').length>2)errs.push(`${who} : 2 guerriers mystiques au maximum.`);}
   if(big<500)errs.push('En dessous de 500 hommes, pas de bataille rangée : le combat se règle automatiquement.');
   const km=v=>(v/1000).toLocaleString('fr-FR',{maximumFractionDigits:2});
   SB.innerHTML=`<h2 id="setup-t">Nouvelle bataille</h2>
     <div class="row">${Object.entries(BATAILLES).map(([k,b])=>`<button type="button" data-preset="${k}">${b.nom} (${fmtMen(effectifOf(b.bleu))} contre ${fmtMen(effectifOf(b.rouge))})</button>`).join('')}</div>
-    <p>Un sous-général dirige de 500 à 5 000 hommes ; en dessous de 500, c'est un chef d'unité (10 hommes au moins). Chacun est un homme clé : 1 point et 1 action par tour. Le général reste dans son QG avec sa garde de ${fmtMen(REGLAGES.garnisonQG)} hommes.</p>
+    <p>Un sous-général dirige de 500 à 5 000 hommes ; en dessous de 500, c'est un chef d'unité (10 hommes au moins). Chacun est un homme clé : 1 point et 1 action par tour. Un guerrier mystique (2 au plus) se bat en personne, sans armée. Le général reste dans son QG avec sa garde de ${fmtMen(REGLAGES.garnisonQG)} hommes.</p>
     <div class="cols">${['bleu','rouge'].map(side=>`<div><h3>${side==='bleu'?'Ton armée':'Armée adverse'} · général ${GENERAUX[side]}</h3>${draft[side].map((u,i)=>unitRow(side,u,i)).join('')}
       <div class="row" style="margin-top:6px"><button type="button" data-add="${side}"${draft[side].length>=8?' disabled':''}>Ajouter une unité</button>${side==='rouge'?'<button type="button" data-copy="1">Copier mon armée</button>':''}</div>
       <p class="sum">${fmtMen(side==='bleu'?eb:er)} hommes, garde du QG comprise</p></div>`).join('')}</div>
@@ -1188,7 +1328,10 @@ SB.addEventListener('change',e=>{
   if(e.target.dataset.enjeu==='type'){draft.enjeu.mise=e.target.value==='1';renderSetup();return;}
   if(e.target.dataset.enjeu==='texte'){draft.enjeu.texte=e.target.value.slice(0,80);return;}
   const row=e.target.closest('.unit');if(!row)return;const u=draft[row.dataset.side][+row.dataset.i],f=e.target.dataset.f;
-  if(f==='chef')u.chef=e.target.value;else if(f==='kind')u.kind=e.target.value;else if(f==='men')u.men=Math.round(+e.target.value||0);
+  if(f==='chef')u.chef=e.target.value;
+  else if(f==='kind'){const side=row.dataset.side,was=u.kind;u.kind=e.target.value;
+    if(u.kind==='gm'&&was!=='gm'){u.men=1;u.chef=Object.keys(GM_FORCE).find(c=>!draft[side].some(x=>x.chef===c))||u.chef;}
+    else if(u.kind!=='gm'&&was==='gm'){u.men=300;u.chef=CHEFS[side].find(c=>!draft[side].some(x=>x.chef===c))||u.chef;}}else if(f==='men')u.men=Math.round(+e.target.value||0);
   renderSetup();});
 SB.addEventListener('click',e=>{const t=e.target.closest('button');if(!t)return;
   if(t.dataset.preset){const b=BATAILLES[t.dataset.preset];draft={bleu:copyArmy(b.bleu),rouge:copyArmy(b.rouge),enjeu:draft.enjeu};}
@@ -1218,14 +1361,18 @@ function renderLivret(){
     'Le général vaut <b>3 points</b>, chaque homme clé <b>1 point</b>.',
     'Un camp qui tombe à <b>0 point</b> perd la bataille : il faut détruire les armées ennemies <b>et</b> prendre leur QG.'])}
   ${sec('Un tour de jeu',[
-    `Les deux joueurs donnent leurs ordres <b>en même temps</b>, pendant ${v('dureeTour',' s')}, sans voir ceux de l'autre.`,
-    '<b>Fin du tour</b> (ou <kbd>Entrée</kbd>) : sinon le tour passe tout seul à la fin du chrono.',
-    `Puis toutes les armées bougent ensemble (${v('dureeMouvement',' s')} d'animation) et celles au contact se battent : ${v('manchesParTour')} manche(s) de combat par tour.`])}
+    '<b>Chacun son tour</b> : le joueur qui commence est tiré à <b>pile ou face</b>, puis on alterne. Un tour, c\'est le moment où un joueur joue.',
+    '1. <b>Début du tour</b> : les jauges d\'Aura montent, les effets qui durent « X tours » perdent 1 tour, la météo peut changer.',
+    '2. <b>Les actions</b> (5 au maximum, une par homme clé), dans l\'ordre que tu veux.',
+    `3. <b>Fin du tour</b> (ou <kbd>Entrée</kbd>) : tes armées bougent (${v('dureeMouvement',' s')} d'animation). Une armée qui entre au contact d'un ennemi fait son <b>premier choc</b> tout de suite. Les marches longues continuent seules.`,
+    '4. Puis <b>tous les combats au contact</b> se calculent une fois, tes archers tirent, et tes armées mangent leurs vivres. Ensuite, c\'est le tour de l\'adversaire.',
+    r.dureeTour>0?`Temps pour les ordres : ${v('dureeTour',' s')} (réglage).`:'<b>Pas de limite de temps</b> par tour.'])}
   ${sec('Les ordres',[
     `<b>1 ordre par homme clé et par tour</b>, ${v('actionsMax')} au maximum. Le général compte : déplacer le QG coûte une action.`,
     'Changer l\'ordre d\'une armée déjà commandée ce tour ne coûte rien de plus.',
     'Une <b>marche longue continue toute seule</b> aux tours suivants, sans coûter d\'action.',
-    'Clic droit sur le terrain pour y aller, sur une armée ennemie pour marcher sur elle.'])}
+    'Clic droit sur le terrain pour y aller, sur une armée ennemie pour marcher sur elle.',
+    '<b>Rien ne s\'annule pendant le tour de l\'adversaire</b> : une protection se prépare à l\'avance.'])}
   ${sec('Marche et terrain',[
     `En un tour, l'infanterie parcourt ${v('marcheTour',' m')} sur terrain plat, la cavalerie 2 fois plus, le QG ×${v('vitesseQG')} (le cercle vert montre la portée).`,
     'Forêt : infanterie ×0,75, cavalerie ×0,5. Rivière (gué) : ×0,35. Les montées ralentissent, les falaises sont infranchissables.'])}
@@ -1233,31 +1380,50 @@ function renderLivret(){
     'Une armée voit à <b>300 m</b>, <b>+50 %</b> depuis une colline. Le relief et les forêts cachent ce qui est derrière.',
     'Une armée <b>dans une forêt est invisible</b>, sauf pour un ennemi à moins de 50 m.',
     `Ton QG voit à 200 m. Le <b>QG ennemi reste invisible</b> tant qu'aucun de tes soldats n'est à moins de ${v('vueQG',' m')} (et ne le voit).`])}
-  ${sec('Le combat',[
-    `Deux armées ennemies se battent dès que leurs blocs sont à moins de ${v('contact',' m')}. L'armée qui arrive est l'attaquant.`,
-    `<b>Puissance</b> = hommes × valeur (fantassin ${v('valeurFantassin')}, cavalier ${v('valeurCavalier')}) × terrain × charge, ± ${v('hasard',' %')} de hasard à chaque manche.`,
-    `Terrain : cavalerie ×${v('cavPlaine')} en terrain découvert, ×${v('cavForet')} en forêt, ×${v('cavPente')} sur colline ou pente ; infanterie ×${v('infForet')} en forêt ; tout le monde ×${v('gue')} dans la rivière. Charge : ×${v('charge')} à la 1<sup>re</sup> manche.`,
-    `Une charge qui arrive d\'en haut (en descente) frappe encore ×${v('chargeDescente')} à la 1<sup>re</sup> manche.`,
-    `<b>Pertes</b> : à puissance égale, chacun perd ${v('pertes',' %')} de son effectif par manche ; plus l'écart est grand, plus les pertes sont inégales (courbe ${v('courbe')}).`,
-    `<b>Écrasement</b> : si une attaque arrive ${v('ecrasement')} fois plus puissante, l'armée attaquée est détruite d'un coup. Sinon le combat dure.`,
-    `Une armée qui tombe sous ${v('deroute')} hommes est <b>dispersée</b> et quitte le champ de bataille.`,
+  ${sec('Le calcul des pertes',[
+    `Deux armées ennemies se battent dès que leurs blocs sont à moins de ${v('contact',' m')}. Les deux frappent en même temps.`,
+    `À chaque combat, A fait perdre à B : <b>${v('coefPertes',' %')} × hommes de A × (ATK de A ÷ DEF de B)²</b>, bonus compris, ± ${v('hasard',' %')} de hasard. Le carré rend chaque avantage très payant.`,
+    `<b>ATK et DEF d'un soldat</b> (lettres de sa troupe) : infanterie ${v('atkInf')} / ${v('defInf')} · cavalerie ${v('atkCav')} / ${v('defCav')} · archers ${v('atkArc')} / ${v('defArc')} (au tir ${v('tirArc')}) · éclaireurs ${v('atkEcl')} / ${v('defEcl')} · espions ${v('atkEsp')} / ${v('defEsp')}.`,
+    `Terrain (ATK et DEF) : cavalerie ×${v('cavPlaine')} en terrain découvert, ×${v('cavForet')} en forêt, ×${v('cavPente')} sur colline ou pente ; infanterie ×${v('infForet')} en forêt ; archers ×${v('arcColline')} sur colline, ×${v('arcForet')} en forêt ; tout le monde ×${v('gue')} dans la rivière.`,
+    `<b>Charge</b> (premier choc seulement) : cavalerie lourde ×${v('chargeLourde')}, légère (éclaireurs) ×${v('chargeLegere')}, ×${v('chargeDescente')} en plus en descente, ×${v('chargeDispersee')} contre une armée dispersée. Une formation serrée de face l'annule.`,
+    `<b>Écrasement</b> : au premier choc, une armée ${v('ecrasement')} fois plus forte (hommes × racine de ATK × DEF) écrase l'autre d'un coup. C'est rare.`,
+    `<b>Armée dispersée, selon l'END</b> de son chef : quand il lui reste moins de ${v('dispBase',' %')} − END ÷ 100 de ses hommes de départ (${v('dispMin',' %')} au minimum). END ${v('endDefaut')} pour tous dans ce prototype.`,
+    'À égalité, personne ne gagne en fonçant : il faut des flancs, des formations, le terrain… et les vivres obligent à bouger.',
     '<b>Se replier</b> : donner un ordre de marche dans l\'autre sens. On subit des pertes tant qu\'on est au contact.'])}
   ${sec('Types de troupes',[
-    `<b>Infanterie</b> (puissance ${v('valeurFantassin')} par homme), à l\'aise en forêt (×${v('infForet')}).`,
-    `<b>Cavalerie</b> (${v('valeurCavalier')}), rapide (2 fois l\'infanterie), forte en terrain découvert (×${v('cavPlaine')}), gênée en forêt et en pente.`,
-    `<b>Archers</b> (${v('valeurArcher')} au corps à corps) : tirent à distance, forts sur les collines (×${v('arcColline')}), gênés en forêt (×${v('arcForet')}).`,
-    `<b>Éclaireurs</b> (${v('valeurEclaireur')}) : très rapides, voient à ${v('visionEclaireur',' m')} et repèrent les QG ennemis à cette distance.`,
-    `<b>Espions</b> (${v('valeurEspion')}) : voient à ${v('visionEspion',' m')} et repèrent les armées cachées en forêt jusqu\'à ${v('espionForet',' m')}.`,
+    `<b>Infanterie</b> : à l\'aise en forêt (×${v('infForet')}).`,
+    `<b>Cavalerie</b> : rapide (2 fois l\'infanterie), forte en terrain découvert (×${v('cavPlaine')}), gênée en forêt et en pente, charge ×${v('chargeLourde')}.`,
+    `<b>Archers</b> : tirent à distance, forts sur les collines (×${v('arcColline')}), gênés en forêt (×${v('arcForet')}), faibles au corps à corps.`,
+    `<b>Éclaireurs</b> : très rapides, voient à ${v('visionEclaireur',' m')} et repèrent les QG ennemis à cette distance.`,
+    `<b>Espions</b> : voient à ${v('visionEspion',' m')} et repèrent les armées cachées en forêt jusqu\'à ${v('espionForet',' m')}.`,
     'Chaque unité a un chef (homme clé : 1 point, 1 action par tour).'])}
+  ${sec('Guerriers mystiques',[
+    'Ils se battent <b>toujours en personne</b>, sans armée (2 au plus par camp). Chacun est un homme clé : 1 point, 1 action.',
+    `Chaque combat, il fait perdre ${v('gmTue',' %')} × son ATK ÷ DEF de la troupe adverse hommes. Il a <b>END points de vie</b> ; l\'armée lui retire ${v('gmRecu',' %')} × hommes × ATK de la troupe ÷ (sa DEF ÷ 1 000) PV. Les flèches ne lui font que ${v('gmFleches',' %')} de leurs dégâts.`,
+    'Leur force suit leur légende : environ 2 000 fantassins lourds pour Lü Bu, Hou Ken et le Chevalier squelette, 1 000 pour Messi ou Jeanne d\'Arc. Un combat contre l\'un d\'eux dure 10 à 30 tours.'])}
+  ${sec('Aura, attaque spéciale, étourdi',[
+    `Chaque homme clé a une <b>jauge d\'Aura</b> de 0 à 100. Elle monte de Aura ÷ 300 par tour (Aura ${v('auraDefaut')} pour tous ici), ×${v('auraCombat')} quand son armée combat, +${v('auraTombe')} quand un homme clé ennemi tombe.`,
+    `Pleine, elle permet l\'<b>attaque spéciale</b> (ordre rapide, bouton dans le panneau) : ATK +${v('auraBonus',' %')} pendant ${v('auraDuree')} tours. Un guerrier mystique étourdit aussi ses adversaires au contact pendant 1 tour.`,
+    `Une armée <b>étourdie</b> ne peut rien jouer (ni bouger, ni ordre). Attaquée, elle se défend avec DEF −${v('etourdiDef',' %')}.`,
+    'Ni moral ni fatigue : une armée se bat à 100 % jusqu\'à être dispersée.'])}
+  ${sec('Météo et nuit',[
+    `La météo est tirée au hasard au début, puis peut changer (une chance sur ${v('meteoChange')} à chaque tour) : soleil, pluie, froid ou brouillard.`,
+    `<b>Brouillard</b> : vision −${v('brouillardPlaine',' %')} en plaine, −${v('brouillardHauteur',' %')} sur les collines.`,
+    `<b>Pluie</b> : tirs −${v('pluieTir',' %')}, et de la <b>boue</b> près des forêts et dans les zones basses (vitesse −${v('boueVitesse',' %')}), qui reste ${v('boueTours')} tours après la pluie.`,
+    `<b>Froid</b> : vitesse −${v('froidVitesse',' %')}.`,
+    `<b>Jour et nuit</b> : ${v('toursJour')} tours de jour, puis ${v('toursNuit')} tours de nuit. La nuit, la vision de tous est réduite de ${v('nuitVision',' %')}.`])}
+  ${sec('Vivres',[
+    `Chaque camp part avec des vivres pour <b>${v('vivres')} tours pour 1 000 hommes</b> (2 000 hommes : 2 fois moins). La barre du bas montre ce qu\'il te reste.`,
+    `Sans vivres, chaque armée perd ${v('faim',' %')} de ses hommes par tour. Deux armées égales ne peuvent pas attendre indéfiniment : il faut agir.`])}
   ${sec('Formations',[
     'Trois formations, changées avec les boutons du panneau ou <kbd>F</kbd>. C\'est un <b>ordre rapide</b> : il utilise l\'action de l\'armée, qui peut encore se déplacer dans le même tour.',
-    `<b>Serrée</b> (blocs denses) : corps à corps ×${v('serreeMelee')}, flèches reçues ×${v('serreeFleches')}, vitesse ×${v('serreeVitesse')}.`,
-    `<b>Dispersée</b> (blocs clairsemés) : corps à corps ×${v('disperseeMelee')}, flèches reçues ×${v('disperseeFleches')}, vitesse ×${v('disperseeVitesse')}, et une charge contre elle frappe ×${v('chargeDispersee')}.`,
+    `<b>Serrée</b> (blocs denses) : DEF ×${v('serreeMelee')}, flèches reçues ×${v('serreeFleches')}, vitesse ×${v('serreeVitesse')} ; de face, les charges ne marchent pas.`,
+    `<b>Dispersée</b> (blocs clairsemés) : DEF ×${v('disperseeMelee')}, flèches reçues ×${v('disperseeFleches')}, vitesse ×${v('disperseeVitesse')}, et une charge contre elle frappe ×${v('chargeDispersee')}.`,
     '<b>Normale</b> : aucun effet.'])}
   ${sec('Archers et tirs',[
-    `À chaque manche, les archers qui ne sont pas au corps à corps tirent sur l\'ennemi visible le plus proche, jusqu\'à ${v('porteeArc',' m')} (+30 % depuis une colline).`,
-    `Ils mettent hors de combat ${v('degatsArc',' %')} de leur nombre par manche, selon le terrain et la formation de la cible ; une cible en forêt ne reçoit que ×${v('flechesForet')} des flèches.`,
-    'Au corps à corps, ils se battent mal : protège-les.'])}
+    `À la fin de ton tour, tes archers qui ne sont pas au corps à corps tirent sur l\'ennemi visible le plus proche, jusqu\'à ${v('porteeArc',' m')} (+30 % depuis une colline).`,
+    `Même calcul que le corps à corps : ${v('coefPertes',' %')} × archers × (ATK au tir ÷ DEF de la cible)². La cible ne riposte pas, sauf si elle a aussi des archers à portée (à son tour).`,
+    `Formation de la cible, forêt (×${v('flechesForet')} des flèches) et pluie (−${v('pluieTir',' %')}) comptent. Au corps à corps, les archers se battent mal : protège-les.`])}
   ${sec('Vues',[
     '<kbd>Z</kbd> ou le bouton « Zoom » : <b>près</b> (les soldats en grand), <b>tactique</b> (le secteur de tes armées), <b>stratégique</b> (toute la carte).',
     'Vue de très loin, les armées deviennent des bannières.',
@@ -1265,7 +1431,7 @@ function renderLivret(){
   ${sec('Angle d\'attaque',[
     `Frapper une armée <b>de flanc</b> (par le côté) multiplie la puissance par ${v('flanc')}, <b>de dos</b> par ${v('dos')}. De face : pas de bonus.`,
     'L\'angle dépend de l\'endroit d\'où vient l\'attaquant par rapport à l\'avant de sa cible (la petite flèche du contour).',
-    `Après ${v('retournement')} manche(s) au contact, l\'armée attaquée <b>se retourne</b> face à son principal assaillant : le bonus disparaît pour lui, mais une deuxième armée qui la prend à revers le garde.`])}
+    `Après ${v('retournement')} combat(s), l\'armée attaquée <b>se retourne</b> face à son principal assaillant : le bonus disparaît pour lui, mais une deuxième armée qui la prend à revers le garde. Le carré (pas encore ici) n\'a ni flanc ni dos.`])}
   ${sec('Le quartier général',[
     `Le général y est gardé par ${v('garnisonQG')} hommes et 3 gardes rapprochés (${v('pvGarde')} PV chacun). Il a ${v('pvGeneral')} PV.`,
     `Attaqué, le QG se défend ×${v('defenseQG')} ; le général se bat comme ${v('forceGeneral')} hommes. Il n'est <b>jamais écrasé d'un coup</b> : il résiste un temps.`,
@@ -1274,7 +1440,7 @@ function renderLivret(){
     'Une armée détruite (écrasée ou dispersée) = son homme clé tombé : <b>−1 point</b>.',
     'Le QG pris = le général tombé : <b>−3 points</b>.',
     '<b>0 point = défaite.</b>',
-    `Au bout de ${v('toursMax')} tours, le camp qui a le plus de points gagne (égalité s\'ils en ont autant). Le nombre définitif sera fixé en simulant des batailles.`,
+    r.toursMax>0?`Au bout de ${v('toursMax')} tours (réglage), le camp qui a le plus de points gagne.`:'<b>Pas de nombre maximum de tours</b> : ce sont les vivres qui obligent à agir.',
     'Le vainqueur remporte la <b>mise</b> choisie dans « Nouvelle bataille » ; une bataille amicale n\'a pas d\'enjeu. Pas de pillage en bataille rangée.',
     'Tout le monde gagne de l\'XP, même en bataille amicale. Un bilan s\'affiche à la fin.'])}
   ${sec('Armées et cartes',[
@@ -1287,10 +1453,12 @@ function renderLivret(){
     'Clic droit dans la zone pour y mettre les armées choisies, <kbd>R</kbd> pour les tourner (<kbd>Maj</kbd>+<kbd>R</kbd> dans l\'autre sens), puis <b>Prêt</b> (ou <kbd>Entrée</kbd>).',
     'Les deux camps se placent <b>en même temps, sans voir l\'adversaire</b>.'])}
   ${sec('Pas encore dans le prototype',[
-    'Effets des généraux, attaques spéciales, soignants.',
-    'Créer une unité en cours de bataille, pièges et constructions.',
-    'Images propres aux archers et aux espions (ils utilisent pour l\'instant celles des fantassins).',
-    'Bataille à deux joueurs en ligne, calcul de l\'XP.'])}
+    'Effets des généraux autres que l\'attaque spéciale, stratégies (recharge : 10 tours, 1 de moins par tranche de 200 d\'INT du général), soignants.',
+    'END et Aura propres à chaque personnage (pour l\'instant les mêmes pour tous, dans les réglages).',
+    'Combat du QG avec les vraies stats du général, garde rapprochée à composer, hommes d\'un sous-général tombé (étourdis 2 tours puis répartis).',
+    'Formations et stratégies de la liste complète, pièges et constructions, créer une unité en cours de bataille.',
+    'Images propres aux archers, aux espions et aux guerriers mystiques.',
+    'Bataille à deux joueurs en ligne, à plusieurs, calcul de l\'XP.'])}
   </div>`;
   document.getElementById('livret-close').addEventListener('click',()=>{LIV.hidden=true;});
 }
@@ -1307,7 +1475,7 @@ function buildReglages(){
   for(const [titre,items] of REGLAGES_INFO){h+=`<fieldset><legend>${titre}</legend>`;
     for(const [k,lab,unit,min,max,st,help] of items)h+=`<label title="${help.replace(/"/g,'&quot;')}"><span>${lab}</span><input type="number" data-k="${k}" min="${min}" max="${max}" step="${st}" value="${REGLAGES[k]}"${REGLAGES[k]!==REGLAGES_DEFAUT[k]?' class="mod"':''}><i>${unit}</i></label>`;
     h+='</fieldset>';}
-  h+=`<fieldset><legend>Simulateur : A attaque B, 1 000 combats</legend>${simRow('A','inf',500)}${simRow('B','cav',168)}
+  h+=`<fieldset><legend>Simulateur : A attaque B, 1 000 batailles</legend>${simRow('A','inf',500)}${simRow('B','cav',168)}
     <label title="Angle sous lequel A frappe B au début du combat (B se retourne ensuite)."><span>A attaque B</span><select id="sA-a" style="grid-column:span 2"><option value="face">de face</option><option value="flanc">de flanc</option><option value="dos">de dos</option></select></label>
     <div class="row"><button type="button" id="sim-go">Lancer la simulation</button></div><div id="sim-out" aria-live="polite"></div></fieldset>
     <div class="row"><button type="button" id="r-restart">Recommencer la bataille</button><button type="button" id="r-copy">Copier les valeurs</button><button type="button" id="r-reset">Valeurs de départ</button></div>`;
@@ -1323,13 +1491,14 @@ function buildReglages(){
 }
 function runSim(){
   const army=id=>{const kind=document.getElementById(`s${id}-k`).value,n=Math.max(0,Math.round(+document.getElementById(`s${id}-n`).value||0));
+    if(kind==='gm'){const st=gmStats('Achille');return{kind,...st,men:st.end,terrain:'decouvert'};}   // un guerrier mystique d'environ 1 850 de force
     return{kind,men:kind==='qg'?n+3*REGLAGES.pvGarde+REGLAGES.pvGeneral:Math.max(1,n),terrain:document.getElementById(`s${id}-t`).value};};
   const A={...army('A'),angle:document.getElementById('sA-a').value},B=army('B'),r=simuler(A,B,1000),pc=x=>Math.round(x*100)+' %',f1=x=>x.toFixed(1).replace('.',',');
   const rf=puissanceBase({...A,charge:false})/puissanceBase({...B,charge:false});
   document.getElementById('sim-out').innerHTML=`<span><span class="k">Rapport de force :</span> ×${rf.toFixed(2).replace('.',',')} (${rapportMot(rf)} pour A)</span>
     <span><span class="k">Victoires :</span> A ${pc(r.winA)} · B ${pc(r.winB)}</span>
     <span><span class="k">Combats finis par un écrasement :</span> ${pc(r.crush)}</span>
-    <span><span class="k">Durée moyenne :</span> ${f1(r.rounds)} manches, soit ${f1(r.rounds/Math.max(1,Math.round(REGLAGES.manchesParTour)))} tours (${Math.round(r.rounds*REGLAGES.manche)} s en temps réel)</span>
+    <span><span class="k">Durée moyenne :</span> ${f1(r.rounds)} combats, soit environ ${f1(r.rounds)} tours (un combat à la fin de chaque tour ; ${Math.round(r.rounds*REGLAGES.manche)} s en temps réel)</span>
     <span><span class="k">Pertes moyennes :</span> A −${fmtMen(r.lossA)} (${pc(r.lossA/A.men)}) · B −${fmtMen(r.lossB)} (${pc(r.lossB/B.men)})</span>`;
 }
 function toggleReglages(on){RP.hidden=!on;document.getElementById('b-regl').setAttribute('aria-expanded',on);if(on&&!RP.innerHTML)buildReglages();}
