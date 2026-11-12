@@ -927,8 +927,9 @@ function updateFog(){
   regs.filter(g=>g.side==='rouge').forEach(e=>{
     // un QG n'est repéré que par des soldats assez proches (règles : éclaireurs ou soldats proches)
     const v=placing?!fogOn:(!fogOn||(spotted(e,blues)&&(e.kind!=='qg'||blues.some(b=>Math.hypot(b.x-e.x,b.z-e.z)<(b.kind==='ecl'?REGLAGES.visionEclaireur:REGLAGES.vueQG)))));   // placement : rien ne se voit ; éclaireurs : QG repéré de loin
-    if(v&&fogOn&&!known.has(e)){known.add(e);const by=blues.slice().sort((a,b)=>Math.hypot(a.x-e.x,a.z-e.z)-Math.hypot(b.x-e.x,b.z-e.z))[0];
+    if(v&&fogOn&&!known.has(e)&&!(e.lastSpot>=turn-2)){known.add(e);const by=blues.slice().sort((a,b)=>Math.hypot(a.x-e.x,a.z-e.z)-Math.hypot(b.x-e.x,b.z-e.z))[0];
       toast(`${e.kind==='qg'?'Quartier général ennemi repéré':'Troupe ennemie repérée'}${by?` par ${by.kind==='esp'?'ton espion ':by.kind==='ecl'?'ton éclaireur ':''}${by.name}`:''} : ${e.name} (${fmtMen(e.men)} ${KIND_HOMMES[e.kind]||'hommes'})`,undefined,{x:e.x,z:e.z});}
+    if(v&&!placing)e.lastSpot=turn;
     if(!v)known.delete(e);
     showReg(e,v);});
 }
@@ -1016,12 +1017,12 @@ function centerOn(list){
 // ---------- affichage des infos ----------
 // notifications (volet de droite) : tout ce qui se passe, le plus récent en haut ; clic sur une notification avec un lieu = y aller
 const NOTIFS=[],notEl=document.getElementById('notifs');
-function notify(msg,type='info',pos=null){NOTIFS.unshift({t:typeof turn==='number'&&!placing?turn:null,msg,type,pos});if(NOTIFS.length>80)NOTIFS.pop();
+function notify(msg,type='info',pos=null){const t0=typeof turn==='number'&&!placing?turn:null;if(NOTIFS.some(n=>n.t===t0&&n.msg===msg))return;NOTIFS.unshift({t:typeof turn==='number'&&!placing?turn:null,msg,type,pos});if(NOTIFS.length>80)NOTIFS.pop();
   notEl.innerHTML=NOTIFS.map((n,i)=>`<div class="n ${n.type}"${n.pos?` data-n="${i}" title="Clic : y aller"`:''}><b>${n.t?'T'+n.t:''}</b><span>${String(n.msg).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'})[c])}</span></div>`).join('');}
 notEl.innerHTML='<p class="k">Rien pour l\'instant.</p>';
 notEl.addEventListener('click',e=>{const d=e.target.closest('[data-n]');if(!d)return;const n=NOTIFS[+d.dataset.n];if(n&&n.pos)lookAt(n.pos.x,n.pos.z);});
 const selEl=document.getElementById('sel'),toastEl=document.getElementById('toast');let toastT=0,toastAt=0,lastSel='';
-function toast(msg,bg,pos){if(bg!=='#5a4a16')notify(msg,bg==='#5a1a16'?'bad':bg==='#1d4a2a'?'good':bg==='#3a4a5a'?'info':'alerte',pos);const now=performance.now();if(toastEl.classList.contains('on')&&now-toastAt<400&&toastEl.textContent)msg=toastEl.textContent+' · '+msg;toastAt=now;toastEl.textContent=msg;toastEl.style.background=bg?bg+'ee':'';toastEl.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>toastEl.classList.remove('on'),3200);}
+function toast(msg,bg,pos){const nm=String(msg).replace(/^À toi de jouer( · )?/,'');if(bg!=='#5a4a16'&&nm)notify(nm,bg==='#5a1a16'?'bad':bg==='#1d4a2a'?'good':bg==='#3a4a5a'?'info':'alerte',pos);const now=performance.now();if(toastEl.classList.contains('on')&&now-toastAt<400&&toastEl.textContent)msg=toastEl.textContent+' · '+msg;toastAt=now;toastEl.textContent=msg;toastEl.style.background=bg?bg+'ee':'';toastEl.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>toastEl.classList.remove('on'),3200);}
 const fmt=n=>String(Math.round(n)).replace('.',',');
 function renderSel(force){
   let h='';
@@ -1078,7 +1079,7 @@ function animateForms(dt,t){
     g.fcur+=(g.ftarget-g.fcur)*Math.min(1,dt*3);if(Math.abs(g.ftarget-g.fcur)<.01)g.fcur=g.ftarget;
     g.hw=g.hw0*g.fcur;g.hd=g.hd0*g.fcur;g.soldiers.forEach(s=>{s.lx=s.bx*g.fcur;s.lz=s.bz*g.fcur;});place(g,t);}
 }
-const onPanelClick=e=>{const b=e.target.closest('[data-form]');if(b)setFormation(selected,b.dataset.form);if(e.target.closest('[data-special]')&&selected.length===1)specialBleu(selected[0]);if(e.target.closest('[data-split]')&&selected.length===1){splitFor=selected[0];renderSplit();}};
+const onPanelClick=e=>{const ac=e.target.closest('[data-act]');if(ac&&selected.length===1)doAct(selected[0],ac.dataset.act);const b=e.target.closest('[data-form]');if(b)setFormation(selected,b.dataset.form);if(e.target.closest('[data-special]')&&selected.length===1)specialBleu(selected[0]);if(e.target.closest('[data-split]')&&selected.length===1){splitFor=selected[0];renderSplit();}};
 selEl.addEventListener('click',onPanelClick);
 // ---------- volet « Ordres » : tout ce que l'armée choisie peut faire (ce qui n'est pas encore en jeu est grisé) ----------
 const actEl=document.getElementById('actions');let lastAct='';actEl.addEventListener('click',onPanelClick);
@@ -1089,6 +1090,31 @@ const f1=x=>(Math.round(x*10)/10).toLocaleString('fr-FR');
 const FUTURE_FORMS=[['Phalange','infanterie : de face DEF +30 %, les charges ne marchent pas ; vitesse −30 %'],['Mur de boucliers','DEF +40 %, ATK −20 %, vitesse −40 %'],['Tortue','flèches reçues −70 %, DEF +20 %, ATK −40 %'],['Carré','pas de flanc ni de dos, DEF +20 % contre la cavalerie, vitesse −60 %'],['Coin','ATK +30 % (percée), DEF −20 %'],['Croissant','ATK +20 %, prend de flanc un ennemi moins nombreux'],['Volées','archers : tir +20 %, DEF −10 %'],['Légion','ATK et DEF +10 %, meilleure en terrain accidenté'],['Ordre oblique','une aile ATK +40 %, l\'autre DEF −30 % (grands généraux)'],['Double enveloppement','encercle l\'ennemi : flanc et dos sur tout le front (grands généraux)']];
 const STRATS=[['Embuscade','armée cachée (forêt, crête)',g=>isHidden(g),'la première manche frappe ×1,5, l\'ennemi ne peut pas changer de formation'],['Nuage de poussière','cavaliers dans l\'armée',g=>mounted(g.kind),'l\'ennemi ne voit qu\'une fourchette de tes effectifs'],['Flèches enflammées','archers du niveau voulu',g=>g.kind==='arc','tir +30 %, met le feu à une forêt ou un bâtiment'],['Pieux','archers',g=>g.kind==='arc','les charges contre eux ne marchent pas pendant quelques tours'],['Fausse retraite','cavalerie',g=>mounted(g.kind),'l\'armée recule ; l\'ennemi qui poursuit prend un contre-coup ×1,5'],['Tir en retraite','archers à cheval',null,'tir sans entrer au contact, puis l\'armée s\'éloigne'],['Marteau et enclume','deux armées : une de face, une de flanc ou de dos',null,'bonus de flanc ou de dos renforcé'],['Dos à la rivière','armée adossée à la rivière',g=>Math.abs(g.x-riverX(g.z))<90,'ATK +30 %, impossible de se replier'],['Attaque de nuit','n\'importe quelle armée',g=>true,'vision réduite, l\'ennemi surpris ne change pas de formation ; plus forte la nuit'],['Feux trompeurs','n\'importe quelle armée (général spécial)',null,'crée de fausses armées visibles par l\'ennemi'],['Désinformation','espion',g=>g.kind==='esp','l\'ennemi voit de fausses positions de tes armées'],['Terre brûlée','sur son propre terrain',g=>g.z>0,'une zone devient impraticable'],['Rupture de barrage','rivière + ingénieur',null,'les armées dans le gué perdent beaucoup d\'hommes'],['Ville vide','quartier général',g=>g.kind==='qg','l\'ennemi qui voit le QG hésite et perd un tour','qg']];
 const BUILDS=[['Palissade','1 tour','DEF +30 % de face, les charges ne passent pas'],['Fossé','2 tours','l\'ennemi qui le traverse : vitesse −50 %, plus de charge'],['Tour de guet','2 tours','vision étendue, révèle les embuscades'],['Pont de fortune','2 tours','traverser la rivière hors du gué'],['Camp fortifié','3 tours','autour du QG : DEF du QG +50 %'],['Chausse-trappes','1 tour','piège caché : la cavalerie perd des hommes et sa charge'],['Fosse camouflée','2 tours','piège caché : pertes et étourdi un tour'],['Éboulement','2 tours','piège caché sur une pente : grosses pertes']];
+// une action d'un homme clé bleu : vérifie qu'elle est possible et la compte
+function actionBleu(g){if(!turnMode||placing)return true;const no=m=>{toast(m,'#5a4a16');return false;};
+  if(phase!=='ordres'||cur!=='bleu')return no('Attends ton tour');if(g.stun>0)return no('Une armée étourdie ne peut rien jouer');
+  if(g.newTurn===turn)return no('Cette unité vient d\'être créée : elle joue au tour suivant');
+  if(g.acted!==turn&&actionsLeft()<=0)return no(`Plus d'action disponible ce tour (${maxActions()} au maximum)`);g.acted=turn;return true;}
+// se replier : marcher vers son QG (et s'arrêter devant), ou vers l'arrière de sa moitié de carte s'il est tombé
+function repliVers(g){const qg=regs.find(e=>e.side===g.side&&e.kind==='qg');g.chase=null;
+  if(qg){const d=Math.hypot(qg.x-g.x,qg.z-g.z)||1,k=Math.max(0,(d-(qg.hd+g.hd+25))/d);g.tx=g.x+(qg.x-g.x)*k;g.tz=g.z+(qg.z-g.z)*k;}
+  else{g.tx=g.x;g.tz=g.side==='bleu'?D/2-60:-D/2+60;}}
+function doAct(g,a){if(g.side!=='bleu'||ended)return;
+  if(a==='repli'){if(!actionBleu(g))return;repliVers(g);toast(`${g.name} se replie vers le QG`,'#3a4a5a');}
+  else if(a==='stop'){if(!actionBleu(g))return;g.tx=null;g.chase=null;}
+  updatePaths();drawReach();renderSel(true);renderTour();renderArmy(true);}
+// retraite générale (règles) : l'adversaire accepte = ta défaite ; il refuse = la bataille continue, et si tu ramènes tous tes soldats au QG, c'est une défaite légère
+let retraite=false;
+const forceCamp=side=>regs.filter(g=>g.side===side).reduce((s,g)=>s+puissanceBase(combatObj(g)),0);
+function retraiteGenerale(){if(ended||placing)return;
+  if(retraite){toast('L\'adversaire a refusé : ramène tous tes soldats au QG pour une défaite légère','#5a4a16');return;}
+  if(!window.confirm('Demander la retraite générale ? Si l\'adversaire accepte, tu perds la bataille (la mise, et tu es pillé).'))return;
+  const accepte=forceCamp('rouge')>=forceCamp('bleu')*.9||pointsOf('rouge')>pointsOf('bleu');   // l'IA accepte quand elle n'est pas en train de perdre
+  if(accepte){finish('rouge','Retraite générale acceptée par l\'adversaire : tu perds la bataille (la mise), et tu es pillé.');return;}
+  retraite=true;regs.forEach(g=>{if(g.side==='bleu'&&g.kind!=='qg'&&!(g.stun>0))repliVers(g);});updatePaths();
+  toast('L\'adversaire refuse la retraite générale : la bataille continue. Tes armées marchent vers le QG ; quand tous tes soldats y sont, c\'est une défaite légère (tu sauves tes hommes).','#5a1a16');renderCamp(true);}
+function checkRetraite(){if(!retraite||ended)return;const qg=regs.find(g=>g.side==='bleu'&&g.kind==='qg');if(!qg)return;
+  if(regs.filter(g=>g.side==='bleu'&&g.kind!=='qg').every(g=>gap(g,qg)<60))finish('rouge','Défaite légère : tous tes soldats sont rentrés au QG. Tu perds la mise mais tu sauves tes hommes (tu es quand même pillé).');}
 function renderActions(force){let h='';const list=selected;
   if(!list.length)h=`<div class="sec"><p>Choisis une armée (clic gauche, ou touches <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd>…) pour voir tout ce qu'elle peut faire.</p></div>`;
   else if(list.length===1&&list[0].side!=='bleu')h=sec('Armée ennemie','<p>Choisis une de tes armées, puis clic droit sur celle-ci pour marcher sur elle et l\'attaquer.</p>');
@@ -1096,7 +1122,7 @@ function renderActions(force){let h='';const list=selected;
   else{const g=list[0],qg=g.kind==='qg',gm=g.kind==='gm',a=Math.floor(g.aura||0);
     const etat=g.stun>0?'<span class="warn">Étourdi : ne peut rien jouer</span>':g.newTurn===turn?'Unité toute neuve : elle joue au tour suivant':!turnMode||placing?'':cur!=='bleu'||phase!=='ordres'?'Attends ton tour':g.acted===turn?'<span class="ok">Ordre donné ce tour</span> (le changer ne coûte rien)':actionsLeft()>0?`${actionsLeft()} action(s) restante(s) ce tour`:'<span class="warn">Plus d\'action ce tour</span>';
     h=(etat?`<div class="sec"><p>${etat}</p></div>`:'')
-      +sec('Mouvement',`<p>${qg?'<b>Clic droit</b> sur le terrain : déplacer le QG (lentement).':'<b>Clic droit</b> sur le terrain : marcher. Sur une armée rouge : l\'attaquer. Dans l\'autre sens : se replier.'}</p><span class="k">Portée ce tour : ${fmt(reachOf(g))} m (cercle vert)${g.tx!==null?` · arrivée dans ${Math.max(1,Math.ceil(Math.hypot(g.tx-g.x,g.tz-g.z)/reachOf(g)))} tour(s)`:''}</span>`,'1 action')
+      +sec('Mouvement',`<p>${qg?'<b>Clic droit</b> sur le terrain : déplacer le QG (lentement).':'<b>Clic droit</b> sur le terrain : marcher. Sur une armée rouge : l\'attaquer. Dans l\'autre sens : se replier.'}</p><span class="row">${qg?'':'<button type="button" data-act="repli" title="Marche vers ton QG ; quitter le contact, c\'est se replier">Se replier vers le QG</button>'}<button type="button" data-act="stop" title="Annule la marche : l\'armée reste sur place et attend l\'ennemi">S'arrêter (attendre en défense)</button></span><span class="k">Portée ce tour : ${fmt(reachOf(g))} m (cercle vert)${g.tx!==null?` · arrivée dans ${Math.max(1,Math.ceil(Math.hypot(g.tx-g.x,g.tz-g.z)/reachOf(g)))} tour(s)`:''}</span>`,'1 action')
       +(!qg&&!gm?sec('Formation',formButtons([g])+`<div class="row">${FUTURE_FORMS.map(([n,t])=>soon(n,t)).join('')}</div>`,'ordre rapide'):'')
       +(!qg?sec('Attaque spéciale',`<div class="jauge" title="Jauge d'Aura : ${a}/100"><i style="width:${a}%"></i></div><span class="k">Jauge d'Aura ${a}/100 · +${f1((g.auraStat||REGLAGES.auraDefaut)/300)} par tour, ×${f1(REGLAGES.auraCombat)} au combat, +${fmt(REGLAGES.auraTombe)} quand un homme clé ennemi tombe</span>${a>=100?`<span class="row"><button type="button" data-special="1">Lancer : ATK +${fmt(REGLAGES.auraBonus)} % pendant ${fmt(REGLAGES.auraDuree)} tours${gm?', étourdit ses adversaires':''}</button></span>`:''}`,'ordre rapide'):'')
       +(!gm?sec('Hommes',`<span class="row"><button type="button" data-split="1">Séparer / transférer</button></span><span class="k">Créer une unité (ordre lourd) ou donner des hommes à une armée proche ou au QG (ordre rapide).</span>`):'')
@@ -1113,7 +1139,9 @@ function renderCamp(force){
   const h=`<div class="sec carte"><div class="portrait" aria-hidden="true">${GENERAUX.bleu[0]}</div><div><b class="nom">${GENERAUX.bleu}</b><span class="k">Général · ${qg?'dans son quartier général':'tombé'}</span>${q?`<span class="k">Garde ${fmtMen(q.garnison)} · gardes rapprochés ${q.gardes}/3 · PV ${fmtMen(q.pv)}/${fmtMen(qg.pvGen)}</span>`:''}</div></div>`
     +sec('Score',`<div class="tiles">${tile(pointsOf('bleu'),'tes points','Général 3, chaque homme clé 1. À 0, la bataille est perdue.')}${tile(pointsOf('rouge'),'points adverses')}${tile(placing?'—':turn,'tour')}${tile(fmtMen(kills),'ennemis hors de combat')}${tile(fmtMen(lost),'tes pertes')}${tile(isNight()?'Nuit':'Jour',METEO_NOM[meteo]+(boue>0&&meteo!=='pluie'?', boue':''))}</div>`)
     +sec('Ressources',`<div class="tiles">${tile(fmtMen(men),'hommes')}${tile(vivresTours('bleu'),'tours de vivres','Sans vivres, chaque armée perd des hommes à chaque tour.')}${tile(turnMode&&!placing?`${actionsLeft()}/${maxActions()}`:'—','actions')}${tile(cnt('inf'),'fantassins')}${tile(cnt('cav'),'cavaliers')}${tile(cnt('arc'),'archers')}${tile(cnt('ecl'),'éclaireurs')}${tile(cnt('esp'),'espions')}${tile(mine.filter(g=>g.kind==='gm').length,'guerriers mystiques')}${tile(0,'médecins','Soignants : bientôt')}${tile(0,'architectes','Constructions et pièges : bientôt')}${tile(RESERVE.bleu.length,'chefs au QG',RESERVE.bleu.join(', ')||'aucun')}</div><span class="k">${CONF.enjeu.mise?`Enjeu : ${esc(CONF.enjeu.texte||'une mise')}`:'Bataille amicale : pas d\'enjeu'}</span>`);
-  if(force||h!==lastCamp){campEl.innerHTML=h;lastCamp=h;}}
+  const hr=h+sec('Retraite générale',`<span class="row"><button type="button" data-act="retraite"${ended||placing?' disabled':''}>${retraite?'Retraite refusée : rentre au QG':'Demander la retraite générale'}</button></span><span class="k">L'adversaire accepte : tu perds la bataille. Il refuse : la bataille continue, et ramener tous tes soldats au QG donne une défaite légère (hommes sauvés).</span>`);
+  if(force||hr!==lastCamp){campEl.innerHTML=hr;lastCamp=hr;}}
+campEl.addEventListener('click',e=>{if(e.target.closest('[data-act="retraite"]'))retraiteGenerale();});
 // ---------- séparer une armée, transférer des hommes, regrouper (règles : créer une unité = ordre lourd ; transférer = ordre rapide) ----------
 const splitEl=document.getElementById('split');let splitFor=null,splitDests=[];
 const splitMax=g=>g.kind==='qg'?qgParts(g).garnison:g.men;
@@ -1414,7 +1442,7 @@ function endMove(t){
   combatRound(1,true);                 // le premier choc des armées qui viennent d'entrer au contact
   if(!ended)combatRound(1,false);      // puis tous les combats au contact, une fois (et les tirs du camp qui joue)
   if(!ended)finTour(cur);
-  checkTurnLimit();
+  checkTurnLimit();checkRetraite();
   if(ended){renderTour();return;}
   cur=cur==='bleu'?'rouge':'bleu';turn++;
   const msgs=debutTour(cur);
@@ -1475,7 +1503,7 @@ function finish(winner,why){
 // les armées de départ : composition choisie dans « Nouvelle bataille », placées par planSide()
 const ARMEES=PLAN;
 function deploy(){
-  select([]);regs.slice().forEach(removeReg);NOTIFS.length=0;notEl.innerHTML='<p class="k">Rien pour l\'instant.</p>';allRegs.length=0;RESERVE.bleu.length=RESERVE.rouge.length=0;splitFor=null;floats.forEach(f=>f.el.remove());floats.length=0;
+  select([]);regs.slice().forEach(removeReg);NOTIFS.length=0;notEl.innerHTML='<p class="k">Rien pour l\'instant.</p>';allRegs.length=0;RESERVE.bleu.length=RESERVE.rouge.length=0;retraite=false;splitFor=null;floats.forEach(f=>f.el.remove());floats.length=0;
   ARMEES.forEach(o=>regiment(o.kind==='qg'?{...o,rows:Math.max(1,Math.ceil(REGLAGES.garnisonQG/HPS/o.cols))}:{...o}));known.clear();ended=false;finEl.hidden=true;combatAcc=0;
   turn=1;phase='ordres';phaseT=REGLAGES.dureeTour;cur='bleu';wasNight=false;meteo=METEOS[Math.floor(Math.random()*METEOS.length)];boue=meteo==='pluie'?Math.round(REGLAGES.boueTours):0;
   VIVRES.bleu=VIVRES.rouge=REGLAGES.vivres*1000;ambiance();startPlacement();regs.forEach(applyVis);renderArmy(true);
@@ -1561,6 +1589,7 @@ function renderLivret(){
   ${sec('Les ordres',[
     `<b>1 ordre par homme clé et par tour</b>, ${v('actionsMax')} au maximum. Le général compte : déplacer le QG coûte une action.`,
     'Changer l\'ordre d\'une armée déjà commandée ce tour ne coûte rien de plus.',
+    '<b>Se replier vers le QG</b> ou <b>s\'arrêter</b> (attendre en défense) : boutons du volet « Ordres », 1 action. <b>Retraite générale</b> (volet de gauche) : si l\'adversaire accepte, tu perds ; s\'il refuse, ramener tous tes soldats au QG donne une défaite légère.',
     '<b>Séparer / transférer</b> (bouton du panneau) : créer une nouvelle unité avec une partie des hommes et un chef libre (ordre lourd : l\'armée ne bouge plus ce tour, la nouvelle unité joue au tour suivant), ou donner des hommes à une armée du même type à moins de 100 m ou au QG (ordre rapide). Une armée qui donne tous ses hommes disparaît : son chef rentre au QG et compte toujours 1 point.',
     'Une <b>marche longue continue toute seule</b> aux tours suivants, sans coûter d\'action.',
     'Clic droit sur le terrain pour y aller, sur une armée ennemie pour marcher sur elle.',
