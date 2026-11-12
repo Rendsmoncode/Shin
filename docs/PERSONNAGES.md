@@ -74,7 +74,7 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 
 ## Généraux légendaires
 
-- Garp (One Piece), « Garp le Poing » (aussi mentor de Koby)
+- Garp (One Piece), « Le Héros » (aussi mentor de Koby)
 - Kanki, « L'Obscurité de Qin »
 - Abd el-Kader, « L'Émir »
 - Shaka Zulu, « La Corne du Buffle »
