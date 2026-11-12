@@ -376,13 +376,22 @@ Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de
   |---|---|---|
   | Égalité (même troupe, sans bonus) | 7 à 15 | 7 à 15 |
   | Un camp a +30 % (ATK et DEF) | 4 | 12 |
-  | Attaque de flanc | 8 | 14 |
-  | Flanc + 30 % de bonus | 4 | 26 |
+  | Attaque de flanc (×1,3) | 7 | 12 |
+  | Attaque de dos (×1,6) | 7 | 18 |
+  | Dos + 30 % de bonus | 4 | 31 |
   | Cavalerie lourde qui charge de l'infanterie légère | 7 | 77 |
 
   - **Durée** : à égalité, personne ne gagne (près de 300 tours) : c'est le **ravitaillement** qui oblige à bouger. Avec +30 %, il faut environ 85 tours ; en combinant flanc et bonus, environ 35 tours.
   - **Écrasement** : au **premier choc**, si une armée est **2,5 fois plus forte** que l'autre (force = hommes × racine de ATK × DEF, bonus compris), elle l'écrase d'un coup. Ça reste rare (environ 6 % des combats).
   - **Armée dispersée, selon l'END** : une armée tient tant qu'elle reste organisée, et c'est l'**END de son homme clé** qui décide. Elle est dispersée (détruite, son homme clé tombe) quand il lui reste moins de **15 % − END ÷ 100** de ses hommes de départ (2 % au minimum). END 200 → 13 % ; END 500 → 10 % ; END 850 → 6,5 % ; END 1 000 → 5 %.
+- ✅ **Les chiffres qui manquaient** (12/11, proposés par Claude, à régler par simulation) :
+  - **Flanc et dos** (catégorie Situation) : de flanc, attaque ×1,3 ; de dos, ×1,6. Une armée prise de flanc ou de dos **se retourne au bout de 2 tours** face à son principal assaillant (sauf le carré, qui n'a ni flanc ni dos).
+  - **Charge** (premier choc seulement) : cavalerie lourde ×1,5, cavalerie légère et coin ×1,3 ; +20 % en plus en descente. Les pieux, la palissade, la phalange de face et les chausse-trappes l'annulent.
+  - **Tir des archers** : même calcul que le corps à corps (1,5 % × archers × (ATK ÷ DEF)²), à portée (150 m, +30 % depuis une colline). La cible ne riposte pas, sauf si elle a aussi des archers à portée.
+  - **Ravitaillement** : chaque camp part avec des vivres pour **60 tours pour 1 000 hommes** (2 000 hommes → 30 tours ; 500 → 120). Sans vivres, chaque armée perd **2 % de ses hommes par tour**. En simulation, deux armées parfaitement égales ne peuvent pas tenir au-delà d'environ 130 tours : il faut agir avant.
+  - **Jauge d'Aura** : elle va de 0 à 100. Elle monte de **Aura ÷ 300 par tour**, ×1,5 quand l'armée du personnage combat, +10 quand un homme clé ennemi tombe. Une Aura de 800 remplit la jauge en 25 à 37 tours : 1 ou 2 attaques spéciales par bataille, comme prévu.
+  - **Recharge des stratégies** : **10 tours**, 1 tour de moins par tranche de 200 d'INT du général (INT 800 → 6 tours).
+  - **Mort d'un sous-général** : ses hommes sont étourdis **2 tours**.
 - ✅ **Ni moral ni fatigue** (règle déjà fixée, section 6) : aucun effet ne parle de fuite, de moral ou de fatigue. Une armée se bat à 100 % jusqu'à être dispersée.
 - ✅ **Étourdi** (12/11) : une armée ou un personnage étourdi **ne peut rien jouer pendant X tours** (ni bouger, ni ordre). S'il est attaqué, le combat se calcule quand même, avec **DEF −10 %**.
 - ✅ **Se battre en personne** (12/11) : les stats ATK, DEF et END d'un personnage servent dans trois cas :
@@ -479,7 +488,7 @@ Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de
   | **Terre brûlée** | n'importe quelle armée, sur son propre terrain | une zone devient impraticable ; sur la carte du monde, l'ennemi qui la traverse perd des hommes faute de nourriture | Vercingétorix (52 av. J.-C.), Koutouzov (1812) |
 
   - **Qui peut les utiliser** : comme les formations, certaines sont accessibles à tous si l'armée remplit la condition (embuscade, nuage de poussière, pieux, attaque de nuit) ; les autres sont des **stratégies spéciales** maîtrisées par certains généraux selon leur niveau et leur histoire (ex. Hannibal : feux trompeurs ; Zhuge Liang : ville vide ; Alexandre : marteau et enclume ; Gengis Khan et Subötaï : fausse retraite, tir en retraite ; Koutouzov : terre brûlée).
-  - **Usage limité** : une stratégie a un temps de recharge (piste : une fois tous les 3 tours) ou un nombre d'usages par bataille. L'**INT** du général renforce l'effet ou raccourcit la recharge.
+  - **Usage limité** : une stratégie a un temps de recharge (10 tours, raccourci par l'INT du général : voir « Les chiffres qui manquaient ») ou un nombre d'usages par bataille. L'**INT** renforce aussi l'effet.
   - ✅ **Chaque stratégie a au moins un contre** (colonne « Contre ») : certains jouent automatiquement (éclaireurs, espions, INT du général, formation), d'autres dépendent des choix du joueur (ne pas poursuivre, ne pas rester dans le gué, garder une réserve).
 - ✅ **Courbe progressive** : plus l'écart de puissance grandit, plus les pertes deviennent déséquilibrées, jusqu'à l'écrasement (pas de paliers brutaux).
 - ✅ **Hasard** : ±10 % sur le résultat d'un affrontement.
