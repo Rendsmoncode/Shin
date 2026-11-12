@@ -288,6 +288,9 @@ Raretés : rare et épique (environ 30 épiques). Les guerriers mystiques sont a
 ## Explorateurs
 
 - Leif Erikson
+- Pythéas (le Marseillais), Ibn Battuta, Zheng He, Marco Polo, Magellan, Amundsen, Shackleton, Aboubakri II, Cousteau
+- Avec la capacité Archéologue : Champollion, Howard Carter, Indiana Jones, Lara Croft, Nico Robin (One Piece)
+- Non retenus : Christophe Colomb, Cortés, Pizarro (massacres et esclavage), Armin.
 - ✅ Explorateur et Archéologue sont fusionnés : « Archéologue » est une capacité rare de certains explorateurs, qui permet de déterrer des trésors pendant les parties (soin, bonus temporaire, monstre allié).
 
 ## Généraux rares (à faire plus tard)
