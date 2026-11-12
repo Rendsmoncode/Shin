@@ -1387,6 +1387,7 @@ function endPlacement(){
 let turnMode=true,turn=1,phase='ordres',phaseT=REGLAGES.dureeTour,cur='bleu',wasNight=false;
 const VIVRES={bleu:0,rouge:0};
 const maxActions=()=>Math.min(REGLAGES.actionsMax,regs.filter(g=>g.side==='bleu').length);
+const reachOf=g=>REGLAGES.marcheTour*speedOf(g.kind)*formSpeed(g)*speedMeteo(g)/SPEED.inf;   // distance qu'une armée peut parcourir en un tour (sur terrain plat)
 const actionsLeft=()=>Math.max(0,maxActions()-regs.filter(g=>g.side==='bleu'&&g.acted===turn).length);
 // ---------- météo et nuit ----------
 const METEOS=['soleil','pluie','froid','brouillard'],METEO_NOM={soleil:'soleil',pluie:'pluie',froid:'froid',brouillard:'brouillard'};
