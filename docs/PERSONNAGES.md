@@ -30,7 +30,7 @@ Liste de travail des personnages du gacha. Stats et aptitudes à définir ensemb
 
 ## La fiche d'un personnage (validée le 12/11)
 
-Les fiches remplies sont dans `FICHES.md`.
+Les fiches remplies sont dans le jeu (onglet **Fiches**), fichier de référence `prototype/fiches/fiches.json` (voir `FICHES.md`).
 
 **Contenu d'une fiche** : nom, surnom, catégorie (général, soldat d'élite, soignant, espion, architecte, ingénieur, économiste, explorateur, guerrier mystique), rareté, stats (ATK, DEF, END, INT, VIT, Aura ; + soin pour les soignants), effets, formations et stratégies spéciales maîtrisées, liens.
 
