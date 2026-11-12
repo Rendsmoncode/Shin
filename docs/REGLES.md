@@ -165,7 +165,7 @@ Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de
     3. **Liens** : personnages réunis (ex. Thorfinn + Knut + Thorkell +50 %) ;
     4. **Effets** : cadeaux des mentors, effets des sauveurs, trésors, attaques spéciales ;
     5. **Situation** : terrain, formation, flanc ou dos, charge (déjà dans le prototype).
-  - **Plafond** : chaque catégorie plafonnée (piste : +100 % maximum), pour qu'aucune combinaison ne rende une armée invincible.
+  - ✅ **Pas de plafond** (12/11) : les bonnes combinaisons doivent récompenser le joueur. L'équilibre se règle par la **valeur des pourcentages** de chaque effet : c'est ce qui permet de contrôler la méta, de décider quelles combinaisons sont les meilleures, et d'ajouter de nouveaux éléments pour la rendre plus amusante.
   - Puis le **hasard de ±10 %**, et les pertes calculées comme dans le prototype (courbe progressive, écrasement à partir d'un rapport de 3).
   - **Les autres stats** : END réduit les pertes subies, INT renforce les stratégies et la vision, VIT la vitesse de déplacement, Aura les attaques spéciales.
   - Exemple : 1 000 fantassins → base 1 000. Général +20 %, quartier +15 %, lien +50 %, mentor +10 % → 1 000 × 1,2 × 1,15 × 1,5 × 1,1 ≈ **2 280**. En forêt (×1,2) → **2 730**, puis ±10 % de hasard.
@@ -193,7 +193,7 @@ Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de
 
   - ✅ **L'ascendant de Ri Boku** (12/11) : face à une armée commandée par un général de Qin (Ouki, Ousen, Kanki ; **pas Shin ni Kyoukai**), Ri Boku gagne un bonus (piste : attaque et défense +20 %). Historiquement, Li Mu a écrasé Huan Yi (Kanki) deux fois et Wang Jian (Ousen) n'a pu le vaincre qu'après son exécution. C'est le seul « ascendant » : les autres duels historiques (Scipion-Hannibal, Richard-Saladin…) ne sont pas assez nets. Pas de bonus de rivalité (supprimé le 12/11).
 
-- ❓ **Comment les bonus se combinent** : additions d'abord puis multiplications ? Les pourcentages de même type s'additionnent entre eux (+10 % et +20 % = +30 %) ou se multiplient (×1,1 × 1,2 = +32 %) ? Plafond éventuel ? (à fixer avec la formule de puissance, tâche 21)
+- ✅ **Comment les bonus se combinent** (12/11) : dans une catégorie, les pourcentages s'additionnent ; les catégories se multiplient entre elles ; pas de plafond (l'équilibre passe par la valeur des pourcentages).
 
 ## 7. Les généraux et les grades
 

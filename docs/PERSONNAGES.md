@@ -58,10 +58,9 @@ Liste de travail des personnages du gacha. Stats et aptitudes à définir ensemb
 - les bonus de terrain ou de formation vont dans **Situation**.
 
 **Limites** :
-- chaque catégorie est plafonnée (piste : +100 %) ;
+- **pas de plafond** (12/11) : les bonnes combinaisons sont récompensées ; l'équilibre se règle par la valeur des pourcentages, ce qui permet de contrôler la méta ;
 - deux effets **identiques** ne se cumulent pas (on garde le plus fort) ;
 - l'aptitude de leader ne touche que les soldats placés en dessous dans la hiérarchie (règle déjà fixée) ;
-- un bonus conditionnel reste modeste (piste : +30 % maximum).
 
 ## Raretés
 
