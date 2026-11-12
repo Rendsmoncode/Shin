@@ -1017,9 +1017,13 @@ function centerOn(list){
 // ---------- affichage des infos ----------
 // notifications (volet de droite) : tout ce qui se passe, le plus récent en haut ; clic sur une notification avec un lieu = y aller
 const NOTIFS=[],notEl=document.getElementById('notifs');
-function notify(msg,type='info',pos=null){const t0=typeof turn==='number'&&!placing?turn:null;if(NOTIFS.some(n=>n.t===t0&&n.msg===msg))return;NOTIFS.unshift({t:typeof turn==='number'&&!placing?turn:null,msg,type,pos});if(NOTIFS.length>80)NOTIFS.pop();
-  notEl.innerHTML=NOTIFS.map((n,i)=>`<div class="n ${n.type}"${n.pos?` data-n="${i}" title="Clic : y aller"`:''}><b>${n.t?'T'+n.t:''}</b><span>${String(n.msg).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'})[c])}</span></div>`).join('');}
-notEl.innerHTML='<p class="k">Rien pour l\'instant.</p>';
+function notify(msg,type='info',pos=null){const t0=typeof turn==='number'&&!placing?turn:null;if(NOTIFS.some(n=>n.t===t0&&n.msg===msg))return;NOTIFS.unshift({t:t0,msg,type,pos,at:performance.now()});if(NOTIFS.length>80)NOTIFS.pop();lastNotifs='';drawNotifs();}
+// les notifications disparaissent seules au bout de quelques secondes (4 au plus à l'écran) ; sans notification, la section se cache
+const NOTIF_DUREE=12000;let lastNotifs='';
+function drawNotifs(){const now=performance.now(),vis=NOTIFS.filter(n=>now-n.at<NOTIF_DUREE).slice(0,4);notEl.parentElement.hidden=!vis.length;
+  const h=vis.map(n=>{const i=NOTIFS.indexOf(n),op=Math.min(1,(NOTIF_DUREE-(now-n.at))/2000);return`<div class="n ${n.type}" style="opacity:${op.toFixed(2)}"${n.pos?` data-n="${i}" title="Clic : y aller"`:''}><b>${n.t?'T'+n.t:''}</b><span>${String(n.msg).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'})[c])}</span></div>`;}).join('');
+  if(h!==lastNotifs){notEl.innerHTML=h;lastNotifs=h;}}
+notEl.parentElement.hidden=true;
 notEl.addEventListener('click',e=>{const d=e.target.closest('[data-n]');if(!d)return;const n=NOTIFS[+d.dataset.n];if(n&&n.pos)lookAt(n.pos.x,n.pos.z);});
 const selEl=document.getElementById('sel'),toastEl=document.getElementById('toast');let toastT=0,toastAt=0,lastSel='';
 function toast(msg,bg,pos){const nm=String(msg).replace(/^À toi de jouer( · )?/,'');if(bg!=='#5a4a16'&&nm)notify(nm,bg==='#5a1a16'?'bad':bg==='#1d4a2a'?'good':bg==='#3a4a5a'?'info':'alerte',pos);const now=performance.now();if(toastEl.classList.contains('on')&&now-toastAt<400&&toastEl.textContent)msg=toastEl.textContent+' · '+msg;toastAt=now;toastEl.textContent=msg;toastEl.style.background=bg?bg+'ee':'';toastEl.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>toastEl.classList.remove('on'),3200);}
@@ -1503,7 +1507,7 @@ function finish(winner,why){
 // les armées de départ : composition choisie dans « Nouvelle bataille », placées par planSide()
 const ARMEES=PLAN;
 function deploy(){
-  select([]);regs.slice().forEach(removeReg);NOTIFS.length=0;notEl.innerHTML='<p class="k">Rien pour l\'instant.</p>';allRegs.length=0;RESERVE.bleu.length=RESERVE.rouge.length=0;retraite=false;splitFor=null;floats.forEach(f=>f.el.remove());floats.length=0;
+  select([]);regs.slice().forEach(removeReg);NOTIFS.length=0;lastNotifs='';drawNotifs();allRegs.length=0;RESERVE.bleu.length=RESERVE.rouge.length=0;retraite=false;splitFor=null;floats.forEach(f=>f.el.remove());floats.length=0;
   ARMEES.forEach(o=>regiment(o.kind==='qg'?{...o,rows:Math.max(1,Math.ceil(REGLAGES.garnisonQG/HPS/o.cols))}:{...o}));known.clear();ended=false;finEl.hidden=true;combatAcc=0;
   turn=1;phase='ordres';phaseT=REGLAGES.dureeTour;cur='bleu';wasNight=false;meteo=METEOS[Math.floor(Math.random()*METEOS.length)];boue=meteo==='pluie'?Math.round(REGLAGES.boueTours):0;
   VIVRES.bleu=VIVRES.rouge=REGLAGES.vivres*1000;ambiance();startPlacement();regs.forEach(applyVis);renderArmy(true);
@@ -1879,7 +1883,7 @@ function loop(now){const dt=Math.min(.1,(now-last)/1000),t=now/1000;last=now;
     else if(ended){for(const g of regs)if(g.contact)place(g,t);}
     else if(turnMode)turnTick(dt,t);
     else{for(const g of regs){if(g.side==='rouge')ai(g,dt);const was=g.moving;step(g,dt);if(g.moving||was||g.contact)place(g,t);}combatTick(dt);}
-    if((acc+=dt)>.2){acc=0;updatePaths();renderCamp(false);updateFog();renderStatus();renderSel(false);renderTour();renderArmy(false);
+    if((acc+=dt)>.2){acc=0;updatePaths();renderCamp(false);drawNotifs();updateFog();renderStatus();renderSel(false);renderTour();renderArmy(false);
       if((shAcc+=1)>=10){shAcc=0;renderer.shadowMap.needsUpdate=true;}
       updatePaths();}
   }catch(err){showErr(err);}
