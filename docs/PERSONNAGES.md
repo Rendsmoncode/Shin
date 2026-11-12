@@ -74,6 +74,7 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 
 ## Généraux légendaires
 
+- Garp (One Piece), « Garp le Poing » (aussi mentor de Koby)
 - Kanki, « L'Obscurité de Qin »
 - Abd el-Kader, « L'Émir »
 - Shaka Zulu, « La Corne du Buffle »
@@ -151,8 +152,8 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 ### Mentors du tutoriel (un par joueur)
 
 - Le créateur du jeu : **Ouki** (Kingdom), le mentor de Shin
-- Mathieu : **Garp** (One Piece), le mentor de Koby
-- Nicolas : **le Chevalier squelette** (Berserk), qui sauve Guts pendant l'Éclipse et le guide ensuite par ses conseils. Mentor mystérieux (personnage non jouable dans ce rôle). Griffith n'est pas son mentor (c'est son rival et frère d'armes) : il est retiré du gacha et devient l'un des grands méchants (voir `LORE.md`).
+- Mathieu : **Garp** (One Piece), le mentor de Koby. Il est aussi tirable au gacha (général légendaire).
+- Nicolas : **le Chevalier squelette** (Berserk), qui sauve Guts pendant l'Éclipse et le guide ensuite par ses conseils. Mentor mystérieux. Il est aussi tirable au gacha (guerrier mystique). Griffith n'est pas son mentor (c'est son rival et frère d'armes) : il est retiré du gacha et devient l'un des grands méchants (voir `LORE.md`).
 - 💡 Idée : le mentor tombe à la fin du tutoriel ou à la première guerre, tué par un lieutenant du grand méchant ; le joueur hérite de son arme ou de son titre.
 
 - 💡 Idée de personnage rare : Adolphe Sax, inventeur du saxophone, qui l'a créé pour les musiques militaires (bonus aux troupes)
@@ -196,6 +197,7 @@ Deux généraux invaincus, absents de la légende des 7, uniques dans tout le je
 
 ## Guerriers mystiques
 
+- Le Chevalier squelette (Berserk), « Le Roi sans tête » (aussi mentor de Guts)
 - Miyamoto Musashi, « Le Saint du sabre »
 - Sasaki Kojirō, « L'Hirondelle »
 - Vercingétorix, « Le Rempart de la Gaule »

@@ -69,7 +69,7 @@ En fonction du choix du joueur, des guerriers différents apparaîtront.
 
 - ✅ **Les joueurs sont eux-mêmes** (Ayoub, Mathieu, Nicolas). En arrivant en ville depuis l'extérieur, l'**âme d'un personnage de fiction s'est liée à chacun** : Shin pour Ayoub, Koby pour Mathieu, Guts pour Nicolas. Ils sont eux et leur personnage à la fois.
 - ✅ **Ceux qui tirent les ficelles** (pour l'instant) : une **alliance entre Imu, Qin Shi Huang et Griffith**.
-- ✅ **Le cadeau du mentor** est un **objet** (guandao, Haki de l'armement, armure du Berserker). Il arrive quand les 3 joueurs débloquent le **mode guerre à 500 contre 500**. Il **débloque une nouvelle fiche** du personnage (l'épique ou la légendaire, ❓ à choisir) et donne un **léger bonus**, sans plus (12/11).
+- ✅ **Le cadeau du mentor** est un **objet** (guandao, Haki de l'armement, armure du Berserker). Il arrive quand les 3 joueurs débloquent le **mode guerre à 500 contre 500**. Il **débloque la fiche épique** du personnage et donne un **léger bonus**, sans plus (12/11).
 - ✅ **Quartiers** : seulement quelques quartiers neutres au début, pour aider à démarrer. Tous les autres sont **dirigés par un tyran**, qu'il faut battre pour prendre le quartier.
 
 ## Points à préciser (notés par Claude)

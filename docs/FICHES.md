@@ -12,7 +12,7 @@
 
 ## Évolutions de Shin, Koby et Guts (SECRET : ne rien en mettre dans le jeu)
 
-Dans le jeu, chacun n'a que sa **fiche de base** (commun), sans aucun indice qu'il évolue. Chaque évolution est une **nouvelle fiche** qui se débloque plus tard (seuils d'XP et de soldats ; l'**objet du mentor** débloque soit la fiche épique, soit la légendaire, ❓ à choisir). Chaque fiche reprend ce qui précède et ajoute ce qui suit (piste de travail, chiffres indicatifs).
+Dans le jeu, chacun n'a que sa **fiche de base** (commun), sans aucun indice qu'il évolue. Chaque évolution est une **nouvelle fiche** qui se débloque plus tard (seuils d'XP et de soldats ; l'**objet du mentor** débloque la **fiche épique**). Chaque fiche reprend ce qui précède et ajoute ce qui suit (piste de travail, chiffres indicatifs).
 
 ### Shin
 
@@ -46,7 +46,7 @@ Dans le jeu, chacun n'a que sa **fiche de base** (commun), sans aucun indice qu'
 
 ### Les objets des mentors
 
-Reçus au déblocage du 500 contre 500. Un objet **débloque une fiche** (l'épique ou la légendaire, ❓) et donne seulement un **léger bonus** : il ne doit pas être trop fort, puisqu'il sert déjà à débloquer la fiche.
+Reçus au déblocage du 500 contre 500. Un objet **débloque la fiche épique** et donne seulement un **léger bonus** : il ne doit pas être trop fort, puisqu'il sert déjà à débloquer la fiche.
 
 | Objet | Pour | Léger bonus (piste) |
 |---|---|---|
