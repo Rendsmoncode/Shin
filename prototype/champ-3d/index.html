@@ -360,7 +360,8 @@ const REGLAGES_DEFAUT={
   forceGeneral:50,     // au combat, le général se bat comme ce nombre d'hommes
   defenseQG:2,         // le quartier général se défend mieux (multiplie son ATK et sa DEF)
   vitesseQG:.25,       // vitesse du quartier général par rapport à l'infanterie (règles : lentement)
-  vueQG:250            // le QG ennemi n'est repéré que par des soldats à moins de cette distance
+  vueQG:250,           // le QG ennemi n'est repéré que par des soldats à moins de cette distance
+  tailleCarte:1        // pour les tests : multiplie la taille de la carte (règles : ×1, taille selon l'effectif) ; la page se recharge
 };
 // pour le panneau : [clé, nom affiché, unité, minimum, maximum, pas, explication]
 const REGLAGES_INFO=[
@@ -451,7 +452,9 @@ const REGLAGES_INFO=[
     ['forceGeneral','Force du général','hommes',0,1000,1,'Au combat, le général se bat comme ce nombre d\'hommes (ses PV ne servent qu\'à encaisser les coups).'],
     ['defenseQG','Défense du QG','×',.1,5,.05,'Multiplie l\'ATK et la DEF du quartier général. Il n\'est jamais écrasé d\'un coup : il résiste un temps.'],
     ['vitesseQG','Vitesse du QG','× infanterie',.05,1,.05,'Vitesse du quartier général par rapport à l\'infanterie.'],
-    ['vueQG','QG ennemi repéré à','mètres',50,1000,10,'Le quartier général ennemi n\'est visible que si un de tes soldats est à moins de cette distance (et le voit).']]]
+    ['vueQG','QG ennemi repéré à','mètres',50,1000,10,'Le quartier général ennemi n\'est visible que si un de tes soldats est à moins de cette distance (et le voit).']]],
+  ['Carte',[
+    ['tailleCarte','Taille de la carte','×',.5,2,.25,'Pour tester : multiplie la largeur et la profondeur de la carte (mêmes pentes, même rivière). Règles : ×1, la taille dépend de l\'effectif. La page se recharge.']]]
 ];
 const REGLAGES={...REGLAGES_DEFAUT};
 try{const sv=JSON.parse(localStorage.getItem('shin-reglages-combat-2')||'{}');for(const k in REGLAGES_DEFAUT)if(typeof sv[k]==='number'&&isFinite(sv[k]))REGLAGES[k]=sv[k];}catch(e){}
@@ -502,7 +505,7 @@ const HPS=BIG>=3000?4:2;      // hommes par soldat affiché (règles : 2, régla
 
 // ---------- terrain (mètres) ----------
 // le relief est dessiné pour la grande carte (3 km × 2 km) ; une carte plus petite en est une réduction, avec les mêmes pentes
-const W=CARTE.W,D=CARTE.D,KS=W/3000,SX=Math.round(W/5),SZ=Math.round(D/5),WATER=-8.5*KS;
+const TC=Math.max(.5,Math.min(2,REGLAGES.tailleCarte||1)),W=Math.round(CARTE.W*TC),D=Math.round(CARTE.D*TC),KS=W/3000,SX=Math.round(W/5),SZ=Math.round(D/5),WATER=-8.5*KS;
 const KX=1600/3000,KZ=1000/2000;                         // le relief d'origine est étiré sur la grande carte
 const riverX0=z=>(110+75*Math.sin(z*KZ/170)+25*Math.sin(z*KZ/53))/KX;
 function height0(x,z){
@@ -513,6 +516,11 @@ function height0(x,z){
   h+=sm(-260,-480,v)*(52+fbm(x/170,z/170)*30);           // crête au fond
   const farm=sm(150,330,v); h=h*(1-farm*.75);            // plaine au premier plan
   const d=Math.abs(x-riverX0(z));
+  // contreforts au pied des montagnes : collines, crêtes et cols près des bords (les zones de départ restent dégagées)
+  const e=Math.min(1500-Math.abs(x),1000-Math.abs(z));
+  if(e<430){const n=fbm(x/210+31,z/210+17,4),r=1-Math.abs(2*fbm(x/330+7,z/330+51,3)-1);
+    const dep=Math.max(sm(500,580,z)*sm(-1420,-1330,x)*sm(1420,1330,x),sm(-250,-310,z)*sm(-800,-740,z)*sm(-1350,-1270,x)*sm(380,300,x));
+    h+=(sm(430,70,e)*(10+80*sm(.38,.72,n)*r)+sm(100,0,e)*(28+34*n))*(1-dep)*sm(50,200,d);}
   h-=5*sm(170,0,d); h-=11*sm(30,0,d);                     // vallée + lit de la rivière
   return h;
 }
@@ -541,7 +549,7 @@ function planSide(side,list){
 const PLAN=[...planSide('bleu',CONF.bleu),...planSide('rouge',CONF.rouge)];
 const BLUE_C=(()=>{const b=PLAN.filter(o=>o.side==='bleu'&&o.kind!=='qg');return[b.reduce((a,o)=>a+o.x,0)/b.length,b.reduce((a,o)=>a+o.z,0)/b.length];})();
 {const km=v=>(v/1000).toLocaleString('fr-FR',{maximumFractionDigits:2});
-  document.getElementById('carte-info').textContent=`Carte ${CARTE.nom} (${km(W)} km × ${km(D)} km) · 1 soldat affiché = ${HPS} hommes`;}
+  document.getElementById('carte-info').textContent=`Carte ${CARTE.nom}${TC!==1?` ×${String(TC).replace('.',',')}`:''} (${km(W)} km × ${km(D)} km) · 1 soldat affiché = ${HPS} hommes`;}
 
 // ---------- brouillard de guerre : une grille de 10 m sur toute la carte ----------
 const FC=10,FW=W/FC,FD=D/FC;
@@ -567,20 +575,27 @@ function fogged(mat){
 
 const scene=new THREE.Scene();
 scene.background=new THREE.Color(0x9fb4c2);
-scene.fog=new THREE.Fog(0x9fb4c2,3400,7500);
+// brume du lointain : la zone jouable reste nette, les montagnes s'y fondent
+const FOG_N=Math.max(1500,1.1*W+100),FOG_F0=FOG_N+5000*Math.max(1,KS);
+scene.fog=new THREE.Fog(0x9fb4c2,FOG_N,FOG_F0);
 const renderer=new THREE.WebGLRenderer({antialias:true});
 renderer.setPixelRatio(Math.min(1.5,window.devicePixelRatio||1));
 renderer.outputEncoding=THREE.sRGBEncoding;
 renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap; renderer.shadowMap.autoUpdate=false; renderer.shadowMap.needsUpdate=true;   // ombres recalculées de temps en temps seulement
 document.getElementById('scene').appendChild(renderer.domElement);
 
-const camera=new THREE.PerspectiveCamera(40,1,1,12000);
+const camera=new THREE.PerspectiveCamera(40,1,1,14000);
 const controls=new THREE.MapControls(camera,renderer.domElement);
 controls.enableDamping=true; controls.dampingFactor=.08;
 controls.minDistance=40; controls.maxDistance=Math.max(1400,3200*KS);
-controls.minPolarAngle=.35; controls.maxPolarAngle=1.15;
+controls.minPolarAngle=.35; controls.maxPolarAngle=1.36;   // le ciel n'apparaît qu'en inclinant fort la vue
 controls.screenSpacePanning=false;
 controls.keyPanSpeed=30; controls.listenToKeyEvents(window);   // flèches du clavier
+// la caméra reste au-dessus de la zone jouable : le point visé ne sort pas de la carte, la caméra ne s'éloigne pas au-dessus des montagnes
+function clampCam(){const t=controls.target,c=camera.position,cl=(v,a)=>Math.max(-a,Math.min(a,v));
+  let dx=cl(t.x,W/2-20)-t.x,dz=cl(t.z,D/2-20)-t.z;t.x+=dx;t.z+=dz;c.x+=dx;c.z+=dz;
+  const mx=W/2+150*KS,mz=D/2+150*KS;c.x=cl(c.x,mx);c.z=cl(c.z,mz);
+  const inside=Math.abs(c.x)<W/2&&Math.abs(c.z)<D/2,gy=(inside?hAt(c.x,c.z):mtnY(c.x,c.z))+40;if(c.y<gy)c.y=gy;}
 function viewArmy(){camera.position.set(BLUE_C[0],300,BLUE_C[1]+480);controls.target.set(BLUE_C[0],0,BLUE_C[1]);controls.update();}
 function viewAll(){camera.position.set(0,300+1600*KS,200+1950*KS);controls.target.set(0,0,0);controls.update();}
 viewArmy();
@@ -622,8 +637,47 @@ const detail=new THREE.CanvasTexture(tc);detail.wrapS=detail.wrapT=THREE.RepeatW
 const ground=new THREE.Mesh(geo,fogged(new THREE.MeshLambertMaterial({vertexColors:true,map:detail})));
 ground.receiveShadow=true; scene.add(ground);
 
-// eau
-const water=new THREE.Mesh(new THREE.PlaneGeometry(W,D),fogged(new THREE.MeshPhongMaterial({color:0x3b6f86,transparent:true,opacity:.82,shininess:80,specular:0x99bbcc})));
+// ---------- décor : chaîne de hautes montagnes autour de la vallée (infranchissable, peu de triangles) ----------
+// anneaux qui suivent le bord de la carte : le premier passe sous le sol, puis la falaise, puis les sommets qui se perdent dans la brume
+const MH=650+600*KS;   // hauteur des grands sommets (mètres)
+function mtnY(x,z){   // hauteur des montagnes hors de la carte (même formule pour le décor et la mini-carte)
+  const bx=Math.max(-W/2,Math.min(W/2,x)),bz=Math.max(-D/2,Math.min(D/2,z)),d=Math.hypot(x-bx,z-bz),y0=height(bx,bz);
+  const n=fbm(x/900+71,z/900+13,4),rd=1-Math.abs(2*fbm(x/520+3,z/520+90,4)-1);
+  let y=y0+sm(0,45,d)*(70+60*n)*KS*1.6+sm(30,1400,d)*MH*(.35+.75*rd*rd+.25*n)+sm(1500,4500,d)*MH*.35;
+  if(Math.abs(bz)>=D/2-1){const dr=Math.abs(x-riverX(bz)),w=25*KS+d*.12;   // gorge où la rivière entre et sort
+    y+=(WATER-1.5-y)*sm(w*1.6,w*.6,dr)*sm(1700,500,d);}
+  return y;}
+const mtnCol=(y,slope,n)=>{const c=new THREE.Color(.36,.34,.30).lerp(new THREE.Color(.30,.38,.22),sm(.55,.3,slope)*sm(MH*.55,MH*.2,y));
+  return c.lerp(new THREE.Color(.92,.94,.97),sm(MH*.55,MH*.75,y+n*MH*.2)*sm(.95,.6,slope));};
+{const RD=[-30,0,12,30,60,110,190,300,460,680,980,1400,1950,2700,3700,5000],B=[],NB=[],step0=25;
+  const edge=(ax,az,bx,bz,nx,nz)=>{const L=Math.hypot(bx-ax,bz-az),n=Math.max(1,Math.round(L/step0));for(let i=0;i<n;i++){B.push([ax+(bx-ax)*i/n,az+(bz-az)*i/n]);NB.push([nx,nz]);}};
+  const corner=(cx,cz,a0)=>{for(let k=0;k<6;k++){const a=a0+k*Math.PI/12;B.push([cx,cz]);NB.push([Math.cos(a),Math.sin(a)]);}};
+  const w=W/2,h=D/2;
+  edge(-w,h,w,h,0,1);corner(w,h,Math.PI/2);edge(w,h,w,-h,1,0);corner(w,-h,0);edge(w,-h,-w,-h,0,-1);corner(-w,-h,-Math.PI/2);edge(-w,-h,-w,h,-1,0);corner(-w,h,Math.PI);
+  const nb=B.length,nr=RD.length,P=new Float32Array(nb*nr*3),idx=[];
+  for(let i=0;i<nb;i++)for(let k=0;k<nr;k++){const d=RD[k]*(k>4?Math.max(1,KS*1.2):1),x=B[i][0]+NB[i][0]*d,z=B[i][1]+NB[i][1]*d,o=(i*nr+k)*3;
+    P[o]=x;P[o+2]=z;P[o+1]=k===0?height(B[i][0],B[i][1])-30:k===1?height(B[i][0],B[i][1])-1.5:mtnY(x,z);}
+  for(let i=0;i<nb;i++){const j=(i+1)%nb;for(let k=0;k<nr-1;k++){const a=i*nr+k,b=j*nr+k;idx.push(a,b,a+1,b,b+1,a+1);}}
+  let g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(P,3));g.setIndex(idx);
+  g=g.toNonIndexed();g.computeVertexNormals();   // facettes : roche taillée
+  const p2=g.attributes.position,n2=g.attributes.normal,C=new Float32Array(p2.count*3);
+  for(let i=0;i<p2.count;i++){const c=mtnCol(p2.getY(i),1-n2.getY(i),fbm(p2.getX(i)/300,p2.getZ(i)/300,2)-.5);C[i*3]=c.r;C[i*3+1]=c.g;C[i*3+2]=c.b;}
+  g.setAttribute('color',new THREE.BufferAttribute(C,3));
+  const mtn=new THREE.Mesh(g,new THREE.MeshLambertMaterial({vertexColors:true}));mtn.receiveShadow=true;scene.add(mtn);}
+
+// ---------- ciel : dégradé et soleil, qui suivent la météo et la nuit ----------
+const SKY_U={top:{value:new THREE.Color(0x4f7fb4)},hor:{value:new THREE.Color(0x9fb4c2)},sunDir:{value:new THREE.Vector3(-1000,170,600).normalize()},
+  sunCol:{value:new THREE.Color(0xfff1d6)},sunVis:{value:1},sunSize:{value:1}};
+const sky=new THREE.Mesh(new THREE.SphereGeometry(12000,32,16),new THREE.ShaderMaterial({uniforms:SKY_U,side:THREE.BackSide,depthWrite:false,fog:false,
+  vertexShader:`varying vec3 vD;void main(){vD=normalize(position);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`,
+  fragmentShader:`uniform vec3 top,hor,sunCol;uniform vec3 sunDir;uniform float sunVis,sunSize;varying vec3 vD;
+    void main(){vec3 d=normalize(vD);float e=max(d.y,0.0);vec3 c=mix(hor,top,pow(smoothstep(0.0,0.55,e),.7));
+    float s=max(dot(d,normalize(sunDir)),0.0);c+=sunCol*sunVis*(pow(s,8.0)*.25+pow(s,90.0)*.35);
+    c=mix(c,sunCol,sunVis*smoothstep(1.0-.00012*sunSize,1.0-.00004*sunSize,s));gl_FragColor=linearToOutputTexel(vec4(c,1.0));}`}));
+sky.renderOrder=-1;sky.frustumCulled=false;scene.add(sky);
+
+// eau (elle déborde un peu pour remplir les gorges de la rivière)
+const water=new THREE.Mesh(new THREE.PlaneGeometry(W+3600*Math.max(1,KS*1.2),D+3600*Math.max(1,KS*1.2)),fogged(new THREE.MeshPhongMaterial({color:0x3b6f86,transparent:true,opacity:.82,shininess:80,specular:0x99bbcc})));
 water.rotation.x=-Math.PI/2; water.position.y=WATER; scene.add(water);
 
 // ---------- forêts ----------
@@ -1496,8 +1550,11 @@ function visionMult(g){const r=REGLAGES;return(isNight()||nuitLocale>=turn?1-r.n
 const inMud=(x,z)=>boue>0&&(hAt(x,z)<WATER+5*KS||[[0,0],[40,0],[-40,0],[0,40],[0,-40]].some(([a,b])=>forest[cellOf(x+a,z+b)]));
 const speedMeteo=g=>(inMud(g.x,g.z)?1-REGLAGES.boueVitesse/100:1)*(meteo==='froid'?1-REGLAGES.froidVitesse/100:1);
 function ambiance(){const n=isNight()||nuitLocale>=turn,m=meteo,col=new THREE.Color(m==='pluie'?0x7f8b93:m==='brouillard'?0xb9c0c4:m==='froid'?0xb7c7d6:0x9fb4c2);
-  if(n)col.multiplyScalar(.3);scene.background=col;scene.fog.color.copy(col);
-  scene.fog.near=m==='brouillard'?250:3400;scene.fog.far=m==='brouillard'?2200:7500;
+  const top=new THREE.Color(m==='pluie'?0x58626b:m==='brouillard'?0xa9b1b6:m==='froid'?0x7f9ec0:0x4f7fb4);
+  if(n){col.multiplyScalar(.3);top.setHex(0x0b1424);}scene.background=col;scene.fog.color.copy(col);
+  SKY_U.hor.value.copy(col);SKY_U.top.value.copy(top);SKY_U.sunCol.value.setHex(n?0xc9d4e6:m==='froid'?0xf4f6ff:0xfff1d6);SKY_U.sunSize.value=n?.6:1;
+  SKY_U.sunVis.value=m==='pluie'?0:m==='brouillard'?.15:n?.55:m==='froid'?.8:1;
+  scene.fog.near=m==='brouillard'?250:m==='pluie'?FOG_N*.6:FOG_N;scene.fog.far=m==='brouillard'?2200:m==='pluie'?FOG_F0*.7:FOG_F0;
   poolU.shade.value=n?.45:m==='soleil'?1:.85;sun.intensity=(n?.22:1)*(m==='soleil'?1.15:m==='froid'?.95:.7);hemi.intensity=n?.3:.65;}
 const vivresTours=side=>{const men=regs.filter(g=>g.side===side&&g.kind!=='gm').reduce((s,g)=>s+(g.kind==='qg'?qgParts(g).garnison:g.men),0);return men?Math.floor(VIVRES[side]/men):99;};
 // début du tour d'un camp : la météo peut changer, le jour ou la nuit, les effets « X tours », les jauges d'Aura montent
@@ -1821,10 +1878,13 @@ function buildReglages(){
     <div class="row"><button type="button" id="r-restart">Recommencer la bataille</button><button type="button" id="r-copy">Copier les valeurs</button><button type="button" id="r-reset">Valeurs de départ</button></div>`;
   RP.innerHTML=h;
   RP.querySelectorAll('input[data-k]').forEach(inp=>inp.addEventListener('input',()=>{const v=parseFloat(inp.value);if(!isFinite(v))return;
+    if(inp.dataset.k==='tailleCarte')return;   // appliqué à la validation (la page se recharge)
     REGLAGES[inp.dataset.k]=v;inp.classList.toggle('mod',v!==REGLAGES_DEFAUT[inp.dataset.k]);saveReglages();renderSel(true);}));
+  RP.querySelector('input[data-k="tailleCarte"]').addEventListener('change',e=>{const v=Math.max(.5,Math.min(2,parseFloat(e.target.value)||1));
+    if(v===REGLAGES.tailleCarte)return;REGLAGES.tailleCarte=v;saveReglages();location.reload();});
   document.getElementById('r-close').addEventListener('click',()=>toggleReglages(false));
   document.getElementById('r-restart').addEventListener('click',deploy);
-  document.getElementById('r-reset').addEventListener('click',()=>{Object.assign(REGLAGES,REGLAGES_DEFAUT);saveReglages();buildReglages();});
+  document.getElementById('r-reset').addEventListener('click',()=>{const t=REGLAGES.tailleCarte;Object.assign(REGLAGES,REGLAGES_DEFAUT);saveReglages();if(t!==REGLAGES.tailleCarte)location.reload();else buildReglages();});
   document.getElementById('r-copy').addEventListener('click',()=>{const txt='Réglages du combat : '+JSON.stringify(REGLAGES);
     (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(()=>toast('Valeurs copiées : colle-les dans un message','#1d4a2a'),()=>window.prompt('Copie ces valeurs :',txt));});
   document.getElementById('sim-go').addEventListener('click',runSim);
@@ -1867,6 +1927,16 @@ const mmBase=document.createElement('canvas');mmBase.width=SX;mmBase.height=SZ;
   g.fillStyle='#d9cdb3';g.fillRect(bx2-BL/10,bz2-1,BL/5,2);                  // pont
   g.fillStyle='#e07a4c';g.fillRect(fx2-2.5,fz2-1.5,5,3);               // ferme
 }
+// mini-carte complète : la carte au centre, la chaîne de montagnes autour (bande de 6 %)
+const MMK=1.12,WW=W*MMK,DD=D*MMK,mmFull=document.createElement('canvas');mmFull.width=Math.round(SX*MMK);mmFull.height=Math.round(SZ*MMK);
+{const g=mmFull.getContext('2d'),fw=mmFull.width,fh=mmFull.height,img=g.createImageData(fw,fh),toS=v=>255*Math.pow(Math.min(1,Math.max(0,v)),1/2.2),e=WW/fw;
+  const Y=new Float32Array(fw*fh),inMap=(x,z)=>Math.abs(x)<W/2&&Math.abs(z)<D/2;
+  for(let py=0;py<fh;py++)for(let px=0;px<fw;px++){const x=-WW/2+(px+.5)*e,z=-DD/2+(py+.5)*e;Y[py*fw+px]=inMap(x,z)?hAt(x,z):mtnY(x,z);}
+  for(let py=0;py<fh;py++)for(let px=0;px<fw;px++){const x=-WW/2+(px+.5)*e,z=-DD/2+(py+.5)*e;if(inMap(x,z))continue;
+    const i=py*fw+px,y=Y[i],sx=(Y[px<fw-1?i+1:i]-Y[px>0?i-1:i])/(2*e),sz=(Y[py<fh-1?i+fw:i]-Y[py>0?i-fw:i])/(2*e);
+    const shade=Math.min(1.3,Math.max(.45,1+(sx*.7-sz*.4)*.8)),c=mtnCol(y,Math.min(1,Math.hypot(sx,sz)*.5),0),o=i*4;
+    img.data[o]=toS(c.r*shade);img.data[o+1]=toS(c.g*shade);img.data[o+2]=toS(c.b*shade);img.data[o+3]=255;}
+  g.putImageData(img,0,0);g.drawImage(mmBase,(fw-fw/MMK)/2,(fh-fh/MMK)/2,fw/MMK,fh/MMK);}
 // brouillard de la mini-carte : 1 pixel par case de 10 m, mis à jour avec celui de la scène
 const mmFog=document.createElement('canvas');mmFog.width=FW;mmFog.height=FD;
 const mmFogCtx=mmFog.getContext('2d'),mmFogImg=mmFogCtx.createImageData(FW,FD);
@@ -1875,9 +1945,9 @@ function mmFogUpdate(){for(let i=0;i<FW*FD;i++)mmFogImg.data[i*4+3]=(1-disp[i])*
 const mmRay=new THREE.Raycaster(),mmNdc=new THREE.Vector2();
 function drawMini(){
   const cw=mm.width,ch=mm.height;if(!cw||mmWrap.hidden)return;
-  const u=cw/Math.max(1,mm.clientWidth),kx=cw/W,kz=ch/D,X=x=>(x+W/2)*kx,Z=z=>(z+D/2)*kz;
-  mmx.imageSmoothingEnabled=true;mmx.drawImage(mmBase,0,0,cw,ch);
-  if(fogOn)mmx.drawImage(mmFog,0,0,cw,ch);
+  const u=cw/Math.max(1,mm.clientWidth),kx=cw/WW,kz=ch/DD,X=x=>(x+WW/2)*kx,Z=z=>(z+DD/2)*kz;
+  mmx.imageSmoothingEnabled=true;mmx.drawImage(mmFull,0,0,cw,ch);
+  if(fogOn)mmx.drawImage(mmFog,X(-W/2),Z(-D/2),W*kx,D*kz);
   // trajets des armées bleues et point d'arrivée
   for(const g of regs)if(g.side==='bleu'&&g.tx!==null){
     mmx.setLineDash([4*u,3*u]);mmx.lineWidth=1.2*u;mmx.strokeStyle='rgba(255,255,255,.75)';
@@ -1898,7 +1968,7 @@ function drawMini(){
   mmx.closePath();mmx.fillStyle='rgba(255,255,255,.10)';mmx.fill();mmx.lineWidth=1.5*u;mmx.strokeStyle='rgba(255,255,255,.9)';mmx.stroke();
   if(placing){const z=ZONES.bleu;mmx.setLineDash([5*u,3*u]);mmx.lineWidth=1.5*u;mmx.strokeStyle='#6fa3ec';mmx.strokeRect(X(z.x0),Z(z.z0),X(z.x1)-X(z.x0),Z(z.z1)-Z(z.z0));mmx.setLineDash([]);}
 }
-function mmPoint(e){const r=mm.getBoundingClientRect();return[Math.max(-W/2,Math.min(W/2,((e.clientX-r.left)/r.width-.5)*W)),Math.max(-D/2,Math.min(D/2,((e.clientY-r.top)/r.height-.5)*D))];}
+function mmPoint(e){const r=mm.getBoundingClientRect();return[Math.max(-W/2,Math.min(W/2,((e.clientX-r.left)/r.width-.5)*WW)),Math.max(-D/2,Math.min(D/2,((e.clientY-r.top)/r.height-.5)*DD))];}
 function lookAt(x,z){const off=camera.position.clone().sub(controls.target);controls.target.set(x,Math.max(hAt(x,z),0),z);camera.position.copy(controls.target).add(off);controls.update();}
 let mmDrag=false;
 mm.addEventListener('pointerdown',e=>{e.preventDefault();const [x,z]=mmPoint(e);
@@ -2002,7 +2072,7 @@ function loop(now){const dt=Math.min(.1,(now-last)/1000),t=now/1000;last=now;
       if((shAcc+=1)>=10){shAcc=0;renderer.shadowMap.needsUpdate=true;}
       updatePaths();}
   }catch(err){showErr(err);}
-  controls.update();updateBannerMode();
+  controls.update();clampCam();updateBannerMode();sky.position.copy(camera.position);
   for(const g of regs){const k=Math.min(4,Math.max(.45,camera.position.distanceTo(g.banner.position)/650));g.banner.scale.set(BH*k*g.texN.userData.aspect,BH*k,1);}
   flushPools();renderer.render(scene,camera);if((mmAcc+=dt)>.066){mmAcc=0;drawMini();}drawFloats(now);drawArrows(now);requestAnimationFrame(loop);}
 requestAnimationFrame(loop);
