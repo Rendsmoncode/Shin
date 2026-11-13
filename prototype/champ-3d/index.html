@@ -268,6 +268,7 @@ kbd{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:3px;p
 
 <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/loaders/GLTFLoader.js"></script>
 <script>
 (function(){
 const status=document.getElementById('status');
@@ -763,6 +764,17 @@ function woodTex(seed,base){const cv=document.createElement('canvas');cv.width=1
   MQ.lampTick0=1;MQ.lampTick=t=>{for(let i=0;i<4;i++)LAMPU.lampF.value[i]=.42+.025*Math.sin(t*9+i*2.1)+.02*Math.sin(t*21.7+i*5.3)+.012*Math.sin(t*37+i);LAMPU.bgI.value=1+.04*Math.sin(t*7.3)+.03*Math.sin(t*17.1);};
 }
 
+// ---------- objets du stratège (modèles Meshy de la communauté, dans modeles/), posés sur les bords de la table ----------
+// [fichier, hauteur réelle en mètres, x, z (en mètres depuis le coin du cadre), rotation]
+{const U1=MQ.U1,ex=MQ.OW/2,ez=MQ.OD/2,gl=new THREE.GLTFLoader();
+  const OBJETS=[['sablier.glb',.2,ex+.27*U1,-ez+.3*U1,.4]];
+  const shc=document.createElement('canvas');shc.width=shc.height=64;{const g=shc.getContext('2d'),gr=g.createRadialGradient(32,32,4,32,32,32);gr.addColorStop(0,'rgba(0,0,0,.6)');gr.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=gr;g.fillRect(0,0,64,64);}
+  const shM=new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(shc),transparent:true,depthWrite:false,fog:false});
+  for(const [f,h,x,z,ry] of OBJETS)gl.load('modeles/'+f,g=>{const o=g.scene,b=new THREE.Box3().setFromObject(o),sz=b.getSize(new THREE.Vector3()),k=h*U1/sz.y;
+    o.scale.setScalar(k);o.rotation.y=ry;o.position.set(x-(b.min.x+sz.x/2)*k,MQ.tY-b.min.y*k,z-(b.min.z+sz.z/2)*k);
+    o.traverse(m=>{if(m.isMesh){m.material.fog=false;lampify(m.material,1.5,.12,'objet');}});scene.add(o);
+    const s=new THREE.Mesh(new THREE.PlaneGeometry(sz.x*k*1.5,sz.z*k*1.5),shM);s.rotation.x=-Math.PI/2;s.position.set(x,MQ.tY+.5,z);scene.add(s);},undefined,()=>{});
+}
 // ---------- forêts ----------
 const spots=[];
 // pas d'arbres sur les zones de départ ni sous les armées placées
