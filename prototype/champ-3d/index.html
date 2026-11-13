@@ -775,6 +775,23 @@ function woodTex(seed,base){const cv=document.createElement('canvas');cv.width=1
     o.traverse(m=>{if(m.isMesh){m.material.fog=false;lampify(m.material,1.5,.12,'objet');}});scene.add(o);
     const s=new THREE.Mesh(new THREE.PlaneGeometry(sz.x*k*1.5,sz.z*k*1.5),shM);s.rotation.x=-Math.PI/2;s.position.set(x,MQ.tY+.5,z);scene.add(s);},undefined,()=>{});
 }
+// ---------- pions en bois tourné, peints en bleu et en rouge, posés au coin de la table ----------
+{const U1=MQ.U1,ex=MQ.OW/2,ez=MQ.OD/2,r=rng(2024);
+  // bloc du Kriegsspiel : petit pavé de bois aux arêtes arrondies (3,6 × 1,4 cm, 1,1 cm de haut)
+  const sh0=new THREE.Shape(),w=.036*U1,d=.014*U1,ht=.011*U1,bv=.0018*U1;sh0.moveTo(-w/2+bv,-d/2+bv);sh0.lineTo(w/2-bv,-d/2+bv);sh0.lineTo(w/2-bv,d/2-bv);sh0.lineTo(-w/2+bv,d/2-bv);sh0.closePath();
+  const geo=new THREE.ExtrudeGeometry(sh0,{depth:ht-2*bv,bevelEnabled:true,bevelThickness:bv,bevelSize:bv,bevelSegments:3,curveSegments:4});geo.rotateX(-Math.PI/2);geo.translate(0,bv,0);
+  const peint=hex=>lampify(new THREE.MeshPhongMaterial({color:new THREE.Color(hex).convertSRGBToLinear(),specular:0x15130f,shininess:12,fog:false}),1.3,.1,'objet');   // peinture ancienne, mate et passée
+  const bleu=peint(0x3d4a58),rouge=peint(0x6b3b30);
+  const shc=document.createElement('canvas');shc.width=shc.height=32;{const g=shc.getContext('2d'),gr=g.createRadialGradient(16,16,2,16,16,16);gr.addColorStop(0,'rgba(0,0,0,.55)');gr.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=gr;g.fillRect(0,0,32,32);}
+  const shM=new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(shc),transparent:true,depthWrite:false,fog:false}),shG=new THREE.PlaneGeometry(.05*U1,.026*U1);
+  const pose=(mat,x,z,ry)=>{const m=new THREE.Mesh(geo,mat);m.position.set(x,MQ.tY,z);m.rotation.y=ry;scene.add(m);
+    const s=new THREE.Mesh(shG,shM);s.rotation.set(-Math.PI/2,0,ry);s.position.set(x+.002*U1,MQ.tY+.4,z+.002*U1);scene.add(s);};
+  // deux petits groupes en quinconce, un peu irréguliers (comme posés à la main)
+  // en lignes, comme des régiments : une ligne de front et une seconde ligne, légèrement de travers (posés à la main)
+  const grp=(mat,cx,cz,rows,ry)=>{let k=0;rows.forEach((n,j)=>{for(let i=0;i<n;i++){const a=ry+(r()-.5)*.08,lx=(i-(n-1)/2)*.042*U1+(r()-.5)*.003*U1,lz=j*.03*U1+(j%2)*0;
+    pose(mat,cx+lx*Math.cos(ry)+lz*Math.sin(ry),cz-lx*Math.sin(ry)+lz*Math.cos(ry),a);k++;}});};
+  grp(bleu,-ex+.2*U1,-ez-.28*U1,[4,3],.12);grp(rouge,-ex+.4*U1,-ez-.42*U1,[3,3],-.1);
+}
 // ---------- forêts ----------
 const spots=[];
 // pas d'arbres sur les zones de départ ni sous les armées placées
