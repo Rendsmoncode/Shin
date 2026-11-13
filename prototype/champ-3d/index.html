@@ -574,7 +574,7 @@ renderer.outputEncoding=THREE.sRGBEncoding;
 renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap; renderer.shadowMap.autoUpdate=false; renderer.shadowMap.needsUpdate=true;   // ombres recalculées de temps en temps seulement
 document.getElementById('scene').appendChild(renderer.domElement);
 
-const camera=new THREE.PerspectiveCamera(40,1,1,12000);
+const camera=new THREE.PerspectiveCamera(40,1,1,20000);
 const controls=new THREE.MapControls(camera,renderer.domElement);
 controls.enableDamping=true; controls.dampingFactor=.08;
 controls.minDistance=40; controls.maxDistance=Math.max(1400,3200*KS);
@@ -628,16 +628,6 @@ water.rotation.x=-Math.PI/2; water.position.y=WATER; scene.add(water);
 
 // ---------- maquette en relief : la tranche (couches de terre et de roche) et le cadre en bois ----------
 const MQ={};{let mn=1e9,mx=-1e9;for(const v of HG){mn=Math.min(mn,v);mx=Math.max(mx,v);}MQ.base=mn-40*KS;MQ.top=mx;}
-// texture des couches : bandes horizontales légèrement ondulées (se répète sans couture en largeur)
-function strataTex(){const cv=document.createElement('canvas');cv.width=256;cv.height=512;const g=cv.getContext('2d'),r=rng(77);
-  const pal=['#e6dcc4','#8a5a34','#cdb98f','#5a3d26','#b07a45','#efe6d0','#6e6a60','#c79a5e','#a8a294','#7b4a2a','#dccfae','#94765a'];
-  // de haut en bas : chaque couche descend jusqu'en bas, la suivante la recouvre plus bas
-  let y=-6;while(y<512){const h=10+r()*44,c=pal[Math.floor(r()*pal.length)],a=r()*6.28,amp=1+r()*3,k=1+Math.floor(r()*3),yy=x=>y+Math.sin(a+x/256*6.283*k)*amp;
-    g.fillStyle=c;g.beginPath();g.moveTo(0,520);for(let x=0;x<=256;x+=8)g.lineTo(x,yy(x));g.lineTo(256,520);g.closePath();g.fill();
-    g.strokeStyle='rgba(50,32,18,.45)';g.lineWidth=1.2;g.beginPath();for(let x=0;x<=256;x+=8)x?g.lineTo(x,yy(x)):g.moveTo(x,yy(x));g.stroke();y+=h;}
-  for(let i=0;i<9000;i++){const v=r();g.fillStyle=v<.5?`rgba(50,35,20,${.08+r()*.12})`:`rgba(255,250,235,${.06+r()*.1})`;g.fillRect(r()*256,r()*512,1+r()*2,1+r()*1.5);}
-  for(let i=0;i<70;i++){g.fillStyle=`rgba(${120+r()*60|0},${110+r()*50|0},${95+r()*40|0},.9)`;g.beginPath();g.ellipse(r()*256,r()*512,1.5+r()*3,1+r()*2,r()*3,0,6.3);g.fill();}   // cailloux
-  const t=new THREE.CanvasTexture(cv);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.encoding=THREE.sRGBEncoding;t.anisotropy=4;return t;}
 // bois sombre ciré : veines longues
 function woodTex(seed,base){const cv=document.createElement('canvas');cv.width=1024;cv.height=256;const g=cv.getContext('2d'),r=rng(seed);
   g.fillStyle=base;g.fillRect(0,0,1024,256);
@@ -646,13 +636,14 @@ function woodTex(seed,base){const cv=document.createElement('canvas');cv.width=1
     for(let x=0;x<=1024;x+=16){const y=y0+Math.sin(a+x/1024*6.283*f)*amp+Math.sin(a*2+x/1024*6.283*7)*1.2;x?g.lineTo(x,y):g.moveTo(x,y);}g.stroke();}
   for(let k=0;k<3;k++){const cx=r()*1024,cy=r()*256;for(let j=0;j<10;j++){g.strokeStyle=`rgba(20,10,5,${.18-j*.015})`;g.lineWidth=1.2;g.beginPath();g.ellipse(cx,cy,6+j*7,2+j*2.2,0,0,6.3);g.stroke();}}   // nœuds
   const t=new THREE.CanvasTexture(cv);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.encoding=THREE.sRGBEncoding;t.anisotropy=8;return t;}
-{const sT=strataTex(),soil=new THREE.Color(.20,.14,.09),pale=new THREE.Color(1,1,1),tk=MQ.top-MQ.base,rep=60*KS;
-  const sMat=new THREE.MeshLambertMaterial({map:sT,vertexColors:true,side:THREE.DoubleSide});
+{const soil=new THREE.Color(.16,.11,.07),pale=new THREE.Color(1,1,1),tk=MQ.top-MQ.base,rep=300*Math.max(.5,KS);
+  const sT=woodTex(13,'#33200f');sT.repeat.set(1,1);
+  const sMat=new THREE.MeshPhongMaterial({map:sT,vertexColors:true,specular:0x2a1a10,shininess:30,side:THREE.DoubleSide});   // tranche : bois sombre simple
   const wMat=new THREE.MeshPhongMaterial({color:0x24546e,specular:0x88aacc,shininess:90,transparent:true,opacity:.88,side:THREE.DoubleSide});
   // un côté : la liste des points du bord (ceux du maillage du sol, pour coller exactement)
   const side=pts=>{const n=pts.length,P=[],C=[],U=[],I=[],WP=[],WI=[];let dist=0;
     pts.forEach(([x,z,gy],i)=>{if(i)dist+=Math.hypot(x-pts[i-1][0],z-pts[i-1][1]);const u=dist/rep,soilB=Math.max(MQ.base,gy-2.5*KS);
-      for(const [y,c] of [[gy,soil],[soilB,soil.clone().lerp(pale,.25)],[Math.max(MQ.base,gy-6*KS),pale],[MQ.base,pale.clone().multiplyScalar(.82)]]){P.push(x,y,z);C.push(c.r,c.g,c.b);U.push(u,(y-MQ.base)/(200*KS));}
+      for(const [y,c] of [[gy,soil],[soilB,pale],[Math.max(MQ.base,gy-6*KS),pale],[MQ.base,pale.clone().multiplyScalar(.8)]]){P.push(x,y,z);C.push(c.r,c.g,c.b);U.push(u,(y-MQ.base)/(rep*.25));}
       WP.push(x,Math.max(gy,WATER),z,x,gy,z);
       if(i){for(let k=0;k<3;k++){const a=(i-1)*4+k,b=i*4+k;I.push(a,b,a+1,b,b+1,a+1);}const a=(i-1)*2,b=i*2;WI.push(a,b,a+1,b,b+1,a+1);}});
     const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(P,3));g.setAttribute('color',new THREE.Float32BufferAttribute(C,3));
@@ -693,7 +684,47 @@ function woodTex(seed,base){const cv=document.createElement('canvas');cv.width=1
     add(new THREE.BoxGeometry(cs*.9,ph*.8,1.2),brass,cx,yB-ph*.45,sz*(OD/2+.6));
     add(new THREE.BoxGeometry(1.2,ph*.8,cs*.9),brass,sx*(OW/2+.6),yB-ph*.45,cz);
     const rv=new THREE.SphereGeometry(Math.max(1.2,rw*.07),10,6);for(const k of [.25,.75])add(rv,brass,sx*(OW/2-cs*k),top+ct/2,sz*(OD/2-rw*.375));}
-  MQ.OW=OW;MQ.OD=OD;MQ.yB=yB;MQ.ph=ph;}
+  MQ.OW=OW;MQ.OD=OD;MQ.yB=yB;MQ.ph=ph;
+  // ---------- la table de guerre : plateau massif et quatre pieds tournés ----------
+  const U1=OW/3.2,TW=OW+1.1*U1,TD=OD+1.1*U1,tt=.07*U1,tY=yB-ph,fl=tY-tt-.78*U1;   // U1 ≈ 1 mètre réel à l'échelle de la table
+  MQ.U1=U1;MQ.TW=TW;MQ.TD=TD;MQ.tY=tY;MQ.fl=fl;
+  {const m=wood(woodTex(21,'#2a180c'),TW);m.map.repeat.set(5,9);add(new THREE.BoxGeometry(TW,tt,TD),m,0,tY-tt/2,0);}
+  add(new THREE.BoxGeometry(TW-.12*U1,.09*U1,TD-.12*U1),wood(wT2,TW),0,tY-tt-.045*U1,0);   // ceinture sous le plateau
+  const legG=new THREE.LatheGeometry([[.07,0],[.09,.03],[.06,.1],[.05,.35],[.075,.45],[.05,.55],[.055,.68],[.085,.7],[.085,.74]].map(([r,h])=>new THREE.Vector2(r*U1,h*U1/.74*(tY-tt-fl)/U1)),16);
+  for(const sx of [-1,1])for(const sz of [-1,1])add(legG,wood(wT2,U1),sx*(TW/2-.14*U1),fl,sz*(TD/2-.14*U1));
+}
+// ---------- la tente du général : toile sombre aux plis de rideau, poteaux en bois ; elle n'est pas touchée par la brume ni la météo ----------
+{const U1=MQ.U1,fl=MQ.fl,HX=MQ.TW/2+1.6*U1,HZ=MQ.TD/2+1.6*U1,H=2.7*U1,RH=1.5*U1;
+  // toile de lin : trame fine
+  const cv=document.createElement('canvas');cv.width=cv.height=256;{const g=cv.getContext('2d'),r=rng(31);g.fillStyle='#8a7658';g.fillRect(0,0,256,256);
+    for(let i=0;i<256;i+=2){g.fillStyle=`rgba(40,28,15,${.05+r()*.07})`;g.fillRect(0,i,256,1);g.fillStyle=`rgba(40,28,15,${.04+r()*.06})`;g.fillRect(i,0,1,256);}
+    for(let i=0;i<1500;i++){g.fillStyle=`rgba(${r()<.5?'30,20,10':'200,180,140'},${.05+r()*.08})`;g.fillRect(r()*256,r()*256,1+r()*4,1);}}
+  const lin=new THREE.CanvasTexture(cv);lin.wrapS=lin.wrapT=THREE.RepeatWrapping;lin.encoding=THREE.sRGBEncoding;
+  const lampe=new THREE.Vector3(0,1,0);   // la lueur vient de la table, au centre
+  // un pan de rideau : plis verticaux, serrés en haut, plus amples en bas ; l'ombre des plis est peinte dans les sommets (pas de lumière coûteuse)
+  function rideau(L,h,cx,cz,ry,seed){const nx=Math.round(L/(.06*U1)),ny=12,r=rng(seed),P=[],C=[],UV=[],I=[],ph=[];for(let k=0;k<8;k++)ph.push(r()*6.28);
+    const ang=Math.PI/2-ry,dir=new THREE.Vector3(Math.cos(ry),0,-Math.sin(ry)),nrm=new THREE.Vector3(Math.sin(ry),0,Math.cos(ry));
+    for(let j=0;j<=ny;j++)for(let i=0;i<=nx;i++){const u=i/nx,v=j/ny,x=(u-.5)*L,amp=(.05+.1*(1-v))*U1,lam=(.32+.12*Math.sin(x/(2.1*U1)+ph[2]))*U1;
+      const t=x/lam*6.283+Math.sin(x/(1.3*U1)+ph[0])*1.2,d=Math.sin(t)*amp+Math.sin(x/(.7*U1)+ph[1])*amp*.35,dd=Math.cos(t)*amp/lam*6.283;
+      const wx=cx+dir.x*x+nrm.x*d,wz=cz+dir.z*x+nrm.z*d,wy=fl+v*h;P.push(wx,wy,wz);UV.push(x/(.8*U1),v*h/(.8*U1));
+      const sh=Math.max(.15,Math.min(1,.6-dd*.4)),hg=.35+.65*Math.exp(-((v-.25)**2)/.12),k=.55*sh*hg*(.92+.16*r());   // creux sombres, plus clair à hauteur de table
+      C.push(.42*k,.33*k,.23*k);}
+    for(let j=0;j<ny;j++)for(let i=0;i<nx;i++){const a=j*(nx+1)+i,b=a+1,c=a+nx+1,d=c+1;I.push(a,b,c,b,d,c);}
+    const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(P,3));g.setAttribute('color',new THREE.Float32BufferAttribute(C,3));
+    g.setAttribute('uv',new THREE.Float32BufferAttribute(UV,2));g.setIndex(I);
+    scene.add(new THREE.Mesh(g,new THREE.MeshBasicMaterial({map:lin,vertexColors:true,fog:false,side:THREE.DoubleSide})));}
+  rideau(2*HX,H,0,-HZ,0,1);rideau(2*HX,H,0,HZ,Math.PI,2);rideau(2*HZ,H,-HX,0,-Math.PI/2,3);rideau(2*HZ,H,HX,0,Math.PI/2,4);
+  // toit : pans tendus vers le faîte, très sombres (la lumière ne monte pas jusque-là)
+  {const P=[],C=[],top=[0,fl+H+RH,0],cs=[[-HX,-HZ],[HX,-HZ],[HX,HZ],[-HX,HZ]];
+    for(let k=0;k<4;k++){const a=cs[k],b=cs[(k+1)%4];P.push(a[0],fl+H,a[1],b[0],fl+H,b[1],...top);C.push(.16,.12,.08,.16,.12,.08,.03,.025,.02);}
+    const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(P,3));g.setAttribute('color',new THREE.Float32BufferAttribute(C,3));
+    scene.add(new THREE.Mesh(g,new THREE.MeshBasicMaterial({vertexColors:true,fog:false,side:THREE.DoubleSide})));}
+  // poteaux en bois aux coins et au milieu des côtés
+  const pole=new THREE.MeshBasicMaterial({map:woodTex(41,'#3a2412'),color:0x8a6a50,fog:false}),pg=new THREE.CylinderGeometry(.06*U1,.075*U1,H+.15*U1,10);
+  for(const [x,z] of [[-HX,-HZ],[HX,-HZ],[HX,HZ],[-HX,HZ],[0,-HZ],[0,HZ],[-HX,0],[HX,0]]){const m=new THREE.Mesh(pg,pole);m.position.set(x*.985,fl+(H+.15*U1)/2,z*.985);scene.add(m);}
+  // sol : terre battue sombre
+  const fg=new THREE.Mesh(new THREE.PlaneGeometry(2*HX,2*HZ),new THREE.MeshBasicMaterial({color:0x1c140c,fog:false}));fg.rotation.x=-Math.PI/2;fg.position.y=fl;scene.add(fg);
+}
 
 // ---------- forêts ----------
 const spots=[];
