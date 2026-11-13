@@ -566,7 +566,7 @@ function fogged(mat){
 }
 
 const scene=new THREE.Scene();
-scene.background=new THREE.Color(0x9fb4c2);
+scene.background=new THREE.Color(0x140e0a);
 scene.fog=new THREE.Fog(0x9fb4c2,3400,7500);
 const renderer=new THREE.WebGLRenderer({antialias:true});
 renderer.setPixelRatio(Math.min(1.5,window.devicePixelRatio||1));
@@ -589,7 +589,7 @@ const hemi=new THREE.HemisphereLight(0xdfe9f2,0x5a5236,.65);scene.add(hemi);
 const sun=new THREE.DirectionalLight(0xfff1d6,1.15);
 sun.position.set(-1000,1400,600); sun.castShadow=true;
 sun.shadow.mapSize.set(4096,4096);
-Object.assign(sun.shadow.camera,{left:-W/2-100,right:W/2+100,top:D/2+100,bottom:-D/2-100,near:10,far:4500});
+Object.assign(sun.shadow.camera,{left:-W/2-160*Math.max(1,KS),right:W/2+160*Math.max(1,KS),top:D/2+160*Math.max(1,KS),bottom:-D/2-160*Math.max(1,KS),near:10,far:4500});
 sun.shadow.bias=-.0006;
 scene.add(sun);
 
@@ -625,6 +625,75 @@ ground.receiveShadow=true; scene.add(ground);
 // eau
 const water=new THREE.Mesh(new THREE.PlaneGeometry(W,D),fogged(new THREE.MeshPhongMaterial({color:0x3b6f86,transparent:true,opacity:.82,shininess:80,specular:0x99bbcc})));
 water.rotation.x=-Math.PI/2; water.position.y=WATER; scene.add(water);
+
+// ---------- maquette en relief : la tranche (couches de terre et de roche) et le cadre en bois ----------
+const MQ={};{let mn=1e9,mx=-1e9;for(const v of HG){mn=Math.min(mn,v);mx=Math.max(mx,v);}MQ.base=mn-40*KS;MQ.top=mx;}
+// texture des couches : bandes horizontales légèrement ondulées (se répète sans couture en largeur)
+function strataTex(){const cv=document.createElement('canvas');cv.width=256;cv.height=512;const g=cv.getContext('2d'),r=rng(77);
+  const pal=['#e6dcc4','#8a5a34','#cdb98f','#5a3d26','#b07a45','#efe6d0','#6e6a60','#c79a5e','#a8a294','#7b4a2a','#dccfae','#94765a'];
+  // de haut en bas : chaque couche descend jusqu'en bas, la suivante la recouvre plus bas
+  let y=-6;while(y<512){const h=10+r()*44,c=pal[Math.floor(r()*pal.length)],a=r()*6.28,amp=1+r()*3,k=1+Math.floor(r()*3),yy=x=>y+Math.sin(a+x/256*6.283*k)*amp;
+    g.fillStyle=c;g.beginPath();g.moveTo(0,520);for(let x=0;x<=256;x+=8)g.lineTo(x,yy(x));g.lineTo(256,520);g.closePath();g.fill();
+    g.strokeStyle='rgba(50,32,18,.45)';g.lineWidth=1.2;g.beginPath();for(let x=0;x<=256;x+=8)x?g.lineTo(x,yy(x)):g.moveTo(x,yy(x));g.stroke();y+=h;}
+  for(let i=0;i<9000;i++){const v=r();g.fillStyle=v<.5?`rgba(50,35,20,${.08+r()*.12})`:`rgba(255,250,235,${.06+r()*.1})`;g.fillRect(r()*256,r()*512,1+r()*2,1+r()*1.5);}
+  for(let i=0;i<70;i++){g.fillStyle=`rgba(${120+r()*60|0},${110+r()*50|0},${95+r()*40|0},.9)`;g.beginPath();g.ellipse(r()*256,r()*512,1.5+r()*3,1+r()*2,r()*3,0,6.3);g.fill();}   // cailloux
+  const t=new THREE.CanvasTexture(cv);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.encoding=THREE.sRGBEncoding;t.anisotropy=4;return t;}
+// bois sombre ciré : veines longues
+function woodTex(seed,base){const cv=document.createElement('canvas');cv.width=1024;cv.height=256;const g=cv.getContext('2d'),r=rng(seed);
+  g.fillStyle=base;g.fillRect(0,0,1024,256);
+  for(let i=0;i<260;i++){const y0=r()*256,a=r()*6.28,f=1+Math.floor(r()*3),amp=2+r()*7,dark=r()<.6;
+    g.strokeStyle=dark?`rgba(15,8,4,${.08+r()*.22})`:`rgba(150,95,55,${.05+r()*.12})`;g.lineWidth=.6+r()*2.2;g.beginPath();
+    for(let x=0;x<=1024;x+=16){const y=y0+Math.sin(a+x/1024*6.283*f)*amp+Math.sin(a*2+x/1024*6.283*7)*1.2;x?g.lineTo(x,y):g.moveTo(x,y);}g.stroke();}
+  for(let k=0;k<3;k++){const cx=r()*1024,cy=r()*256;for(let j=0;j<10;j++){g.strokeStyle=`rgba(20,10,5,${.18-j*.015})`;g.lineWidth=1.2;g.beginPath();g.ellipse(cx,cy,6+j*7,2+j*2.2,0,0,6.3);g.stroke();}}   // nœuds
+  const t=new THREE.CanvasTexture(cv);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.encoding=THREE.sRGBEncoding;t.anisotropy=8;return t;}
+{const sT=strataTex(),soil=new THREE.Color(.20,.14,.09),pale=new THREE.Color(1,1,1),tk=MQ.top-MQ.base,rep=60*KS;
+  const sMat=new THREE.MeshLambertMaterial({map:sT,vertexColors:true,side:THREE.DoubleSide});
+  const wMat=new THREE.MeshPhongMaterial({color:0x24546e,specular:0x88aacc,shininess:90,transparent:true,opacity:.88,side:THREE.DoubleSide});
+  // un côté : la liste des points du bord (ceux du maillage du sol, pour coller exactement)
+  const side=pts=>{const n=pts.length,P=[],C=[],U=[],I=[],WP=[],WI=[];let dist=0;
+    pts.forEach(([x,z,gy],i)=>{if(i)dist+=Math.hypot(x-pts[i-1][0],z-pts[i-1][1]);const u=dist/rep,soilB=Math.max(MQ.base,gy-2.5*KS);
+      for(const [y,c] of [[gy,soil],[soilB,soil.clone().lerp(pale,.25)],[Math.max(MQ.base,gy-6*KS),pale],[MQ.base,pale.clone().multiplyScalar(.82)]]){P.push(x,y,z);C.push(c.r,c.g,c.b);U.push(u,(y-MQ.base)/(200*KS));}
+      WP.push(x,Math.max(gy,WATER),z,x,gy,z);
+      if(i){for(let k=0;k<3;k++){const a=(i-1)*4+k,b=i*4+k;I.push(a,b,a+1,b,b+1,a+1);}const a=(i-1)*2,b=i*2;WI.push(a,b,a+1,b,b+1,a+1);}});
+    const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(P,3));g.setAttribute('color',new THREE.Float32BufferAttribute(C,3));
+    g.setAttribute('uv',new THREE.Float32BufferAttribute(U,2));g.setIndex(I);g.computeVertexNormals();
+    const m=new THREE.Mesh(g,sMat);m.receiveShadow=true;scene.add(m);
+    const wg=new THREE.BufferGeometry();wg.setAttribute('position',new THREE.Float32BufferAttribute(WP,3));wg.setIndex(WI);wg.computeVertexNormals();scene.add(new THREE.Mesh(wg,wMat));};
+  const r=SX+1,at=(ix,iz)=>[-W/2+ix*W/SX,-D/2+iz*D/SZ,HG[iz*r+ix]];
+  side(Array.from({length:SX+1},(_,i)=>at(i,0)));side(Array.from({length:SX+1},(_,i)=>at(i,SZ)));
+  side(Array.from({length:SZ+1},(_,i)=>at(0,i)));side(Array.from({length:SZ+1},(_,i)=>at(SX,i)));
+  // cadre : un socle en bois sombre ciré, un rebord mouluré, des coins en laiton
+  const Mg=Math.max(40,.035*W),ph=Math.max(25,.022*W),rw=Mg*.55,rh=Math.max(5,-MQ.base*.2),yB=MQ.base;
+  const wT=woodTex(5,'#3b2415'),wT2=woodTex(9,'#2e1b0f');
+  const wood=(tex,len)=>{const t=tex.clone();t.needsUpdate=true;t.repeat.set(Math.max(1,len/(260*Math.max(.5,KS))),1);
+    return new THREE.MeshPhongMaterial({map:t,bumpMap:t,bumpScale:.6,color:0xffffff,specular:0x3a2618,shininess:38});};
+  const bc=document.createElement('canvas');bc.width=bc.height=128;{const g=bc.getContext('2d'),r=rng(3),gr=g.createLinearGradient(0,0,128,128);
+    gr.addColorStop(0,'#b8913f');gr.addColorStop(.45,'#8a6526');gr.addColorStop(.55,'#9c7630');gr.addColorStop(1,'#6b4c1c');g.fillStyle=gr;g.fillRect(0,0,128,128);
+    for(let i=0;i<400;i++){g.fillStyle=`rgba(${r()<.5?'40,25,5':'255,225,150'},${.05+r()*.08})`;g.fillRect(r()*128,r()*128,r()*30,1);}
+    g.strokeStyle='rgba(50,30,8,.55)';g.lineWidth=3;g.strokeRect(9,9,110,110);g.strokeStyle='rgba(255,220,150,.35)';g.lineWidth=1;g.strokeRect(12,12,104,104);}
+  const bT=new THREE.CanvasTexture(bc);bT.encoding=THREE.sRGBEncoding;
+  const brass=new THREE.MeshPhongMaterial({map:bT,color:0xffffff,specular:0xb08a48,shininess:55});
+  const add=(geo,mat,x,y,z,ry=0)=>{const m=new THREE.Mesh(geo,mat);m.position.set(x,y,z);m.rotation.y=ry;m.castShadow=m.receiveShadow=true;scene.add(m);return m;};
+  const OW=W+2*Mg,OD=D+2*Mg;
+  // socle (ses faces ont le bois dans le bon sens)
+  add(new THREE.BoxGeometry(OW,ph,OD),wood(wT2,OW),0,yB-ph/2,0);
+  // rebord : deux longs côtés et deux petits, avec une moulure (un gradin plus étroit dessus)
+  for(const [len,x,z,ry] of [[OW,0,-D/2-Mg+rw/2,0],[OW,0,D/2+Mg-rw/2,0],[OD-2*rw,-W/2-Mg+rw/2,0,Math.PI/2],[OD-2*rw,W/2+Mg-rw/2,0,Math.PI/2]]){
+    add(new THREE.BoxGeometry(len,rh,rw),wood(wT,len),x,yB+rh/2,z,ry);
+    const m=add(new THREE.BoxGeometry(len-(ry?0:rw*.5),rh*.35,rw*.62),wood(wT,len),x,yB+rh+rh*.175,z,ry);
+    m.position.x+=ry?(x<0?-rw*.19:rw*.19):0;m.position.z+=ry?0:(z<0?-rw*.19:rw*.19);}
+  // baguette basse le long du socle
+  for(const [len,x,z,ry] of [[OW+6,0,-OD/2-1.5,0],[OW+6,0,OD/2+1.5,0],[OD+6,-OW/2-1.5,0,Math.PI/2],[OD+6,OW/2+1.5,0,Math.PI/2]])
+    add(new THREE.BoxGeometry(len,ph*.22,3),wood(wT,len),x,yB-ph*.2,z,ry);
+  // coins en laiton : équerre posée sur le rebord et pointe sur la tranche du socle
+  const cs=rw*1.6,ct=Math.max(1,rh*.08);
+  for(const sx of [-1,1])for(const sz of [-1,1]){const cx=sx*(OW/2-cs/2+1),cz=sz*(OD/2-cs/2+1),top=yB+rh*1.35+ct/2;
+    add(new THREE.BoxGeometry(cs,ct,rw*.75),brass,cx,top,sz*(OD/2-rw*.375));
+    add(new THREE.BoxGeometry(rw*.75,ct,cs),brass,sx*(OW/2-rw*.375),top,cz);
+    add(new THREE.BoxGeometry(cs*.9,ph*.8,1.2),brass,cx,yB-ph*.45,sz*(OD/2+.6));
+    add(new THREE.BoxGeometry(1.2,ph*.8,cs*.9),brass,sx*(OW/2+.6),yB-ph*.45,cz);
+    const rv=new THREE.SphereGeometry(Math.max(1.2,rw*.07),10,6);for(const k of [.25,.75])add(rv,brass,sx*(OW/2-cs*k),top+ct/2,sz*(OD/2-rw*.375));}
+  MQ.OW=OW;MQ.OD=OD;MQ.yB=yB;MQ.ph=ph;}
 
 // ---------- forêts ----------
 const spots=[];
@@ -1496,7 +1565,7 @@ function visionMult(g){const r=REGLAGES;return(isNight()||nuitLocale>=turn?1-r.n
 const inMud=(x,z)=>boue>0&&(hAt(x,z)<WATER+5*KS||[[0,0],[40,0],[-40,0],[0,40],[0,-40]].some(([a,b])=>forest[cellOf(x+a,z+b)]));
 const speedMeteo=g=>(inMud(g.x,g.z)?1-REGLAGES.boueVitesse/100:1)*(meteo==='froid'?1-REGLAGES.froidVitesse/100:1);
 function ambiance(){const n=isNight()||nuitLocale>=turn,m=meteo,col=new THREE.Color(m==='pluie'?0x7f8b93:m==='brouillard'?0xb9c0c4:m==='froid'?0xb7c7d6:0x9fb4c2);
-  if(n)col.multiplyScalar(.3);scene.background=col;scene.fog.color.copy(col);
+  if(n)col.multiplyScalar(.3);scene.fog.color.copy(col);
   scene.fog.near=m==='brouillard'?250:3400;scene.fog.far=m==='brouillard'?2200:7500;
   poolU.shade.value=n?.45:m==='soleil'?1:.85;sun.intensity=(n?.22:1)*(m==='soleil'?1.15:m==='froid'?.95:.7);hemi.intensity=n?.3:.65;}
 const vivresTours=side=>{const men=regs.filter(g=>g.side===side&&g.kind!=='gm').reduce((s,g)=>s+(g.kind==='qg'?qgParts(g).garnison:g.men),0);return men?Math.floor(VIVRES[side]/men):99;};
