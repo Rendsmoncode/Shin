@@ -588,13 +588,12 @@ const camera=new THREE.PerspectiveCamera(40,1,1,14000);
 const controls=new THREE.MapControls(camera,renderer.domElement);
 controls.enableDamping=true; controls.dampingFactor=.08;
 controls.minDistance=40; controls.maxDistance=Math.max(1400,3200*KS);
-controls.minPolarAngle=.35; controls.maxPolarAngle=1.36;   // le ciel n'apparaît qu'en inclinant fort la vue
+controls.minPolarAngle=.35; controls.maxPolarAngle=1.15;
 controls.screenSpacePanning=false;
 controls.keyPanSpeed=30; controls.listenToKeyEvents(window);   // flèches du clavier
 // la caméra reste au-dessus de la zone jouable : le point visé ne sort pas de la carte, la caméra ne s'éloigne pas au-dessus des montagnes
 function clampCam(){const t=controls.target,c=camera.position,cl=(v,a)=>Math.max(-a,Math.min(a,v));
   let dx=cl(t.x,W/2-20)-t.x,dz=cl(t.z,D/2-20)-t.z;t.x+=dx;t.z+=dz;c.x+=dx;c.z+=dz;
-  const mx=W/2+150*KS,mz=D/2+150*KS;c.x=cl(c.x,mx);c.z=cl(c.z,mz);
   const inside=Math.abs(c.x)<W/2&&Math.abs(c.z)<D/2,gy=(inside?hAt(c.x,c.z):mtnY(c.x,c.z))+40;if(c.y<gy)c.y=gy;}
 function viewArmy(){camera.position.set(BLUE_C[0],300,BLUE_C[1]+480);controls.target.set(BLUE_C[0],0,BLUE_C[1]);controls.update();}
 function viewAll(){camera.position.set(0,300+1600*KS,200+1950*KS);controls.target.set(0,0,0);controls.update();}
