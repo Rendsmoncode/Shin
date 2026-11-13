@@ -628,13 +628,16 @@ water.rotation.x=-Math.PI/2; water.position.y=WATER; scene.add(water);
 
 // ---------- maquette en relief : la tranche (couches de terre et de roche) et le cadre en bois ----------
 // lueur des bougies : ajoutée dans les matières de la pièce seulement (tente, table, cadre), jamais sur la maquette ; pas de vraie lumière (rien ne rame)
-const LAMPU={lampP:{value:[0,1,2,3].map(()=>new THREE.Vector3())},lampF:{value:[1,1,1,1]},lampR:{value:1}};
-function lampify(mat,k,amb=.07){mat.onBeforeCompile=sh=>{Object.assign(sh.uniforms,LAMPU);sh.uniforms.lampK={value:k};sh.uniforms.lampA={value:amb};
+const LAMPU={lampP:{value:[0,1,2,3].map(()=>new THREE.Vector3())},lampF:{value:[1,1,1,1]},lampR:{value:1},bgP:{value:new THREE.Vector3()},bgR:{value:1},bgI:{value:1}};
+function lampify(mat,k,amb=.07,fond=false){mat.onBeforeCompile=sh=>{Object.assign(sh.uniforms,LAMPU);sh.uniforms.lampK={value:k};sh.uniforms.lampA={value:amb};
     sh.vertexShader='varying vec3 vLw;\n'+sh.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nvLw=(modelMatrix*vec4(transformed,1.0)).xyz;');
-    sh.fragmentShader='uniform vec3 lampP[4];uniform float lampF[4];uniform float lampR;uniform float lampK;uniform float lampA;varying vec3 vLw;\n'+sh.fragmentShader.replace('#include <tonemapping_fragment>',
+    sh.fragmentShader='uniform vec3 lampP[4];uniform float lampF[4];uniform float lampR;uniform float lampK;uniform float lampA;uniform vec3 bgP;uniform float bgR;uniform float bgI;varying vec3 vLw;\n'+sh.fragmentShader.replace('#include <tonemapping_fragment>',fond?
+      // fond (clair-obscur) : une seule lumière chaude venue d'un côté, chute rapide vers un brun-noir chaud
+      `{vec3 d=bgP-vLw;float q=dot(d,d)/(bgR*bgR);float la=bgI/(1.0+q*q*1.5+q*.5);
+      gl_FragColor.rgb=diffuseColor.rgb*(vec3(.09,.055,.03)*lampA*14.0+vec3(1.0,.8,.52)*la*lampK);}\n#include <tonemapping_fragment>`:
       `{vec3 la=vec3(0.0);for(int i=0;i<4;i++){vec3 d=lampP[i]-vLw;float q=dot(d,d)/(lampR*lampR);la+=vec3(lampF[i]/(1.0+q+q*q*.4));}
       gl_FragColor.rgb=diffuseColor.rgb*(vec3(lampA)+vec3(1.0,.8,.52)*la*lampK);}\n#include <tonemapping_fragment>`);};
-  mat.customProgramCacheKey=()=>'lampe'+k+'/'+amb;return mat;}
+  mat.customProgramCacheKey=()=>'lampe'+k+'/'+amb+fond;return mat;}
 const MQ={};{let mn=1e9,mx=-1e9;for(const v of HG){mn=Math.min(mn,v);mx=Math.max(mx,v);}MQ.base=mn-40*KS;MQ.top=mx;}
 // bois sombre ciré : veines longues
 function woodTex(seed,base){const cv=document.createElement('canvas');cv.width=1024;cv.height=256;const g=cv.getContext('2d'),r=rng(seed);
@@ -719,11 +722,11 @@ function woodTex(seed,base){const cv=document.createElement('canvas');cv.width=1
       const d=(Math.sin(t)*.5+.5)*amp,dd=Math.cos(t)*amp/lam*3.14;
       P.push(cx+dir.x*x+inw.x*d,fl+v*h,cz+dir.z*x+inw.z*d);UV.push(x/(.8*U1),v*h/(.8*U1));
       const crest=Math.pow(Math.max(0,Math.sin(t)),3),sh=Math.max(.12,.5-dd*.35),hg=.3+.7*Math.exp(-((v-.25)**2)/.1);
-      const k=(sh+crest*.35)*(.9+.15*r());C.push(.30*k,.10*k,.08*k);}   // velours bordeaux presque noir, reflet sur la crête des plis
+      const k=(sh*.8+crest*.7)*(.9+.15*r());C.push(.38*k,.2*k,.1*k);}   // velours bordeaux presque noir, reflet sur la crête des plis
     for(let j=0;j<ny;j++)for(let i=0;i<nx;i++){const a=j*(nx+1)+i,b=a+1,c=a+nx+1,d=c+1;I.push(a,b,c,b,d,c);}
     const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(P,3));g.setAttribute('color',new THREE.Float32BufferAttribute(C,3));
     g.setAttribute('uv',new THREE.Float32BufferAttribute(UV,2));g.setIndex(I);
-    const m=new THREE.Mesh(g,lampify(new THREE.MeshBasicMaterial({map:lin,vertexColors:true,fog:false,side:THREE.DoubleSide}),1.6,.05));scene.add(m);
+    const m=new THREE.Mesh(g,lampify(new THREE.MeshBasicMaterial({map:lin,vertexColors:true,fog:false,side:THREE.DoubleSide}),2.4,.05,true));scene.add(m);
     // feston (lambrequin) : bande drapée qui retombe en arc entre deux poteaux, galon doré en bas
     const fP=[],fC=[],fI=[],nf=60,fh=.5*U1,top=fl+h,off=.14*U1;
     for(let i=0;i<=nf;i++){const u=i/nf,x=(u-.5)*L,sag=Math.sin(Math.PI*u),bot=top-fh*(.35+.65*sag);
@@ -731,7 +734,7 @@ function woodTex(seed,base){const cv=document.createElement('canvas');cv.width=1
         const k=(.35+.45*Math.sin(v*Math.PI*.9))*(.85+.3*sag);j===4?fC.push(.45,.33,.12):fC.push(.2*k,.07*k,.06*k);}}
     for(let i=0;i<nf;i++)for(let j=0;j<4;j++){const a=i*5+j,b=a+5;fI.push(a,b,a+1,b,b+1,a+1);}
     const fg=new THREE.BufferGeometry();fg.setAttribute('position',new THREE.Float32BufferAttribute(fP,3));fg.setAttribute('color',new THREE.Float32BufferAttribute(fC,3));fg.setIndex(fI);
-    const fm=new THREE.Mesh(fg,lampify(new THREE.MeshBasicMaterial({vertexColors:true,fog:false,side:THREE.DoubleSide}),1.6,.05));scene.add(fm);
+    const fm=new THREE.Mesh(fg,lampify(new THREE.MeshBasicMaterial({vertexColors:true,fog:false,side:THREE.DoubleSide}),2.4,.05,true));scene.add(fm);
     TENTE.push({m:[m,fm],ok:c=>inw.x?c.x*-inw.x<HX:c.z*-inw.z<HZ});}
   // deux tentures par côté, entre les poteaux
   for(const k of [-1,1]){tenture(HX,H,k*HX/2,-HZ,0,1+k);tenture(HX,H,k*HX/2,HZ,Math.PI,5+k);tenture(HZ,H,-HX,k*HZ/2,-Math.PI/2,9+k);tenture(HZ,H,HX,k*HZ/2,Math.PI/2,13+k);}
@@ -742,18 +745,19 @@ function woodTex(seed,base){const cv=document.createElement('canvas');cv.width=1
   {const P=[],C=[],top=[0,fl+H+RH,0],cs=[[-HX,-HZ],[HX,-HZ],[HX,HZ],[-HX,HZ]];
     for(let k=0;k<4;k++){const a=cs[k],b=cs[(k+1)%4];P.push(a[0],fl+H,a[1],b[0],fl+H,b[1],...top);C.push(.07,.03,.03,.07,.03,.03,.015,.008,.008);}
     const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(P,3));g.setAttribute('color',new THREE.Float32BufferAttribute(C,3));
-    MQ.roof=new THREE.Mesh(g,lampify(new THREE.MeshBasicMaterial({vertexColors:true,fog:false,side:THREE.DoubleSide}),1.6,.03));scene.add(MQ.roof);}
+    MQ.roof=new THREE.Mesh(g,lampify(new THREE.MeshBasicMaterial({vertexColors:true,fog:false,side:THREE.DoubleSide}),2.4,.03,true));scene.add(MQ.roof);}
   // poteaux en bois aux coins et au milieu des côtés
-  const pole=lampify(new THREE.MeshBasicMaterial({map:woodTex(41,'#3a2412'),color:0xffffff,fog:false}),1.6,.05),pg=new THREE.CylinderGeometry(.06*U1,.075*U1,H+.15*U1,10);
+  const pole=lampify(new THREE.MeshBasicMaterial({map:woodTex(41,'#3a2412'),color:0xffffff,fog:false}),2.4,.05,true),pg=new THREE.CylinderGeometry(.06*U1,.075*U1,H+.15*U1,10);
   for(const [x,z] of [[-HX,-HZ],[HX,-HZ],[HX,HZ],[-HX,HZ],[0,-HZ],[0,HZ],[-HX,0],[HX,0]]){const m=new THREE.Mesh(pg,pole);m.position.set(x*.985,fl+(H+.15*U1)/2,z*.985);scene.add(m);TENTE.push({m:[m,m],ok:c=>(x?c.x*Math.sign(x)<HX:true)&&(z?c.z*Math.sign(z)<HZ:true)});}
   // sol : terre battue sombre
-  const fg=new THREE.Mesh(new THREE.PlaneGeometry(2*HX,2*HZ),lampify(new THREE.MeshBasicMaterial({color:new THREE.Color(0x3a2a1a).convertSRGBToLinear(),fog:false}),1.6,.05));fg.rotation.x=-Math.PI/2;fg.position.y=fl;scene.add(fg);
+  const fg=new THREE.Mesh(new THREE.PlaneGeometry(2*HX,2*HZ),lampify(new THREE.MeshBasicMaterial({color:new THREE.Color(0x3a2a1a).convertSRGBToLinear(),fog:false}),2.4,.05,true));fg.rotation.x=-Math.PI/2;fg.position.y=fl;scene.add(fg);
 }
 // ---------- lueur de bougies hors de la vue : rien n'est posé sur la table, seule la lumière vacille sur le fond ----------
 {const U1=MQ.U1;MQ.HX=MQ.HX||MQ.TW;
   [[-1,-1],[1,-1],[1,1],[-1,1]].forEach(([sx,sz],i)=>LAMPU.lampP.value[i].set(sx*MQ.TW/4,MQ.tY+1.1*U1,sz*MQ.TD/4));
   LAMPU.lampR.value=1.5*U1;
-  MQ.lampTick=t=>{for(let i=0;i<4;i++)LAMPU.lampF.value[i]=.42+.025*Math.sin(t*9+i*2.1)+.02*Math.sin(t*21.7+i*5.3)+.012*Math.sin(t*37+i);};
+  LAMPU.bgP.value.set(-MQ.HX*.3,MQ.tY+1.1*U1,-MQ.HZ+.7*U1);LAMPU.bgR.value=1.5*U1;
+  MQ.lampTick=t=>{for(let i=0;i<4;i++)LAMPU.lampF.value[i]=.42+.025*Math.sin(t*9+i*2.1)+.02*Math.sin(t*21.7+i*5.3)+.012*Math.sin(t*37+i);LAMPU.bgI.value=1+.04*Math.sin(t*7.3)+.03*Math.sin(t*17.1);};
 }
 
 // ---------- forêts ----------
