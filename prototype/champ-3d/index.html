@@ -631,7 +631,10 @@ water.rotation.x=-Math.PI/2; water.position.y=WATER; scene.add(water);
 const LAMPU={lampP:{value:[0,1,2,3].map(()=>new THREE.Vector3())},lampF:{value:[1,1,1,1]},lampR:{value:1},bgP:{value:new THREE.Vector3()},bgR:{value:1},bgI:{value:1}};
 function lampify(mat,k,amb=.07,fond=false){mat.onBeforeCompile=sh=>{Object.assign(sh.uniforms,LAMPU);sh.uniforms.lampK={value:k};sh.uniforms.lampA={value:amb};
     sh.vertexShader='varying vec3 vLw;\n'+sh.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nvLw=(modelMatrix*vec4(transformed,1.0)).xyz;');
-    sh.fragmentShader='uniform vec3 lampP[4];uniform float lampF[4];uniform float lampR;uniform float lampK;uniform float lampA;uniform vec3 bgP;uniform float bgR;uniform float bgI;varying vec3 vLw;\n'+sh.fragmentShader.replace('#include <tonemapping_fragment>',fond?
+    sh.fragmentShader='uniform vec3 lampP[4];uniform float lampF[4];uniform float lampR;uniform float lampK;uniform float lampA;uniform vec3 bgP;uniform float bgR;uniform float bgI;varying vec3 vLw;\n'+sh.fragmentShader.replace('#include <tonemapping_fragment>',fond==='objet'?
+      // objets posés sur la table : leur relief (lumière de la scène, atténuée) + la lueur dorée de la table
+      `{vec3 la=vec3(0.0);for(int i=0;i<4;i++){vec3 d=lampP[i]-vLw;float q=dot(d,d)/(lampR*lampR);la+=vec3(lampF[i]/(1.0+q+q*q*.4));}
+      gl_FragColor.rgb=gl_FragColor.rgb*.42+diffuseColor.rgb*(vec3(lampA)+vec3(1.0,.8,.52)*la*lampK);}\n#include <tonemapping_fragment>`:fond?
       // fond (clair-obscur) : une seule lumière chaude venue d'un côté, chute rapide vers un brun-noir chaud
       `{vec3 d=bgP-vLw;float q=dot(d,d)/(bgR*bgR);float la=bgI/(1.0+q*q*1.5+q*.5);
       gl_FragColor.rgb=diffuseColor.rgb*(vec3(.09,.055,.03)*lampA*14.0+vec3(1.0,.8,.52)*la*lampK);}\n#include <tonemapping_fragment>`:
@@ -757,9 +760,80 @@ function woodTex(seed,base){const cv=document.createElement('canvas');cv.width=1
   [[-1,-1],[1,-1],[1,1],[-1,1]].forEach(([sx,sz],i)=>LAMPU.lampP.value[i].set(sx*MQ.TW/4,MQ.tY+1.1*U1,sz*MQ.TD/4));
   LAMPU.lampR.value=1.5*U1;
   LAMPU.bgP.value.set(-MQ.HX*.3,MQ.tY+1.1*U1,-MQ.HZ+.7*U1);LAMPU.bgR.value=1.5*U1;
-  MQ.lampTick=t=>{for(let i=0;i<4;i++)LAMPU.lampF.value[i]=.42+.025*Math.sin(t*9+i*2.1)+.02*Math.sin(t*21.7+i*5.3)+.012*Math.sin(t*37+i);LAMPU.bgI.value=1+.04*Math.sin(t*7.3)+.03*Math.sin(t*17.1);};
+  MQ.lampTick0=1;MQ.lampTick=t=>{for(let i=0;i<4;i++)LAMPU.lampF.value[i]=.42+.025*Math.sin(t*9+i*2.1)+.02*Math.sin(t*21.7+i*5.3)+.012*Math.sin(t*37+i);LAMPU.bgI.value=1+.04*Math.sin(t*7.3)+.03*Math.sin(t*17.1);};
 }
 
+// ---------- outils du stratège, en bois peint, posés sur les bords de la table (jamais sur la carte) ----------
+{const U1=MQ.U1,tY=MQ.tY,ex=MQ.OW/2,ez=MQ.OD/2,mid=.27*U1;   // la bande libre de la table fait environ 55 cm
+  // bois peint : couleur de fond, traces de pinceau, petites usures qui laissent voir le bois
+  const paint=(hex,seed,usure=.5)=>{const c=document.createElement('canvas');c.width=c.height=128;const g=c.getContext('2d'),r=rng(seed);g.fillStyle=hex;g.fillRect(0,0,128,128);
+    for(let i=0;i<60;i++){g.fillStyle=`rgba(${r()<.5?'0,0,0':'255,240,210'},${.01+r()*.018})`;g.fillRect(r()*40,r()*128,40+r()*90,1);}
+    for(let i=0;i<30*usure;i++){g.fillStyle=`rgba(120,80,45,${.25+r()*.3})`;g.beginPath();g.ellipse(r()*128,r()*128,1+r()*4,.5+r()*1.5,r()*3,0,6.3);g.fill();}
+    const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;
+    return lampify(new THREE.MeshPhongMaterial({map:t,color:0xffffff,specular:0x2a2218,shininess:28,fog:false}),1.5,.1,'objet');};
+  const mk=(geo,mat,x,y,z,rx=0,ry=0,rz=0)=>{const m=new THREE.Mesh(geo,mat);m.position.set(x,y,z);m.rotation.set(rx,ry,rz);scene.add(m);return m;};
+  const B=(w,h,d)=>new THREE.BoxGeometry(w*U1,h*U1,d*U1);
+  // ombre douce de contact sous chaque objet
+  const shc=document.createElement('canvas');shc.width=shc.height=64;{const g=shc.getContext('2d'),gr=g.createRadialGradient(32,32,4,32,32,32);gr.addColorStop(0,'rgba(0,0,0,.55)');gr.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=gr;g.fillRect(0,0,64,64);}
+  const shM=new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(shc),transparent:true,depthWrite:false,fog:false});
+  const ombre=(x,z,w,d,ry=0)=>{const m=new THREE.Mesh(new THREE.PlaneGeometry(w*U1*1.25,d*U1*1.25),shM);m.rotation.set(-Math.PI/2,0,ry);m.position.set(x,tY+.5,z);scene.add(m);};
+  const vert=paint('#2f4a35',1),interieur=paint('#8a6a42',2,.2),rouge=paint('#8e2a20',3),bleu=paint('#24406e',4),creme=paint('#d9c9a2',5,.3),noir=paint('#1d1a17',6,.2),ocre=paint('#b8873c',7);
+  // 1. coffret de pions du Kriegsspiel, ouvert (fond, côté gauche du mur du fond)
+  {const x=-ex+.55*U1,z=-ez-mid,w=.34,d=.22,h=.07,t=.012,g=new THREE.Group();g.position.set(x,tY,z);g.rotation.y=.08;scene.add(g);
+    const add=(geo,mat,px,py,pz)=>{const m=new THREE.Mesh(geo,mat);m.position.set(px*U1,py*U1,pz*U1);g.add(m);return m;};
+    add(B(w,t,d),interieur,0,t/2,0);
+    add(B(w,h,t),vert,0,h/2,-d/2+t/2);add(B(w,h,t),vert,0,h/2,d/2-t/2);add(B(t,h,d),vert,-w/2+t/2,h/2,0);add(B(t,h,d),vert,w/2-t/2,h/2,0);
+    add(B(t*.8,h*.9,d-2*t),interieur,0,h*.45,0);   // cloison : bleus à gauche, rouges à droite
+    const pion=B(.045,.018,.022);
+    for(let i=0;i<4;i++)for(let j=0;j<5;j++){add(pion,bleu,-w/4+(i-1.5)*.035,t+.009,(j-2)*.034);add(pion,rouge,w/4+(i-1.5)*.035,t+.009,(j-2)*.034);}
+    const lid=mk(B(w,.012,d),vert,x+.02*U1,tY+.006*U1,z-.0*U1+.0,0,.08,0);lid.position.set(x-(w+.03)*U1,tY+.006*U1,z+.01*U1);   // couvercle posé à côté
+    mk(B(w*.4,.002,d*.3),creme,lid.position.x,tY+.0135*U1,lid.position.z,0,.08,0);   // étiquette
+    ombre(x,z,w,d,.08);ombre(lid.position.x,lid.position.z,w,d,.08);}
+  // 2. pions sortis du coffret, alignés comme une ligne de bataille
+  {const pion=B(.045,.018,.022),x0=-ex+.12*U1,z=-ez-.42*U1;
+    for(let i=0;i<5;i++){mk(pion,bleu,x0+i*.055*U1,tY+.009*U1,z,0,.03*i,0);}
+    for(let i=0;i<4;i++){mk(pion,rouge,x0+.36*U1+i*.055*U1,tY+.009*U1,z-.06*U1,0,Math.PI+.05*i,0);}
+    for(let i=0;i<4;i++)mk(B(.03,.003,.006),creme,x0+i*.055*U1,tY+.0185*U1,z,0,.03*i,0);   // marque blanche peinte
+    ombre(x0+.2*U1,z-.03*U1,.55,.12);}
+  // 3. règle graduée peinte (côté droit)
+  {const x=ex+mid,z=-.15*ez,L=.62,g=new THREE.Group();g.position.set(x,tY+.004*U1,z);g.rotation.y=Math.PI/2+.04;scene.add(g);
+    const c=document.createElement('canvas');c.width=1024;c.height=64;const cg=c.getContext('2d');cg.fillStyle='#c79d55';cg.fillRect(0,0,1024,64);
+    cg.fillStyle='#1d1a17';for(let i=0;i<=60;i++){const big=i%10===0,h=big?28:i%5===0?20:12;cg.fillRect(8+i*16.8,0,big?3:2,h);if(big&&i<60){cg.font='bold 16px serif';cg.fillText(String(i/10),12+i*16.8,50);}}
+    cg.fillStyle='rgba(60,30,10,.18)';for(let i=0;i<40;i++)cg.fillRect(0,Math.random()*64,1024,1);
+    const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;
+    const top=lampify(new THREE.MeshPhongMaterial({map:t,color:0xffffff,specular:0x2a2218,shininess:30,fog:false}),1.5,.1,'objet');
+    const m=new THREE.Mesh(B(L,.008,.04),[ocre,ocre,top,ocre,ocre,ocre]);g.add(m);ombre(x,z,.06,L,.04);}
+  // 4. sablier : cadre en bois peint rouge sombre, verre, sable (côté droit, vers le fond)
+  {const x=ex+mid,z=-ez+.25*U1,g=new THREE.Group();g.position.set(x,tY,z);scene.add(g);
+    const disque=new THREE.CylinderGeometry(.055*U1,.055*U1,.014*U1,24);
+    const d1=new THREE.Mesh(disque,rouge);d1.position.y=.007*U1;g.add(d1);const d2=new THREE.Mesh(disque,rouge);d2.position.y=.163*U1;g.add(d2);
+    const col=new THREE.CylinderGeometry(.006*U1,.006*U1,.142*U1,10);for(let k=0;k<3;k++){const a=k*2.094,m=new THREE.Mesh(col,rouge);m.position.set(Math.cos(a)*.045*U1,.085*U1,Math.sin(a)*.045*U1);g.add(m);}
+    const verreG=new THREE.LatheGeometry([[.002,0],[.035,.01],[.038,.03],[.025,.055],[.004,.071],[.025,.087],[.038,.112],[.035,.132],[.002,.142]].map(([r,h])=>new THREE.Vector2(r*U1,h*U1)),24);
+    const v=new THREE.Mesh(verreG,new THREE.MeshPhongMaterial({color:0xfff6e0,specular:0xffffff,shininess:90,transparent:true,opacity:.22,depthWrite:false,fog:false}));v.position.y=.014*U1;v.renderOrder=2;g.add(v);
+    const sable=new THREE.Mesh(new THREE.LatheGeometry([[.0,0],[.033,.008],[.034,.022],[.0,.03]].map(([r,h])=>new THREE.Vector2(r*U1,h*U1)),20),paint('#c9a061',8,0));sable.position.y=.016*U1;g.add(sable);
+    const sable2=new THREE.Mesh(new THREE.ConeGeometry(.02*U1,.02*U1,16),paint('#c9a061',9,0));sable2.position.y=.07*U1;sable2.rotation.x=Math.PI;g.add(sable2);
+    ombre(x,z,.13,.13);}
+  // 5. compas à pointes en bois peint noir, ouvert, couché sur la table (côté gauche)
+  {const x=-ex-mid,z=.25*ez,g=new THREE.Group();g.position.set(x,tY+.006*U1,z);g.rotation.y=.6;scene.add(g);
+    const jambe=new THREE.ConeGeometry(.01*U1,.24*U1,8);
+    for(const a of [-.22,.22]){const m=new THREE.Mesh(jambe,noir);m.rotation.set(0,0,Math.PI/2);m.position.set(.12*U1,0,0);const p=new THREE.Group();p.rotation.y=a;p.add(m);g.add(p);}
+    const tete=new THREE.Mesh(new THREE.CylinderGeometry(.016*U1,.016*U1,.014*U1,16),ocre);g.add(tete);ombre(x+.08*U1,z,.26,.12,.6);}
+  // 6. deux dés en bois peint crème, points noirs
+  {const c=document.createElement('canvas');c.width=c.height=64;const cg=c.getContext('2d');
+    const face=n=>{cg.fillStyle='#e2d3ad';cg.fillRect(0,0,64,64);cg.fillStyle='#1d1a17';const P={1:[[32,32]],2:[[18,18],[46,46]],3:[[16,16],[32,32],[48,48]],4:[[18,18],[46,18],[18,46],[46,46]],5:[[16,16],[48,16],[32,32],[16,48],[48,48]],6:[[18,14],[46,14],[18,32],[46,32],[18,50],[46,50]]}[n];
+      P.forEach(([a,b])=>{cg.beginPath();cg.arc(a,b,5,0,6.3);cg.fill();});const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;
+      const tt=new THREE.CanvasTexture(cg.getImageData?(()=>{const k=document.createElement('canvas');k.width=k.height=64;k.getContext('2d').drawImage(c,0,0);return k;})():c);tt.encoding=THREE.sRGBEncoding;
+      return lampify(new THREE.MeshPhongMaterial({map:tt,color:0xffffff,specular:0x332a20,shininess:35,fog:false}),1.5,.1,'objet');};
+    const faces=[1,6,2,5,3,4].map(face),dg=B(.022,.022,.022);
+    [[.0,.0,.3],[.04,.025,1.1]].forEach(([dx,dz,ry])=>{const x=-ex+.95*U1+dx*U1,z=-ez-.4*U1+dz*U1;mk(dg,faces,x,tY+.011*U1,z,0,ry,0);ombre(x,z,.03,.03);});}
+  // 7. cartes roulées, nouées d'un ruban rouge (côté gauche, vers le fond)
+  {const parch=paint('#d8c49a',10,.15),ruban=paint('#7a1f18',11,0);
+    [[-ex-mid,-.45*ez,.38,.028,.1],[-ex-mid+.05*U1,-.62*ez,.32,.022,-.15]].forEach(([x,z,L,r,ry])=>{
+      const g=new THREE.Group();g.position.set(x,tY+r*U1,z);g.rotation.y=ry;scene.add(g);
+      const m=new THREE.Mesh(new THREE.CylinderGeometry(r*U1,r*U1,L*U1,20),parch);m.rotation.z=Math.PI/2;g.add(m);
+      const b=new THREE.Mesh(new THREE.CylinderGeometry(r*U1*1.04,r*U1*1.04,.012*U1,20),ruban);b.rotation.z=Math.PI/2;g.add(b);
+      ombre(x,z,L,r*2.4,ry);});}
+}
 // ---------- forêts ----------
 const spots=[];
 // pas d'arbres sur les zones de départ ni sous les armées placées
