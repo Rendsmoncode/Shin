@@ -576,7 +576,7 @@ function fogged(mat){
 const scene=new THREE.Scene();
 scene.background=new THREE.Color(0x9fb4c2);
 // brume du lointain : la zone jouable reste nette, les montagnes s'y fondent
-const FOG_N=Math.max(3400,1.1*W+400),FOG_F0=FOG_N+6000*Math.max(1,KS);
+const FOG_N=3400*Math.max(1,KS)+1500,FOG_F0=FOG_N+10000*Math.max(1,KS);   // les montagnes restent nettes de près, puis se fondent au loin
 scene.fog=new THREE.Fog(0x9fb4c2,FOG_N,FOG_F0);
 const renderer=new THREE.WebGLRenderer({antialias:true});
 renderer.setPixelRatio(Math.min(1.5,window.devicePixelRatio||1));
@@ -584,7 +584,7 @@ renderer.outputEncoding=THREE.sRGBEncoding;
 renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap; renderer.shadowMap.autoUpdate=false; renderer.shadowMap.needsUpdate=true;   // ombres recalculées de temps en temps seulement
 document.getElementById('scene').appendChild(renderer.domElement);
 
-const camera=new THREE.PerspectiveCamera(40,1,1,14000);
+const camera=new THREE.PerspectiveCamera(40,1,1,24000);
 const controls=new THREE.MapControls(camera,renderer.domElement);
 controls.enableDamping=true; controls.dampingFactor=.08;
 controls.minDistance=40; controls.maxDistance=Math.max(1400,3200*KS);
@@ -625,7 +625,8 @@ for(let i=0;i<pos.count;i++){
   const x=pos.getX(i),z=pos.getZ(i),y=pos.getY(i),slope=1-nrm.getY(i);
   c.copy(grass).lerp(gold,sm(.42,.66,fbm(x/160,z/160))).lerp(dark,sm(.55,.75,fbm(x/70+40,z/70))*.5);
   const d=Math.abs(x-riverX(z)); if(d<44*KS) c.lerp(sand,sm(44*KS,24*KS,d));
-  if(slope>.18||y>58*KS) c.lerp(rock,sm(.18,.34,slope)*.9+sm(58*KS,80*KS,y)*.6);
+  const hr=(58+80*sm(430,120,Math.min(1500-Math.abs(x/KS),1000-Math.abs(z/KS))))*KS;   // près des bords, les contreforts restent verts plus haut
+  if(slope>.18||y>hr) c.lerp(rock,sm(.18,.34,slope)*.9+sm(hr,hr+22*KS,y)*.6);
   col[i*3]=c.r;col[i*3+1]=c.g;col[i*3+2]=c.b;
 }
 geo.setAttribute('color',new THREE.BufferAttribute(col,3));
@@ -638,33 +639,35 @@ ground.receiveShadow=true; scene.add(ground);
 
 // ---------- décor : chaîne de hautes montagnes autour de la vallée (infranchissable, peu de triangles) ----------
 // anneaux qui suivent le bord de la carte : le premier passe sous le sol, puis la falaise, puis les sommets qui se perdent dans la brume
-const MH=450+450*KS;   // hauteur des grands sommets (mètres)
+const MH=400+400*KS;   // hauteur des grands sommets (mètres)
 function mtnY(x,z){   // hauteur des montagnes hors de la carte (même formule pour le décor et la mini-carte) : formes larges et lisses
   const bx=Math.max(-W/2,Math.min(W/2,x)),bz=Math.max(-D/2,Math.min(D/2,z)),d=Math.hypot(x-bx,z-bz),y0=height(bx,bz);
   const rd=1-Math.abs(2*fbm(x/1300+3,z/1300+90,3)-1),n=fbm(x/800+71,z/800+13,3);
-  let y=y0+sm(0,90,d)*(60+40*n)*Math.max(.5,KS)+MH*sm(60,2200,d)*(.25+.9*rd*rd+.3*(n-.5));
-  if(Math.abs(bz)>=D/2-1){const dr=Math.abs(x-riverX(bz)),w=70*Math.max(.5,KS)+d*.15;   // gorge où la rivière entre et sort
-    y+=(WATER-1.5-y)*sm(w*1.5,w*.5,dr)*sm(1800,600,d);}
-  return y;}
-const mtnCol=(y,slope,n)=>{const c=new THREE.Color(.33,.31,.28).lerp(new THREE.Color(.30,.38,.22),sm(.45,.2,slope)*sm(MH*.5,MH*.15,y));
-  return c.lerp(new THREE.Color(.90,.92,.96),sm(MH*.6,MH*.8,y+n*MH*.15)*sm(.75,.45,slope));};
-// grille régulière (cases carrées d'environ 75 m) autour de la carte, sans les cases de la carte ; sommets lissés
-{const NX=3*Math.ceil(W/225),c=W/NX,NZ=Math.round(D/c),M=Math.ceil(4800*Math.max(1,KS)/c),GX=NX+2*M+1,GZ=NZ+2*M+1;
-  const P=new Float32Array(GX*GZ*3),C=new Float32Array(GX*GZ*3),idx=[];
-  for(let j=0;j<GZ;j++)for(let i=0;i<GX;i++){const x=-W/2+(i-M)*c,z=-D/2+(j-M)*c,o=(j*GX+i)*3,ins=i>=M&&i<=M+NX&&j>=M&&j<=M+NZ;
+  return y0+sm(0,90,d)*(50+40*n)*Math.max(.5,KS)+MH*sm(60,2600,d)*(.3+.85*rd*rd+.3*(n-.5));}
+// mêmes couleurs que la carte : herbe, blé, sous-bois, roche sur les pentes raides et en altitude, un peu de neige tout en haut
+const snow=new THREE.Color(.92,.93,.95);
+function mtnCol(x,z,y,slope){const c=grass.clone().lerp(gold,sm(.42,.66,fbm(x/600,z/600))).lerp(dark,sm(.5,.75,fbm(x/300+40,z/300))*.6);
+  c.lerp(rock,Math.min(1,sm(.22,.45,slope)*.85+sm(MH*.35,MH*.6,y)*.7));
+  return c.lerp(snow,sm(MH*.78,MH*.95,y)*sm(.6,.35,slope)*.85);}
+// grille autour de la carte (cases d'environ 70 m au bord, de plus en plus larges au loin), sans les cases de la carte ; sommets lissés
+{const NX=3*Math.ceil(W/225),c=W/NX,NZ=Math.round(D/c),off=[];for(let o=0,s=c;o<9000*Math.max(1,KS);){o+=s;s*=1.07;off.push(o);}
+  const M=off.length,ax=(n,h)=>[...off.slice().reverse().map(o=>-h-o),...Array.from({length:n+1},(_,i)=>-h+i*2*h/n),...off.map(o=>h+o)];
+  const XS=ax(NX,W/2),ZS=ax(NZ,D/2),GX=XS.length,GZ=ZS.length;
+  const P=new Float32Array(GX*GZ*3),C=new Float32Array(GX*GZ*3),UV=new Float32Array(GX*GZ*2),idx=[];
+  for(let j=0;j<GZ;j++)for(let i=0;i<GX;i++){const x=XS[i],z=ZS[j],k=j*GX+i,ins=i>=M&&i<=M+NX&&j>=M&&j<=M+NZ;
     const edge=ins&&(i===M||i===M+NX||j===M||j===M+NZ);
-    P[o]=x;P[o+2]=z;P[o+1]=ins?(edge?height(x,z)-4:height(x,z)-40):mtnY(x,z);}
+    P[k*3]=x;P[k*3+2]=z;P[k*3+1]=ins?(edge?height(x,z)-4:height(x,z)-40):mtnY(x,z);UV[k*2]=.5+x/W;UV[k*2+1]=.5-z/D;}
   for(let j=0;j<GZ-1;j++)for(let i=0;i<GX-1;i++){if(i>=M&&i<M+NX&&j>=M&&j<M+NZ)continue;const a=j*GX+i,b=a+1,e=a+GX,f=e+1;idx.push(a,e,b,b,e,f);}
-  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(P,3));g.setIndex(idx);g.computeVertexNormals();
+  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(P,3));g.setAttribute('uv',new THREE.BufferAttribute(UV,2));g.setIndex(idx);g.computeVertexNormals();
   const nn=g.attributes.normal;
-  for(let k=0;k<GX*GZ;k++){const cc=mtnCol(P[k*3+1],1-nn.getY(k),fbm(P[k*3]/400,P[k*3+2]/400,2)-.5);C[k*3]=cc.r;C[k*3+1]=cc.g;C[k*3+2]=cc.b;}
+  for(let k=0;k<GX*GZ;k++){const cc=mtnCol(P[k*3],P[k*3+2],P[k*3+1],1-nn.getY(k));C[k*3]=cc.r;C[k*3+1]=cc.g;C[k*3+2]=cc.b;}
   g.setAttribute('color',new THREE.BufferAttribute(C,3));
-  const mtn=new THREE.Mesh(g,new THREE.MeshLambertMaterial({vertexColors:true}));mtn.receiveShadow=true;scene.add(mtn);}
+  const mtn=new THREE.Mesh(g,new THREE.MeshLambertMaterial({vertexColors:true,map:detail}));mtn.receiveShadow=true;scene.add(mtn);}
 
 // ---------- ciel : dégradé et soleil, qui suivent la météo et la nuit ----------
 const SKY_U={top:{value:new THREE.Color(0x4f7fb4)},hor:{value:new THREE.Color(0x9fb4c2)},sunDir:{value:new THREE.Vector3(-1000,170,600).normalize()},
   sunCol:{value:new THREE.Color(0xfff1d6)},sunVis:{value:1},sunSize:{value:1}};
-const sky=new THREE.Mesh(new THREE.SphereGeometry(12000,32,16),new THREE.ShaderMaterial({uniforms:SKY_U,side:THREE.BackSide,depthWrite:false,fog:false,
+const sky=new THREE.Mesh(new THREE.SphereGeometry(20000,32,16),new THREE.ShaderMaterial({uniforms:SKY_U,side:THREE.BackSide,depthWrite:false,fog:false,
   vertexShader:`varying vec3 vD;void main(){vD=normalize(position);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`,
   fragmentShader:`uniform vec3 top,hor,sunCol;uniform vec3 sunDir;uniform float sunVis,sunSize;varying vec3 vD;
     void main(){vec3 d=normalize(vD);float e=max(d.y,0.0);vec3 c=mix(hor,top,pow(smoothstep(0.0,0.55,e),.7));
@@ -672,8 +675,8 @@ const sky=new THREE.Mesh(new THREE.SphereGeometry(12000,32,16),new THREE.ShaderM
     c=mix(c,sunCol,sunVis*smoothstep(1.0-.00012*sunSize,1.0-.00004*sunSize,s));gl_FragColor=linearToOutputTexel(vec4(c,1.0));}`}));
 sky.renderOrder=-1;sky.frustumCulled=false;scene.add(sky);
 
-// eau (elle déborde un peu pour remplir les gorges de la rivière)
-const water=new THREE.Mesh(new THREE.PlaneGeometry(W+3600*Math.max(1,KS*1.2),D+3600*Math.max(1,KS*1.2)),fogged(new THREE.MeshPhongMaterial({color:0x3b6f86,transparent:true,opacity:.82,shininess:80,specular:0x99bbcc})));
+// eau
+const water=new THREE.Mesh(new THREE.PlaneGeometry(W,D),fogged(new THREE.MeshPhongMaterial({color:0x3b6f86,transparent:true,opacity:.82,shininess:80,specular:0x99bbcc})));
 water.rotation.x=-Math.PI/2; water.position.y=WATER; scene.add(water);
 
 // ---------- forêts ----------
@@ -1930,7 +1933,7 @@ const MMK=1.12,WW=W*MMK,DD=D*MMK,mmFull=document.createElement('canvas');mmFull.
   for(let py=0;py<fh;py++)for(let px=0;px<fw;px++){const x=-WW/2+(px+.5)*e,z=-DD/2+(py+.5)*e;Y[py*fw+px]=inMap(x,z)?hAt(x,z):mtnY(x,z);}
   for(let py=0;py<fh;py++)for(let px=0;px<fw;px++){const x=-WW/2+(px+.5)*e,z=-DD/2+(py+.5)*e;if(inMap(x,z))continue;
     const i=py*fw+px,y=Y[i],sx=(Y[px<fw-1?i+1:i]-Y[px>0?i-1:i])/(2*e),sz=(Y[py<fh-1?i+fw:i]-Y[py>0?i-fw:i])/(2*e);
-    const shade=Math.min(1.3,Math.max(.45,1+(sx*.7-sz*.4)*.8)),c=mtnCol(y,Math.min(1,Math.hypot(sx,sz)*.5),0),o=i*4;
+    const shade=Math.min(1.3,Math.max(.45,1+(sx*.7-sz*.4)*.8)),c=mtnCol(x,z,y,1-1/Math.sqrt(1+sx*sx+sz*sz)),o=i*4;
     img.data[o]=toS(c.r*shade);img.data[o+1]=toS(c.g*shade);img.data[o+2]=toS(c.b*shade);img.data[o+3]=255;}
   g.putImageData(img,0,0);g.drawImage(mmBase,(fw-fw/MMK)/2,(fh-fh/MMK)/2,fw/MMK,fh/MMK);}
 // brouillard de la mini-carte : 1 pixel par case de 10 m, mis à jour avec celui de la scène
