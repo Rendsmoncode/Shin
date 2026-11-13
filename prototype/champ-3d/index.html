@@ -695,7 +695,7 @@ function woodTex(seed,base){const cv=document.createElement('canvas');cv.width=1
   for(const sx of [-1,1])for(const sz of [-1,1])add(legG,brun,sx*(TW/2-.14*U1),fl,sz*(TD/2-.14*U1));
 }
 // ---------- la tente du général : toile sombre aux plis de rideau, poteaux en bois ; elle n'est pas touchée par la brume ni la météo ----------
-{const U1=MQ.U1,fl=MQ.fl,HX=MQ.TW/2+1.6*U1,HZ=MQ.TD/2+1.6*U1,H=2.7*U1,RH=1.5*U1;
+{const U1=MQ.U1,fl=MQ.fl,MD=controls.maxDistance*.95+.25*U1,HX=MQ.TW/2+Math.max(1.6*U1,MD),HZ=MQ.TD/2+Math.max(1.6*U1,MD),H=2.7*U1,RH=1.5*U1;
   // toile de lin : trame fine
   const cv=document.createElement('canvas');cv.width=cv.height=256;{const g=cv.getContext('2d'),r=rng(31);g.fillStyle='#8a7658';g.fillRect(0,0,256,256);
     for(let i=0;i<256;i+=2){g.fillStyle=`rgba(40,28,15,${.05+r()*.07})`;g.fillRect(0,i,256,1);g.fillStyle=`rgba(40,28,15,${.04+r()*.06})`;g.fillRect(i,0,1,256);}
@@ -705,7 +705,7 @@ function woodTex(seed,base){const cv=document.createElement('canvas');cv.width=1
   // tentures de baldaquin : velours très sombre, grands plis ronds, froncés contre les poteaux, festons en haut ; ombres peintes dans les sommets
   const TENTE=[];
   function tenture(L,h,cx,cz,ry,seed){const nx=Math.round(L/(.05*U1)),ny=14,r=rng(seed),P=[],C=[],UV=[],I=[],ph=[];for(let k=0;k<6;k++)ph.push(r()*6.28);
-    const dir=new THREE.Vector3(Math.cos(ry),0,-Math.sin(ry)),inw=new THREE.Vector3(-cx,0,-cz).normalize();
+    const dir=new THREE.Vector3(Math.cos(ry),0,-Math.sin(ry)),inw=Math.abs(cz)>=HZ-1?new THREE.Vector3(0,0,-Math.sign(cz)):new THREE.Vector3(-Math.sign(cx),0,0);   // vers l'intérieur de la tente
     for(let j=0;j<=ny;j++)for(let i=0;i<=nx;i++){const u=i/nx,v=j/ny,x=(u-.5)*L,e=Math.abs(u-.5)*2,gath=Math.pow(e,3);   // froncé près des poteaux
       const lam=(.55-.3*gath+.08*Math.sin(x/(1.7*U1)+ph[0]))*U1,amp=(.1+.12*gath)*U1*(.75+.35*(1-v)),t=x/lam*6.283+ph[1];
       const d=(Math.sin(t)*.5+.5)*amp,dd=Math.cos(t)*amp/lam*3.14;
@@ -724,11 +724,11 @@ function woodTex(seed,base){const cv=document.createElement('canvas');cv.width=1
     for(let i=0;i<nf;i++)for(let j=0;j<4;j++){const a=i*5+j,b=a+5;fI.push(a,b,a+1,b,b+1,a+1);}
     const fg=new THREE.BufferGeometry();fg.setAttribute('position',new THREE.Float32BufferAttribute(fP,3));fg.setAttribute('color',new THREE.Float32BufferAttribute(fC,3));fg.setIndex(fI);
     const fm=new THREE.Mesh(fg,new THREE.MeshBasicMaterial({vertexColors:true,fog:false,side:THREE.DoubleSide}));scene.add(fm);
-    TENTE.push({m:[m,fm],p:new THREE.Vector3(cx,0,cz),n:inw});}
+    TENTE.push({m:[m,fm],ok:c=>inw.x?c.x*-inw.x<HX:c.z*-inw.z<HZ});}
   // deux tentures par côté, entre les poteaux
   for(const k of [-1,1]){tenture(HX,H,k*HX/2,-HZ,0,1+k);tenture(HX,H,k*HX/2,HZ,Math.PI,5+k);tenture(HZ,H,-HX,k*HZ/2,-Math.PI/2,9+k);tenture(HZ,H,HX,k*HZ/2,Math.PI/2,13+k);}
   // une tenture n'est affichée que si la caméra est du bon côté (sinon elle masquerait la vue en dézoomant)
-  const tv=new THREE.Vector3();MQ.tentVis=()=>{for(const t of TENTE){const v=tv.copy(camera.position).sub(t.p).dot(t.n)>0;t.m[0].visible=t.m[1].visible=v;}
+  MQ.tentVis=()=>{const c=camera.position;for(const t of TENTE){const v=t.ok(c);t.m[0].visible=t.m[1].visible=v;}
     if(MQ.roof)MQ.roof.visible=camera.position.y<fl+H;};
   // toit : pans tendus vers le faîte, très sombres (la lumière ne monte pas jusque-là)
   {const P=[],C=[],top=[0,fl+H+RH,0],cs=[[-HX,-HZ],[HX,-HZ],[HX,HZ],[-HX,HZ]];
@@ -737,7 +737,7 @@ function woodTex(seed,base){const cv=document.createElement('canvas');cv.width=1
     MQ.roof=new THREE.Mesh(g,new THREE.MeshBasicMaterial({vertexColors:true,fog:false,side:THREE.DoubleSide}));scene.add(MQ.roof);}
   // poteaux en bois aux coins et au milieu des côtés
   const pole=new THREE.MeshBasicMaterial({map:woodTex(41,'#3a2412'),color:0x8a6a50,fog:false}),pg=new THREE.CylinderGeometry(.06*U1,.075*U1,H+.15*U1,10);
-  for(const [x,z] of [[-HX,-HZ],[HX,-HZ],[HX,HZ],[-HX,HZ],[0,-HZ],[0,HZ],[-HX,0],[HX,0]]){const m=new THREE.Mesh(pg,pole);m.position.set(x*.985,fl+(H+.15*U1)/2,z*.985);scene.add(m);TENTE.push({m:[m,m],p:m.position.clone().setY(0),n:new THREE.Vector3(-x,0,-z).normalize()});}
+  for(const [x,z] of [[-HX,-HZ],[HX,-HZ],[HX,HZ],[-HX,HZ],[0,-HZ],[0,HZ],[-HX,0],[HX,0]]){const m=new THREE.Mesh(pg,pole);m.position.set(x*.985,fl+(H+.15*U1)/2,z*.985);scene.add(m);TENTE.push({m:[m,m],ok:c=>(x?c.x*Math.sign(x)<HX:true)&&(z?c.z*Math.sign(z)<HZ:true)});}
   // sol : terre battue sombre
   const fg=new THREE.Mesh(new THREE.PlaneGeometry(2*HX,2*HZ),new THREE.MeshBasicMaterial({color:0x1c140c,fog:false}));fg.rotation.x=-Math.PI/2;fg.position.y=fl;scene.add(fg);
 }
@@ -2118,7 +2118,8 @@ function loop(now){const dt=Math.min(.1,(now-last)/1000),t=now/1000;last=now;
       if((shAcc+=1)>=10){shAcc=0;renderer.shadowMap.needsUpdate=true;}
       updatePaths();}
   }catch(err){showErr(err);}
-  controls.update();updateBannerMode();MQ.tentVis();
+  controls.update();{const t=controls.target,dx=Math.max(-MQ.TW/2,Math.min(MQ.TW/2,t.x))-t.x,dz=Math.max(-MQ.TD/2,Math.min(MQ.TD/2,t.z))-t.z;if(dx||dz){t.x+=dx;t.z+=dz;camera.position.x+=dx;camera.position.z+=dz;}}   // on ne glisse pas au-delà de la table
+  updateBannerMode();MQ.tentVis();
   for(const g of regs){const k=Math.min(4,Math.max(.45,camera.position.distanceTo(g.banner.position)/650));g.banner.scale.set(BH*k*g.texN.userData.aspect,BH*k,1);}
   flushPools();renderer.render(scene,camera);if((mmAcc+=dt)>.066){mmAcc=0;drawMini();}drawFloats(now);drawArrows(now);requestAnimationFrame(loop);}
 requestAnimationFrame(loop);
