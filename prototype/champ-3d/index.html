@@ -645,9 +645,13 @@ function mtnY(x,z){   // hauteur des montagnes hors de la carte (même formule p
   const rd=1-Math.abs(2*fbm(x/1300+3,z/1300+90,3)-1),n=fbm(x/800+71,z/800+13,3);
   return y0+sm(0,90,d)*(50+40*n)*Math.max(.5,KS)+MH*sm(60,2600,d)*(.3+.85*rd*rd+.3*(n-.5));}
 // mêmes couleurs que la carte : herbe, blé, sous-bois, roche sur les pentes raides et en altitude, un peu de neige tout en haut
-const snow=new THREE.Color(.92,.93,.95);
+const snow=new THREE.Color(.92,.93,.95),woodCol=new THREE.Color(.10,.19,.07);
+// forêts de montagne : par grandes taches, sous la limite des arbres et hors des pentes trop raides
+const mtnWood=(x,z,y,slope)=>sm(.47,.55,fbm(x/520+9,z/520+4,3))*sm(MH*.55,MH*.38,y)*sm(.6,.42,slope);
+const decorSpots=[];   // arbres posés sur les montagnes proches (voir build)
 function mtnCol(x,z,y,slope){const c=grass.clone().lerp(gold,sm(.42,.66,fbm(x/600,z/600))).lerp(dark,sm(.5,.75,fbm(x/300+40,z/300))*.6);
   c.lerp(rock,Math.min(1,sm(.22,.45,slope)*.85+sm(MH*.35,MH*.6,y)*.7));
+  c.lerp(woodCol,mtnWood(x,z,y,slope)*.7);
   return c.lerp(snow,sm(MH*.78,MH*.95,y)*sm(.6,.35,slope)*.85);}
 // grille autour de la carte (cases d'environ 70 m au bord, de plus en plus larges au loin), sans les cases de la carte ; sommets lissés
 {const NX=3*Math.ceil(W/225),c=W/NX,NZ=Math.round(D/c),off=[];for(let o=0,s=c;o<9000*Math.max(1,KS);){o+=s;s*=1.07;off.push(o);}
@@ -661,7 +665,23 @@ function mtnCol(x,z,y,slope){const c=grass.clone().lerp(gold,sm(.42,.66,fbm(x/60
   const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(P,3));g.setAttribute('uv',new THREE.BufferAttribute(UV,2));g.setIndex(idx);g.computeVertexNormals();
   const nn=g.attributes.normal;
   for(let k=0;k<GX*GZ;k++){const cc=mtnCol(P[k*3],P[k*3+2],P[k*3+1],1-nn.getY(k));C[k*3]=cc.r;C[k*3+1]=cc.g;C[k*3+2]=cc.b;}
+  // hauteur exacte du maillage (pour poser les arbres et calculer les ombres des sommets)
+  const fi=(A,v)=>{let lo=0,hi=A.length-2;if(v<=A[0]||v>=A[hi+1])return-1;while(lo<hi){const m=(lo+hi+1)>>1;if(A[m]<=v)lo=m;else hi=m-1;}return lo;};
+  const gY=(x,z)=>{if(Math.abs(x)<W/2&&Math.abs(z)<D/2)return hAt(x,z);const i=fi(XS,x),j=fi(ZS,z);if(i<0||j<0)return null;
+    const u=(x-XS[i])/(XS[i+1]-XS[i]),v=(z-ZS[j])/(ZS[j+1]-ZS[j]),a=P[(j*GX+i)*3+1],b=P[(j*GX+i+1)*3+1],e=P[((j+1)*GX+i)*3+1],f=P[((j+1)*GX+i+1)*3+1];
+    return u+v<=1?a+(b-a)*u+(e-a)*v:f+(e-f)*(1-u)+(b-f)*(1-v);};
+  // ombres portées des sommets (calculées une fois, vers le soleil)
+  const L=new THREE.Vector3(-1000,1400,600).normalize();
+  for(let k=0;k<GX*GZ;k++){const x=P[k*3],y=P[k*3+1],z=P[k*3+2];if(Math.abs(x)<W/2+1&&Math.abs(z)<D/2+1)continue;let sh=0;
+    for(let t=25;t<6000;t*=1.14){const h=gY(x+L.x*t,z+L.z*t);if(h===null)break;if(h>y+L.y*t+3){sh=1;break;}}
+    if(sh){C[k*3]*=.55;C[k*3+1]*=.58;C[k*3+2]*=.66;}}
   g.setAttribute('color',new THREE.BufferAttribute(C,3));
+  // arbres sur les montagnes proches, dans les taches de forêt
+  const Lb=1700*Math.max(1,KS);
+  for(let n=0;n<90000&&decorSpots.length<9000*Math.max(1,KS);n++){const x=(R()-.5)*(W+2*Lb),z=(R()-.5)*(D+2*Lb);
+    if(Math.abs(x)<W/2+40&&Math.abs(z)<D/2+40)continue;const y=gY(x,z);if(y===null)continue;const yx=gY(x+8,z),yz=gY(x,z+8);if(yx===null||yz===null)continue;
+    const gr=Math.hypot(yx-y,yz-y)/8,sl=1-1/Math.sqrt(1+gr*gr);
+    if(R()<mtnWood(x,z,y,sl)*.9)decorSpots.push([x,y-1,z]);}
   const mtn=new THREE.Mesh(g,new THREE.MeshLambertMaterial({vertexColors:true,map:detail}));mtn.receiveShadow=true;scene.add(mtn);}
 
 // ---------- ciel : dégradé et soleil, qui suivent la météo et la nuit ----------
@@ -1982,7 +2002,7 @@ mm.addEventListener('pointerup',()=>{mmDrag=false;});
 mm.addEventListener('pointercancel',()=>{mmDrag=false;});
 mm.addEventListener('contextmenu',e=>e.preventDefault());
 
-function forestMesh(){
+function forestMesh(spots,decor){
   const set=mats.arbre; if(!set.length) return;
   // planche de 4 x 2 vues de l'arbre
   const cv=document.createElement('canvas');cv.width=1024;cv.height=512;const g=cv.getContext('2d');
@@ -1992,24 +2012,30 @@ function forestMesh(){
   const n=spots.length,base=new THREE.PlaneGeometry(1,1),geo=new THREE.InstancedBufferGeometry();
   geo.index=base.index;geo.setAttribute('position',base.attributes.position);geo.setAttribute('uv',base.attributes.uv);
   const ip=new Float32Array(n*3),is=new Float32Array(n*2),it=new Float32Array(n),ic=new Float32Array(n);
-  const sh=new THREE.InstancedMesh(shadowG,fogged(new THREE.MeshBasicMaterial({color:0x000000,transparent:true,opacity:.28,depthWrite:false})),n);
+  const sh=decor?null:new THREE.InstancedMesh(shadowG,fogged(new THREE.MeshBasicMaterial({color:0x000000,transparent:true,opacity:.28,depthWrite:false})),n);
   spots.forEach(([x,y,z],i)=>{const h=11+R()*7;ip.set([x,y,z],i*3);is.set([h*(R()<.5?-1:1),h],i*2);it[i]=Math.floor(R()*set.length);ic[i]=.82+R()*.28;
-    P.set(x+3,y+.3,z+2.5);Q.identity();S.set(h*.36,1,h*.3);M.compose(P,Q,S);sh.setMatrixAt(i,M);});
+    if(sh){P.set(x+3,y+.3,z+2.5);Q.identity();S.set(h*.36,1,h*.3);M.compose(P,Q,S);sh.setMatrixAt(i,M);}});
   geo.setAttribute('iPos',new THREE.InstancedBufferAttribute(ip,3));geo.setAttribute('iSize',new THREE.InstancedBufferAttribute(is,2));
   geo.setAttribute('iTile',new THREE.InstancedBufferAttribute(it,1));geo.setAttribute('iShade',new THREE.InstancedBufferAttribute(ic,1));
   geo.instanceCount=n;
-  const mat=new THREE.ShaderMaterial({uniforms:{map:{value:atlas},...fogU},side:THREE.DoubleSide,
-    vertexShader:`attribute vec3 iPos;attribute vec2 iSize;attribute float iTile;attribute float iShade;varying vec2 vUv;varying float vShade;varying vec2 vFogUv;
-      void main(){vec4 mv=modelViewMatrix*vec4(iPos,1.0);vec2 p=position.xy;p.y+=0.42;mv.xy+=p*iSize;gl_Position=projectionMatrix*mv;
+  const mat=new THREE.ShaderMaterial({uniforms:{map:{value:atlas},...fogU,...(decor?{fogOn:{value:0}}:{}),...THREE.UniformsUtils.clone(THREE.UniformsLib.fog)},fog:true,side:THREE.DoubleSide,
+    vertexShader:`#include <fog_pars_vertex>
+attribute vec3 iPos;attribute vec2 iSize;attribute float iTile;attribute float iShade;varying vec2 vUv;varying float vShade;varying vec2 vFogUv;
+      void main(){vec4 mv=modelViewMatrix*vec4(iPos,1.0);vec2 p=position.xy;p.y+=0.42;mv.xy+=p*iSize;vec4 mvPosition=mv;
+#include <fog_vertex>
+gl_Position=projectionMatrix*mv;
       float c=mod(iTile,4.0),r=floor(iTile/4.0);vUv=vec2((c+uv.x)/4.0,1.0-(r+1.0-uv.y)/2.0);vShade=iShade;
       vFogUv=(iPos.xz+vec2(${(W/2).toFixed(1)},${(D/2).toFixed(1)}))/vec2(${W.toFixed(1)},${D.toFixed(1)});}`,
-    fragmentShader:`uniform sampler2D map;uniform sampler2D fogMap;uniform float fogOn;varying vec2 vUv;varying float vShade;varying vec2 vFogUv;
-      void main(){vec4 c=texture2D(map,vUv);if(c.a<0.5)discard;gl_FragColor=vec4(c.rgb*vShade,1.0);${FOG_F}}`});
-  const trees=new THREE.Mesh(geo,mat);trees.frustumCulled=false;scene.add(trees);scene.add(sh);
+    fragmentShader:`#include <fog_pars_fragment>
+uniform sampler2D map;uniform sampler2D fogMap;uniform float fogOn;varying vec2 vUv;varying float vShade;varying vec2 vFogUv;
+      void main(){vec4 c=texture2D(map,vUv);if(c.a<0.5)discard;gl_FragColor=vec4(c.rgb*vShade,1.0);${FOG_F}
+#include <fog_fragment>
+}`});
+  const trees=new THREE.Mesh(geo,mat);trees.frustumCulled=false;scene.add(trees);if(sh)scene.add(sh);
 }
 let ready=false;
 function build(){
-  forestMesh();makePool('inf');makePool('cav');
+  forestMesh(spots,false);forestMesh(decorSpots,true);makePool('inf');makePool('cav');
   deploy();ready=true;
 }
 function done(){if(++loaded===toLoad)build();}
