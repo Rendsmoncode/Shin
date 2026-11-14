@@ -39,6 +39,6 @@ Celui qui vainc dans les ténèbres…
 
 ## Sources et vérifications
 
-- **La citation** vient du chant de guerre des Hussites, *Ktož jsú boží bojovníci* (« Vous qui êtes les guerriers de Dieu »), vers 1420, que l'armée de Žižka chantait avant les batailles (attribution à Žižka lui-même incertaine). La mélodie, du XVᵉ siècle, est libre de droits ; un enregistrement précis peut être protégé.
+- **La citation** vient du chant de guerre des Hussites, *Ktož jsú boží bojovníci* (« Vous qui êtes les guerriers de Dieu »), vers 1420, que l'armée de Žižka chantait avant les batailles (attribution à Žižka lui-même incertaine).
 - Faits vérifiés : borgne jeune, aveugle en 1421 au siège de Rabí, jamais vaincu en bataille rangée, armée de paysans retranchée derrière des chariots enchaînés, premières armes à feu portatives (le mot « pistolet » vient du tchèque *píšťala*).
 - Prononciation pour la voix de synthèse : Žižka = « Jijka ».
