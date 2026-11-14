@@ -181,6 +181,8 @@ Certains joueurs doivent obtenir les légendaires qui leur correspondent. Le Gam
 - Hannibal Barca, « L'Enfer aux portes de Rome »
   - Animation : la dernière phrase de sa présentation est « Les Romains hurlaient : Hannibal est aux portes !! », puis son surnom s'écrase sur l'écran.
 - Napoléon, « Le Petit Caporal »
+  - ✅ Scène de Laffrey (7 mars 1815) à reprendre dans son animation d'obtention et/ou son attaque spéciale : un bataillon royaliste (700 à 800 hommes) l'attend avec l'ordre de tirer ; il avance seul, ouvre sa redingote : « S'il est parmi vous un soldat qui veuille tuer son Empereur, me voici ! ». Personne ne tire, le bataillon se rallie à lui ; 19 jours plus tard, il entre à Paris sans un coup de feu. Sources : Mémoires du maréchal Randon (officier du camp royaliste, présent), Henry Houssaye, *1815*.
+  - 💡 Attaque spéciale « Me voici » : des unités ennemies refusent de tirer, voire passent de son côté (surtout troupes au moral bas). Sur la carte : prise d'un quartier sans combat si son prestige est assez haut. À équilibrer.
 - Saladin, « Le Roi victorieux »
 - Ouki, « L'Oiseau millénaire de Qin »
 - César, « Le Divin Jules » (provisoire, à remplacer si on trouve mieux)
