@@ -1,5 +1,5 @@
 {
-"maj": "2026-11-13",
+"maj": "2026-11-14",
 "statuts": ["À décider", "À faire", "En cours", "Fait, à vérifier", "Fait", "Abandonné"],
 "responsables": ["Ayoub", "Mathieu", "Les deux", "Nico"],
 "taches": [
@@ -145,7 +145,7 @@
 {"id": 140, "phase": "6. Personnages et gacha", "domaine": "Contenu", "tache": "Généraux rares (PDG, entraîneur de foot…)", "detail": "À faire plus tard.", "statut": "À faire", "priorite": 3, "payant": "Non", "taille": "M", "responsable": "", "notes": ""},
 {"id": 141, "phase": "6. Personnages et gacha", "domaine": "Contenu", "tache": "Soignants, espions, architectes, ingénieurs, économistes, explorateurs (dont archéologues)", "detail": "Catégories du gacha encore vides.", "statut": "À faire", "priorite": 2, "payant": "Non", "taille": "L", "responsable": "", "notes": ""},
 {"id": 142, "phase": "6. Personnages et gacha", "domaine": "Contenu", "tache": "Illustration de chaque personnage", "detail": "Style réaliste/manga validé.", "statut": "À faire", "priorite": 2, "payant": "Oui (Gemini)", "taille": "XL", "responsable": "", "notes": ""},
-{"id": 143, "phase": "6. Personnages et gacha", "domaine": "Contenu", "tache": "Animations d'obtention des 7 Sous les Cieux et des 2 généraux cachés", "detail": "Phrases, surnom qui s'écrase à l'écran…", "statut": "À faire", "priorite": 3, "payant": "Oui (Gemini/ElevenLabs)", "taille": "L", "responsable": "", "notes": ""},
+{"id": 143, "phase": "6. Personnages et gacha", "domaine": "Contenu", "tache": "Animations d'obtention des 7 Sous les Cieux et des 2 généraux cachés", "detail": "Phrases, surnom qui s'écrase à l'écran…", "statut": "En cours", "priorite": 3, "payant": "Oui (Gemini/ElevenLabs)", "taille": "L", "responsable": "Ayoub", "notes": "Commencé par Jan Žižka (voix off + trame de montage)."},
 {"id": 144, "phase": "6. Personnages et gacha", "domaine": "Contenu", "tache": "Voix du narrateur (si validée)", "detail": "Voix de synthèse sous licence.", "statut": "À faire", "priorite": 3, "payant": "Oui (ElevenLabs)", "taille": "M", "responsable": "", "notes": ""},
 {"id": 145, "phase": "6. Personnages et gacha", "domaine": "Système", "tache": "Tirage du gacha (coffre = un personnage)", "detail": "Probabilités, monnaie, animation.", "statut": "À faire", "priorite": 1, "payant": "Non", "taille": "M", "responsable": "", "notes": ""},
 {"id": 146, "phase": "6. Personnages et gacha", "domaine": "Système", "tache": "Doublons transformés en XP", "detail": "1 doublon = 1 000 XP par exemple.", "statut": "À faire", "priorite": 2, "payant": "Non", "taille": "S", "responsable": "", "notes": ""},
