@@ -8,7 +8,7 @@ Liste de travail des personnages du gacha. Stats et aptitudes à définir ensemb
 - C'est un jeu de guerre : on ne juge pas la morale des personnages (Napoléon reste). On fait du cas par cas.
 - On équilibre les origines (pas trop de personnages asiatiques).
 - Pas de pharaons, et peu de personnages de l'Antiquité.
-- On exclut ceux dont l'héritage principal est un crime de masse.
+- ✅ On accepte les conquérants cruels de l'histoire ancienne et médiévale (Gengis Khan, Bai Qi, Tamerlan, Vlad III…) : leur légende est d'abord militaire. On exclut du gacha les auteurs de génocides de l'époque moderne (Hitler, etc.) : ils ne sont célèbres que pour leurs crimes, leurs victimes ont encore des descendants directs vivants, et ils ne valent rien comme stratèges. Ils restent dans le jeu en tyrans à abattre (voir `LORE.md`).
 - Chaque personnage aura son **lore** (son histoire et ses exploits), affiché pendant les parties pour que les joueurs comprennent à quel point c'est de la folie.
 
 ## Surnoms
@@ -105,7 +105,15 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 - Le roi Arthur (légende bretonne, Vᵉ-VIᵉ siècle), « Le Roi d'hier et de demain » (*Rex quondam, rexque futurus*, l'épitaphe que lui donne Thomas Malory)
   - Lore : existence incertaine (peut-être un chef de guerre breton contre les Saxons). La plus ancienne source, l'*Historia Brittonum* (vers 830), lui attribue douze victoires et affirme qu'au mont Badon il tua à lui seul 960 ennemis en une seule charge. Puis la légende : l'épée tirée du rocher, Excalibur, la Table ronde, Merlin. Détail signature : Excalibur. Liens possibles : Roland (autre héros de chanson de geste), Charlemagne.
 
+- Bai Qi (Haku Ki, Chine, IIIᵉ siècle av. J.-C.), « Le Boucher d'hommes » (人屠, son vrai surnom)
+  - Lore : général de Qin, jamais vaincu en plus de 70 batailles ; il aurait anéanti plus d'un million de soldats ennemis. À Changping (260 av. J.-C.), il fait enterrer vivants les prisonniers de Zhao. Aussi personnage du manga *Kingdom* (l'un des Six Grands Généraux de Qin). Lien : Ouki, Ri Boku, Ousen, Kanki.
+- Tamerlan (Asie centrale, XIVᵉ siècle), « Le Boiteux de fer » (Timur veut dire « fer », Lang « le boiteux »)
+  - Lore : boiteux d'une jambe et paralysé d'un bras, il ne perd jamais une bataille en 35 ans. Il écrase la Horde d'or, prend Delhi et Bagdad, et capture le sultan ottoman Bayezid à Ankara (1402). Célèbre aussi pour ses pyramides de crânes. Meurt en marchant sur la Chine.
+
 ## Généraux épiques
+
+- Vlad III, « L'Empaleur » (Țepeș, son vrai surnom)
+  - Lore : prince de Valachie (XVᵉ siècle). En 1462, il attaque de nuit le camp de Mehmed II pour tenter de le tuer dans sa tente ; quand l'armée ottomane avance, elle découvre une « forêt d'empalés » de milliers de prisonniers, et Mehmed fait demi-tour. Il a inspiré Dracula. Lien : Mehmed II (rival).
 
 - Baudouin IV, « Le Roi lépreux » (vainqueur de Saladin à Montgisard)
 - Harald Hardrada, « Hardrada, l'Impitoyable »
@@ -178,9 +186,6 @@ Certains joueurs doivent obtenir les légendaires qui leur correspondent. Le Gam
 
 - Thors (Vinland Saga) : légendaire ou rien, et il n'est pas retenu en guerrier mystique.
 
-- Bai Qi (Haku Ki) : connu avant tout pour un massacre de masse (prisonniers enterrés vivants à Changping), même règle que pour Hitler.
-- Vlad III l'Empaleur : connu avant tout pour ses empalements de masse.
-- Tamerlan : connu pour ses massacres et ses pyramides de crânes (cas à confirmer, même logique).
 
 ## Grands Généraux Sous les Cieux : les 7 de la légende
 
