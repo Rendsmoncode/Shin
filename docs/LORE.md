@@ -8,7 +8,7 @@ Le 12 décembre, une faille temporelle se fissure mystérieusement à Aubagne.
 
 Le passé, le présent et le futur se mélangent dans toute la région. La région d'Aubagne semble être devenue une toute autre dimension, et seuls les habitants n'ayant pas été touchés par la distorsion temporelle sont conscients de la situation. Par chance, 3 garçons étaient à Paris ce jour-là pour un tournoi de cartes : Ayoub, Mathieu et Nicolas.
 
-À Aubagne, les époques se mélangent et certaines personnes venues du passé souhaitent assouvir leur pouvoir sur le monde. Par exemple Lu Bu, Staline, Hitler ou Attila. Des personnes issues de fiction sont également là pour faire le mal, par exemple Ray Dark, Dark Vador, Freezer et d'autres.
+À Aubagne, les époques se mélangent et certaines personnes venues du passé souhaitent assouvir leur pouvoir sur le monde. Par exemple Lu Bu, Staline, Hitler, Attila, Bai Qi, Tamerlan ou Vlad III (ces quatre derniers, comme Lu Bu, deviennent recrutables une fois vaincus). Des personnes issues de fiction sont également là pour faire le mal, par exemple Ray Dark, Dark Vador, Freezer et d'autres.
 
 Le jeu commence avec Attila qui essaie de ravager un quartier. La police intervient et l'armée d'Attila, contre eux, fait égalité. Toutes les armes de la ville ont été détruites ce jour-là. Les antennes réseau sont brisées également. Désormais, il ne reste que les armes venues du passé.
 

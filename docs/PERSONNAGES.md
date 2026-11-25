@@ -107,13 +107,20 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 
 - Bai Qi (Haku Ki, Chine, IIIᵉ siècle av. J.-C.), « Le Boucher d'hommes » (人屠, son vrai surnom)
   - Lore : général de Qin, jamais vaincu en plus de 70 batailles ; il aurait anéanti plus d'un million de soldats ennemis. À Changping (260 av. J.-C.), il fait enterrer vivants les prisonniers de Zhao. Aussi personnage du manga *Kingdom* (l'un des Six Grands Généraux de Qin). Lien : Ouki, Ri Boku, Ousen, Kanki.
+  - 🔒 Tyran du mode histoire : jouable seulement une fois vaincu dans l'histoire (comme Attila et Lü Bu).
 - Tamerlan (Asie centrale, XIVᵉ siècle), « Le Boiteux de fer » (Timur veut dire « fer », Lang « le boiteux »)
   - Lore : boiteux d'une jambe et paralysé d'un bras, il ne perd jamais une bataille en 35 ans. Il écrase la Horde d'or, prend Delhi et Bagdad, et capture le sultan ottoman Bayezid à Ankara (1402). Célèbre aussi pour ses pyramides de crânes. Meurt en marchant sur la Chine.
+  - 🔒 Tyran du mode histoire : jouable seulement une fois vaincu dans l'histoire (comme Attila et Lü Bu).
 
 ## Généraux épiques
 
+- Abd el-Krim (Maroc, XXᵉ siècle), « L'Émir du Rif »
+  - Lore : en 1921, à la tête des tribus du Rif, il écrase l'armée espagnole à Anoual (plus de 8 000 soldats espagnols tués), l'un des pires désastres coloniaux de l'histoire. Ses méthodes de guérilla inspireront Mao et Hô Chi Minh. Il faut la France (maréchal Pétain) et l'Espagne réunies pour le vaincre en 1926.
+- Tariq ibn Ziyad (VIIIᵉ siècle), « La Montagne de Tariq » (Gibraltar vient de *Djebel Tariq*)
+  - Lore : en 711, avec environ 7 000 hommes, il traverse la mer et conquiert l'Espagne wisigothique. Légende : il aurait brûlé ses bateaux en disant « La mer est derrière vous, l'ennemi devant vous ».
 - Vlad III, « L'Empaleur » (Țepeș, son vrai surnom)
   - Lore : prince de Valachie (XVᵉ siècle). En 1462, il attaque de nuit le camp de Mehmed II pour tenter de le tuer dans sa tente ; quand l'armée ottomane avance, elle découvre une « forêt d'empalés » de milliers de prisonniers, et Mehmed fait demi-tour. Il a inspiré Dracula. Lien : Mehmed II (rival).
+  - 🔒 Tyran du mode histoire : jouable seulement une fois vaincu dans l'histoire (comme Attila et Lü Bu).
 
 - Baudouin IV, « Le Roi lépreux » (vainqueur de Saladin à Montgisard)
 - Harald Hardrada, « Hardrada, l'Impitoyable »
