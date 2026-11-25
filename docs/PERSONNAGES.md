@@ -97,6 +97,11 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 - Yi Sun-sin (Corée, XVIᵉ siècle), « L'Amiral invaincu »
   - Lore : face à l'invasion japonaise (1592-1598), il remporte toutes ses batailles navales, dont Myeongnyang (1597) avec 13 navires contre plus de 130. Il meurt à sa dernière bataille, en demandant qu'on cache sa mort pour ne pas briser le moral de ses hommes. Détail signature : les « bateaux-tortues » cuirassés.
 
+- Oda Nobunaga (Japon, XVIᵉ siècle), « Le Roi démon du sixième ciel » (titre qu'il se donnait lui-même)
+  - Lore : à Okehazama (1560), avec 2 000 à 3 000 hommes, il attaque 25 000 ennemis sous l'orage et tue leur chef. À Nagashino (1575), ses arquebusiers tirent par rangs successifs et écrasent la cavalerie Takeda. Il unifie la moitié du Japon ; trahi par un de ses généraux, il se donne la mort dans le temple en flammes de Honnō-ji (1582).
+- Minamoto no Yoshitsune (Japon, XIIᵉ siècle), « Le Cavalier de la falaise »
+  - Lore : à Ichi-no-Tani (1184), il descend à cheval une falaise jugée infranchissable et prend l'ennemi à revers ; à Dan-no-ura (1185), il anéantit le clan Taira. Pourchassé par son propre frère, il se donne la mort pendant que Benkei meurt debout pour le protéger. Légende : il aurait survécu et serait devenu Gengis Khan. Lien : Benkei (son fidèle), Gengis Khan (la légende).
+
 ## Généraux épiques
 
 - Baudouin IV, « Le Roi lépreux » (vainqueur de Saladin à Montgisard)
