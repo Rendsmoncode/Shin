@@ -102,6 +102,9 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 - Minamoto no Yoshitsune (Japon, XIIᵉ siècle), « Le Cavalier de la falaise »
   - Lore : à Ichi-no-Tani (1184), il descend à cheval une falaise jugée infranchissable et prend l'ennemi à revers ; à Dan-no-ura (1185), il anéantit le clan Taira. Pourchassé par son propre frère, il se donne la mort pendant que Benkei meurt debout pour le protéger. Légende : il aurait survécu et serait devenu Gengis Khan. Lien : Benkei (son fidèle), Gengis Khan (la légende).
 
+- Le roi Arthur (légende bretonne, Vᵉ-VIᵉ siècle), « Le Roi d'hier et de demain » (*Rex quondam, rexque futurus*, l'épitaphe que lui donne Thomas Malory)
+  - Lore : existence incertaine (peut-être un chef de guerre breton contre les Saxons). La plus ancienne source, l'*Historia Brittonum* (vers 830), lui attribue douze victoires et affirme qu'au mont Badon il tua à lui seul 960 ennemis en une seule charge. Puis la légende : l'épée tirée du rocher, Excalibur, la Table ronde, Merlin. Détail signature : Excalibur. Liens possibles : Roland (autre héros de chanson de geste), Charlemagne.
+
 ## Généraux épiques
 
 - Baudouin IV, « Le Roi lépreux » (vainqueur de Saladin à Montgisard)
