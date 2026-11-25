@@ -112,6 +112,10 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
   - Lore : boiteux d'une jambe et paralysé d'un bras, il ne perd jamais une bataille en 35 ans. Il écrase la Horde d'or, prend Delhi et Bagdad, et capture le sultan ottoman Bayezid à Ankara (1402). Célèbre aussi pour ses pyramides de crânes. Meurt en marchant sur la Chine.
   - 🔒 Tyran du mode histoire : jouable seulement une fois vaincu dans l'histoire (comme Attila et Lü Bu).
 
+- Cao Cao (Chine, IIᵉ-IIIᵉ siècle), « Le Héros du chaos »
+  - Surnom : d'après la prédiction du critique Xu Shao : « un ministre capable en temps de paix, un héros perfide en temps de chaos ».
+  - Lore : seigneur de guerre des Trois Royaumes. À Guandu (200), il bat Yuan Shao, à la tête d'une armée bien plus nombreuse, en brûlant ses réserves de vivres, puis il unifie tout le nord de la Chine. Battu à la Falaise rouge (208). Aussi grand poète. Phrase célèbre (rapportée par une source tardive) : « Je préfère trahir le monde plutôt que le monde me trahisse. » Liens : Guan Yu (qu'il laisse partir), Lü Bu (qu'il fait exécuter), Xu Chu et Dian Wei (ses gardes du corps), Liu Bei (son rival).
+
 ## Généraux épiques
 
 - Abd el-Krim (Maroc, XXᵉ siècle), « L'Émir du Rif »
