@@ -47,7 +47,7 @@ Rédigé par Claude le 26/11 à partir de `LORE.md`, `PERSONNAGES.md` et `REGLES
 - ✅ **La première bataille rangée est perdue d'office**, et c'est un des moments où **chaque joueur a son propre ennemi** :
   - Shin contre **Kyou** (provisoire) ;
   - Koby contre **le colonel Morgan** (le premier méchant de Koby dans One Piece) ;
-  - Guts contre **Zodd** (provisoire).
+  - Guts contre **Wyald** (le chef des Chevaliers du Chien noir ; Zodd est gardé pour la guerre aux portes de la ville).
 - ✅ Chaque joueur est **recueilli par un mentor**, qui lui apprend la bataille rangée : **Ouki** pour Ayoub, **Garp** pour Mathieu, **le Chevalier squelette** pour Nicolas. Il **rejoue la bataille et la gagne**.
 - ✅ Le **cadeau du mentor** (le guandao, le Haki de l'armement, l'armure du Berserker) arrive quand **les trois joueurs** ont débloqué le 500 contre 500. Il débloque la **fiche épique** du personnage et donne un léger bonus ; l'apparence change.
 - ✅ **Le mentor aide contre les tyrans personnels** de chacun, avant Attila.
@@ -81,9 +81,9 @@ Rédigé par Claude le 26/11 à partir de `LORE.md`, `PERSONNAGES.md` et `REGLES
 - ✅ La guerre est longue (plusieurs jours) et peut se renverser. **En cas d'échec, elle recommence** jusqu'à la victoire.
 - ✅ Pas d'antennes : on se coordonne par **messagers** (règle proposée dans `REGLES.md`, section 11).
 - ✅ **Les 3 généraux sont des ennemis personnels**, un par joueur, tirés de l'histoire de son personnage :
-  - **Shin** : un général ennemi qu'il a affronté dans Kingdom. ❓ **T14a** : lequel ? (propositions de Claude dans la réponse du 26/11 : Rinko, Mangoku, Fūki… à vérifier)
-  - **Koby** : un pirate, par exemple un **Grand Corsaire**. Akainu serait trop fort si tôt. ❓ **T14b** : 💡 **Crocodile** (le premier Grand Corsaire de l'histoire, fort mais pas démesuré).
-  - **Guts** : ❓ **T14c** : 💡 **Wyald** (le chef des Chevaliers du Chien noir, un apôtre) ou **Boscogn** (le champion du royaume de Tudor).
+  - **Shin** contre **Mangoku** (Kingdom) ;
+  - **Koby** contre **Crocodile** (le premier Grand Corsaire de One Piece) ;
+  - **Guts** contre **Zodd** (l'apôtre immortel de Berserk).
 - ✅ **Ce qu'on y gagne** : surtout de l'**XP**, et peut-être quelques **objets rares** (à décider).
 
 🚩 **Point d'étape : la guerre aux portes de la ville.**
@@ -94,7 +94,7 @@ Rédigé par Claude le 26/11 à partir de `LORE.md`, `PERSONNAGES.md` et `REGLES
 - ✅ **Qui a ouvert la faille** : sûrement **un antagoniste, depuis le passé**, par exemple **Lü Bu** ou même **Gengis Khan**. C'est **le méchant final**.
 - ✅ **La fin de l'histoire** : **battre le méchant final**. Le monde continue ensuite (pas de fin de partie dans les règles).
 - ✅ **La triade** (Imu, Qin Shi Huang et Griffith) tire les ficelles. **Le méchant final est caché derrière elle** : il n'apparaît qu'une fois la triade battue.
-- ❓ **T16** : **qui est le méchant final ?** Il a ouvert la faille depuis le passé. Pistes de Claude (26/11) : **Kronos**, le titan grec du temps, qui dévore ses enfants pour garder le pouvoir ; **la Main de Dieu** (Berserk), qui manipule déjà Griffith ; **Aizen** (Bleach), le manipulateur caché derrière tout depuis le début ; ou un **personnage inventé** pour le jeu, lié à Aubagne.
+- ❓ **T16** : **qui est le méchant final ?** Il a ouvert la faille depuis le passé. Ayoub préfère une **figure historique liée au temps** (un « Einstein maléfique »). Pistes de Claude : **Nostradamus** (le prophète qui voyait l'avenir, mort à Salon-de-Provence, tout près d'Aubagne), le **comte de Saint-Germain** (l'aventurier du XVIIIᵉ siècle qui se disait immortel et voyageur du temps), **John Dee** (l'astrologue et occultiste d'Élisabeth Iʳᵉ), **Einstein** lui-même (la relativité). Autres pistes : **Kronos**, le titan grec du temps, qui dévore ses enfants pour garder le pouvoir ; **la Main de Dieu** (Berserk), qui manipule déjà Griffith ; **Aizen** (Bleach), le manipulateur caché derrière tout depuis le début ; ou un **personnage inventé** pour le jeu, lié à Aubagne.
 - ❓ **T17** : **pourquoi Aubagne ?** Pistes de Claude (26/11) : les **santons** (Aubagne en est la capitale, et la foire aux santons a lieu en décembre : des figurines de toutes les époques) ; le **Garlaban** ; la **main du capitaine Danjou**, relique de la Légion étrangère gardée à Aubagne ; **Marcel Pagnol**, né à Aubagne.
 
 🚩 **Point d'étape : la chute de la triade**, puis **la révélation** (le méchant final apparaît).
@@ -128,4 +128,4 @@ Rédigé par Claude le 26/11 à partir de `LORE.md`, `PERSONNAGES.md` et `REGLES
 
 ## Trous qui restent
 
-T10 (le moment de la mort du mentor), T11 (les autres sauveurs, plus tard), T14a, T14b et T14c (les trois généraux de la guerre aux portes de la ville), T16 (le méchant final), T17 (pourquoi Aubagne).
+T10 (le moment de la mort du mentor), T11 (les autres sauveurs, plus tard), T16 (le méchant final), T17 (pourquoi Aubagne).
