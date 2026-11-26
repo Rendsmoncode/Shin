@@ -79,11 +79,11 @@ Rédigé par Claude le 26/11 à partir de `LORE.md`, `PERSONNAGES.md` et `REGLES
 - ✅ **Trois sauveurs suffisent : un par joueur** (décidé le 26/11). Candidats de la liste d'origine : Khalid, Knut, Musashi, Saladin, Toussaint Louverture, Thorfinn, Abd el-Kader.
 - ✅ **Les sauveurs** arrivent dans des **conquêtes prévues dans l'histoire**. Ce sont des batailles impossibles à gagner sans une faculté qu'on n'a pas encore : on perd, une **cinématique** montre le sauveur qui arrive et donne une **leçon de vie**, on obtient la faculté, on rejoue et on gagne. **Chaque joueur a son propre sauveur.**
 - ✅ **Les trois sauveurs** (26/11) :
-  - **Ayoub (Shin)** : **Saladin** (la leçon sera décidée plus tard ; l'idée de départ : il aide contre Richard Cœur de Lion).
-  - **Mathieu (Koby)** : **Toussaint Louverture**. Sa leçon : un homme doit se demander ce qui est réellement juste ; suivre les ordres ne suffit pas. **Un homme de la justice se bat pour la justice, pas pour le juge.**
-  - **Nicolas (Guts)** : **Miyamoto Musashi**, la figure historique qui s'est battue pour trouver la paix intérieure (invaincu, il finit par poser le sabre pour méditer et écrire *Le Livre des cinq anneaux*). Il garde aussi son rôle de sabreur de la voie « la vie des hommes vaut plus que les objectifs ».
+  - **Ayoub (Shin)** : **Saladin**, contre **Richard Cœur de Lion**. Sa leçon : **gagner des batailles ne sert à rien si on perd la guerre** ; gagner la guerre compte plus que gagner la bataille (comme lui face à Richard : battu à Arsouf, il garde pourtant Jérusalem).
+  - **Mathieu (Koby)** : **Toussaint Louverture**, contre **Akainu** (en écho à Shanks, qui protège Koby face à Akainu à Marineford). Sa leçon : un homme doit se demander ce qui est réellement juste ; suivre les ordres ne suffit pas. **Un homme de la justice se bat pour la justice, pas pour le juge.**
+  - **Nicolas (Guts)** : contre ❓ un **général historique rempli de haine** (💡 Vlad III l'Empaleur). Sauveur : **Miyamoto Musashi**, la figure historique qui s'est battue pour trouver la paix intérieure (invaincu, il finit par poser le sabre pour méditer et écrire *Le Livre des cinq anneaux*). Il garde aussi son rôle de sabreur de la voie « la vie des hommes vaut plus que les objectifs ».
 - ✅ Selon la **voie choisie**, des **guerriers différents** apparaissent : Alexandre ou Hannibal pour « prêt à tout » ; Musashi en face de Kojirō, le duel de Ganryūjima devenant le symbole des deux voies.
-- ❓ **T11** : contre quel tyran a lieu chaque sauvetage (Richard Cœur de Lion pour Saladin ?), et la leçon de Saladin.
+- ❓ **T11** : l'adversaire de Guts dans son sauvetage, et la leçon de Musashi.
 
 🚩 **Points d'étape 7 : les trois sauvetages** (Saladin, Toussaint Louverture, Musashi).
 
@@ -160,4 +160,4 @@ Rédigé par Claude le 26/11 à partir de `LORE.md`, `PERSONNAGES.md` et `REGLES
 
 ## Trous qui restent
 
-T11 (contre quel tyran a lieu chaque sauvetage, la leçon de Saladin), T16 (la cachette de la pierre philosophale, plus tard), qui tue chaque mentor, l'ordre exact entre les sauvetages et la guerre aux portes de la ville, et les étapes de la conquête de la ville (Acte V bis).
+T11 (l'adversaire de Guts et la leçon de Musashi), T16 (la cachette de la pierre philosophale, plus tard), qui tue chaque mentor, l'ordre exact entre les sauvetages et la guerre aux portes de la ville, et les étapes de la conquête de la ville (Acte V bis).
