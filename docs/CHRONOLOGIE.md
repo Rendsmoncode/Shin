@@ -1,198 +1,157 @@
 # Le lore dans l'ordre (chronologie, points d'étape et difficulté)
 
-Version 3, refaite le 26/11 avec le déroulé d'Ayoub. Elle remplace l'ordre de `LORE.md` (qui garde le texte d'origine).
+Version 4, refaite le 26/11 avec le déroulé d'Ayoub. Elle remplace l'ordre de `LORE.md` (qui garde le texte d'origine).
 
-🚩 = **point d'étape** : un moment clé, qui déclenche une scène de visual novel et débloque quelque chose.
+🎬 = avec cinématique (visual novel). ⚔️ = combat sans cinématique.
 ❓ = reste à décider. 💡 = idée de Claude, pas encore validée.
-**Difficulté** : note de 1 à 10 de chaque adversaire (voir l'échelle en bas). Elle servira de base aux récompenses du gacha.
+**Difficulté** : note de 1 à 10 de chaque adversaire (échelle en bas). Elle servira de base aux récompenses du gacha.
+
+**Le rythme** (décidé le 26/11) : **prendre un quartier est rapide et facile**, pour avancer vite. Entre les guerres, on affronte des **tyrans, sans cinématique**. Les tyrans sont les mêmes pour les trois joueurs.
 
 ---
 
-## 0. La faille (cinématique, le joueur ne fait rien)
+## 0. La faille 🎬 (le joueur ne fait rien)
 
 Il y a près de 500 ans, **Nostradamus** a passé sa vie à chercher **la pierre philosophale**. Il est mort à Salon-de-Provence en 1566, juste avant de la trouver, en comprenant qu'elle était **à Aubagne**. Depuis le XVIᵉ siècle, il a ouvert une **faille dans le temps** pour la rejoindre.
 
-Le **12 décembre** (Ayoub, Mathieu et Nicolas sont vraiment à Paris ce jour-là, pour un week-end de tournoi de cartes), la faille s'ouvre sur Aubagne. Nostradamus y apparaît, mais il a semé le chaos : **passé, présent, futur et fiction se mélangent**. Il ne fait venir personne exprès, et reste caché dans l'ombre.
-
-Des tyrans du passé et de la fiction prennent le pouvoir. **Attila ravage un quartier** ; la police l'affronte : égalité. **Toutes les armes modernes et toutes les antennes sont détruites** : il ne reste que les armes du passé, et on ne communique plus que par **messagers**.
+Le **12 décembre** (Ayoub, Mathieu et Nicolas sont vraiment à Paris ce jour-là, pour un week-end de tournoi de cartes), la faille s'ouvre sur Aubagne. Nostradamus y apparaît, mais il a semé le chaos : **passé, présent, futur et fiction se mélangent**. Il ne fait venir personne exprès, et reste caché dans l'ombre. Des tyrans prennent le pouvoir. **Attila ravage un quartier** ; la police l'affronte : égalité. **Toutes les armes modernes et toutes les antennes sont détruites** : il ne reste que les armes du passé, et on ne communique plus que par **messagers**.
 
 Scène : `docs/scenes/01_la_faille.md` (V1 à corriger).
 
-## 1. La fusion (cinématique, enchaînée avec la 0)
+## 1. La fusion 🎬 (enchaînée avec la 0)
 
-Les trois garçons rentrent de Paris sans rien savoir. Ce sont **les trois seuls habitants de la ville à avoir été dehors** ce jour-là. En arrivant, chacun a une **vision de la faille**, puis **rencontre son personnage et fusionne avec lui** (une conséquence de la faille, pas un choix) : **Ayoub devient Shin, Mathieu devient Koby, Nicolas devient Guts**. Chacun voit son personnage sur son écran, puis l'écran montre les trois : on comprend que tous ont fusionné.
+Les trois garçons rentrent de Paris sans rien savoir : ce sont **les trois seuls habitants à avoir été dehors**. En arrivant, chacun a une **vision de la faille**, rencontre son personnage et **fusionne avec lui** : **Ayoub devient Shin, Mathieu devient Koby, Nicolas devient Guts**. Chacun voit son personnage sur son écran, puis l'écran montre les trois.
 
-À la fin de la cinématique, chacun **choisit sa voie**, pour toujours (moment à confirmer) :
-- « Pour atteindre son objectif, il faut être prêt à tout, même au pire » (le *satsujinken* : Kojirō, le sabre Muramasa) ;
-- « La vie des hommes vaut plus que le prix des objectifs » (le *katsujinken* : Musashi, le sabre Masamune).
+À la fin, chacun **choisit sa voie**, pour toujours (moment à confirmer) : « prêt à tout, même au pire » (Kojirō, le sabre Muramasa) ou « la vie des hommes vaut plus que le prix des objectifs » (Musashi, le sabre Masamune).
 
-## 2. La découverte de son quartier
+## 2. Son quartier
 
-On arrive sur la carte et on découvre **son quartier** ; sa vraie maison devient l'**hôtel de ville**. Les premiers soldats sont **ses voisins**.
+On arrive sur la carte et on découvre **son quartier** ; sa vraie maison devient l'**hôtel de ville**. Les premiers soldats sont **ses voisins**. On prend vite quelques quartiers neutres.
 
-🚩 Débloque la carte de la ville et la production.
+## 3. Trop fort pour nous 🎬 (défaite obligatoire)
 
-## 3. Trop fort pour nous
+Sans vraiment comprendre les règles, chacun tombe sur **son propre ennemi**, trop fort (environ 500 hommes) : **Kyou** (provisoire) pour Shin (2), **le colonel Morgan** pour Koby (2), **le Comte** pour Guts (3). Défaite, puis arrivée du **mentor** : **Ouki**, **Garp**, **le Chevalier squelette**.
 
-On prend **quelques quartiers sans vraiment comprendre les règles**, puis on tombe sur un ennemi **trop fort** : une défaite obligatoire, chacun contre **son propre ennemi** (environ 500 hommes) :
+## 4. Le tutoriel et la revanche 🎬
 
-| Joueur | Adversaire | Difficulté |
-|---|---|---|
-| Shin | **Kyou** (provisoire) | 2 |
-| Koby | **le colonel Morgan** | 2 |
-| Guts | **le Comte**, l'apôtre limace | 3 |
+Le mentor apprend la **bataille rangée** (les trois en même temps). On rejoue et **on gagne**.
 
-(Ce combat est perdu d'office : sa note sert pour la revanche.)
+## 5. Attila, à trois 🎬
 
-🚩 Défaite, puis arrivée du **mentor** : **Ouki** pour Shin, **Garp** pour Koby, **le Chevalier squelette** pour Guts.
+Le premier tyran commun. **Les trois s'allient dans la même bataille** : **500 soldats chacun contre 2 000**. Attila (4) devient recrutable.
 
-## 4. Le tutoriel et la revanche
+## 6. La triade et la mort des mentors 🎬 (vers 1 000 soldats chacun)
 
-Le mentor apprend la **bataille rangée** (tutoriel, les trois en même temps). On rejoue contre Kyou, Morgan et le Comte, et **on gagne**. Le mentor aide ensuite contre les tyrans personnels de chacun.
+Chacun affronte **un membre de la triade** et se fait **écraser** (10, défaite obligatoire). **Chaque mentor meurt pour sauver son élève** et lui laisse **son objet unique**, qui débloque sa fiche épique :
 
-🚩 Débloque la bataille rangée.
+| Joueur | Membre de la triade | Mentor tué | Objet laissé |
+|---|---|---|---|
+| Shin | Qin Shi Huang | Ouki | le guandao |
+| Koby | Imu | Garp | le Haki de l'armement |
+| Guts | Griffith | le Chevalier squelette | l'armure du Berserker |
 
-## 5. Attila, à trois
+## Tyrans ⚔️ (avant la 1ʳᵉ guerre)
 
-Le premier tyran commun, celui qui ouvrait le jeu. Personne ne peut le battre seul : **les trois s'allient dans la même bataille**, à **500 soldats chacun contre 2 000**.
+💡 Lü Bu (5), Ray Dark (3).
 
-| Adversaire | Difficulté |
-|---|---|
-| **Attila** (2 000 hommes contre 3 × 500) | 4 |
+## 7. 1ʳᵉ guerre : aux portes de la ville 🎬 (sans prévenir, ~1 500 soldats 💡)
 
-🚩 Débloque les batailles à plusieurs ; Attila devient recrutable.
+Shin contre **Mangoku** (4) · Koby contre **Crocodile** (5) · Guts contre **Zodd** (5).
+Une vraie guerre : longue, elle peut se renverser et recommence en cas d'échec. On se coordonne par messagers. Récompense : surtout de l'XP.
 
-## 6. La triade et la mort des mentors (vers 1 000 soldats chacun)
+## Tyrans ⚔️ (avant la 2ᵉ guerre)
 
-On reprend des quartiers. Quand chacun atteint **environ 1 000 soldats**, une cinématique se lance : chacun affronte **un membre de la triade**. Les joueurs sont **écrasés**, et **chaque mentor meurt pour que son élève survive**, en lui laissant **son objet unique** :
+💡 Freezer (5), Tamerlan (6).
 
-| Joueur | Membre de la triade | Mentor tué | Objet unique laissé | Difficulté |
-|---|---|---|---|---|
-| Shin | **Qin Shi Huang** | Ouki | **le guandao d'Ouki** | 10 (défaite obligatoire) |
-| Koby | **Imu** | Garp | **le Haki de l'armement** | 10 (défaite obligatoire) |
-| Guts | **Griffith** | le Chevalier squelette | **l'armure du Berserker** | 10 (défaite obligatoire) |
+## 8. 2ᵉ guerre et les sauveurs 🎬 (vers 2 000 soldats ou plus)
 
-L'objet débloque la **fiche épique** du personnage, change son apparence et donne un léger bonus. Les mentors restent tirables au gacha.
-- ❓ Avant, le cadeau du mentor arrivait au tutoriel (`REGLES.md` et `PERSONNAGES.md` : « quand les trois débloquent le 500 contre 500 »). Il arrive désormais à la mort du mentor : on met à jour ces deux fichiers ?
+Shin contre **Rinko** (6) · Koby contre **Doflamingo** (6) · Guts contre **Rosine** (6).
 
-## 7. Première guerre : aux portes de la ville (sans prévenir)
+Pendant cette guerre, chacun vit son **sauvetage** : une bataille impossible, une défaite, puis le sauveur arrive, donne une **leçon de vie** et une faculté. On rejoue et on gagne.
 
-Après un certain nombre de quartiers supplémentaires, la guerre arrive **sans crier gare** : trois généraux attaquent aux portes de la ville. C'est une vraie **guerre** : longue (plusieurs jours), elle peut se renverser et **recommence en cas d'échec**. Sans antennes, on se coordonne par **messagers**.
+| Joueur | Ennemi du sauvetage | Sauveur | Leçon |
+|---|---|---|---|
+| Shin | Richard Cœur de Lion (7) | **Saladin** | Gagner des batailles ne sert à rien si on perd la guerre. |
+| Koby | Akainu (8) | **Toussaint Louverture** | « Un homme de la justice se bat pour la justice, pas pour le juge. » |
+| Guts | Vlad III l'Empaleur (6) | **Miyamoto Musashi** | « La rancune ne convient ni à soi ni aux autres. Regarde-le : la haine l'a mangé tout entier. » |
 
-| Joueur | Adversaire | Difficulté |
-|---|---|---|
-| Shin | **Mangoku** (Kingdom) | 4 |
-| Koby | **Crocodile**, le premier Grand Corsaire | 5 |
-| Guts | **Zodd**, l'apôtre immortel | 5 |
+Récompense : un **2ᵉ objet unique** : le bouclier de Hyou Kou (Shin), un autre Haki (Koby, 💡 l'observation), ❓ un objet de Berserk (Guts, 💡 la Dragon Slayer ou la main mécanique et son canon).
 
-🚩 Récompense : surtout de l'**XP**.
+## Tyrans ⚔️ (avant la 3ᵉ guerre)
 
-## 8. Deuxième guerre et les sauveurs (vers 2 000 soldats ou plus)
+💡 Bai Qi (7), Dark Vador (7).
 
-On reprend des quartiers, on atteint **environ 2 000 soldats** (ou plus), et une **deuxième guerre** arrive :
+## 9. 3ᵉ guerre 🎬 (~3 500 soldats 💡)
 
-| Joueur | Adversaire | Difficulté |
-|---|---|---|
-| Shin | **Rinko** (Kingdom) | 6 |
-| Koby | **Doflamingo** | 6 |
-| Guts | **Rosine**, l'apôtre elfe | 6 |
+Shin contre **Hou Ken** (8) · Koby contre **Kizaru** (8) · Guts contre **Grunbeld** (7).
 
-Pendant cette guerre, chacun vit son **sauvetage** : une bataille impossible, une défaite, puis la cinématique du **sauveur** qui donne une **leçon de vie** et une faculté. On rejoue et on gagne.
+## Tyrans ⚔️ (avant la 4ᵉ guerre)
 
-| Joueur | Ennemi du sauvetage | Sauveur | Leçon | Difficulté |
-|---|---|---|---|---|
-| Shin | Richard Cœur de Lion | **Saladin** | Gagner des batailles ne sert à rien si on perd la guerre. | 7 |
-| Koby | Akainu | **Toussaint Louverture** | « Un homme de la justice se bat pour la justice, pas pour le juge. » | 8 |
-| Guts | Vlad III l'Empaleur | **Miyamoto Musashi** | « La rancune ne convient ni à soi ni aux autres. Regarde-le : la haine l'a mangé tout entier. » | 6 |
+💡 Staline (8), Hitler (8).
 
-- ❓ Les sauvetages ont-ils lieu **contre ces ennemis-là** (Richard, Akainu, Vlad III), au milieu de la guerre, ou **contre les généraux de la guerre** (Rinko, Doflamingo, Zodd) ? Akainu revient aussi à la quatrième guerre.
+## 10. 4ᵉ guerre 🎬 (~5 000 soldats 💡), la dernière avant la triade
 
-🚩 Récompense : un **deuxième objet unique** :
-- Shin : **le bouclier de Hyou Kou** (le « duc Hyou ») ;
-- Koby : **un autre Haki** (💡 le Haki de l'observation) ;
-- Guts : ❓ un objet de Berserk (💡 **la Dragon Slayer**, l'épée géante, ou **la main mécanique et son canon**).
+Shin contre **Ri Boku** (9) · Koby contre **Akainu** (9) · Guts contre **Ganishka** (9).
 
-## 9. La conquête continue : troisième et quatrième guerres
+## 11. La vengeance contre la triade 🎬
 
-On reprend encore des quartiers et on agrandit ses armées. Entre-temps, les tyrans illustres, les lieux majeurs, le Garlaban, les généraux cachés et le duel de Ganryūjima (Musashi contre Kojirō) trouvent leur place (❓ à placer).
+Chacun affronte le membre de la triade qui a tué son mentor : Shin contre **Qin Shi Huang** (10) · Koby contre **Imu** (10) · Guts contre **Griffith** (10).
 
-**Troisième guerre** (💡 vers 3 500 soldats chacun) :
+## 12. Nostradamus et Einstein 🎬
 
-| Joueur | Adversaire | Difficulté |
-|---|---|---|
-| Shin | **Hou Ken**, le « Bushin » | 8 |
-| Koby | **Kizaru** | 8 |
-| Guts | **Grunbeld**, l'apôtre dragon | 7 |
+La triade vaincue, **Nostradamus apparaît**. Il **prend les hommes de la triade et leurs aptitudes** : plus personne ne peut l'arrêter. **Il écrase les joueurs** (10+, défaite obligatoire). **Albert Einstein les recueille**, leur montre ses recherches et leur apprend qu'**il suffit de détruire la pierre pour tout remettre en ordre**. Les joueurs **s'entraînent**. En voulant leur montrer où est la pierre (dans le quartier de Mathieu), **Einstein est tué par Nostradamus**, comme Vegapunk dans One Piece.
 
-**Quatrième guerre**, la dernière avant la triade (💡 vers 5 000 soldats chacun) :
+## 13. La bataille finale 🎬
 
-| Joueur | Adversaire | Difficulté |
-|---|---|---|
-| Shin | **Ri Boku** | 9 |
-| Koby | **Akainu** | 9 |
-| Guts | **Ganishka**, l'empereur des Kushans | 9 |
-
-## 10. La vengeance contre la triade
-
-On continue de gérer son avancée, puis vient **la revanche** : chacun affronte le membre de la triade qui a tué son mentor.
-
-| Joueur | Adversaire | Difficulté |
-|---|---|---|
-| Shin | **Qin Shi Huang** | 10 |
-| Koby | **Imu** | 10 |
-| Guts | **Griffith** | 10 |
-
-## 11. Nostradamus, Einstein et l'entraînement
-
-Une fois la triade vaincue, **Nostradamus apparaît**. Il **prend les hommes de la triade et leurs aptitudes** : plus personne ne peut l'arrêter, et il pourra faire ce qu'il veut de la pierre. **Il écrase les joueurs** (défaite obligatoire, difficulté 10+).
-
-**Albert Einstein les recueille** et leur montre ses recherches. Les joueurs **s'entraînent** pour le vaincre. En voulant leur montrer où se trouve la pierre (dans le quartier de Mathieu), **Einstein est tué par Nostradamus**, comme Vegapunk dans One Piece. Avant de mourir, il leur a appris l'essentiel : **il suffit de détruire la pierre pour tout remettre en ordre**.
-
-## 12. La bataille finale et la fin
-
-La bataille finale contre **Nostradamus** (difficulté 10+). En plein combat, il révèle ce qu'est la pierre : au fil des siècles, la pierre philosophale est devenue un objet pour se protéger, **l'immense manteau de Mathieu**. Le manteau n'a aucun pouvoir, il est juste là. Nostradamus a retourné l'espace-temps pendant près de 500 ans pour un manteau.
-
-Les joueurs le battent et **détruisent la pierre** : **tout redevient comme avant**. C'est la fin.
-- ❓ `REGLES.md` dit qu'il n'y a pas de fin de partie. Après la fin de l'histoire, le monde continue-t-il (guerres entre joueurs, généraux cachés), ou la partie s'arrête-t-elle vraiment ?
+Contre **Nostradamus** (10+). En plein combat, il révèle ce qu'est la pierre : au fil des siècles, la pierre philosophale est devenue **l'immense manteau de Mathieu**. Le manteau n'a aucun pouvoir, il est juste là. Les joueurs battent Nostradamus et **détruisent la pierre** : **tout redevient comme avant**. Fin.
 
 ---
 
-## En parallèle, tout au long du jeu
+## En parallèle
 
-- **Les deux généraux cachés**, Khalid ibn al-Walid et Jan Žižka : on sait dès le début qu'ils existent ; on les obtient par des chaînes de quêtes secrètes (`docs/QUETES.md`).
+- **Les généraux cachés**, Khalid ibn al-Walid et Jan Žižka : chaînes de quêtes secrètes (`docs/QUETES.md`).
 - **Les 7 Grands Généraux Sous les Cieux**, par le gacha.
 - **La trahison** entre joueurs : une quête secrète.
+- 💡 À placer entre les guerres : les lieux majeurs, le Garlaban, le duel de Ganryūjima (Musashi contre Kojirō).
 
 ## Récapitulatif
 
-| N° | Moment | Soldats (environ) | Adversaires (difficulté) | Ce qu'on gagne |
-|---|---|---|---|---|
-| 0-1 | La faille, la fusion, la voie | — | — | Son personnage |
-| 2 | Son quartier | voisins | — | La carte |
-| 3 | Trop fort pour nous | 500 | Kyou 2, Morgan 2, le Comte 3 (perdu) | Le mentor |
-| 4 | Tutoriel et revanche | 500 | les mêmes | La bataille rangée |
-| 5 | Attila, à trois | 3 × 500 | Attila 4 | Attila recrutable |
-| 6 | La triade, mort des mentors | 1 000 | Qin Shi Huang, Imu, Griffith 10 (perdu) | 1ᵉʳ objet unique (guandao, Haki de l'armement, armure du Berserker) |
-| 7 | 1ʳᵉ guerre, aux portes | ~1 500 💡 | Mangoku 4, Crocodile 5, Zodd 5 | XP |
-| 8 | 2ᵉ guerre et sauveurs | 2 000+ | Rinko 6, Doflamingo 6, Rosine 6 ; Richard 7, Akainu 8, Vlad III 6 | Une faculté par sauveur ; 2ᵉ objet unique |
-| 9 | 3ᵉ guerre | ~3 500 💡 | Hou Ken 8, Kizaru 8, Grunbeld 7 | ❓ |
-| 9 bis | 4ᵉ guerre | ~5 000 💡 | Ri Boku 9, Akainu 9, Ganishka 9 | ❓ |
-| 10 | Vengeance contre la triade | ❓ | Qin Shi Huang, Imu, Griffith 10 | ❓ |
-| 11 | Nostradamus, Einstein | — | Nostradamus 10+ (perdu) | L'entraînement |
-| 12 | Bataille finale | — | Nostradamus 10+ | La fin |
+| N° | Moment | Soldats | Adversaires (difficulté) |
+|---|---|---|---|
+| 0-1 | 🎬 La faille, la fusion, la voie | — | — |
+| 2 | Son quartier | voisins | quartiers neutres |
+| 3 | 🎬 Trop fort pour nous (perdu) | 500 | Kyou 2, Morgan 2, le Comte 3 |
+| 4 | 🎬 Tutoriel et revanche | 500 | les mêmes |
+| 5 | 🎬 Attila, à trois | 3 × 500 | Attila 4 |
+| 6 | 🎬 La triade (perdu), mort des mentors | 1 000 | Qin Shi Huang, Imu, Griffith 10 |
+| — | ⚔️ Tyrans | | 💡 Lü Bu 5, Ray Dark 3 |
+| 7 | 🎬 1ʳᵉ guerre | ~1 500 | Mangoku 4, Crocodile 5, Zodd 5 |
+| — | ⚔️ Tyrans | | 💡 Freezer 5, Tamerlan 6 |
+| 8 | 🎬 2ᵉ guerre et sauveurs | 2 000+ | Rinko 6, Doflamingo 6, Rosine 6 ; Richard 7, Akainu 8, Vlad III 6 |
+| — | ⚔️ Tyrans | | 💡 Bai Qi 7, Dark Vador 7 |
+| 9 | 🎬 3ᵉ guerre | ~3 500 | Hou Ken 8, Kizaru 8, Grunbeld 7 |
+| — | ⚔️ Tyrans | | 💡 Staline 8, Hitler 8 |
+| 10 | 🎬 4ᵉ guerre | ~5 000 | Ri Boku 9, Akainu 9, Ganishka 9 |
+| 11 | 🎬 Vengeance contre la triade | ❓ | Qin Shi Huang, Imu, Griffith 10 |
+| 12 | 🎬 Nostradamus (perdu), Einstein | — | Nostradamus 10+ |
+| 13 | 🎬 Bataille finale | — | Nostradamus 10+ |
 
 ## L'échelle de difficulté (💡 proposée par Claude)
 
-La note dit **à quel moment du jeu** l'adversaire doit être battu, et donc **quelle récompense** il mérite.
-
 | Note | Sens | Exemples |
 |---|---|---|
-| 1-2 | Début de partie : un ennemi de quartier | Kyou, Morgan |
-| 3-4 | Un vrai chef, qu'il faut une stratégie pour battre | le Comte, Attila, Mangoku |
-| 5-6 | Un grand nom de son œuvre, un adversaire de guerre | Crocodile, Zodd, Doflamingo, Rinko, Vlad III |
-| 7-8 | Un des plus forts de son œuvre | Richard Cœur de Lion, Hou Ken, Kizaru, Akainu (sauvetage) |
-| 9 | Le sommet avant la fin | Ri Boku, Akainu |
+| 1-2 | Un ennemi de quartier | Kyou, Morgan |
+| 3-4 | Un vrai chef, il faut une stratégie | le Comte, Attila, Mangoku, Ray Dark |
+| 5-6 | Un grand nom, un adversaire de guerre | Crocodile, Zodd, Lü Bu, Doflamingo, Rinko, Rosine, Vlad III |
+| 7-8 | Un des plus forts de son univers | Richard Cœur de Lion, Bai Qi, Hou Ken, Kizaru, Grunbeld, Staline |
+| 9 | Le sommet avant la fin | Ri Boku, Akainu, Ganishka |
 | 10 | Les grands méchants | Qin Shi Huang, Imu, Griffith |
 | 10+ | Le boss final | Nostradamus |
 
-**Prochaine étape** : fixer, pour chaque note, les **récompenses du gacha** (nombre de tirages, coffres) et les **pourcentages de chaque rareté** selon le moment du jeu (tâche 14).
+## Ce qui reste à décider
+
+- Les tyrans entre les guerres (les 💡 ci-dessus sont des propositions, d'autres tyrans peuvent s'ajouter).
+- Le 2ᵉ objet unique de Guts.
+- La fin : `REGLES.md` dit qu'il n'y a pas de fin de partie ; une fois la pierre détruite, le jeu s'arrête-t-il ?
+- Le cadeau du mentor arrive maintenant à sa mort (étape 6) : mettre à jour `REGLES.md` et `PERSONNAGES.md`.
+- **Ensuite** : les récompenses du gacha pour chaque note de difficulté, et les pourcentages de chaque rareté selon le moment du jeu (tâche 14).
