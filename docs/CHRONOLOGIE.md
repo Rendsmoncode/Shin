@@ -42,7 +42,7 @@ Les premiers soldats sont **les voisins** de son quartier. Bagarres de rue, peti
 À **500 hommes**, la bataille rangée se débloque. Les trois joueurs font le tutoriel **en même temps**, chacun contre **son propre ennemi**, et la première bataille est **perdue d'office** :
 - **Shin** contre **Kyou** (provisoire) ;
 - **Koby** contre **le colonel Morgan** ;
-- **Guts** contre **Wyald**, le chef des Chevaliers du Chien noir.
+- **Guts** contre **le Comte**, l'apôtre limace (le premier grand ennemi de Guts dans Berserk).
 
 Chacun est recueilli par **son mentor**, qui lui apprend la bataille rangée : **Ouki** pour Shin, **Garp** pour Koby, **le Chevalier squelette** pour Guts. Il rejoue la bataille et la gagne. Le mentor l'aide ensuite contre ses tyrans personnels.
 
@@ -136,7 +136,7 @@ Les joueurs **battent Nostradamus** : l'histoire est finie. Le monde, lui, conti
 | 0 | La faille (scène d'ouverture, Attila) | Le jeu |
 | 1 | La fusion avec Shin, Koby et Guts, et le choix de la voie | Son personnage ; les guerriers de sa voie plus tard |
 | 2 | Le premier quartier pris (un quartier neutre) | La carte, la production |
-| 3 | La défaite du tutoriel (Kyou, Morgan, Wyald) et le mentor | La bataille rangée |
+| 3 | La défaite du tutoriel (Kyou, Morgan, le Comte) et le mentor | La bataille rangée |
 | 4 | La revanche et le cadeau du mentor | La fiche épique de Shin, Koby ou Guts |
 | 5 | Attila, à trois (500 chacun contre 2 000) | Les batailles à plusieurs ; Attila recrutable |
 | 6 | La défaite contre la triade, la mort des mentors | — |
