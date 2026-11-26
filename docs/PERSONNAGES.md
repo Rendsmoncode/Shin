@@ -322,9 +322,9 @@ Raretés : rare et épique (environ 30 épiques). Les guerriers mystiques sont a
 - Boulanger, « C'est toi le pain »
 - Vigile de Carrefour, « Ne suit que les noirs » (critique du contrôle au faciès : c'est le vigile qui est ridicule)
 
-## Les deux voies (✅ règle d'Ayoub, 💡 attribution de Claude, 26/11)
+## Les deux voies (✅ validé par Ayoub le 26/11)
 
-✅ **Chaque général et chaque guerrier mystique appartient à l'une des deux voies** (voir `LORE.md`). 💡 Attribution selon leur histoire : « prêt à tout » pour ceux qui ont gagné par la terreur, les massacres, la trahison ou l'obsession de vaincre à n'importe quel prix ; « la vie des hommes » pour ceux qui ont protégé leur peuple ou leurs hommes, épargné l'ennemi ou refusé l'injustice. Shin, Koby et Guts suivent la voie choisie par leur joueur.
+✅ **Chaque général et chaque guerrier mystique appartient à l'une des deux voies** (voir `LORE.md`). Attribution selon leur histoire : « prêt à tout » pour ceux qui ont gagné par la terreur, les massacres, la trahison ou l'obsession de vaincre à n'importe quel prix ; « la vie des hommes » pour ceux qui ont protégé leur peuple ou leurs hommes, épargné l'ennemi ou refusé l'injustice. Shin, Koby et Guts suivent la voie choisie par leur joueur.
 
 | | « Prêt à tout » (Kojirō, Muramasa) | « La vie des hommes » (Musashi, Masamune) |
 |---|---|---|

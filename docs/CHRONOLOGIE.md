@@ -119,7 +119,7 @@ Contre **Nostradamus** (10+). En plein combat, il révèle ce qu'est la pierre :
 - **Les 7 Grands Généraux Sous les Cieux**, par le gacha.
 - **La trahison** entre joueurs : une quête secrète.
 - ✅ **Les deux sabreurs du duel sont des sauveurs** (Ayoub, 26/11) : Musashi sauve Guts et Kojirō sauve Koby à la 2ᵉ guerre ; Saladin reste le sauveur de Shin.
-- 💡 À placer entre les guerres : les lieux majeurs, le Garlaban.
+- ✅ Les lieux majeurs et le Garlaban se placeront entre les guerres avec la liste des lieux majeurs (tâche 13) ; la quête du Garlaban s'ouvre après la 1ʳᵉ guerre.
 
 ## Récapitulatif
 

@@ -155,7 +155,7 @@ Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de
 - ✅ **Les défenses du quartier comptent dans toutes les batailles**, pas seulement en défense. Exemple : une tour donne **+10 % aux archers**.
 - ✅ **Les liens entre personnages** : réunir certains personnages dans la même armée donne un bonus. Exemple : **Thorfinn + Knut + Thorkell** dans la même équipe → **toute l'armée +50 % de puissance**.
 - Autres facteurs déjà prévus ailleurs : rareté et grade du général, formations, terrain, soignants, stratégies, effets des mentors et des sauveurs, hasard de ±10 %.
-- 💡 **Proposition de formule (Claude, 10/11, à valider)** :
+- ✅ **La formule** (proposée par Claude le 10/11, validée par Ayoub le 26/11 ; chiffres réglés par simulation) :
   - ✅ **Deux valeurs par armée** (validé le 11/11) : une **attaque** (combien d'ennemis on met hors de combat) et une **défense** (combien d'hommes on perd sous les coups). Les deux armées se frappent en même temps ; chacune perd des hommes selon l'attaque de l'adversaire face à sa propre défense. Les formations déplacent l'équilibre (ex. tortue : défense +40 %, attaque −30 %), ce qui donne des profils variés (cavalerie lourde, phalange, archers…).
   - ✅ **Les valeurs chiffrées** (stats des troupes, des personnages, des bonus) seront fixées par Claude, équilibrées par simulation.
   - **Base** = nombre d'hommes (+ les hommes ajoutés par les garnisons) × valeur d'un homme selon sa troupe (fantassin, archer, cavalier…, + les améliorations d'époque).
