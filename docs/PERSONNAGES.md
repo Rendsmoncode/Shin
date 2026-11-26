@@ -214,7 +214,7 @@ Certains joueurs doivent obtenir les légendaires qui leur correspondent. Le Gam
 
 ## Les généraux cachés (hors catégorie)
 
-Deux généraux invaincus, absents de la légende des 7, uniques dans tout le jeu et obtenus par des chaînes de quêtes secrètes.
+Deux généraux invaincus, absents de la légende des 7. ✅ **Pas uniques, mais hyper rares** (Ayoub, 26/11) : on les obtient par leur chaîne de quêtes secrète ou, très rarement, dans un coffre (taux dans `REGLES.md`, section 8).
 
 - **Khalid ibn al-Walid**, « L'Épée de Dieu » : l'invincible face aux deux plus grands empires de son époque.
 - **Jan Žižka**, « Le Feu sans lumière » : l'aveugle à la tête de paysans, jamais vaincu.

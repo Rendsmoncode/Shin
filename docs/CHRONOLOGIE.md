@@ -157,7 +157,7 @@ Contre **Nostradamus** (10+). En plein combat, il révèle ce qu'est la pierre :
 
 ✅ **Les coffres de récompense du lore sont à part** (Ayoub, 26/11) : ils ont l'apparence des coffres classiques (5 éléments, le personnage en dernier), mais **la rareté du personnage n'est pas tirée au hasard : c'est Ayoub et Claude qui la fixent**, étape par étape, dans les tableaux ci-dessous. Les 4 autres éléments sont tirés comme dans un coffre classique de la même rareté (`REGLES.md`, section 8).
 
-- **Khalid et Žižka** ne sont jamais dans un coffre de récompense : on les obtient seulement au bout de leur chaîne de quêtes secrète.
+- **Khalid et Žižka** (hyper rares) peuvent sortir d'un coffre de récompense avec les mêmes chances qu'un coffre classique de la même rareté (`REGLES.md`, section 8), en plus de leur chaîne de quêtes secrète.
 
 Le **palier du gacha** (les taux des coffres communs achetés avec les pièces) monte avec le lore : palier 1 au début, 2 après la triade (étape 6), 3 à la 2ᵉ guerre (étape 8), 4 à la 4ᵉ guerre (étape 10).
 

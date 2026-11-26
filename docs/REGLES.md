@@ -277,7 +277,7 @@ Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de
     | Légendaire | Légendaire 98 %, Sous les Cieux 2 % (0 % avant la 2ᵉ guerre) |
     | Mystique | guerrier mystique 98 %, Sous les Cieux 2 % (0 % avant la 2ᵉ guerre) |
     | Ultime | Sous les Cieux 100 % |
-    | Tous les coffres | **Khalid ibn al-Walid et Jan Žižka (généraux cachés) : 0 %**. Uniques dans tout le jeu, ils ne s'obtiennent que par leur chaîne de quêtes secrète (`PERSONNAGES.md`, `QUETES.md`), jamais dans un coffre, même ultime ou de récompense du lore. |
+    | Tous les coffres | **Khalid ibn al-Walid et Jan Žižka (généraux cachés)** : hyper rares, pas uniques. Ils s'obtiennent par leur chaîne de quêtes secrète **ou**, très rarement, dans un coffre (chance prise sur la part du Sous les Cieux, 0 % avant la 2ᵉ guerre) : 0,01 % (commun), 0,02 % (rare), 0,05 % (épique), 0,2 % (légendaire ou mystique), 1 % (ultime). Aucune garantie ne les donne. |
     | Du tyran | le tyran battu, avec une chance selon sa difficulté (voir `CHRONOLOGIE.md`) ; sinon le personnage d'un coffre épique |
 
   - **Les 4 autres éléments** : chacun est tiré à part, donc on peut avoir 4 fois la même chose.
