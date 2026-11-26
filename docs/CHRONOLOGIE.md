@@ -30,7 +30,7 @@ On arrive sur la carte et on découvre **son quartier** ; sa vraie maison devien
 
 ## 3. Trop fort pour nous 🎬 (défaite obligatoire)
 
-Sans vraiment comprendre les règles, chacun tombe sur **son propre ennemi**, trop fort (environ 500 hommes) : **Kyou** (provisoire) pour Shin (2), **le colonel Morgan** pour Koby (2), **le Comte** pour Guts (3). Défaite, puis arrivée du **mentor** : **Ouki**, **Garp**, **le Chevalier squelette**.
+Sans vraiment comprendre les règles, chacun tombe sur **son propre ennemi**, trop fort (environ 500 hommes) : **Kyou** (provisoire) pour Shin (2), **le colonel Morgan** pour Koby (2), **le Comte** pour Guts (2). Défaite, puis arrivée du **mentor** : **Ouki**, **Garp**, **le Chevalier squelette**.
 
 ## 4. Le tutoriel et la revanche 🎬
 
@@ -124,7 +124,7 @@ Contre **Nostradamus** (10+). En plein combat, il révèle ce qu'est la pierre :
 |---|---|---|---|
 | 0-1 | 🎬 La faille, la fusion, la voie | — | — |
 | 2 | Son quartier | voisins | quartiers neutres |
-| 3 | 🎬 Trop fort pour nous (perdu) | 500 | Kyou 2, Morgan 2, le Comte 3 |
+| 3 | 🎬 Trop fort pour nous (perdu) | 500 | Kyou 2, Morgan 2, le Comte 2 |
 | 4 | 🎬 Tutoriel et revanche | 500 | les mêmes |
 | 5 | 🎬 Attila, à trois | 3 × 500 | Attila 4 |
 | 6 | 🎬 La triade (perdu), mort des mentors | 1 000 | Qin Shi Huang, Imu, Griffith 10 |
@@ -145,8 +145,8 @@ Contre **Nostradamus** (10+). En plein combat, il révèle ce qu'est la pierre :
 
 | Note | Sens | Exemples |
 |---|---|---|
-| 1-2 | Un ennemi de quartier | Kyou, Morgan |
-| 3-4 | Un vrai chef, il faut une stratégie | le Comte, Attila, Mangoku, Dong Zhuo |
+| 1-2 | Un ennemi de quartier | Kyou, Morgan, le Comte |
+| 3-4 | Un vrai chef, il faut une stratégie | Attila, Mangoku, Dong Zhuo |
 | 5-6 | Un grand nom, un adversaire de guerre | Crocodile, Zodd, Cortés, Sylla, Basile II, Doflamingo, Rinko, Rosine, Vlad III |
 | 7-8 | Un des plus forts de son univers | Richard Cœur de Lion, Bai Qi, Hulagu, Oda Nobunaga, Hou Ken, Kizaru, Grunbeld, Tamerlan, Xerxès, Charlemagne, César |
 | 9 | Le sommet avant la fin | Ri Boku, Akainu, Ganishka, Alexandre, Gengis Khan, Napoléon, Staline, Hitler |
@@ -178,44 +178,44 @@ Le **palier du gacha** (les taux des coffres communs achetés avec les pièces) 
 - **Guerres** : beaucoup d'XP, plus le coffre de récompense.
 - **Staline et Hitler** (exclus du gacha) : pas de chance d'avoir le tyran, le coffre est toujours de la rareté fixée.
 
-**Étape par étape, pour chaque joueur** : la case d'un joueur donne la **rareté minimale** du personnage de son coffre de récompense, ou **le personnage exact**. Fichier de travail à remplir : `docs/RECOMPENSES_LORE.xlsx` (feuille 1 ; feuille 2 : tous les personnages par rareté, avec ceux que Claude conseille pour chacun). Ce tableau reprend sa première version (proposition de Claude).
+**Étape par étape** (version d'Ayoub, 26/11). ✅ **Pas de personnage attribué** : les récompenses sont les mêmes pour les trois joueurs, la surprise reste dans le coffre. ✅ **4 coffres ultimes** (4ᵉ guerre, Hitler, vengeance, bataille finale) : les Sous les Cieux, qui auront une animation et des effets travaillés, doivent être vus, alors qu'au gacha on a au mieux environ 4 % de chances d'en avoir un. Ce tableau l'emporte sur celui par difficulté ci-dessus. Fichier de travail : `docs/RECOMPENSES_LORE.xlsx` (feuille 2 : tous les personnages par rareté).
 
-| N° | Moment | Adversaire(s) | Pour tous | Shin (Ayoub) | Koby (Mathieu) | Guts (Nicolas) |
-|---|---|---|---|---|---|---|
-| 1 | 🎬 La fusion | — | 1 000 pièces de départ (10 coffres communs) | — | — | — |
-| 2 | Son quartier | quartiers neutres | 100 pièces par quartier neutre pris (les 5 premiers) | — | — | — |
-| 3 | 🎬 Trop fort pour nous (perdu) | Kyou 2 · Morgan 2 · le Comte 3 | rien | — | — | — |
-| 4 | 🎬 Tutoriel et revanche | Kyou 2 · Morgan 2 · le Comte 3 | 200 pièces | Rare | Rare | Rare |
-| 5 | 🎬 Attila, à trois | Attila 4 | Attila (donné à chacun) + 300 pièces | — | — | — |
-| 6 | 🎬 La triade (perdu), mort des mentors | Qin Shi Huang · Imu · Griffith 10 | objet du mentor ; palier 2 | — | — | — |
-| — | ⚔️ Tyran | Dong Zhuo 4 | 200 pièces ; chance d'avoir le tyran 20 % | Rare | Rare | Rare |
-| — | ⚔️ Tyran | Hernán Cortés 5 | 300 pièces ; chance d'avoir le tyran 15 % | Épique | Épique | Épique |
-| — | ⚔️ Tyran | Francisco Pizarro 5 | 300 pièces ; chance d'avoir le tyran 15 % | Épique | Épique | Épique |
-| 7 | 🎬 1ʳᵉ guerre | Mangoku 4 · Crocodile 5 · Zodd 5 | XP + 300 pièces | Épique | Épique | Épique |
-| — | ⚔️ Tyran | Sylla 6 | 300 pièces ; chance d'avoir le tyran 15 % | Épique | Épique | Épique |
-| — | ⚔️ Tyran | Cao Cao 6 | 300 pièces ; chance d'avoir le tyran 15 % | Épique | Épique | Épique |
-| — | ⚔️ Tyran | Basile II 6 | 300 pièces ; chance d'avoir le tyran 15 % | Épique | Épique | Épique |
-| 8 | 🎬 2ᵉ guerre | Rinko 6 · Doflamingo 6 · Rosine 6 | XP + 2ᵉ objet unique ; palier 3 (Sous les Cieux possibles) | Épique | Épique | Épique |
-| 8 | 🎬 Le sauvetage | Richard Cœur de Lion 7 · Akainu 8 · Vlad III 6 | leçon de vie et faculté du sauveur | Légendaire | Légendaire | Mystique |
-| — | ⚔️ Tyran | Bai Qi 7 | 500 pièces ; chance d'avoir le tyran 10 % | Épique | Épique | Épique |
-| — | ⚔️ Tyran | Hulagu 7 | 500 pièces ; chance d'avoir le tyran 10 % | Épique | Épique | Épique |
-| — | ⚔️ Tyran | Oda Nobunaga 7 | 500 pièces ; chance d'avoir le tyran 10 % | Épique | Épique | Épique |
-| 9 | 🎬 3ᵉ guerre | Hou Ken 8 · Kizaru 8 · Grunbeld 7 | XP + 500 pièces | Épique | Épique | Épique |
-| — | ⚔️ Tyran | Tamerlan 8 | 500 pièces ; chance d'avoir le tyran 10 % | Épique | Épique | Épique |
-| — | ⚔️ Tyran | Xerxès 8 | 500 pièces ; chance d'avoir le tyran 10 % | Épique | Épique | Épique |
-| — | ⚔️ Tyran | Charlemagne 8 | 500 pièces ; chance d'avoir le tyran 10 % | Épique | Épique | Épique |
-| — | ⚔️ Tyran | Jules César 8 | 500 pièces ; chance d'avoir le tyran 10 % | Épique | Épique | Épique |
-| 10 | 🎬 4ᵉ guerre | Ri Boku 9 · Akainu 9 · Ganishka 9 | XP + 800 pièces ; palier 4 | Légendaire | Légendaire | Légendaire |
-| — | ⚔️ Tyran | Alexandre le Grand 9 | 800 pièces ; chance d'avoir le tyran 5 % | Légendaire | Légendaire | Légendaire |
-| — | ⚔️ Tyran | Gengis Khan 9 | 800 pièces ; chance d'avoir le tyran 5 % | Légendaire | Légendaire | Légendaire |
-| — | ⚔️ Tyran | Napoléon 9 | 800 pièces ; chance d'avoir le tyran 5 % | Légendaire | Légendaire | Légendaire |
-| — | ⚔️ Tyran | Staline 9 | 800 pièces (exclu du gacha : pas de chance d'avoir le tyran) | Légendaire | Légendaire | Légendaire |
-| — | ⚔️ Tyran | Hitler 9 | 800 pièces (exclu du gacha : pas de chance d'avoir le tyran) | Légendaire | Légendaire | Légendaire |
-| 11 | 🎬 Vengeance contre la triade | Qin Shi Huang · Imu · Griffith 10 | 1 000 pièces | Mystique | Mystique | Mystique |
-| 12 | 🎬 Nostradamus (perdu), Einstein | Nostradamus 10+ | rien | — | — | — |
-| 13 | 🎬 Bataille finale | Nostradamus 10+ | 2 000 pièces | Sous les Cieux (ultime) | Sous les Cieux (ultime) | Sous les Cieux (ultime) |
+| N° | Moment | Adversaire(s) | Récompense pour chaque joueur | Coffre de récompense (rareté minimale) |
+|---|---|---|---|---|
+| 1 | 🎬 La fusion | — | 1 000 pièces de départ (10 coffres communs + 1 coffre rare) | — |
+| 2 | Son quartier | quartiers neutres | 100 pièces par quartier neutre pris (les 5 premiers + 2 coffres par quartier pris) | — |
+| 3 | 🎬 Trop fort pour nous (perdu) | Kyou 2 · Morgan 2 · le Comte 2 | rien | — |
+| 4 | 🎬 Tutoriel et revanche | Kyou 2 · Morgan 2 · le Comte 2 | 200 pièces | Rare |
+| 5 | 🎬 Attila, à trois | Attila 4 | Attila (donné à chacun) + 300 pièces + 10 coffres communs | Rare |
+| 6 | 🎬 La triade (perdu), mort des mentors | Qin Shi Huang · Imu · Griffith 10 | objet du mentor ; palier 2 + 10 coffres rares + 1 coffre épique | — |
+| — | ⚔️ Tyran | Dong Zhuo 4 | 200 pièces ; chance d'avoir le tyran 20 % + 5 coffres rares + coffre épique | Rare |
+| — | ⚔️ Tyran | Hernán Cortés 5 | 300 pièces ; chance d'avoir le tyran 15 % + 5 coffres rares + coffre épique | Épique |
+| — | ⚔️ Tyran | Francisco Pizarro 5 | 300 pièces ; chance d'avoir le tyran 15 % + 5 coffres rares + coffre épique | Épique |
+| 7 | 🎬 1ʳᵉ guerre | Mangoku 4 · Crocodile 5 · Zodd 5 | XP + 300 pièces + 5 coffres rares + coffre épique + 1 coffre légendaire | Épique |
+| — | ⚔️ Tyran | Sylla 6 | 300 pièces ; chance d'avoir le tyran 15 % + 5 coffres épiques | Épique |
+| — | ⚔️ Tyran | Cao Cao 6 | 300 pièces ; chance d'avoir le tyran 15 % + 5 coffres épiques | Épique |
+| — | ⚔️ Tyran | Basile II 6 | 300 pièces ; chance d'avoir le tyran 15 % + 5 coffres épiques | Épique |
+| 8 | 🎬 2ᵉ guerre | Rinko 6 · Doflamingo 6 · Rosine 6 | XP + 2ᵉ objet unique ; palier 3 (Sous les Cieux possibles) + 5 coffres épiques + coffre légendaire | Épique |
+| 8 | 🎬 Le sauvetage | Richard Cœur de Lion 7 · Akainu 8 · Vlad III 6 | leçon de vie et faculté du sauveur + 3 coffres légendaires | Légendaire ou mystique |
+| — | ⚔️ Tyran | Bai Qi 7 | 500 pièces ; chance d'avoir le tyran 10 % + 5 coffres épiques | Épique |
+| — | ⚔️ Tyran | Hulagu 7 | 500 pièces ; chance d'avoir le tyran 10 % + 5 coffres épiques | Épique |
+| — | ⚔️ Tyran | Oda Nobunaga 7 | 500 pièces ; chance d'avoir le tyran 10 % + 5 coffres épiques | Épique |
+| 9 | 🎬 3ᵉ guerre | Hou Ken 8 · Kizaru 8 · Grunbeld 7 | XP + 500 pièces + 5 coffres épiques + 3 coffres légendaires | Épique |
+| — | ⚔️ Tyran | Tamerlan 8 | 500 pièces ; chance d'avoir le tyran 10 % + 5 coffres épiques | Épique |
+| — | ⚔️ Tyran | Xerxès 8 | 500 pièces ; chance d'avoir le tyran 10 % + 5 coffres épiques | Épique |
+| — | ⚔️ Tyran | Charlemagne 8 | 500 pièces ; chance d'avoir le tyran 10 % + 5 coffres épiques + 1 coffre légendaire | Épique |
+| — | ⚔️ Tyran | Jules César 8 | 500 pièces ; chance d'avoir le tyran 10 % + 5 coffres épiques + 1 coffre légendaire | Épique |
+| 10 | 🎬 4ᵉ guerre | Ri Boku 9 · Akainu 9 · Ganishka 9 | XP + 800 pièces ; palier 4 + 5 coffres épiques + 3 coffres légendaires + 1 coffre ultime | Légendaire |
+| — | ⚔️ Tyran | Alexandre le Grand 9 | 800 pièces ; chance d'avoir le tyran 5 % + 5 coffres épiques + 1 coffre légendaire | Légendaire |
+| — | ⚔️ Tyran | Gengis Khan 9 | 800 pièces ; chance d'avoir le tyran 5 % + 5 coffres épiques + 1 coffre légendaire | Légendaire |
+| — | ⚔️ Tyran | Napoléon 9 | 800 pièces ; chance d'avoir le tyran 5 % + 5 coffres épiques + 1 coffre légendaire | Légendaire |
+| — | ⚔️ Tyran | Staline 9 | 800 pièces (exclu du gacha : pas de chance d'avoir le tyran) + 5 coffres épiques + 1 coffre légendaire | Légendaire |
+| — | ⚔️ Tyran | Hitler 9 | 800 pièces (exclu du gacha : pas de chance d'avoir le tyran) + 5 coffres épiques + 1 coffre légendaire + 1 coffre ultime | Légendaire |
+| 11 | 🎬 Vengeance contre la triade | Qin Shi Huang · Imu · Griffith 10 | 1 000 pièces + 1 coffre ultime | Mystique |
+| 12 | 🎬 Nostradamus (perdu), Einstein | Nostradamus 10+ | rien | — |
+| 13 | 🎬 Bataille finale | Nostradamus 10+ | 2 000 pièces | Sous les Cieux (ultime) |
 
-**Ordre de grandeur** : sur tout le lore, un joueur ouvre environ 150 à 200 coffres. Il obtient en moyenne 6 à 10 légendaires ou guerriers mystiques et 1 ou 2 Sous les Cieux (le coffre ultime de la fin, et parfois la chance ou la garantie des 200 tirages). À ajuster quand on saura combien de temps dure une partie.
+**Ordre de grandeur** : avec ces récompenses, chaque joueur reçoit sur tout le lore au moins 4 Sous les Cieux (les 4 coffres ultimes) et plus de 20 légendaires ou guerriers mystiques. Lore généreux, voulu par Ayoub ; à ajuster si les joueurs deviennent trop forts trop vite.
 
 ## Ce qui reste à décider
 
