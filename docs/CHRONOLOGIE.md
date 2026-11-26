@@ -96,7 +96,7 @@ Rédigé par Claude le 26/11 à partir de `LORE.md`, `PERSONNAGES.md` et `REGLES
   - **Mathieu (Koby)** : **Toussaint Louverture**, contre **Akainu** (en écho à Shanks, qui protège Koby face à Akainu à Marineford). Sa leçon : un homme doit se demander ce qui est réellement juste ; suivre les ordres ne suffit pas. **Un homme de la justice se bat pour la justice, pas pour le juge.**
   - **Nicolas (Guts)** : contre **Vlad III l'Empaleur**, le général rempli de haine (otage des Ottomans enfant, comme Guts dont l'enfance a été volée). Sauveur : **Miyamoto Musashi**, la figure historique qui s'est battue pour trouver la paix intérieure (invaincu, il finit par poser le sabre pour méditer et écrire *Le Livre des cinq anneaux*). Il garde aussi son rôle de sabreur de la voie « la vie des hommes vaut plus que les objectifs ».
 - ✅ Selon la **voie choisie**, des **guerriers différents** apparaissent : Alexandre ou Hannibal pour « prêt à tout » ; Musashi en face de Kojirō, le duel de Ganryūjima devenant le symbole des deux voies.
-- ❓ **T11** : la leçon exacte de Musashi. 💡 « La haine finit par te transformer en ce que tu combats. »
+- ✅ **La leçon de Musashi** (tirée de *La Voie à suivre seul*, ses 21 règles écrites une semaine avant sa mort, 1645) : « **La rancune ne convient ni à soi ni aux autres.** Regarde-le : la haine l'a mangé tout entier. » Vlad III est le miroir de ce que Guts pourrait devenir.
 
 🚩 **Point d'étape 8 : les trois sauvetages** (Saladin, Toussaint Louverture, Musashi).
 
@@ -160,4 +160,4 @@ Rédigé par Claude le 26/11 à partir de `LORE.md`, `PERSONNAGES.md` et `REGLES
 
 ## Trous qui restent
 
-T11 (la leçon exacte de Musashi), T16 (la cachette de la pierre philosophale, plus tard), et les étapes de la conquête de la ville (Acte V bis).
+T16 (la cachette de la pierre philosophale, plus tard), et les étapes de la conquête de la ville (Acte V bis).
