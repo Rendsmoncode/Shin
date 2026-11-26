@@ -325,12 +325,11 @@ Raretés : rare et épique (environ 30 épiques). Les guerriers mystiques sont a
 ## Personnages de soutien : règles (Ayoub, 26/11)
 
 - ✅ **Pas de fiction** dans les catégories de soutien, sauf exceptions choisies par Ayoub : **Leif Erikson** (personnage historique, pour son visuel de Vinland Saga), **Nico Robin** (explorateurs), **Tony Tony Chopper** (soignants), **Lloyd Frontera** (architectes).
-- 💡 **Équilibre** : **2 légendaires par catégorie**, le reste en épique, et quelques rares du quotidien. Les légendaires choisis par Ayoub sont Marie Curie, Léonard de Vinci et Nikola Tesla ; Claude a complété les autres (voir chaque catégorie).
+- ✅ **Légendaires seulement pour ceux qui le méritent** (Ayoub, 26/11), sans quota par catégorie : Marie Curie, Léonard de Vinci, Nikola Tesla et Adam Smith. Tous les autres sont épiques (ou rares pour ceux du quotidien).
 
 ## Explorateurs
 
-- 💡 Légendaires : Zheng He (les flottes géantes de la Chine Ming), Ibn Battuta (le plus grand voyageur du Moyen Âge)
-- Épiques : Leif Erikson, Pythéas (le Marseillais), Marco Polo, Magellan, Amerigo Vespucci, Amundsen, Shackleton, Aboubakri II, Cousteau
+- Épiques : Zheng He, Ibn Battuta, Leif Erikson, Pythéas (le Marseillais), Marco Polo, Magellan, Amerigo Vespucci, Amundsen, Shackleton, Aboubakri II, Cousteau
 - Avec la capacité Archéologue (épiques) : Champollion, Howard Carter, Nico Robin (One Piece)
 - Non retenus : Christophe Colomb, Cortés, Pizarro (massacres et esclavage), Armin ; Indiana Jones, Lara Croft (fiction).
 - 💡 Cortés et Pizarro restent des **tyrans du lore**, mais exclus du gacha pour la même raison (comme Staline et Hitler) : battus, ils donnent leur coffre de récompense sans chance d'avoir le tyran.
@@ -338,22 +337,20 @@ Raretés : rare et épique (environ 30 épiques). Les guerriers mystiques sont a
 
 ## Soignants
 
-- Légendaires : ✅ Marie Curie ; 💡 Avicenne (le *Canon de la médecine*, la référence pendant six siècles)
-- Épiques : Hua Tuo, Dominique-Jean Larrey, Ambroise Paré, Florence Nightingale, Mary Seacole, Rufaida al-Aslamia, Al-Zahrawi, Henri Dunant, Tony Tony Chopper (One Piece), Claude et Régis (les parents de Mathieu, podologues)
+- ✅ Légendaire : Marie Curie
+- Épiques : Avicenne, Hua Tuo, Dominique-Jean Larrey, Ambroise Paré, Florence Nightingale, Mary Seacole, Rufaida al-Aslamia, Al-Zahrawi, Henri Dunant, Tony Tony Chopper (One Piece), Claude et Régis (les parents de Mathieu, podologues)
 - Rares : Médecin de MSF, Pharmacien du coin (« Prenez un Doliprane »), Infirmière de l'hôpital d'Aubagne
 - Non retenues : Mère Teresa ; Tsunade (fiction).
 
 ## Espions
 
-- 💡 Légendaires : Juan Pujol (« Garbo », l'agent double qui a trompé Hitler sur le Débarquement), Hattori Hanzō
-- Épiques : Fūma Kotarō, Joséphine Baker, Noor Inayat Khan, Virginia Hall, Harriet Tubman, Richard Sorge, Edward Snowden
+- Épiques : Hattori Hanzō, Juan Pujol (« Garbo »), Fūma Kotarō, Joséphine Baker, Noor Inayat Khan, Virginia Hall, Harriet Tubman, Richard Sorge, Edward Snowden
 - Rares : la concierge de l'immeuble, le papi à la fenêtre, le commère du PMU
 - Non retenus (fiction) : Varys, Loid Forger, Itachi Uchiha, OSS 117, Solid Snake.
 
 ## Architectes
 
-- 💡 Légendaires : Imhotep (la première pyramide, le premier architecte connu), Vauban (les forteresses de toute la France)
-- Épiques : Apollodore de Damas, Mimar Sinan, Vitruve, Brunelleschi, le baron Haussmann, Le Corbusier, Gaudí, Lloyd Frontera (The Greatest Estate Developer)
+- Épiques : Imhotep, Vauban, Apollodore de Damas, Mimar Sinan, Vitruve, Brunelleschi, le baron Haussmann, Le Corbusier, Gaudí, Lloyd Frontera (The Greatest Estate Developer)
 - Rares : le chef de chantier de la mairie, le client de Leroy Merlin
 - Non retenus : Steve (Minecraft), Franky (One Piece), Bob le bricoleur (fiction) ; l'artisan qui dit « je passe lundi ».
 - Léonard de Vinci, Archimède et Eiffel : gardés pour les ingénieurs.
@@ -366,8 +363,8 @@ Raretés : rare et épique (environ 30 épiques). Les guerriers mystiques sont a
 
 ## Économistes
 
-- Légendaires : 💡 Adam Smith (le père de l'économie moderne, comme Sun Tzu pour la guerre), 💡 Mansa Moussa (l'homme le plus riche de l'histoire)
-- Épiques : Jacques Cœur, Colbert, Sully, Jakob Fugger, Ibn Khaldoun, John Maynard Keynes, Kautilya, Wang Anshi, Laurent de Médicis, Khadija, Muhammad Yunus, Warren Buffett
+- ✅ Légendaire : Adam Smith (le père de l'économie moderne, comme Sun Tzu pour la guerre)
+- Épiques : Mansa Moussa, Jacques Cœur, Colbert, Sully, Jakob Fugger, Ibn Khaldoun, John Maynard Keynes, Kautilya, Wang Anshi, Laurent de Médicis, Khadija, Muhammad Yunus, Warren Buffett
 - Rares : le patron d'Ayoub
 
 ## Généraux rares
