@@ -250,15 +250,15 @@ Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de
   - un général a en plus une **aptitude de leader**.
 - ✅ **Doublons** : ils se transforment en XP pour le personnage (par exemple 1 doublon = 1 000 XP).
 - ✅ **Aucun argent réel dans le jeu.** La boutique contient seulement un **lien vers la page de dons de MSF** pour la Palestine. Après un don, l'admin offre lui-même un coffre au joueur.
-- ✅ **Raretés** : Commun · Rare · Épique · Légendaire · Sous les Cieux. Un coffre contient **5 éléments, dont toujours au moins un personnage** (détail plus bas, Ayoub 26/11).
+- ✅ **Raretés** : Commun · Rare · Épique · Légendaire · Sous les Cieux. Un coffre contient **5 éléments, dont toujours au moins un personnage**, en dernier (détail plus bas, Ayoub 26/11).
 - ✅ La liste des personnages est dans [PERSONNAGES.md](PERSONNAGES.md).
 - 💡 **Probabilités du gacha** (tâche 14, proposées par Claude le 26/11, à valider) :
-  - ✅ **Ce qu'il y a dans un coffre** (Ayoub, 26/11) : **5 éléments**. Le 1ᵉʳ est **toujours un personnage**, dont la rareté est tirée au pourcentage. Les 4 autres peuvent être des ressources (la même ressource peut sortir 4 fois, pas de limite), des objets, d'autres personnages, etc.
-  - ✅ **Les coffres ont une rareté**, qui donne la **rareté minimum du personnage garanti** : Commun · Rare · Épique · Légendaire · **Mystique** (un guerrier mystique **ou** un Sous les Cieux) · **Ultime** (au minimum un Sous les Cieux).
+  - ✅ **Ce qu'il y a dans un coffre** (Ayoub, 26/11) : **5 éléments**. Le **5ᵉ (le dernier) est toujours un personnage**, dont la rareté est tirée au pourcentage. S'il y a plusieurs personnages dans le coffre, **les plus rares sont toujours à la fin**. Les 4 autres peuvent être des ressources (la même ressource peut sortir 4 fois, pas de limite), des objets, d'autres personnages, etc.
+  - ✅ **Les coffres ont une rareté**, qui donne la **rareté minimum du personnage garanti** : Commun · Rare · Épique · **Légendaire** (un légendaire ou un Sous les Cieux) et **Mystique** (un guerrier mystique ou un Sous les Cieux), **à égalité** · **Ultime** (au minimum un Sous les Cieux). Les guerriers mystiques sont au même niveau que les légendaires, pas au-dessus.
   - **Un tirage = ouvrir un coffre commun = 100 pièces** de la monnaie du gacha. **10 tirages d'un coup = 900 pièces**, avec au moins un coffre épique parmi les 10.
   - Les taux du personnage d'un **coffre commun** montent avec l'avancée dans le lore (le palier se débloque au moment indiqué, pour chaque joueur) :
 
-    | Palier du lore | Commun | Rare | Épique | Légendaire | Sous les Cieux |
+    | Palier du lore | Commun | Rare | Épique | Légendaire ou mystique | Sous les Cieux |
     |---|---|---|---|---|---|
     | 1. Début (étapes 2 à 5) | 70 % | 25 % | 4,5 % | 0,5 % | 0 % |
     | 2. Après la triade (étapes 6 à 7) | 60 % | 28 % | 10 % | 2 % | 0 % |
@@ -266,22 +266,22 @@ Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de
     | 4. 4ᵉ guerre et fin (étape 10 et après) | 40 % | 32 % | 20 % | 7 % | 1 % |
 
   - **Pas de Sous les Cieux avant la 2ᵉ guerre** : les 7 Grands Généraux doivent rester un moment fort, et ne pas écraser le début du lore.
-  - Dans un coffre commun, les **guerriers mystiques** sont tirés dans la case Légendaire (environ 1 légendaire sur 4 est un guerrier mystique).
-  - **Le personnage garanti selon la rareté du coffre** (les coffres rares et au-dessus se gagnent dans le lore, les quêtes ou sont offerts par l'admin) :
+  - Dans un coffre commun, la case « Légendaire ou mystique » donne un légendaire 3 fois sur 4 et un guerrier mystique 1 fois sur 4.
+  - **Le personnage garanti selon la rareté du coffre** (coffres classiques des quêtes, des trésors ou offerts par l'admin ; les coffres de récompense du lore sont à part, voir `CHRONOLOGIE.md`) :
 
     | Coffre | Personnage garanti |
     |---|---|
     | Commun | taux du palier (tableau ci-dessus) |
-    | Rare | Rare 80 %, Épique 17 %, Légendaire 3 % |
-    | Épique | Épique 85 %, Légendaire 14 %, Sous les Cieux 1 % (0 % avant la 2ᵉ guerre : Légendaire 15 %) |
-    | Légendaire | Légendaire 90 %, guerrier mystique 8 %, Sous les Cieux 2 % (0 % avant la 2ᵉ guerre : guerrier mystique 10 %) |
-    | Mystique | guerrier mystique 85 %, Sous les Cieux 15 % |
+    | Rare | Rare 80 %, Épique 17 %, Légendaire ou mystique 3 % |
+    | Épique | Épique 85 %, Légendaire ou mystique 14 %, Sous les Cieux 1 % (0 % avant la 2ᵉ guerre : Légendaire ou mystique 15 %) |
+    | Légendaire | Légendaire 98 %, Sous les Cieux 2 % (0 % avant la 2ᵉ guerre) |
+    | Mystique | guerrier mystique 98 %, Sous les Cieux 2 % (0 % avant la 2ᵉ guerre) |
     | Ultime | Sous les Cieux 100 % |
     | Du tyran | le tyran battu, avec une chance selon sa difficulté (voir `CHRONOLOGIE.md`) ; sinon le personnage d'un coffre épique |
 
   - **Les 4 autres éléments** : chacun est tiré à part, donc on peut avoir 4 fois la même chose.
 
-    | Élément | Coffre commun à légendaire | Coffre mystique et ultime |
+    | Élément | Coffre commun à épique | Coffre légendaire, mystique et ultime |
     |---|---|---|
     | Ressource (argent, nourriture, matériaux, population ou pièces du gacha) | 65 % | 50 % |
     | Accélérateur (construction, soins) | 12 % | 12 % |
@@ -292,7 +292,7 @@ Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de
   - **La quantité** d'une ressource, d'un accélérateur ou d'un livre d'XP grandit avec la rareté du coffre : ×1 (commun), ×2 (rare), ×4 (épique), ×8 (légendaire), ×12 (mystique), ×20 (ultime). La valeur de base sera fixée avec l'économie.
   - Un personnage déjà possédé devient de l'XP (doublon), qu'il soit le personnage garanti ou un élément en plus.
 
-  - **Garanties** (compteur propre à chaque joueur, tous coffres confondus, sur le personnage garanti) : un **Légendaire garanti au 60ᵉ tirage** sans légendaire ; un **Sous les Cieux garanti au 200ᵉ tirage** sans Sous les Cieux (le compteur ne tourne qu'à partir de la 2ᵉ guerre). Le compteur revient à zéro dès qu'on obtient la rareté.
+  - **Garanties** (compteur propre à chaque joueur, tous coffres confondus, sur le personnage garanti) : un **Légendaire ou mystique garanti au 60ᵉ tirage** sans en avoir eu ; un **Sous les Cieux garanti au 200ᵉ tirage** sans Sous les Cieux (le compteur ne tourne qu'à partir de la 2ᵉ guerre). Le compteur revient à zéro dès qu'on obtient la rareté.
   - **Gagner des pièces** : connexion quotidienne 50 (un tirage tous les deux jours), 7 jours d'affilée 300, quêtes et lieux majeurs 100 à 500, étapes du lore (voir `CHRONOLOGIE.md`).
   - Les tirages forcés du Game Master (légendaires dédiés) passent au-dessus de ces taux.
 

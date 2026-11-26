@@ -155,49 +155,51 @@ Contre **Nostradamus** (10+). En plein combat, il révèle ce qu'est la pierre :
 
 ## Les récompenses (💡 proposées par Claude le 26/11, tâche 14)
 
-Les taux des coffres et les garanties sont dans `REGLES.md` (section 8). Le **palier du gacha** (les taux d'un coffre commun) monte avec le lore : palier 1 au début, 2 après la triade (étape 6), 3 à la 2ᵉ guerre (étape 8), 4 à la 4ᵉ guerre (étape 10).
+✅ **Les coffres de récompense du lore sont à part** (Ayoub, 26/11) : ils ont l'apparence des coffres classiques (5 éléments, le personnage en dernier), mais **la rareté du personnage n'est pas tirée au hasard : c'est Ayoub et Claude qui la fixent**, étape par étape, dans les tableaux ci-dessous. Les 4 autres éléments sont tirés comme dans un coffre classique de la même rareté (`REGLES.md`, section 8).
 
-**Selon la difficulté de l'adversaire battu** (chaque joueur reçoit sa récompense, même dans une bataille à trois ; chaque coffre contient 5 éléments, dont au moins un personnage de sa rareté) :
+Le **palier du gacha** (les taux des coffres communs achetés avec les pièces) monte avec le lore : palier 1 au début, 2 après la triade (étape 6), 3 à la 2ᵉ guerre (étape 8), 4 à la 4ᵉ guerre (étape 10).
 
-| Difficulté | Pièces | Coffres | Chance d'avoir le tyran battu |
+**Selon la difficulté de l'adversaire battu** (chaque joueur reçoit sa récompense, même dans une bataille à trois) :
+
+| Difficulté | Pièces | Rareté fixée du personnage | Chance d'avoir le tyran battu |
 |---|---|---|---|
-| 1-2 | 100 | 1 coffre commun | — |
-| 3-4 | 200 | 1 coffre rare | 20 % |
-| 5-6 | 300 | 1 coffre épique | 15 % |
-| 7-8 | 500 | 1 coffre épique + 1 coffre rare | 10 % |
-| 9 | 800 | 1 coffre légendaire | 5 % |
-| 10 | 1 000 | 1 coffre mystique | — |
-| 10+ | 2 000 | 1 coffre ultime | — |
+| 1-2 | 100 | Rare | — |
+| 3-4 | 200 | Rare | 20 % |
+| 5-6 | 300 | Épique | 15 % |
+| 7-8 | 500 | Épique | 10 % |
+| 9 | 800 | Légendaire ou mystique | 5 % |
+| 10 | 1 000 | Légendaire ou mystique | — |
+| 10+ | 2 000 | Sous les Cieux (coffre ultime) | — |
 
-- La chance d'avoir le tyran passe par le **coffre du tyran** : si on ne l'obtient pas, son personnage garanti est tiré comme dans un coffre épique. On peut rejouer contre un tyran déjà battu, mais pour une récompense réduite (un coffre commun).
+- **Contre un tyran**, le personnage du coffre est le tyran battu avec la chance indiquée ; sinon c'est un personnage de la rareté fixée. On peut rejouer contre un tyran déjà battu, pour une récompense réduite (un coffre commun classique).
 - **Défaite obligatoire** (étapes 3, 6 et 12) : pas de coffre. À l'étape 6, la récompense est l'objet du mentor.
-- **Guerres** : beaucoup d'XP, plus la récompense de la difficulté de l'ennemi.
-- **Staline et Hitler** (exclus du gacha) : pas de coffre du tyran, un coffre légendaire à la place.
+- **Guerres** : beaucoup d'XP, plus le coffre de récompense.
+- **Staline et Hitler** (exclus du gacha) : pas de chance d'avoir le tyran, le coffre est toujours de la rareté fixée.
 
-**Étape par étape** :
+**Étape par étape** (rareté fixée du personnage du coffre de récompense) :
 
 | N° | Moment | Récompense |
 |---|---|---|
-| 1 | La fusion | 1 000 pièces de départ (10 tirages, un Épique garanti) |
+| 1 | La fusion | 1 000 pièces de départ (10 coffres communs classiques) |
 | 2 | Son quartier | 100 pièces par quartier neutre pris (les 5 premiers) |
 | 3 | Trop fort pour nous (perdu) | rien |
-| 4 | La revanche | 200 pièces + 1 coffre rare (difficulté 2-3) |
+| 4 | La revanche | 200 pièces + coffre **Rare** |
 | 5 | Attila, à trois | Attila (donné à chacun) + 300 pièces |
 | 6 | La triade (perdu) | l'objet du mentor ; passage au palier 2 |
 | — | Tyrans (Dong Zhuo, Cortés, Pizarro) | selon la difficulté (4-5) |
-| 7 | 1ʳᵉ guerre | XP + 300 pièces + 1 coffre épique |
+| 7 | 1ʳᵉ guerre | XP + 300 pièces + coffre **Épique** |
 | — | Tyrans (Sylla, Cao Cao, Basile II) | selon la difficulté (6) |
-| 8 | 2ᵉ guerre et sauveurs | XP + 2ᵉ objet unique + 1 coffre épique pour la guerre, 1 coffre épique + 1 coffre rare pour le sauvetage ; passage au palier 3 (les Sous les Cieux deviennent possibles) |
+| 8 | 2ᵉ guerre et sauveurs | XP + 2ᵉ objet unique + coffre **Épique** (guerre) + coffre **Légendaire** (sauvetage) ; passage au palier 3 |
 | — | Tyrans (Bai Qi, Hulagu, Nobunaga) | selon la difficulté (7) |
-| 9 | 3ᵉ guerre | XP + 500 pièces + 1 coffre épique + 1 coffre rare |
+| 9 | 3ᵉ guerre | XP + 500 pièces + coffre **Épique** |
 | — | Tyrans (Tamerlan, Xerxès, Charlemagne, César) | selon la difficulté (8) |
-| 10 | 4ᵉ guerre | XP + 800 pièces + 1 coffre légendaire ; passage au palier 4 |
+| 10 | 4ᵉ guerre | XP + 800 pièces + coffre **Légendaire** ; passage au palier 4 |
 | — | Tyrans (Alexandre, Gengis Khan, Napoléon, Staline, Hitler) | selon la difficulté (9) |
-| 11 | Vengeance contre la triade | 1 000 pièces + 1 coffre mystique |
+| 11 | Vengeance contre la triade | 1 000 pièces + coffre **Mystique** (un guerrier mystique) |
 | 12 | Nostradamus (perdu), Einstein | rien |
-| 13 | Bataille finale | 2 000 pièces + 1 coffre ultime |
+| 13 | Bataille finale | 2 000 pièces + coffre **Ultime** (un Sous les Cieux) |
 
-**Ordre de grandeur** : sur tout le lore, un joueur fait environ 150 à 200 tirages. Il obtient en moyenne 6 à 10 légendaires (dont les garanties) et 1 ou 2 Sous les Cieux (le coffre ultime de la fin, et parfois le coffre mystique ou la garantie des 200 tirages). À ajuster quand on saura combien de temps dure une partie.
+**Ordre de grandeur** : sur tout le lore, un joueur ouvre environ 150 à 200 coffres. Il obtient en moyenne 6 à 10 légendaires ou guerriers mystiques et 1 ou 2 Sous les Cieux (le coffre ultime de la fin, et parfois la chance ou la garantie des 200 tirages). À ajuster quand on saura combien de temps dure une partie.
 
 ## Ce qui reste à décider
 
