@@ -95,7 +95,7 @@ On reprend des quartiers, on atteint **environ 2 000 soldats** (ou plus), et une
 |---|---|---|
 | Shin | **Rinko** (Kingdom) | 6 |
 | Koby | **Doflamingo** | 6 |
-| Guts | **Zodd**, encore | 6 |
+| Guts | **Rosine**, l'apôtre elfe | 6 |
 
 Pendant cette guerre, chacun vit son **sauvetage** : une bataille impossible, une défaite, puis la cinématique du **sauveur** qui donne une **leçon de vie** et une faculté. On rejoue et on gagne.
 
@@ -122,7 +122,7 @@ On reprend encore des quartiers et on agrandit ses armées. Entre-temps, les tyr
 |---|---|---|
 | Shin | **Hou Ken**, le « Bushin » | 8 |
 | Koby | **Kizaru** | 8 |
-| Guts | ❓ un ennemi de Berserk (💡 **Grunbeld**, l'apôtre dragon, ou **Rosine**) | 7 |
+| Guts | **Grunbeld**, l'apôtre dragon | 7 |
 
 **Quatrième guerre**, la dernière avant la triade (💡 vers 5 000 soldats chacun) :
 
@@ -130,7 +130,7 @@ On reprend encore des quartiers et on agrandit ses armées. Entre-temps, les tyr
 |---|---|---|
 | Shin | **Ri Boku** | 9 |
 | Koby | **Akainu** | 9 |
-| Guts | ❓ un ennemi de Berserk (💡 **Ganishka**, l'empereur des Kushans) | 9 |
+| Guts | **Ganishka**, l'empereur des Kushans | 9 |
 
 ## 10. La vengeance contre la triade
 
@@ -174,9 +174,9 @@ Les joueurs le battent et **détruisent la pierre** : **tout redevient comme ava
 | 5 | Attila, à trois | 3 × 500 | Attila 4 | Attila recrutable |
 | 6 | La triade, mort des mentors | 1 000 | Qin Shi Huang, Imu, Griffith 10 (perdu) | 1ᵉʳ objet unique (guandao, Haki de l'armement, armure du Berserker) |
 | 7 | 1ʳᵉ guerre, aux portes | ~1 500 💡 | Mangoku 4, Crocodile 5, Zodd 5 | XP |
-| 8 | 2ᵉ guerre et sauveurs | 2 000+ | Rinko 6, Doflamingo 6, Zodd 6 ; Richard 7, Akainu 8, Vlad III 6 | Une faculté par sauveur ; 2ᵉ objet unique |
-| 9 | 3ᵉ guerre | ~3 500 💡 | Hou Ken 8, Kizaru 8, ❓ 7 | ❓ |
-| 9 bis | 4ᵉ guerre | ~5 000 💡 | Ri Boku 9, Akainu 9, ❓ 9 | ❓ |
+| 8 | 2ᵉ guerre et sauveurs | 2 000+ | Rinko 6, Doflamingo 6, Rosine 6 ; Richard 7, Akainu 8, Vlad III 6 | Une faculté par sauveur ; 2ᵉ objet unique |
+| 9 | 3ᵉ guerre | ~3 500 💡 | Hou Ken 8, Kizaru 8, Grunbeld 7 | ❓ |
+| 9 bis | 4ᵉ guerre | ~5 000 💡 | Ri Boku 9, Akainu 9, Ganishka 9 | ❓ |
 | 10 | Vengeance contre la triade | ❓ | Qin Shi Huang, Imu, Griffith 10 | ❓ |
 | 11 | Nostradamus, Einstein | — | Nostradamus 10+ (perdu) | L'entraînement |
 | 12 | Bataille finale | — | Nostradamus 10+ | La fin |
