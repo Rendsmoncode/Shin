@@ -153,7 +153,7 @@ Contre **Nostradamus** (10+). En plein combat, il révèle ce qu'est la pierre :
 | 10 | Les grands méchants | Qin Shi Huang, Imu, Griffith |
 | 10+ | Le boss final | Nostradamus |
 
-## Les récompenses (💡 proposées par Claude le 26/11, tâche 14)
+## Les récompenses (✅ validées par Ayoub le 26/11, tâche 14)
 
 ✅ **Les coffres de récompense du lore sont à part** (Ayoub, 26/11) : ils ont l'apparence des coffres classiques (5 éléments, le personnage en dernier), mais **la rareté du personnage n'est pas tirée au hasard : c'est Ayoub et Claude qui la fixent**, étape par étape, dans les tableaux ci-dessous. Les 4 autres éléments sont tirés comme dans un coffre classique de la même rareté (`REGLES.md`, section 8).
 
@@ -222,4 +222,3 @@ Le **palier du gacha** (les taux des coffres communs achetés avec les pièces) 
 - Les tyrans entre les guerres (les 💡 ci-dessus sont des propositions, d'autres tyrans peuvent s'ajouter).
 - Le 2ᵉ objet unique de Guts.
 - ✅ **La fin** (Ayoub, 26/11) : une fois la pierre détruite, le jeu **continue en amical**, mais **sans plus aucun but**. Les récompenses de la fin (étape 13) ne servent donc plus à progresser : les coffres puissants doivent arriver avant les derniers combats.
-- 💡 Les récompenses du gacha et les pourcentages par rareté sont proposés plus haut et dans `REGLES.md` (section 8) : à valider (tâche 14).
