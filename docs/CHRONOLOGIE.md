@@ -78,7 +78,7 @@ Rédigé par Claude le 26/11 à partir de `LORE.md`, `PERSONNAGES.md` et `REGLES
 - ✅ La guerre est longue (plusieurs jours) et peut se renverser. **En cas d'échec, elle recommence** jusqu'à la victoire.
 - ✅ Pas d'antennes : on se coordonne par **messagers** (règle proposée dans `REGLES.md`, section 11).
 - ✅ **Les 3 généraux sont des ennemis personnels**, un par joueur, tirés de l'histoire de son personnage :
-  - **Shin** contre ❓ un grand général de Kingdom (Mangoku était proposé, mais il n'est pas dans le jeu et n'est pas un grand homme ; 💡 **Ren Pa**, le vrai Lian Po, l'un des quatre grands généraux de Zhao, que Shin affronte dans Kingdom ; ou **Hou Ken**) ;
+  - **Shin** contre **Mangoku** (Kingdom) : comme Crocodile et Zodd, c'est un adversaire de l'histoire du personnage, pas un personnage du gacha ;
   - **Koby** contre **Crocodile** (le premier Grand Corsaire de One Piece) ;
   - **Guts** contre **Zodd** (l'apôtre immortel de Berserk).
 - ✅ **Ce qu'on y gagne** : surtout de l'**XP**, et peut-être quelques **objets rares** (à décider).
@@ -151,7 +151,7 @@ Rédigé par Claude le 26/11 à partir de `LORE.md`, `PERSONNAGES.md` et `REGLES
 | 4 | La revanche et le cadeau du mentor | La fiche épique de Shin, Koby ou Guts |
 | 5 | Attila, à trois contre lui (500 chacun contre 2 000) | Les batailles à plusieurs ; Attila recrutable |
 | 6 | La défaite contre la triade, la mort des mentors | La soif de vengeance |
-| 7 | La guerre aux portes de la ville (❓ pour Shin, Crocodile, Zodd) | XP, objets rares |
+| 7 | La guerre aux portes de la ville (Mangoku, Crocodile, Zodd) | XP, objets rares |
 | 8 | Les trois sauvetages : Saladin contre Richard, Toussaint Louverture contre Akainu, Musashi contre Vlad III | Une faculté par sauveur |
 | 8 bis | La conquête de la ville : plein d'étapes à définir | — |
 | 9 | La vengeance contre la triade, puis Nostradamus apparaît | La dernière partie de l'histoire |
@@ -160,4 +160,4 @@ Rédigé par Claude le 26/11 à partir de `LORE.md`, `PERSONNAGES.md` et `REGLES
 
 ## Trous qui restent
 
-T11 (la leçon exacte de Musashi), T16 (la cachette de la pierre philosophale, plus tard), l'adversaire de Shin à la guerre aux portes de la ville, et les étapes de la conquête de la ville (Acte V bis).
+T11 (la leçon exacte de Musashi), T16 (la cachette de la pierre philosophale, plus tard), et les étapes de la conquête de la ville (Acte V bis).
