@@ -51,8 +51,7 @@ Rédigé par Claude le 26/11 à partir de `LORE.md`, `PERSONNAGES.md` et `REGLES
 - ✅ Chaque joueur est **recueilli par un mentor**, qui lui apprend la bataille rangée : **Ouki** pour Ayoub, **Garp** pour Mathieu, **le Chevalier squelette** pour Nicolas. Il **rejoue la bataille et la gagne**.
 - ✅ Le **cadeau du mentor** (le guandao, le Haki de l'armement, l'armure du Berserker) arrive quand **les trois joueurs** ont débloqué le 500 contre 500. Il débloque la **fiche épique** du personnage et donne un léger bonus ; l'apparence change.
 - ✅ **Le mentor aide contre les tyrans personnels** de chacun, avant Attila.
-- ✅ **Le mentor meurt dans l'histoire**, mais il reste tirable au gacha : soit pendant la bataille contre Attila, soit à la grande étape suivante (la guerre aux portes de la ville). Puis on avance sans lui.
-- ❓ **T10** : lequel des deux moments ?
+- ✅ **Le mentor meurt dans l'histoire** (il reste tirable au gacha), peu après Attila : voir « La première rencontre avec la triade ».
 
 🚩 **Point d'étape 3 : la défaite.** Scène de la bataille perdue, puis l'arrivée du mentor (`docs/scenes/`, tâche 218).
 🚩 **Point d'étape 4 : la revanche et le cadeau du mentor.** Évolution vers la fiche épique (Shin, Koby, Guts).
@@ -64,16 +63,26 @@ Rédigé par Claude le 26/11 à partir de `LORE.md`, `PERSONNAGES.md` et `REGLES
 
 🚩 **Point d'étape 5 : la revanche contre Attila**, première bataille à trois.
 
+### La première rencontre avec la triade (défaite, mort du mentor)
+
+- ✅ **Peu après Attila**, un premier combat contre **la triade** (Imu, Qin Shi Huang et Griffith). Les joueurs sont **battus**.
+- ✅ **Le mentor meurt pour que son joueur puisse survivre.**
+- ✅ La **vengeance** ne viendra que **plusieurs batailles et guerres plus tard** (voir l'Acte VI).
+- ❓ Chaque mentor meurt-il face à un membre précis de la triade (par exemple Ouki face à Qin Shi Huang, le Chevalier squelette face à Griffith, Garp face à Imu) ?
+
+🚩 **Point d'étape 6 : la défaite contre la triade et la mort des mentors.**
+
 ## Acte IV : la conquête et les sauveurs
 
 - ✅ Combat après combat, on fait tomber plusieurs **tyrans**. Les tyrans du passé deviennent **recrutables une fois vaincus** (Attila, Lü Bu, Bai Qi, Tamerlan, Vlad III). Les tyrans modernes (Staline, Hitler) restent des ennemis à abattre.
 - ✅ **Ce qu'ils veulent** : un tyran est un tyran, il cherche **le pouvoir et la domination**. Les plus illustres auront une **motivation personnelle**, écrite plus tard.
-- ✅ **Les sauveurs** (Khalid, Knut, Musashi, Saladin, Toussaint Louverture, Thorfinn, Abd el-Kader ; liste pas encore définitive) arrivent dans des **conquêtes prévues dans l'histoire**. Ce sont des batailles impossibles à gagner sans une faculté qu'on n'a pas encore : on perd, une **cinématique** montre le sauveur qui arrive et donne une **leçon de vie**, on obtient la faculté, on rejoue et on gagne. **Chaque joueur a ses propres sauveurs.**
-- ✅ **Le premier sauvetage** déjà évoqué : **Saladin** aide contre **Richard Cœur de Lion**. Les autres seront décidés plus tard.
+- ✅ **Trois sauveurs suffisent : un par joueur** (décidé le 26/11). Candidats de la liste d'origine : Khalid, Knut, Musashi, Saladin, Toussaint Louverture, Thorfinn, Abd el-Kader.
+- ✅ **Les sauveurs** arrivent dans des **conquêtes prévues dans l'histoire**. Ce sont des batailles impossibles à gagner sans une faculté qu'on n'a pas encore : on perd, une **cinématique** montre le sauveur qui arrive et donne une **leçon de vie**, on obtient la faculté, on rejoue et on gagne. **Chaque joueur a son propre sauveur.**
+- ✅ **Le sauvetage déjà évoqué** : **Saladin** aide contre **Richard Cœur de Lion** (💡 le sauveur d'Ayoub : Saladin est un de ses légendaires dédiés).
 - ✅ Selon la **voie choisie**, des **guerriers différents** apparaissent : Alexandre ou Hannibal pour « prêt à tout » ; Musashi en face de Kojirō, le duel de Ganryūjima devenant le symbole des deux voies.
-- ❓ **T11** : l'ordre des autres sauveurs, et contre quel tyran chacun (plus tard).
+- ❓ **T11** : les sauveurs de Mathieu et de Nicolas, et contre quel tyran chacun. 💡 Pour Nicolas, **Thorfinn** (« je n'ai pas d'ennemis », l'opposé de la rage de Guts) ; pour Mathieu, **Toussaint Louverture** ou **Knut**.
 
-🚩 **Points d'étape 6 et suivants : un par sauveur** (le premier : Saladin contre Richard).
+🚩 **Points d'étape 7 : les trois sauvetages** (un par joueur ; celui d'Ayoub : Saladin contre Richard).
 
 ## Acte V : la première guerre (3 contre 3)
 
@@ -91,17 +100,15 @@ Rédigé par Claude le 26/11 à partir de `LORE.md`, `PERSONNAGES.md` et `REGLES
 ## Acte VI : la vérité
 
 - ✅ Après les adversaires de la route, on trouve **ceux qui veulent contrôler le monde**, puis on découvre **la vraie source de la distorsion**, **l'objectif des tyrans** et **qui tire les ficelles**.
-- ✅ **Qui a ouvert la faille** : sûrement **un antagoniste, depuis le passé**, par exemple **Lü Bu** ou même **Gengis Khan**. C'est **le méchant final**.
-- ✅ **La fin de l'histoire** : **battre le méchant final**. Le monde continue ensuite (pas de fin de partie dans les règles).
-- ✅ **La triade** (Imu, Qin Shi Huang et Griffith) tire les ficelles. **Le méchant final est caché derrière elle** : il n'apparaît qu'une fois la triade battue.
-- ✅ **Le méchant final est Nostradamus** (décidé par Ayoub le 26/11). Il a cherché **toute sa vie un objet** (par exemple **la pierre philosophale**). Il est **mort à Salon-de-Provence juste avant de le trouver**, en comprenant au dernier moment que **l'objet était à Aubagne**. Alors, depuis le XVIᵉ siècle, il a lancé la faille ; il est **apparu environ 500 ans plus tard** (il est mort en 1566), mais il a **semé le chaos dans l'espace-temps** : les époques se sont mélangées.
-- ✅ **Pourquoi Aubagne** : parce que l'objet que cherchait Nostradamus s'y trouve.
-- ✅ **Einstein vient aider les joueurs vers la fin** : il les prépare à affronter Nostradamus, **de manière subtile** (pas un sauveur en pleine bataille).
-- ❓ **T16** : **quel objet** exactement (la pierre philosophale ou autre chose), et **où** à Aubagne ? 💡 Caché dans le Garlaban, ou dans l'argile des santons.
-- ❓ **T17** : **comment Einstein aide-t-il ?** 💡 Il laisse des indices (des équations sur un tableau, une lettre), il explique comment refermer la faille, ou il donne aux joueurs de quoi résister au chaos du temps pendant la bataille finale.
-- ❓ **T18** : **quel lien entre Nostradamus et la triade ?** 💡 Il a fait venir Imu, Qin Shi Huang et Griffith par la faille et leur a promis le monde ; eux croient diriger, mais travaillent pour lui.
+- ✅ **La triade** (Imu, Qin Shi Huang et Griffith) : les plus grands tyrans de la ville. Derrière elle, Nostradamus manipule dans l'ombre.
+- ✅ **La vengeance contre la triade** (Imu, Qin Shi Huang et Griffith), plusieurs batailles et guerres après la mort des mentors.
+- ✅ **Le méchant final est Nostradamus** (décidé par Ayoub le 26/11). Il a cherché **toute sa vie la pierre philosophale**. Il est **mort à Salon-de-Provence juste avant de la trouver**, en comprenant au dernier moment qu'**elle était à Aubagne**. Alors, depuis le XVIᵉ siècle, il a lancé la faille ; il est **apparu environ 500 ans plus tard** (il est mort en 1566), mais il a **semé le chaos dans l'espace-temps** : les époques se sont mélangées.
+- ✅ **Il n'a fait venir personne** : la faille a tout mélangé, et lui **manipule dans l'ombre, de manière subtile**. Il n'apparaît qu'une fois la triade battue.
+- ✅ **Pourquoi Aubagne** : parce que la pierre philosophale s'y trouve. ❓ **T16** : où exactement (plus tard).
+- ✅ **Einstein vient aider les joueurs vers la fin**, de manière subtile : il **laisse des indices** (des équations sur un tableau, une lettre), **explique comment refermer la faille**, et **donne de quoi résister au chaos du temps** pendant la bataille finale.
+- ✅ **La fin de l'histoire** : **battre Nostradamus**. Le monde continue ensuite (pas de fin de partie dans les règles).
 
-🚩 **Point d'étape : la chute de la triade**, puis **la révélation** (le méchant final apparaît).
+🚩 **Point d'étape : la vengeance contre la triade**, puis **la révélation** (Nostradamus apparaît).
 🚩 **Point d'étape : l'aide d'Einstein**, qui prépare les joueurs.
 🚩 **Point d'étape : la bataille finale contre Nostradamus.**
 
@@ -121,17 +128,17 @@ Rédigé par Claude le 26/11 à partir de `LORE.md`, `PERSONNAGES.md` et `REGLES
 |---|---|---|
 | 0 | La faille (scène d'ouverture) | Le jeu |
 | 1 | L'arrivée en ville : la vision, la fusion et le choix de la voie | Shin, Koby, Guts ; les guerriers de sa voie apparaîtront plus tard |
-| 2 | Le premier quartier pris (premier tyran, le même pour tous) | La carte, la production |
-| 3 | La défaite du tutoriel (Kyou, Morgan, Zodd) et le mentor | La bataille rangée |
+| 2 | Le premier quartier pris (un quartier neutre) | La carte, la production |
+| 3 | La défaite du tutoriel (Kyou, Morgan, Wyald) et le mentor | La bataille rangée |
 | 4 | La revanche et le cadeau du mentor | La fiche épique de Shin, Koby ou Guts |
-| 5 | Attila, à trois contre lui | Les batailles à plusieurs ; Attila recrutable |
-| 6 et suivants | Les sauveurs (le premier : Saladin contre Richard) | Une faculté par sauveur |
-| — | La mort du mentor (moment à fixer) | — |
-| — | La guerre aux portes de la ville (3 contre 3) | Les guerres entre joueurs ? |
-| — | La chute de la triade, puis la révélation : Nostradamus | La dernière partie de l'histoire |
-| — | L'aide d'Einstein | De quoi affronter Nostradamus |
-| — | La bataille finale contre Nostradamus | La fin de l'histoire ; le monde continue |
+| 5 | Attila, à trois contre lui (500 chacun contre 2 000) | Les batailles à plusieurs ; Attila recrutable |
+| 6 | La défaite contre la triade, la mort des mentors | La soif de vengeance |
+| 7 | Les trois sauvetages (un par joueur) | Une faculté par sauveur |
+| 8 | La guerre aux portes de la ville (Mangoku, Crocodile, Zodd) | XP, objets rares |
+| 9 | La vengeance contre la triade, puis Nostradamus apparaît | La dernière partie de l'histoire |
+| 10 | L'aide d'Einstein | De quoi affronter Nostradamus |
+| 11 | La bataille finale contre Nostradamus | La fin de l'histoire ; le monde continue |
 
 ## Trous qui restent
 
-T10 (le moment de la mort du mentor), T11 (les autres sauveurs : 7 pour 3 joueurs, on passe à 9 ou à 6 ?), T16 (l'objet et sa cachette), T17 (comment Einstein aide), T18 (le lien entre Nostradamus et la triade).
+T11 (les sauveurs de Mathieu et de Nicolas), T16 (la cachette de la pierre philosophale, plus tard), qui tue chaque mentor, et l'ordre exact entre les sauvetages et la guerre aux portes de la ville.
