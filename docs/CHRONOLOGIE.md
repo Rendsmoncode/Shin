@@ -136,8 +136,8 @@ Contre **Nostradamus** (10+). En plein combat, il révèle ce qu'est la pierre :
 | 9 | 🎬 3ᵉ guerre | ~3 500 | Hou Ken 8, Kizaru 8, Grunbeld 7 |
 | — | ⚔️ Tyrans | | 💡 Tamerlan 8, Xerxès 8, Charlemagne 8, César 8 |
 | 10 | 🎬 4ᵉ guerre | ~5 000 | Ri Boku 9, Akainu 9, Ganishka 9 |
-| 11 | 🎬 Vengeance contre la triade | ❓ | Qin Shi Huang, Imu, Griffith 10 |
 | — | ⚔️ Tyrans, les derniers | | 💡 Alexandre 9, Gengis Khan 9, Napoléon 9, puis Staline 9 et Hitler 9 |
+| 11 | 🎬 Vengeance contre la triade | ❓ | Qin Shi Huang, Imu, Griffith 10 |
 | 12 | 🎬 Nostradamus (perdu), Einstein | — | Nostradamus 10+ |
 | 13 | 🎬 Bataille finale | — | Nostradamus 10+ |
 
