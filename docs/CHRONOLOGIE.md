@@ -189,8 +189,8 @@ Le **palier du gacha** (les taux des coffres communs achetés avec les pièces) 
 | 5 | 🎬 Attila, à trois | Attila 4 | Attila (donné à chacun) + 300 pièces + 10 coffres communs | Rare |
 | 6 | 🎬 La triade (perdu), mort des mentors | Qin Shi Huang · Imu · Griffith 10 | objet du mentor ; palier 2 + 10 coffres rares + 1 coffre épique | — |
 | — | ⚔️ Tyran | Dong Zhuo 4 | 200 pièces ; chance d'avoir le tyran 20 % + 5 coffres rares + coffre épique | Rare |
-| — | ⚔️ Tyran | Hernán Cortés 5 | 300 pièces ; chance d'avoir le tyran 15 % + 5 coffres rares + coffre épique | Épique |
-| — | ⚔️ Tyran | Francisco Pizarro 5 | 300 pièces ; chance d'avoir le tyran 15 % + 5 coffres rares + coffre épique | Épique |
+| — | ⚔️ Tyran | Hernán Cortés 5 | 300 pièces (exclu du gacha : pas de chance d'avoir le tyran) + 5 coffres rares + coffre épique | Épique |
+| — | ⚔️ Tyran | Francisco Pizarro 5 | 300 pièces (exclu du gacha : pas de chance d'avoir le tyran) + 5 coffres rares + coffre épique | Épique |
 | 7 | 🎬 1ʳᵉ guerre | Mangoku 4 · Crocodile 5 · Zodd 5 | XP + 300 pièces + 5 coffres rares + coffre épique + 1 coffre légendaire | Épique |
 | — | ⚔️ Tyran | Sylla 6 | 300 pièces ; chance d'avoir le tyran 15 % + 5 coffres épiques | Épique |
 | — | ⚔️ Tyran | Cao Cao 6 | 300 pièces ; chance d'avoir le tyran 15 % + 5 coffres épiques | Épique |

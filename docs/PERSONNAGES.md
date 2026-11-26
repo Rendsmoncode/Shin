@@ -116,6 +116,10 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
   - Surnom : tiré de sa phrase célèbre « Je préfère trahir le monde plutôt que le monde me trahisse ».
   - ✅ Animation d'obtention : raconter l'expression chinoise « Quand on parle de Cao Cao, Cao Cao arrive » (l'équivalent de « quand on parle du loup »), tant il était redouté.
   - Lore : seigneur de guerre des Trois Royaumes. À Guandu (200), il bat Yuan Shao, à la tête d'une armée bien plus nombreuse, en brûlant ses réserves de vivres, puis il unifie tout le nord de la Chine. Battu à la Falaise rouge (208). Aussi grand poète. Phrase célèbre (rapportée par une source tardive) : « Je préfère trahir le monde plutôt que le monde me trahisse. » Liens : Guan Yu (qu'il laisse partir), Lü Bu (qu'il fait exécuter), Xu Chu et Dian Wei (ses gardes du corps), Liu Bei (son rival).
+- Hulagu (Mongols, XIIIᵉ siècle), « Le Destructeur de Bagdad » (💡 surnom provisoire)
+  - Tyran du lore (difficulté 7) : rareté Légendaire selon sa difficulté (26/11).
+- Xerxès Iᵉʳ (Perse, Vᵉ siècle av. J.-C.), « Le Roi des rois »
+  - Tyran du lore (difficulté 8) : rareté Légendaire selon sa difficulté (26/11).
 
 ## Généraux épiques
 
@@ -160,6 +164,12 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 - Skanderbeg, « L'Athlète du Christ »
 - Zhuge Liang, « Le Dragon couché »
 - Shikamaru (Naruto), « Le 8ᵉ Hokage »
+- Dong Zhuo (Chine, IIᵉ siècle), « Le Tyran de Luoyang » (💡 surnom provisoire)
+  - Tyran du lore (difficulté 4) : rareté Épique selon sa difficulté (26/11).
+- Sylla (Rome, Iᵉʳ siècle av. J.-C.), « Felix, l'Heureux » (son vrai surnom)
+  - Tyran du lore (difficulté 6) : rareté Épique selon sa difficulté (26/11).
+- Basile II (Byzance, Xᵉ-XIᵉ siècle), « Le Tueur de Bulgares » (Bulgaroctone, son vrai surnom)
+  - Tyran du lore (difficulté 6) : rareté Épique selon sa difficulté (26/11).
 
 ## Généraux de départ (un par joueur)
 
@@ -314,10 +324,14 @@ Raretés : rare et épique (environ 30 épiques). Les guerriers mystiques sont a
 
 ## Explorateurs
 
+💡 **Rareté** (26/11) : tous **Épiques**, comme les autres catégories de soutien (soignants, espions, architectes, ingénieurs, économistes). Ceux qui ont la capacité Archéologue restent Épiques : c'est la capacité qui est rare.
+
+
 - Leif Erikson
 - Pythéas (le Marseillais), Ibn Battuta, Zheng He, Marco Polo, Magellan, Amundsen, Shackleton, Aboubakri II, Cousteau
 - Avec la capacité Archéologue : Champollion, Howard Carter, Indiana Jones, Lara Croft, Nico Robin (One Piece)
 - Non retenus : Christophe Colomb, Cortés, Pizarro (massacres et esclavage), Armin.
+- 💡 Cortés et Pizarro restent des **tyrans du lore**, mais exclus du gacha pour la même raison (comme Staline et Hitler) : battus, ils donnent leur coffre de récompense sans chance d'avoir le tyran.
 - ✅ Explorateur et Archéologue sont fusionnés : « Archéologue » est une capacité rare de certains explorateurs, qui permet de déterrer des trésors pendant les parties (soin, bonus temporaire, monstre allié).
 
 ## Soignants
