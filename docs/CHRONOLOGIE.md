@@ -122,7 +122,13 @@ Rédigé par Claude le 26/11 à partir de `LORE.md`, `PERSONNAGES.md` et `REGLES
 - ✅ **La vengeance contre la triade** (Imu, Qin Shi Huang et Griffith), plusieurs batailles et guerres après la mort des mentors.
 - ✅ **Le méchant final est Nostradamus** (décidé par Ayoub le 26/11). Il a cherché **toute sa vie la pierre philosophale**. Il est **mort à Salon-de-Provence juste avant de la trouver**, en comprenant au dernier moment qu'**elle était à Aubagne**. Alors, depuis le XVIᵉ siècle, il a lancé la faille ; il est **apparu environ 500 ans plus tard** (il est mort en 1566), mais il a **semé le chaos dans l'espace-temps** : les époques se sont mélangées.
 - ✅ **Il n'a fait venir personne** : la faille a tout mélangé, et lui **manipule dans l'ombre, de manière subtile**. Il n'apparaît qu'une fois la triade battue.
-- ✅ **Pourquoi Aubagne** : parce que la pierre philosophale s'y trouve. ❓ **T16** : où exactement (plus tard).
+- ✅ **Pourquoi Aubagne** : parce que la pierre philosophale s'y trouve.
+- ✅ **La cachette, en blague** (idée d'Ayoub, 26/11) : pas le Garlaban, trop évident. Au fil des siècles, **la pierre philosophale est devenue un objet pour se protéger** : **l'immense manteau de Mathieu**. Nostradamus a retourné l'espace-temps pour… un manteau.
+- 💡 Pistes pour le raconter (à choisir) :
+  - **le manteau protège depuis le début** : c'est grâce à lui que Mathieu n'a jamais froid… et peut-être pour ça que la faille a « raté » sur lui ;
+  - **la révélation juste avant la bataille finale** : Einstein fait ses calculs, tout désigne un point précis d'Aubagne… la chambre de Mathieu, ou Mathieu lui-même ;
+  - **personne ne le croit** : Nostradamus annonce enfin l'objet de sa quête, et les trois éclatent de rire en voyant le manteau ;
+  - **le dernier objet du jeu** : une fois Nostradamus battu, le manteau devient un objet légendaire (protection énorme, et il traîne par terre).
 - ✅ **Einstein vient aider les joueurs vers la fin**, de manière subtile : il **laisse des indices** (des équations sur un tableau, une lettre), **explique comment refermer la faille**, et **donne de quoi résister au chaos du temps** pendant la bataille finale.
 - ✅ **La fin de l'histoire** : **battre Nostradamus**. Le monde continue ensuite (pas de fin de partie dans les règles).
 
@@ -160,4 +166,4 @@ Rédigé par Claude le 26/11 à partir de `LORE.md`, `PERSONNAGES.md` et `REGLES
 
 ## Trous qui restent
 
-T16 (la cachette de la pierre philosophale, plus tard), et les étapes de la conquête de la ville (Acte V bis).
+la façon de raconter la blague du manteau, et les étapes de la conquête de la ville (Acte V bis).
