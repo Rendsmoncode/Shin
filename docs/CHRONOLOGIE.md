@@ -6,7 +6,7 @@ Version 4, refaite le 26/11 avec le déroulé d'Ayoub. Elle remplace l'ordre de 
 ❓ = reste à décider. 💡 = idée de Claude, pas encore validée.
 **Difficulté** : note de 1 à 10 de chaque adversaire (échelle en bas). Elle servira de base aux récompenses du gacha.
 
-**Le rythme** (décidé le 26/11) : **prendre un quartier est rapide et facile**, pour avancer vite. Entre les guerres, on affronte des **tyrans, sans cinématique**. Les tyrans sont les mêmes pour les trois joueurs. Ce sont des **généraux historiques** (pas des guerriers mystiques, et **pas de personnages de fiction** : il y en a déjà assez dans le lore). Les premiers sont peu connus, puis viennent **les plus grands noms de l'histoire militaire** (César, Napoléon, Alexandre, Gengis Khan). ❓ Les tyrans peu connus deviennent recrutables une fois vaincus ; les grands (qui sont des Sous les Cieux du gacha) **ne s'obtiennent qu'au gacha** (💡 vaincus, ils disparaissent dans la faille), pour garder leur rareté.
+**Le rythme** (décidé le 26/11) : **prendre un quartier est rapide et facile**, pour avancer vite. Entre les guerres, on affronte des **tyrans, sans cinématique**. Les tyrans sont les mêmes pour les trois joueurs. Ce sont des **généraux historiques** (pas des guerriers mystiques, et **pas de personnages de fiction** : il y en a déjà assez dans le lore). Les premiers sont peu connus, puis viennent **les plus grands noms de l'histoire militaire** (César, Napoléon, Alexandre, Gengis Khan). ✅ **Battre un tyran ne le donne pas** (Ayoub, 26/11) : on ne l'obtient que par le gacha (ses chances seront dans les récompenses du lore). Exception : certains tyrans qui sont une étape importante, comme **Attila**, s'obtiennent en les battant.
 
 ---
 
