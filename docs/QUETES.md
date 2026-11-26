@@ -14,7 +14,7 @@
   - **Temps** : tenir un lieu pendant un certain temps sans le perdre.
 - 💡 **Une quête se lance depuis le lieu** : on clique sur le lieu, on lit le texte, on accepte. Une seule quête de lieu majeur à la fois par joueur.
 - 💡 **Échec** : on peut toujours réessayer, sauf pour la trahison et les généraux cachés (voir plus bas).
-- 💡 **Récompenses** possibles : le lieu lui-même, des ressources, des coffres du gacha, des livres d'XP, un objet, un titre (tâche 173).
+- 💡 **Récompenses** possibles : le lieu lui-même, des ressources, des coffres du gacha (✅ dont les **coffres mystiques**, coffres bonus qui ne tombent qu'avec les missions et ne contiennent que des guerriers mystiques), des livres d'XP, un objet, un titre (tâche 173).
 
 ## 2. Les quêtes des lieux majeurs
 

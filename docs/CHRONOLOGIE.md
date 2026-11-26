@@ -169,8 +169,8 @@ Le **palier du gacha** (les taux des coffres communs achetés avec les pièces) 
 | 3-4 | 200 | Rare | 20 % |
 | 5-6 | 300 | Épique | 15 % |
 | 7-8 | 500 | Épique | 10 % |
-| 9 | 800 | Légendaire ou mystique | 5 % |
-| 10 | 1 000 | Légendaire ou mystique | — |
+| 9 | 800 | Légendaire | 5 % |
+| 10 | 1 000 | Légendaire | — |
 | 10+ | 2 000 | Sous les Cieux (coffre ultime) | — |
 
 - **Contre un tyran**, le personnage du coffre est le tyran battu avec la chance indiquée ; sinon c'est un personnage de la rareté fixée. On peut rejouer contre un tyran déjà battu, pour une récompense réduite (un coffre commun classique).
@@ -196,7 +196,7 @@ Le **palier du gacha** (les taux des coffres communs achetés avec les pièces) 
 | — | ⚔️ Tyran | Cao Cao 6 | 300 pièces ; chance d'avoir le tyran 15 % + 5 coffres épiques | Épique |
 | — | ⚔️ Tyran | Basile II 6 | 300 pièces ; chance d'avoir le tyran 15 % + 5 coffres épiques | Épique |
 | 8 | 🎬 2ᵉ guerre | Rinko 6 · Doflamingo 6 · Rosine 6 | XP + 2ᵉ objet unique ; palier 3 (Sous les Cieux possibles) + 5 coffres épiques + coffre légendaire | Épique |
-| 8 | 🎬 Le sauvetage | Richard Cœur de Lion 7 · Akainu 8 · Vlad III 6 | leçon de vie et faculté du sauveur + 3 coffres légendaires | Légendaire ou mystique |
+| 8 | 🎬 Le sauvetage | Richard Cœur de Lion 7 · Akainu 8 · Vlad III 6 | leçon de vie et faculté du sauveur + 3 coffres légendaires | Légendaire |
 | — | ⚔️ Tyran | Bai Qi 7 | 500 pièces ; chance d'avoir le tyran 10 % + 5 coffres épiques | Épique |
 | — | ⚔️ Tyran | Hulagu 7 | 500 pièces ; chance d'avoir le tyran 10 % + 5 coffres épiques | Épique |
 | — | ⚔️ Tyran | Oda Nobunaga 7 | 500 pièces ; chance d'avoir le tyran 10 % + 5 coffres épiques | Épique |
@@ -211,7 +211,7 @@ Le **palier du gacha** (les taux des coffres communs achetés avec les pièces) 
 | — | ⚔️ Tyran | Napoléon 9 | 800 pièces ; chance d'avoir le tyran 5 % + 5 coffres épiques + 1 coffre légendaire | Légendaire |
 | — | ⚔️ Tyran | Staline 9 | 800 pièces (exclu du gacha : pas de chance d'avoir le tyran) + 5 coffres épiques + 1 coffre légendaire | Légendaire |
 | — | ⚔️ Tyran | Hitler 9 | 800 pièces (exclu du gacha : pas de chance d'avoir le tyran) + 5 coffres épiques + 1 coffre légendaire + 1 coffre ultime | Légendaire |
-| 11 | 🎬 Vengeance contre la triade | Qin Shi Huang · Imu · Griffith 10 | 1 000 pièces + 1 coffre ultime | Mystique |
+| 11 | 🎬 Vengeance contre la triade | Qin Shi Huang · Imu · Griffith 10 | 1 000 pièces + 1 coffre ultime | Légendaire |
 | 12 | 🎬 Nostradamus (perdu), Einstein | Nostradamus 10+ | rien | — |
 | 13 | 🎬 Bataille finale | Nostradamus 10+ | 2 000 pièces | Sous les Cieux (ultime) |
 
