@@ -125,11 +125,14 @@ Rédigé par Claude le 26/11 à partir de `LORE.md`, `PERSONNAGES.md` et `REGLES
 - ✅ **Pourquoi Aubagne** : parce que la pierre philosophale s'y trouve.
 - ✅ **La cachette, en blague** (idée d'Ayoub, 26/11) : pas le Garlaban, trop évident. Au fil des siècles, **la pierre philosophale est devenue un objet pour se protéger** : **l'immense manteau de Mathieu**. Nostradamus a retourné l'espace-temps pour… un manteau.
 - ✅ **Le manteau n'a aucun pouvoir** et n'aide pas les joueurs : il est juste là, c'est tout. Toute la blague est là.
+- ✅ **La découverte** (Ayoub, 26/11) :
+  1. **Einstein** comprend que la pierre est **dans le quartier de Mathieu**. Au moment où il va dire où exactement, **Nostradamus le tue** (comme Vegapunk dans One Piece).
+  2. **En pleine bataille finale, Nostradamus révèle toute la vérité** : sa quête, sa mort à Salon, la faille… et que la pierre philosophale est le manteau de Mathieu.
 - ✅ **Einstein vient aider les joueurs vers la fin**, de manière subtile : il **laisse des indices** (des équations sur un tableau, une lettre), **explique comment refermer la faille**, et **donne de quoi résister au chaos du temps** pendant la bataille finale.
 - ✅ **La fin de l'histoire** : **battre Nostradamus**. Le monde continue ensuite (pas de fin de partie dans les règles).
 
 🚩 **Point d'étape : la vengeance contre la triade**, puis **la révélation** (Nostradamus apparaît).
-🚩 **Point d'étape : l'aide d'Einstein**, qui prépare les joueurs.
+🚩 **Point d'étape : l'aide d'Einstein**, qui prépare les joueurs, puis **sa mort**, tué par Nostradamus juste avant de dire où est la pierre.
 🚩 **Point d'étape : la bataille finale contre Nostradamus.**
 
 ## En parallèle, tout au long du jeu
@@ -157,9 +160,9 @@ Rédigé par Claude le 26/11 à partir de `LORE.md`, `PERSONNAGES.md` et `REGLES
 | 8 | Les trois sauvetages : Saladin contre Richard, Toussaint Louverture contre Akainu, Musashi contre Vlad III | Une faculté par sauveur |
 | 8 bis | La conquête de la ville : plein d'étapes à définir | — |
 | 9 | La vengeance contre la triade, puis Nostradamus apparaît | La dernière partie de l'histoire |
-| 10 | L'aide d'Einstein | De quoi affronter Nostradamus |
-| 11 | La bataille finale contre Nostradamus | La fin de l'histoire ; le monde continue |
+| 10 | L'aide d'Einstein, puis sa mort (la pierre est dans le quartier de Mathieu) | De quoi affronter Nostradamus |
+| 11 | La bataille finale contre Nostradamus, qui révèle toute la vérité (le manteau) | La fin de l'histoire ; le monde continue |
 
 ## Trous qui restent
 
-le moment où l'on découvre que la pierre est le manteau, et les étapes de la conquête de la ville (Acte V bis).
+les étapes de la conquête de la ville (Acte V bis).
