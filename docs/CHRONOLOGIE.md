@@ -222,5 +222,4 @@ Le **palier du gacha** (les taux des coffres communs achetés avec les pièces) 
 - Les tyrans entre les guerres (les 💡 ci-dessus sont des propositions, d'autres tyrans peuvent s'ajouter).
 - Le 2ᵉ objet unique de Guts.
 - ✅ **La fin** (Ayoub, 26/11) : une fois la pierre détruite, le jeu **continue en amical**, mais **sans plus aucun but**. Les récompenses de la fin (étape 13) ne servent donc plus à progresser : les coffres puissants doivent arriver avant les derniers combats.
-- Le cadeau du mentor arrive maintenant à sa mort (étape 6) : mettre à jour `REGLES.md` et `PERSONNAGES.md`.
 - 💡 Les récompenses du gacha et les pourcentages par rareté sont proposés plus haut et dans `REGLES.md` (section 8) : à valider (tâche 14).

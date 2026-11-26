@@ -192,7 +192,7 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 - Le créateur du jeu : **Ouki** (Kingdom), le mentor de Shin
 - Mathieu : **Garp** (One Piece), le mentor de Koby. Il est aussi tirable au gacha (général légendaire).
 - Nicolas : **le Chevalier squelette** (Berserk), qui sauve Guts pendant l'Éclipse et le guide ensuite par ses conseils. Mentor mystérieux. Il est aussi tirable au gacha (guerrier mystique). Griffith n'est pas son mentor (c'est son rival et frère d'armes) : il est retiré du gacha et devient l'un des grands méchants (voir `LORE.md`).
-- 💡 Idée : le mentor tombe à la fin du tutoriel ou à la première guerre, tué par un lieutenant du grand méchant ; le joueur hérite de son arme ou de son titre.
+- ✅ Le mentor meurt à l'étape 6 du lore, tué en sauvant son élève face à la triade, et lui laisse son objet unique (voir `CHRONOLOGIE.md`).
 
 - 💡 Idée de personnage rare : Adolphe Sax, inventeur du saxophone, qui l'a créé pour les musiques militaires (bonus aux troupes)
 

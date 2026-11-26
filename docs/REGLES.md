@@ -252,7 +252,7 @@ Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de
 - ✅ **Aucun argent réel dans le jeu.** La boutique contient seulement un **lien vers la page de dons de MSF** pour la Palestine. Après un don, l'admin offre lui-même un coffre au joueur.
 - ✅ **Raretés** : Commun · Rare · Épique · Légendaire · Sous les Cieux. Un coffre contient **5 éléments, dont toujours au moins un personnage**, en dernier (détail plus bas, Ayoub 26/11).
 - ✅ La liste des personnages est dans [PERSONNAGES.md](PERSONNAGES.md).
-- 💡 **Probabilités du gacha** (tâche 14, proposées par Claude le 26/11, à valider) :
+- ✅ **Probabilités du gacha** (tâche 14, validées par Ayoub le 26/11) :
   - ✅ **Ce qu'il y a dans un coffre** (Ayoub, 26/11) : **5 éléments**. Le **5ᵉ (le dernier) est toujours un personnage**, dont la rareté est tirée au pourcentage. S'il y a plusieurs personnages dans le coffre, **les plus rares sont toujours à la fin**. Les 4 autres peuvent être des ressources (la même ressource peut sortir 4 fois, pas de limite), des objets, d'autres personnages, etc.
   - ✅ **Les coffres ont une rareté**, qui donne la **rareté minimum du personnage garanti** : Commun · Rare · Épique · **Légendaire** (un légendaire ou un Sous les Cieux) · **Ultime** (au minimum un Sous les Cieux).
   - ✅ **Les guerriers mystiques ont la même rareté que les légendaires** (Ayoub, 26/11) : ils sont dans tous les coffres, dans la case Légendaire, comme les généraux légendaires.
