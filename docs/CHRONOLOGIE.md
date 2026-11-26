@@ -6,7 +6,7 @@ Version 4, refaite le 26/11 avec le déroulé d'Ayoub. Elle remplace l'ordre de 
 ❓ = reste à décider. 💡 = idée de Claude, pas encore validée.
 **Difficulté** : note de 1 à 10 de chaque adversaire (échelle en bas). Elle servira de base aux récompenses du gacha.
 
-**Le rythme** (décidé le 26/11) : **prendre un quartier est rapide et facile**, pour avancer vite. Entre les guerres, on affronte des **tyrans, sans cinématique**. Les tyrans sont les mêmes pour les trois joueurs. Ce sont des **généraux historiques** (pas des guerriers mystiques, et **pas de personnages de fiction** : il y en a déjà assez dans le lore). Les premiers sont peu connus, puis viennent **les plus grands noms de l'histoire militaire** (César, Napoléon, Alexandre). ❓ Les tyrans peu connus deviennent recrutables une fois vaincus ; les grands (qui sont des Sous les Cieux du gacha) **ne s'obtiennent qu'au gacha** (💡 vaincus, ils disparaissent dans la faille), pour garder leur rareté.
+**Le rythme** (décidé le 26/11) : **prendre un quartier est rapide et facile**, pour avancer vite. Entre les guerres, on affronte des **tyrans, sans cinématique**. Les tyrans sont les mêmes pour les trois joueurs. Ce sont des **généraux historiques** (pas des guerriers mystiques, et **pas de personnages de fiction** : il y en a déjà assez dans le lore). Les premiers sont peu connus, puis viennent **les plus grands noms de l'histoire militaire** (César, Napoléon, Alexandre, Gengis Khan). ❓ Les tyrans peu connus deviennent recrutables une fois vaincus ; les grands (qui sont des Sous les Cieux du gacha) **ne s'obtiennent qu'au gacha** (💡 vaincus, ils disparaissent dans la faille), pour garder leur rareté.
 
 ---
 
@@ -87,7 +87,7 @@ Shin contre **Hou Ken** (8) · Koby contre **Kizaru** (8) · Guts contre **Grunb
 
 ## Tyrans ⚔️ (avant la 4ᵉ guerre)
 
-💡 **Napoléon** (9), l'Empereur, et sa Grande Armée ; **Alexandre le Grand** (9), invaincu jusqu'en Inde.
+💡 **Napoléon** (9), l'Empereur, et sa Grande Armée ; **Alexandre le Grand** (9), invaincu jusqu'en Inde ; **Gengis Khan** (9), le plus grand empire terrestre de l'histoire.
 
 ## 10. 4ᵉ guerre 🎬 (~5 000 soldats 💡), la dernière avant la triade
 
@@ -130,7 +130,7 @@ Contre **Nostradamus** (10+). En plein combat, il révèle ce qu'est la pierre :
 | 8 | 🎬 2ᵉ guerre et sauveurs | 2 000+ | Rinko 6, Doflamingo 6, Rosine 6 ; Richard 7, Akainu 8, Vlad III 6 |
 | — | ⚔️ Tyrans | | 💡 Tamerlan 7, César 8 |
 | 9 | 🎬 3ᵉ guerre | ~3 500 | Hou Ken 8, Kizaru 8, Grunbeld 7 |
-| — | ⚔️ Tyrans | | 💡 Napoléon 9, Alexandre 9 |
+| — | ⚔️ Tyrans | | 💡 Napoléon 9, Alexandre 9, Gengis Khan 9 |
 | 10 | 🎬 4ᵉ guerre | ~5 000 | Ri Boku 9, Akainu 9, Ganishka 9 |
 | 11 | 🎬 Vengeance contre la triade | ❓ | Qin Shi Huang, Imu, Griffith 10 |
 | 12 | 🎬 Nostradamus (perdu), Einstein | — | Nostradamus 10+ |
