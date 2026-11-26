@@ -94,11 +94,16 @@ Rédigé par Claude le 26/11 à partir de `LORE.md`, `PERSONNAGES.md` et `REGLES
 - ✅ **Qui a ouvert la faille** : sûrement **un antagoniste, depuis le passé**, par exemple **Lü Bu** ou même **Gengis Khan**. C'est **le méchant final**.
 - ✅ **La fin de l'histoire** : **battre le méchant final**. Le monde continue ensuite (pas de fin de partie dans les règles).
 - ✅ **La triade** (Imu, Qin Shi Huang et Griffith) tire les ficelles. **Le méchant final est caché derrière elle** : il n'apparaît qu'une fois la triade battue.
-- ❓ **T16** : **qui est le méchant final ?** Il a ouvert la faille depuis le passé. Ayoub préfère une **figure historique liée au temps** (un « Einstein maléfique »). Pistes de Claude : **Nostradamus** (le prophète qui voyait l'avenir, mort à Salon-de-Provence, tout près d'Aubagne), le **comte de Saint-Germain** (l'aventurier du XVIIIᵉ siècle qui se disait immortel et voyageur du temps), **John Dee** (l'astrologue et occultiste d'Élisabeth Iʳᵉ), **Einstein** lui-même (la relativité). Autres pistes : **Kronos**, le titan grec du temps, qui dévore ses enfants pour garder le pouvoir ; **la Main de Dieu** (Berserk), qui manipule déjà Griffith ; **Aizen** (Bleach), le manipulateur caché derrière tout depuis le début ; ou un **personnage inventé** pour le jeu, lié à Aubagne.
-- ❓ **T17** : **pourquoi Aubagne ?** Pistes de Claude (26/11) : les **santons** (Aubagne en est la capitale, et la foire aux santons a lieu en décembre : des figurines de toutes les époques) ; le **Garlaban** ; la **main du capitaine Danjou**, relique de la Légion étrangère gardée à Aubagne ; **Marcel Pagnol**, né à Aubagne.
+- ✅ **Le méchant final est Nostradamus** (décidé par Ayoub le 26/11). Il a cherché **toute sa vie un objet** (par exemple **la pierre philosophale**). Il est **mort à Salon-de-Provence juste avant de le trouver**, en comprenant au dernier moment que **l'objet était à Aubagne**. Alors, depuis le XVIᵉ siècle, il a lancé la faille ; il est **apparu environ 500 ans plus tard** (il est mort en 1566), mais il a **semé le chaos dans l'espace-temps** : les époques se sont mélangées.
+- ✅ **Pourquoi Aubagne** : parce que l'objet que cherchait Nostradamus s'y trouve.
+- ✅ **Einstein vient aider les joueurs vers la fin** : il les prépare à affronter Nostradamus, **de manière subtile** (pas un sauveur en pleine bataille).
+- ❓ **T16** : **quel objet** exactement (la pierre philosophale ou autre chose), et **où** à Aubagne ? 💡 Caché dans le Garlaban, ou dans l'argile des santons.
+- ❓ **T17** : **comment Einstein aide-t-il ?** 💡 Il laisse des indices (des équations sur un tableau, une lettre), il explique comment refermer la faille, ou il donne aux joueurs de quoi résister au chaos du temps pendant la bataille finale.
+- ❓ **T18** : **quel lien entre Nostradamus et la triade ?** 💡 Il a fait venir Imu, Qin Shi Huang et Griffith par la faille et leur a promis le monde ; eux croient diriger, mais travaillent pour lui.
 
 🚩 **Point d'étape : la chute de la triade**, puis **la révélation** (le méchant final apparaît).
-🚩 **Point d'étape : la bataille finale** contre le méchant final.
+🚩 **Point d'étape : l'aide d'Einstein**, qui prépare les joueurs.
+🚩 **Point d'étape : la bataille finale contre Nostradamus.**
 
 ## En parallèle, tout au long du jeu
 
@@ -123,9 +128,10 @@ Rédigé par Claude le 26/11 à partir de `LORE.md`, `PERSONNAGES.md` et `REGLES
 | 6 et suivants | Les sauveurs (le premier : Saladin contre Richard) | Une faculté par sauveur |
 | — | La mort du mentor (moment à fixer) | — |
 | — | La guerre aux portes de la ville (3 contre 3) | Les guerres entre joueurs ? |
-| — | La révélation | La dernière partie de l'histoire |
-| — | La bataille finale contre le méchant final | La fin de l'histoire ; le monde continue |
+| — | La chute de la triade, puis la révélation : Nostradamus | La dernière partie de l'histoire |
+| — | L'aide d'Einstein | De quoi affronter Nostradamus |
+| — | La bataille finale contre Nostradamus | La fin de l'histoire ; le monde continue |
 
 ## Trous qui restent
 
-T10 (le moment de la mort du mentor), T11 (les autres sauveurs, plus tard), T16 (le méchant final), T17 (pourquoi Aubagne).
+T10 (le moment de la mort du mentor), T11 (les autres sauveurs : 7 pour 3 joueurs, on passe à 9 ou à 6 ?), T16 (l'objet et sa cachette), T17 (comment Einstein aide), T18 (le lien entre Nostradamus et la triade).
