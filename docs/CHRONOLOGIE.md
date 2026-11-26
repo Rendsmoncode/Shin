@@ -215,7 +215,7 @@ Le **palier du gacha** (les taux des coffres communs achetés avec les pièces) 
 | 12 | 🎬 Nostradamus (perdu), Einstein | Nostradamus 10+ | rien | — |
 | 13 | 🎬 Bataille finale | Nostradamus 10+ | 2 000 pièces | Sous les Cieux (ultime) |
 
-**Ordre de grandeur** : avec ces récompenses, chaque joueur reçoit sur tout le lore au moins 4 Sous les Cieux (les 4 coffres ultimes) et plus de 20 légendaires ou guerriers mystiques. Lore généreux, voulu par Ayoub ; à ajuster si les joueurs deviennent trop forts trop vite.
+**Ordre de grandeur** : avec ces récompenses, chaque joueur reçoit sur tout le lore au moins 4 Sous les Cieux (les 4 coffres ultimes) et plus de 20 légendaires ou guerriers mystiques. ✅ Validé par Ayoub (26/11) : ce n'est pas trop, car on peut tirer plusieurs fois le même légendaire ou le même Sous les Cieux (le doublon devient de l'XP), donc ce ne sont pas forcément 4 Sous les Cieux différents.
 
 ## Ce qui reste à décider
 
