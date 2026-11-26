@@ -1,5 +1,7 @@
 # Lore du jeu (projet Shin)
 
+> 📜 **Version dans l'ordre chronologique, avec les points d'étape et les trous à combler : `docs/CHRONOLOGIE.md`** (26/11).
+
 Version 1, écrite par Ayoub (10/11/2026). **L'histoire se raconte en visual novel** (scènes de dialogue avec portraits et décors). Le jeu reste **privé** : les personnages de fiction sont gardés tels quels. Texte recopié tel quel (fautes de frappe corrigées), suivi des points à préciser.
 
 ## Le début de l'histoire
