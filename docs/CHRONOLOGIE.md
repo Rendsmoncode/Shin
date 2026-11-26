@@ -52,7 +52,7 @@ Chacun affronte **un membre de la triade** et se fait **écraser** (10, défaite
 
 ## Tyrans ⚔️ (avant la 1ʳᵉ guerre)
 
-💡 Dong Zhuo (4), le seigneur de guerre qui a pris l'empereur de Chine en otage ; Hernán Cortés (5), le conquistador qui a abattu l'empire aztèque.
+💡 Dong Zhuo (4), le seigneur de guerre qui a pris l'empereur de Chine en otage ; Hernán Cortés (5) et Francisco Pizarro (5), les conquistadors qui ont abattu les Aztèques et les Incas.
 
 ## 7. 1ʳᵉ guerre : aux portes de la ville 🎬 (sans prévenir, ~1 500 soldats 💡)
 
@@ -61,7 +61,7 @@ Une vraie guerre : longue, elle peut se renverser et recommence en cas d'échec.
 
 ## Tyrans ⚔️ (avant la 2ᵉ guerre)
 
-💡 Sylla (6), le général romain qui a marché sur Rome et dressé des listes de proscrits ; Basile II (6), « le Tueur de Bulgares », qui fit aveugler 15 000 prisonniers.
+💡 Sylla (6), le général romain qui a marché sur Rome ; **Cao Cao** (6), le seigneur de guerre des Trois Royaumes ; Basile II (6), « le Tueur de Bulgares ».
 
 ## 8. 2ᵉ guerre et les sauveurs 🎬 (vers 2 000 soldats ou plus)
 
@@ -79,7 +79,7 @@ Récompense : un **2ᵉ objet unique** : le bouclier de Hyou Kou (Shin), un autr
 
 ## Tyrans ⚔️ (avant la 3ᵉ guerre)
 
-💡 Tamerlan (7), « le Boiteux de fer », et ses pyramides de crânes ; **Jules César** (8), qui a conquis la Gaule et franchi le Rubicon.
+💡 **Bai Qi** (7), « le Boucher d'hommes » ; Hulagu (7), qui a rasé Bagdad ; Oda Nobunaga (7), « le Roi démon ».
 
 ## 9. 3ᵉ guerre 🎬 (~3 500 soldats 💡)
 
@@ -87,11 +87,15 @@ Shin contre **Hou Ken** (8) · Koby contre **Kizaru** (8) · Guts contre **Grunb
 
 ## Tyrans ⚔️ (avant la 4ᵉ guerre)
 
-💡 **Napoléon** (9), l'Empereur, et sa Grande Armée ; **Alexandre le Grand** (9), invaincu jusqu'en Inde ; **Gengis Khan** (9), le plus grand empire terrestre de l'histoire.
+💡 Tamerlan (8) et ses pyramides de crânes ; Xerxès (8), le roi des rois de Perse ; Charlemagne (8) et ses trente ans de guerre contre les Saxons ; **Jules César** (8).
 
 ## 10. 4ᵉ guerre 🎬 (~5 000 soldats 💡), la dernière avant la triade
 
 Shin contre **Ri Boku** (9) · Koby contre **Akainu** (9) · Guts contre **Ganishka** (9).
+
+## Tyrans ⚔️ (les derniers, avant la vengeance)
+
+💡 **Alexandre le Grand** (9), invaincu jusqu'en Inde ; **Gengis Khan** (9), le plus grand empire terrestre de l'histoire ; **Napoléon** (9) et sa Grande Armée ; puis, tout à la fin, **Staline** (9) et **Hitler** (9) : des tyrans à abattre (ils restent exclus du gacha, `PERSONNAGES.md`).
 
 ## 11. La vengeance contre la triade 🎬
 
@@ -124,15 +128,16 @@ Contre **Nostradamus** (10+). En plein combat, il révèle ce qu'est la pierre :
 | 4 | 🎬 Tutoriel et revanche | 500 | les mêmes |
 | 5 | 🎬 Attila, à trois | 3 × 500 | Attila 4 |
 | 6 | 🎬 La triade (perdu), mort des mentors | 1 000 | Qin Shi Huang, Imu, Griffith 10 |
-| — | ⚔️ Tyrans | | 💡 Dong Zhuo 4, Cortés 5 |
+| — | ⚔️ Tyrans | | 💡 Dong Zhuo 4, Cortés 5, Pizarro 5 |
 | 7 | 🎬 1ʳᵉ guerre | ~1 500 | Mangoku 4, Crocodile 5, Zodd 5 |
-| — | ⚔️ Tyrans | | 💡 Sylla 6, Basile II 6 |
+| — | ⚔️ Tyrans | | 💡 Sylla 6, Cao Cao 6, Basile II 6 |
 | 8 | 🎬 2ᵉ guerre et sauveurs | 2 000+ | Rinko 6, Doflamingo 6, Rosine 6 ; Richard 7, Akainu 8, Vlad III 6 |
-| — | ⚔️ Tyrans | | 💡 Tamerlan 7, César 8 |
+| — | ⚔️ Tyrans | | 💡 Bai Qi 7, Hulagu 7, Oda Nobunaga 7 |
 | 9 | 🎬 3ᵉ guerre | ~3 500 | Hou Ken 8, Kizaru 8, Grunbeld 7 |
-| — | ⚔️ Tyrans | | 💡 Napoléon 9, Alexandre 9, Gengis Khan 9 |
+| — | ⚔️ Tyrans | | 💡 Tamerlan 8, Xerxès 8, Charlemagne 8, César 8 |
 | 10 | 🎬 4ᵉ guerre | ~5 000 | Ri Boku 9, Akainu 9, Ganishka 9 |
 | 11 | 🎬 Vengeance contre la triade | ❓ | Qin Shi Huang, Imu, Griffith 10 |
+| — | ⚔️ Tyrans, les derniers | | 💡 Alexandre 9, Gengis Khan 9, Napoléon 9, puis Staline 9 et Hitler 9 |
 | 12 | 🎬 Nostradamus (perdu), Einstein | — | Nostradamus 10+ |
 | 13 | 🎬 Bataille finale | — | Nostradamus 10+ |
 
@@ -143,14 +148,14 @@ Contre **Nostradamus** (10+). En plein combat, il révèle ce qu'est la pierre :
 | 1-2 | Un ennemi de quartier | Kyou, Morgan |
 | 3-4 | Un vrai chef, il faut une stratégie | le Comte, Attila, Mangoku, Dong Zhuo |
 | 5-6 | Un grand nom, un adversaire de guerre | Crocodile, Zodd, Cortés, Sylla, Basile II, Doflamingo, Rinko, Rosine, Vlad III |
-| 7-8 | Un des plus forts de son univers | Richard Cœur de Lion, Bai Qi, Oda Nobunaga, Hou Ken, Kizaru, Grunbeld, Tamerlan, Xerxès |
-| 9 | Le sommet avant la fin | Ri Boku, Akainu, Ganishka |
+| 7-8 | Un des plus forts de son univers | Richard Cœur de Lion, Bai Qi, Hulagu, Oda Nobunaga, Hou Ken, Kizaru, Grunbeld, Tamerlan, Xerxès, Charlemagne, César |
+| 9 | Le sommet avant la fin | Ri Boku, Akainu, Ganishka, Alexandre, Gengis Khan, Napoléon, Staline, Hitler |
 | 10 | Les grands méchants | Qin Shi Huang, Imu, Griffith |
 | 10+ | Le boss final | Nostradamus |
 
 ## Ce qui reste à décider
 
-- Les tyrans entre les guerres (les 💡 ci-dessus sont des propositions, d'autres tyrans peuvent s'ajouter). Staline et Hitler, prévus comme tyrans dans `PERSONNAGES.md`, ne sont pas des généraux : on les garde ailleurs ou on les retire ?
+- Les tyrans entre les guerres (les 💡 ci-dessus sont des propositions, d'autres tyrans peuvent s'ajouter).
 - Le 2ᵉ objet unique de Guts.
 - La fin : `REGLES.md` dit qu'il n'y a pas de fin de partie ; une fois la pierre détruite, le jeu s'arrête-t-il ?
 - Le cadeau du mentor arrive maintenant à sa mort (étape 6) : mettre à jour `REGLES.md` et `PERSONNAGES.md`.
