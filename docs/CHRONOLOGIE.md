@@ -79,14 +79,13 @@ Rédigé par Claude le 26/11 à partir de `LORE.md`, `PERSONNAGES.md` et `REGLES
 - ✅ **Trois sauveurs suffisent : un par joueur** (décidé le 26/11). Candidats de la liste d'origine : Khalid, Knut, Musashi, Saladin, Toussaint Louverture, Thorfinn, Abd el-Kader.
 - ✅ **Les sauveurs** arrivent dans des **conquêtes prévues dans l'histoire**. Ce sont des batailles impossibles à gagner sans une faculté qu'on n'a pas encore : on perd, une **cinématique** montre le sauveur qui arrive et donne une **leçon de vie**, on obtient la faculté, on rejoue et on gagne. **Chaque joueur a son propre sauveur.**
 - ✅ **Les trois sauveurs** (26/11) :
-  - **Ayoub (Shin)** : **Khalid ibn al-Walid** (la raison sera décidée plus tard).
+  - **Ayoub (Shin)** : **Saladin** (la leçon sera décidée plus tard ; l'idée de départ : il aide contre Richard Cœur de Lion).
   - **Mathieu (Koby)** : **Toussaint Louverture**. Sa leçon : un homme doit se demander ce qui est réellement juste ; suivre les ordres ne suffit pas. **Un homme de la justice se bat pour la justice, pas pour le juge.**
-  - **Nicolas (Guts)** : une **figure 100 % historique qui s'est battue pour trouver la paix intérieure**, comme Musashi. ❓ À choisir (propositions de Claude : Musashi ou l'empereur Ashoka).
-- ✅ L'idée de départ (Saladin qui aide contre Richard Cœur de Lion) reste possible ailleurs dans l'histoire.
+  - **Nicolas (Guts)** : **Miyamoto Musashi**, la figure historique qui s'est battue pour trouver la paix intérieure (invaincu, il finit par poser le sabre pour méditer et écrire *Le Livre des cinq anneaux*). Il garde aussi son rôle de sabreur de la voie « la vie des hommes vaut plus que les objectifs ».
 - ✅ Selon la **voie choisie**, des **guerriers différents** apparaissent : Alexandre ou Hannibal pour « prêt à tout » ; Musashi en face de Kojirō, le duel de Ganryūjima devenant le symbole des deux voies.
-- ❓ **T11** : contre quel tyran a lieu chaque sauvetage, et le sauveur de Nicolas.
+- ❓ **T11** : contre quel tyran a lieu chaque sauvetage (Richard Cœur de Lion pour Saladin ?), et la leçon de Saladin.
 
-🚩 **Points d'étape 7 : les trois sauvetages** (Khalid, Toussaint Louverture, et le sauveur de Nicolas).
+🚩 **Points d'étape 7 : les trois sauvetages** (Saladin, Toussaint Louverture, Musashi).
 
 ## Acte V : la première guerre (3 contre 3)
 
@@ -161,4 +160,4 @@ Rédigé par Claude le 26/11 à partir de `LORE.md`, `PERSONNAGES.md` et `REGLES
 
 ## Trous qui restent
 
-T11 (le sauveur de Nicolas, et contre quel tyran a lieu chaque sauvetage), T16 (la cachette de la pierre philosophale, plus tard), qui tue chaque mentor, l'ordre exact entre les sauvetages et la guerre aux portes de la ville, et les étapes de la conquête de la ville (Acte V bis).
+T11 (contre quel tyran a lieu chaque sauvetage, la leçon de Saladin), T16 (la cachette de la pierre philosophale, plus tard), qui tue chaque mentor, l'ordre exact entre les sauvetages et la guerre aux portes de la ville, et les étapes de la conquête de la ville (Acte V bis).
