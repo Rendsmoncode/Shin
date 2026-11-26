@@ -124,11 +124,7 @@ Rédigé par Claude le 26/11 à partir de `LORE.md`, `PERSONNAGES.md` et `REGLES
 - ✅ **Il n'a fait venir personne** : la faille a tout mélangé, et lui **manipule dans l'ombre, de manière subtile**. Il n'apparaît qu'une fois la triade battue.
 - ✅ **Pourquoi Aubagne** : parce que la pierre philosophale s'y trouve.
 - ✅ **La cachette, en blague** (idée d'Ayoub, 26/11) : pas le Garlaban, trop évident. Au fil des siècles, **la pierre philosophale est devenue un objet pour se protéger** : **l'immense manteau de Mathieu**. Nostradamus a retourné l'espace-temps pour… un manteau.
-- 💡 Pistes pour le raconter (à choisir) :
-  - **le manteau protège depuis le début** : c'est grâce à lui que Mathieu n'a jamais froid… et peut-être pour ça que la faille a « raté » sur lui ;
-  - **la révélation juste avant la bataille finale** : Einstein fait ses calculs, tout désigne un point précis d'Aubagne… la chambre de Mathieu, ou Mathieu lui-même ;
-  - **personne ne le croit** : Nostradamus annonce enfin l'objet de sa quête, et les trois éclatent de rire en voyant le manteau ;
-  - **le dernier objet du jeu** : une fois Nostradamus battu, le manteau devient un objet légendaire (protection énorme, et il traîne par terre).
+- ✅ **Le manteau n'a aucun pouvoir** et n'aide pas les joueurs : il est juste là, c'est tout. Toute la blague est là.
 - ✅ **Einstein vient aider les joueurs vers la fin**, de manière subtile : il **laisse des indices** (des équations sur un tableau, une lettre), **explique comment refermer la faille**, et **donne de quoi résister au chaos du temps** pendant la bataille finale.
 - ✅ **La fin de l'histoire** : **battre Nostradamus**. Le monde continue ensuite (pas de fin de partie dans les règles).
 
@@ -166,4 +162,4 @@ Rédigé par Claude le 26/11 à partir de `LORE.md`, `PERSONNAGES.md` et `REGLES
 
 ## Trous qui restent
 
-la façon de raconter la blague du manteau, et les étapes de la conquête de la ville (Acte V bis).
+le moment où l'on découvre que la pierre est le manteau, et les étapes de la conquête de la ville (Acte V bis).
