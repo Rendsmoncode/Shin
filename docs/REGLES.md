@@ -7,6 +7,8 @@ Les réponses d'origine au questionnaire sont dans le dossier [`questionnaire/`]
 
 Légende : ✅ décidé · 💡 proposé, à valider · ❓ à décider plus tard
 
+> ✅ **Changement de cap (Ayoub, 26/11)** : le jeu devient un **jeu d'histoire** (le lore), et non plus un jeu de conquête où les joueurs s'affrontent. Les joueurs ne s'affrontent plus qu'en **combat amical**, avec une **mise possible**. Tout ce qui parle de guerres, de conquête ou de trahison entre joueurs est à revoir (tâche 240).
+
 **Liberté d'équilibrage (accord d'Ayoub, 12/11)** : les éléments proposés par Claude (formations, stratégies, troupes, constructions, attaques spéciales, chiffres…) peuvent être modifiés ou supprimés par Claude s'ils bloquent un élément important ou déséquilibrent le jeu, pour améliorer l'expérience de jeu. Claude doit toujours en informer l'utilisateur (ce qui a changé et pourquoi).
 
 ---

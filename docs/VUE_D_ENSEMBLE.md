@@ -2,6 +2,8 @@
 
 Ce document explique comment les parties du jeu s'emboîtent. Le détail des règles est dans `REGLES.md`.
 
+> ✅ **Changement de cap (Ayoub, 26/11)** : le jeu devient un **jeu d'histoire** (le lore), et non plus un jeu de conquête où les joueurs s'affrontent. Les joueurs ne s'affrontent plus qu'en **combat amical**, avec une **mise possible**. Tout ce qui parle de guerres, de conquête ou de trahison entre joueurs est à revoir (tâche 240).
+
 **Attention à ne pas confondre le jeu et la bataille.** Le jeu est un monde persistant de stratégie sur la carte d'Aubagne. La bataille rangée en 3D n'en est qu'**un des modes de combat**.
 
 ## Les trois niveaux du jeu

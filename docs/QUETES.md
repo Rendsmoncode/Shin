@@ -1,5 +1,7 @@
 # Liste des quêtes (proposition de Claude, 26/11, à valider par Ayoub)
 
+> ❌ **Abandonné (Ayoub, 26/11)** : le jeu devient un jeu d'histoire, sans conquête entre joueurs. Cette liste est gardée seulement pour mémoire.
+
 > Tâche 26. Tout est 💡 tant qu'Ayoub n'a pas validé. Les récompenses et les difficultés seront réglées à l'équilibrage.
 > Rappels : les lieux majeurs demandent des quêtes difficiles (`REGLES.md`, section 3) ; le Garlaban a des quêtes et pas de véhicules (section 2) ; la trahison est une quête secrète (section 11) ; les deux généraux cachés s'obtiennent par des chaînes de quêtes secrètes (`PERSONNAGES.md`).
 
