@@ -187,7 +187,7 @@ Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de
   | **Les héros de l'Iliade** | Achille, Ulysse | attaque +15 %, stratégies renforcées |
   | **La résistance amérindienne** | Tecumseh, Crazy Horse | embuscades renforcées |
   | **Les tireurs d'élite** | Simo Häyhä, Vassili Zaïtsev | portée et tir des archers +20 % |
-  | **Les sauveurs** | 3 parmi les sauveurs (liste pas encore définitive : pour l'instant Khalid, Knut, Musashi, Saladin, Toussaint Louverture, Thorfinn, Abd el-Kader) | défense +20 %, soins renforcés |
+  | **Les sauveurs** | les 3 sauveurs du lore : Saladin, Musashi, Kojirō (✅ 26/11) | défense +20 %, soins renforcés |
   | **Les Briseurs de chaînes** | 2 ou plus parmi ceux qui ont combattu la colonisation et l'esclavage : Toussaint Louverture, Abd el-Kader, Ménélik II, Samori Touré, la reine Nzinga, Rani Lakshmibai, Tecumseh, Crazy Horse, Lapu-Lapu, Võ Nguyên Giáp, Muhammad Ali | +15 % à deux, +25 % à trois ou plus ; bonus en plus quand leur armée est moins nombreuse que l'ennemi |
   | **Le foot** 😄 | 2 ou plus parmi Zidane, Cristiano Ronaldo, Messi, Guardiola, Mourinho, Luis Enrique | +10 % à deux, +15 % à trois ou plus |
   | **Le médecin de Guan Yu** | Hua Tuo, Guan Yu | Guan Yu récupère 10 % de points de vie par tour |

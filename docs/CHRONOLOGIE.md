@@ -22,6 +22,8 @@ Scène : `docs/scenes/01_la_faille.md` (V1 à corriger).
 
 Les trois garçons rentrent de Paris sans rien savoir : ce sont **les trois seuls habitants à avoir été dehors**. En arrivant, chacun a une **vision de la faille**, rencontre son personnage et **fusionne avec lui** : **Ayoub devient Shin, Mathieu devient Koby, Nicolas devient Guts**. Chacun voit son personnage sur son écran, puis l'écran montre les trois.
 
+✅ **Juste avant le choix, le duel de Ganryūjima est évoqué** (Ayoub, 26/11) : une **voix off** raconte ce qui s'est passé en 1612 entre Kojirō et Musashi, puis résume les deux voies.
+
 À la fin, chacun **choisit sa voie**, pour toujours (moment à confirmer) : « prêt à tout, même au pire » (Kojirō, le sabre Muramasa) ou « la vie des hommes vaut plus que le prix des objectifs » (Musashi, le sabre Masamune).
 
 ## 2. Son quartier
@@ -72,8 +74,8 @@ Pendant cette guerre, chacun vit son **sauvetage** : une bataille impossible, un
 | Joueur | Ennemi du sauvetage | Sauveur | Leçon |
 |---|---|---|---|
 | Shin | Richard Cœur de Lion (7) | **Saladin** | Gagner des batailles ne sert à rien si on perd la guerre. |
-| Koby | Akainu (8) | **Toussaint Louverture** | « Un homme de la justice se bat pour la justice, pas pour le juge. » |
-| Guts | Vlad III l'Empaleur (6) | **Miyamoto Musashi** | « La rancune ne convient ni à soi ni aux autres. Regarde-le : la haine l'a mangé tout entier. » |
+| Koby | Akainu (8) | **Sasaki Kojirō** | ✅ Parfois, il faut savoir tout faire pour atteindre son objectif (sa voie, « prêt à tout »). |
+| Guts | Vlad III l'Empaleur (6) | **Miyamoto Musashi** | « La rancune ne convient ni à soi ni aux autres. Regarde-le : la haine l'a mangé tout entier. » Il parle aussi de sa voie, « la vie des hommes ». |
 
 Récompense : un **2ᵉ objet unique** : le bouclier de Hyou Kou (Shin), le Haki de l'observation (Koby), l'armure du Berserker (Guts) (✅ Ayoub, 26/11).
 
@@ -116,7 +118,8 @@ Contre **Nostradamus** (10+). En plein combat, il révèle ce qu'est la pierre :
 - **Les généraux cachés**, Khalid ibn al-Walid et Jan Žižka : chaînes de quêtes secrètes (`docs/QUETES.md`).
 - **Les 7 Grands Généraux Sous les Cieux**, par le gacha.
 - **La trahison** entre joueurs : une quête secrète.
-- 💡 À placer entre les guerres : les lieux majeurs, le Garlaban, le duel de Ganryūjima (Musashi contre Kojirō).
+- ✅ **Les deux sabreurs du duel sont des sauveurs** (Ayoub, 26/11) : Musashi sauve Guts et Kojirō sauve Koby à la 2ᵉ guerre ; Saladin reste le sauveur de Shin.
+- 💡 À placer entre les guerres : les lieux majeurs, le Garlaban.
 
 ## Récapitulatif
 
