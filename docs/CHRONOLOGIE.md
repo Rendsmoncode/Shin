@@ -97,6 +97,21 @@ Rédigé par Claude le 26/11 à partir de `LORE.md`, `PERSONNAGES.md` et `REGLES
 
 🚩 **Point d'étape : la guerre aux portes de la ville.**
 
+## Acte V bis : la conquête de la ville (le cœur du jeu, à remplir)
+
+- ✅ **Il y aura plein de choses entre la guerre aux portes de la ville et la vengeance contre la triade** (Ayoub, 26/11) : c'est la plus longue partie du jeu.
+- 💡 Ce qui peut s'y trouver (idées de Claude, à trier) :
+  - **les tyrans illustres**, un par quartier, chacun avec sa motivation : Lü Bu, Bai Qi, Tamerlan, Vlad III, Staline, Hitler, Ray Dark, Dark Vador, Freezer… ;
+  - **les guerriers de sa voie** : Alexandre ou Hannibal pour « prêt à tout », Musashi pour l'autre voie, et le **duel de Ganryūjima** entre Musashi et Kojirō ;
+  - **les lieux majeurs** et leurs quêtes (hôpital, Légion étrangère, gare, mairie : `docs/QUETES.md`) ;
+  - **le Garlaban** et sa chaîne de quêtes ;
+  - **les généraux cachés** (Khalid, Jan Žižka) ;
+  - **les premières traces de Nostradamus** : des tyrans qui agissent bizarrement, des prophéties qui se réalisent, sans que les joueurs comprennent encore ;
+  - **les premières guerres entre joueurs**, si vous le voulez.
+- ❓ Les grandes étapes de cette partie, à décider ensemble plus tard.
+
+🚩 **Points d'étape 8 bis : à définir.**
+
 ## Acte VI : la vérité
 
 - ✅ Après les adversaires de la route, on trouve **ceux qui veulent contrôler le monde**, puis on découvre **la vraie source de la distorsion**, **l'objectif des tyrans** et **qui tire les ficelles**.
@@ -135,10 +150,11 @@ Rédigé par Claude le 26/11 à partir de `LORE.md`, `PERSONNAGES.md` et `REGLES
 | 6 | La défaite contre la triade, la mort des mentors | La soif de vengeance |
 | 7 | Les trois sauvetages (un par joueur) | Une faculté par sauveur |
 | 8 | La guerre aux portes de la ville (Mangoku, Crocodile, Zodd) | XP, objets rares |
+| 8 bis | La conquête de la ville : plein d'étapes à définir | — |
 | 9 | La vengeance contre la triade, puis Nostradamus apparaît | La dernière partie de l'histoire |
 | 10 | L'aide d'Einstein | De quoi affronter Nostradamus |
 | 11 | La bataille finale contre Nostradamus | La fin de l'histoire ; le monde continue |
 
 ## Trous qui restent
 
-T11 (les sauveurs de Mathieu et de Nicolas), T16 (la cachette de la pierre philosophale, plus tard), qui tue chaque mentor, et l'ordre exact entre les sauvetages et la guerre aux portes de la ville.
+T11 (les sauveurs de Mathieu et de Nicolas), T16 (la cachette de la pierre philosophale, plus tard), qui tue chaque mentor, l'ordre exact entre les sauvetages et la guerre aux portes de la ville, et les étapes de la conquête de la ville (Acte V bis).
