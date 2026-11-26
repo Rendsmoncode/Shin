@@ -37,10 +37,9 @@ Rédigé par Claude le 26/11 à partir de `LORE.md`, `PERSONNAGES.md` et `REGLES
 - ✅ Quelques **quartiers neutres** pour démarrer ; tous les autres sont tenus par un **tyran** qu'il faut battre.
 - ✅ Les tyrans sont **dispersés** dans la ville : à côté de chez Ayoub, par exemple, Ray Dark. On en bat un, il y en a un autre au quartier suivant.
 - ✅ **Les premiers soldats** sont les habitants de son quartier : concrètement, **ses voisins**.
-- ✅ **Les tyrans sont les mêmes pour les trois joueurs**, sauf à certains moments. **Le premier tyran est le même pour tous.**
-- ❓ **T7** : qui est ce premier tyran commun ? (Ray Dark, qui est à côté du quartier d'Ayoub ?)
+- ✅ **Les tyrans sont les mêmes pour les trois joueurs**, sauf à certains moments. **Le premier tyran commun est Attila** (voir l'Acte III). Avant lui, on n'affronte que des bagarres de rue, des quartiers neutres et ses ennemis personnels.
 
-🚩 **Point d'étape 2 : le premier quartier pris.** Il débloque la carte de la ville et la production.
+🚩 **Point d'étape 2 : le premier quartier pris** (un quartier neutre). Il débloque la carte de la ville et la production.
 
 ## Acte III : l'armée et le tutoriel (500 hommes)
 
@@ -51,17 +50,17 @@ Rédigé par Claude le 26/11 à partir de `LORE.md`, `PERSONNAGES.md` et `REGLES
   - Guts contre **Zodd** (provisoire).
 - ✅ Chaque joueur est **recueilli par un mentor**, qui lui apprend la bataille rangée : **Ouki** pour Ayoub, **Garp** pour Mathieu, **le Chevalier squelette** pour Nicolas. Il **rejoue la bataille et la gagne**.
 - ✅ Le **cadeau du mentor** (le guandao, le Haki de l'armement, l'armure du Berserker) arrive quand **les trois joueurs** ont débloqué le 500 contre 500. Il débloque la **fiche épique** du personnage et donne un léger bonus ; l'apparence change.
-- ✅ **Le mentor meurt dans l'histoire**, mais il reste tirable au gacha. Puis on avance sans lui.
-- ❓ **T10** : **quand et comment** meurt-il ? 💡 Tué par un lieutenant du méchant final, ce qui donne au joueur une raison personnelle de se battre.
+- ✅ **Le mentor aide contre les tyrans personnels** de chacun, avant Attila.
+- ✅ **Le mentor meurt dans l'histoire**, mais il reste tirable au gacha : soit pendant la bataille contre Attila, soit à la grande étape suivante (la guerre aux portes de la ville). Puis on avance sans lui.
+- ❓ **T10** : lequel des deux moments ?
 
 🚩 **Point d'étape 3 : la défaite.** Scène de la bataille perdue, puis l'arrivée du mentor (`docs/scenes/`, tâche 218).
 🚩 **Point d'étape 4 : la revanche et le cadeau du mentor.** Évolution vers la fiche épique (Shin, Koby, Guts).
 
 ### Attila, la première alliance
 
-- ✅ **La quête qui suit la revanche du tutoriel : battre Attila**, qui ouvrait le jeu. Seul, aucun joueur ne peut le battre : **les trois doivent s'allier dans la même bataille**. Exemple : 250 soldats chacun contre 1 000 pour lui.
+- ✅ **La quête qui suit la revanche du tutoriel : battre Attila**, qui ouvrait le jeu. Seul, aucun joueur ne peut le battre : **les trois doivent s'allier dans la même bataille**. **500 soldats chacun contre 2 000 pour lui.**
 - ✅ Attila devient ensuite **recrutable**.
-- ❓ **T13** : avec 250 soldats chacun, on est sous le seuil de 500 de la bataille rangée. On dit que le seuil compte pour **l'armée des trois réunis** (750) ?
 
 🚩 **Point d'étape 5 : la revanche contre Attila**, première bataille à trois.
 
@@ -81,8 +80,11 @@ Rédigé par Claude le 26/11 à partir de `LORE.md`, `PERSONNAGES.md` et `REGLES
 - ✅ Après plusieurs tyrans, **une guerre** : une **immense attaque de 3 généraux ennemis aux portes de la ville** (texte de `LORE.md`). Il faut se battre **à 3 contre 3** (un joueur contre un général).
 - ✅ La guerre est longue (plusieurs jours) et peut se renverser. **En cas d'échec, elle recommence** jusqu'à la victoire.
 - ✅ Pas d'antennes : on se coordonne par **messagers** (règle proposée dans `REGLES.md`, section 11).
-- ❓ **T14** : c'est de **cette guerre-là** que je parlais. **Qui sont ces 3 généraux ?** (Trois tyrans alliés, ou des lieutenants du méchant final ?)
-- ❓ **T15** : que gagne-t-on après cette guerre ? 💡 Les guerres entre joueurs se débloquent (section 10 des règles).
+- ✅ **Les 3 généraux sont des ennemis personnels**, un par joueur, tirés de l'histoire de son personnage :
+  - **Shin** : un général ennemi qu'il a affronté dans Kingdom. ❓ **T14a** : lequel ? (propositions de Claude dans la réponse du 26/11 : Rinko, Mangoku, Fūki… à vérifier)
+  - **Koby** : un pirate, par exemple un **Grand Corsaire**. Akainu serait trop fort si tôt. ❓ **T14b** : 💡 **Crocodile** (le premier Grand Corsaire de l'histoire, fort mais pas démesuré).
+  - **Guts** : ❓ **T14c** : 💡 **Wyald** (le chef des Chevaliers du Chien noir, un apôtre) ou **Boscogn** (le champion du royaume de Tudor).
+- ✅ **Ce qu'on y gagne** : surtout de l'**XP**, et peut-être quelques **objets rares** (à décider).
 
 🚩 **Point d'étape : la guerre aux portes de la ville.**
 
@@ -91,11 +93,11 @@ Rédigé par Claude le 26/11 à partir de `LORE.md`, `PERSONNAGES.md` et `REGLES
 - ✅ Après les adversaires de la route, on trouve **ceux qui veulent contrôler le monde**, puis on découvre **la vraie source de la distorsion**, **l'objectif des tyrans** et **qui tire les ficelles**.
 - ✅ **Qui a ouvert la faille** : sûrement **un antagoniste, depuis le passé**, par exemple **Lü Bu** ou même **Gengis Khan**. C'est **le méchant final**.
 - ✅ **La fin de l'histoire** : **battre le méchant final**. Le monde continue ensuite (pas de fin de partie dans les règles).
-- ✅ Les documents parlaient d'une **alliance d'Imu, Qin Shi Huang et Griffith** qui tire les ficelles.
-- ❓ **T16** : qui est le méchant final (Lü Bu, Gengis Khan, un autre) ? Et quel est **son lien avec l'alliance** Imu, Qin Shi Huang et Griffith : il est leur chef, il les a fait venir par la faille, ou l'alliance n'existe plus ?
-- ❓ **T17** : **pourquoi Aubagne ?** (une raison à trouver)
+- ✅ **La triade** (Imu, Qin Shi Huang et Griffith) tire les ficelles. **Le méchant final est caché derrière elle** : il n'apparaît qu'une fois la triade battue.
+- ❓ **T16** : **qui est le méchant final ?** Il a ouvert la faille depuis le passé. Pistes de Claude (26/11) : **Kronos**, le titan grec du temps, qui dévore ses enfants pour garder le pouvoir ; **la Main de Dieu** (Berserk), qui manipule déjà Griffith ; **Aizen** (Bleach), le manipulateur caché derrière tout depuis le début ; ou un **personnage inventé** pour le jeu, lié à Aubagne.
+- ❓ **T17** : **pourquoi Aubagne ?** Pistes de Claude (26/11) : les **santons** (Aubagne en est la capitale, et la foire aux santons a lieu en décembre : des figurines de toutes les époques) ; le **Garlaban** ; la **main du capitaine Danjou**, relique de la Légion étrangère gardée à Aubagne ; **Marcel Pagnol**, né à Aubagne.
 
-🚩 **Point d'étape : la révélation** (qui a ouvert la faille).
+🚩 **Point d'étape : la chute de la triade**, puis **la révélation** (le méchant final apparaît).
 🚩 **Point d'étape : la bataille finale** contre le méchant final.
 
 ## En parallèle, tout au long du jeu
@@ -126,4 +128,4 @@ Rédigé par Claude le 26/11 à partir de `LORE.md`, `PERSONNAGES.md` et `REGLES
 
 ## Trous qui restent
 
-T7 (le premier tyran), T10 (la mort du mentor), T11 (les autres sauveurs, plus tard), T13 (le seuil de 500 hommes à trois), T14 et T15 (la guerre aux portes de la ville), T16 (le méchant final et l'alliance), T17 (pourquoi Aubagne).
+T10 (le moment de la mort du mentor), T11 (les autres sauveurs, plus tard), T14a, T14b et T14c (les trois généraux de la guerre aux portes de la ville), T16 (le méchant final), T17 (pourquoi Aubagne).
