@@ -7,7 +7,19 @@ Les réponses d'origine au questionnaire sont dans le dossier [`questionnaire/`]
 
 Légende : ✅ décidé · 💡 proposé, à valider · ❓ à décider plus tard
 
-> ✅ **Changement de cap (Ayoub, 26/11)** : le jeu devient un **jeu d'histoire** (le lore), et non plus un jeu de conquête où les joueurs s'affrontent. Les joueurs ne s'affrontent plus qu'en **combat amical**, avec une **mise possible**. Tout ce qui parle de guerres, de conquête ou de trahison entre joueurs est à revoir (tâche 240).
+## ✅ Le nouveau cadre : un jeu d'histoire (Ayoub, 26/11)
+
+Ce cadre passe avant tout le reste du document. Les anciennes règles qui le contredisent sont marquées ❌.
+
+- ✅ **Un jeu d'histoire** (le lore), et plus un jeu de conquête entre joueurs. **Les joueurs sont alliés** : personne ne peut prendre le quartier d'un autre joueur.
+- ✅ **La carte d'Aubagne** sert à prendre des quartiers, à gérer ses quartiers et à entretenir ses armées (nourrir, armer, soigner…).
+- ✅ **Chaque quartier à prendre a un adversaire.** Le premier est **Ray Dark**, le même pour tout le monde. Les suivants sont des personnages du gacha : **faibles près des quartiers de départ, de plus en plus forts quand on s'éloigne** (et qu'on avance dans le jeu).
+- ✅ **Entre joueurs : seulement des combats amicaux.**
+  - On peut **miser** des pièces, des ressources ou des personnages.
+  - On peut jouer **à plusieurs contre plusieurs**.
+- ✅ **Trahison, seulement dans une bataille amicale** : un joueur peut envoyer un messager à un joueur du camp adverse pour lui proposer de trahir en échange de quelque chose. Celui qui reçoit peut appuyer sur le bouton **« Trahison »** : elle prend effet à sa **première attaque contre son ancien allié**.
+- ✅ **Retirés** : les guerres entre joueurs (section 10), les alliances et les contrats (section 11), la trahison comme quête secrète, les quêtes de `QUETES.md`.
+- ✅ **Gardés** : le journal (avec une image PNG ou JPG et un titre pour la une), le chat et les messagers.
 
 **Liberté d'équilibrage (accord d'Ayoub, 12/11)** : les éléments proposés par Claude (formations, stratégies, troupes, constructions, attaques spéciales, chiffres…) peuvent être modifiés ou supprimés par Claude s'ils bloquent un élément important ou déséquilibrent le jeu, pour améliorer l'expérience de jeu. Claude doit toujours en informer l'utilisateur (ce qui a changé et pourquoi).
 
@@ -618,6 +630,8 @@ Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de
 
 ## 10. Les guerres (long terme, façon CK3)
 
+> ❌ **Retiré (Ayoub, 26/11)** : plus de guerres entre joueurs (voir « Le nouveau cadre » en haut). Section gardée pour mémoire, à reprendre seulement si un morceau sert contre les tyrans.
+
 - ✅ **Conditions pour déclarer une guerre** (d'autres conditions pourront s'ajouter) :
   - un objectif important (une contrée, un trésor…) ;
   - au moins 2 parties prenantes ;
@@ -640,13 +654,9 @@ Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de
 
 ## 11. La diplomatie
 
-- ✅ **Contrats violables et inviolables** : ils servent pour les alliances, les pactes, la vassalité, les tributs…
-- ✅ **Trahison** : une **quête secrète très difficile**.
-  1. Le joueur décide de lancer une trahison.
-  2. Il doit réussir plusieurs quêtes.
-  3. S'il en rate une seule, la cible reçoit une notification lui révélant qui a tenté de la trahir.
-  4. Le traître reçoit un marqueur **« traître »**.
-- ✅ **Le journal** : chaque joueur peut publier un journal par jour, dont il rédige le gros titre de la une.
+- ❌ **Contrats et alliances** : retirés (Ayoub, 26/11), les joueurs sont tous alliés.
+- ❌ **Trahison comme quête secrète** : retirée (Ayoub, 26/11). La trahison n'existe plus que dans une bataille amicale (bouton « Trahison », voir « Le nouveau cadre » en haut).
+- ✅ **Le journal** : chaque joueur peut publier un journal par jour. Pour la une, il écrit un **titre** et peut ajouter une **image (PNG ou JPG)** (Ayoub, 26/11).
 - ✅ **Chat** entre joueurs.
 - ✅ **Les messagers** (validés par Ayoub le 26/11 ; vient du lore : les antennes sont détruites, voir `LORE.md`) :
   - **Dans le jeu, tout message entre joueurs voyage à la vitesse d'un messager** sur les vraies routes : messages du chat, propositions de contrat, demandes de renfort, alertes à un allié (« je suis attaqué »). Le joueur qui reçoit est notifié à l'**arrivée** du messager, pas à l'envoi.
