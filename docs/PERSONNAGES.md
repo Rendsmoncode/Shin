@@ -329,15 +329,15 @@ Raretés : rare et épique (environ 30 épiques). Les guerriers mystiques sont a
 | | « Prêt à tout » (Kojirō, Muramasa) | « La vie des hommes » (Musashi, Masamune) |
 |---|---|---|
 | Sous les Cieux (5 / 2) | Alexandre le Grand, César, Gengis Khan, Hannibal Barca, Napoléon | Ouki, Saladin |
-| Généraux cachés (1 / 1) | Khalid ibn al-Walid | Jan Žižka |
+| Généraux cachés (0 / 2) |  | Khalid ibn al-Walid, Jan Žižka |
 | Guerriers mystiques (7 / 11) | Achille, Cristiano Ronaldo, Hou Ken, Le Chevalier squelette, Lü Bu, Ragnar, Sasaki Kojirō | Benkei, Bruce Lee, Guan Yu, Jeanne d'Arc, Kyoukai, Lionel Messi, Livaï, Miyamoto Musashi, Muhammad Ali, Thorfinn, Vercingétorix |
 | Généraux légendaires (17 / 10) | Attila, Bai Qi, Cao Cao, Hulagu, Kanki, Mehmed II, Minamoto no Yoshitsune, Nader Shah, Oda Nobunaga, Ousen, Richard Cœur de Lion, Shaka Zulu, Simón Bolívar, Subötaï, Tamerlan, Võ Nguyên Giáp, Xerxès Iᵉʳ | Abd el-Kader, Alexandre Souvorov, Garp, Le roi Arthur, Ménélik II, Ri Boku, Shivaji, Sun Tzu, Toussaint Louverture, Yi Sun-sin |
 | Généraux épiques (18 / 21) | Basile II, Baybars, Charlemagne, Clovis, Dong Zhuo, Erwin Smith, Foch, Harald Hardrada, José Mourinho, Knut le Grand, La reine Nzinga, Lelouch, Samori Touré, Scipion l'Africain, Sylla, Takeda Shingen, Tariq ibn Ziyad, Vlad III | Abd el-Krim, Aragorn, Baudouin IV, Charles Martel, Crazy Horse, Jean Hunyadi, Koutouzov, Leclerc, Luis Enrique, Mavis Vermillion, Maximus, Pep Guardiola, Rani Lakshmibai, Shikamaru, Skanderbeg, Soundiata Keïta, Spartacus, Tecumseh, Trần Hưng Đạo, Uesugi Kenshin, Zhuge Liang |
-| **Total** | **48** | **45** |
+| **Total** | **47** | **46** |
 
-Quelques choix à expliquer : Khalid (l'exécution de Malik ibn Nuwayra, la « rivière de sang » d'Ullais) ; Simón Bolívar (son décret de « guerre à mort ») ; Giáp (des pertes énormes acceptées pour vaincre) ; Erwin Smith (il sacrifie ses soldats pour l'objectif) ; Cristiano Ronaldo (l'obsession d'être le meilleur, comme Kojirō) ; Vercingétorix (il se rend pour sauver ses hommes à Alésia) ; Uesugi Kenshin (il envoie du sel à son ennemi Takeda Shingen) ; Ouki (« le général porte la vie de ses hommes »).
+Quelques choix à expliquer : ✅ Khalid est dans « la vie des hommes » (choix d'Ayoub, pour équilibrer) ; Simón Bolívar (son décret de « guerre à mort ») ; Giáp (des pertes énormes acceptées pour vaincre) ; Erwin Smith (il sacrifie ses soldats pour l'objectif) ; Cristiano Ronaldo (l'obsession d'être le meilleur, comme Kojirō) ; Vercingétorix (il se rend pour sauver ses hommes à Alésia) ; Uesugi Kenshin (il envoie du sel à son ennemi Takeda Shingen) ; Ouki (« le général porte la vie de ses hommes »).
 
-**Équilibre** : 48 contre 45, donc équilibré au total. Mais en haut de l'échelle, « prêt à tout » a plus de généraux (5 Sous les Cieux sur 7, 17 légendaires contre 10) et « la vie des hommes » plus de guerriers mystiques (11 contre 7). Pour équilibrer, les prochains généraux légendaires ajoutés devraient plutôt être de la voie « la vie des hommes ».
+**Équilibre** : 47 contre 46, donc équilibré au total. Mais en haut de l'échelle, « prêt à tout » a plus de généraux (5 Sous les Cieux sur 7, 17 légendaires contre 10) et « la vie des hommes » plus de guerriers mystiques (11 contre 7). Pour équilibrer, les prochains généraux légendaires ajoutés devraient plutôt être de la voie « la vie des hommes ».
 
 ## Personnages de soutien : règles (Ayoub, 26/11)
 

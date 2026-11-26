@@ -48,20 +48,20 @@ Chacun affronte **un membre de la triade** et se fait **écraser** (10, défaite
 |---|---|---|---|
 | Shin | Qin Shi Huang | Ouki | le guandao |
 | Koby | Imu | Garp | le Haki de l'armement |
-| Guts | Griffith | le Chevalier squelette | l'armure du Berserker |
+| Guts | Griffith | le Chevalier squelette | la Dragon Slayer |
 
 ## Tyrans ⚔️ (avant la 1ʳᵉ guerre)
 
-💡 Dong Zhuo (4), le seigneur de guerre qui a pris l'empereur de Chine en otage ; Hernán Cortés (5) et Francisco Pizarro (5), les conquistadors qui ont abattu les Aztèques et les Incas.
+Dong Zhuo (4), le seigneur de guerre qui a pris l'empereur de Chine en otage ; Hernán Cortés (5) et Francisco Pizarro (5), les conquistadors qui ont abattu les Aztèques et les Incas.
 
-## 7. 1ʳᵉ guerre : aux portes de la ville 🎬 (sans prévenir, ~1 500 soldats 💡)
+## 7. 1ʳᵉ guerre : aux portes de la ville 🎬 (sans prévenir, ~1 500 soldats)
 
 Shin contre **Mangoku** (4) · Koby contre **Crocodile** (5) · Guts contre **Zodd** (5).
 Une vraie guerre : longue, elle peut se renverser et recommence en cas d'échec. On se coordonne par messagers. Récompense : surtout de l'XP.
 
 ## Tyrans ⚔️ (avant la 2ᵉ guerre)
 
-💡 Sylla (6), le général romain qui a marché sur Rome ; **Cao Cao** (6), le seigneur de guerre des Trois Royaumes ; Basile II (6), « le Tueur de Bulgares ».
+Sylla (6), le général romain qui a marché sur Rome ; **Cao Cao** (6), le seigneur de guerre des Trois Royaumes ; Basile II (6), « le Tueur de Bulgares ».
 
 ## 8. 2ᵉ guerre et les sauveurs 🎬 (vers 2 000 soldats ou plus)
 
@@ -75,27 +75,27 @@ Pendant cette guerre, chacun vit son **sauvetage** : une bataille impossible, un
 | Koby | Akainu (8) | **Toussaint Louverture** | « Un homme de la justice se bat pour la justice, pas pour le juge. » |
 | Guts | Vlad III l'Empaleur (6) | **Miyamoto Musashi** | « La rancune ne convient ni à soi ni aux autres. Regarde-le : la haine l'a mangé tout entier. » |
 
-Récompense : un **2ᵉ objet unique** : le bouclier de Hyou Kou (Shin), un autre Haki (Koby, 💡 l'observation), ❓ un objet de Berserk (Guts, 💡 la Dragon Slayer ou la main mécanique et son canon).
+Récompense : un **2ᵉ objet unique** : le bouclier de Hyou Kou (Shin), le Haki de l'observation (Koby), l'armure du Berserker (Guts) (✅ Ayoub, 26/11).
 
 ## Tyrans ⚔️ (avant la 3ᵉ guerre)
 
-💡 **Bai Qi** (7), « le Boucher d'hommes » ; Hulagu (7), qui a rasé Bagdad ; Oda Nobunaga (7), « le Roi démon ».
+**Bai Qi** (7), « le Boucher d'hommes » ; Hulagu (7), qui a rasé Bagdad ; Oda Nobunaga (7), « le Roi démon ».
 
-## 9. 3ᵉ guerre 🎬 (~3 500 soldats 💡)
+## 9. 3ᵉ guerre 🎬 (~3 500 soldats)
 
 Shin contre **Hou Ken** (8) · Koby contre **Kizaru** (8) · Guts contre **Grunbeld** (7).
 
 ## Tyrans ⚔️ (avant la 4ᵉ guerre)
 
-💡 Tamerlan (8) et ses pyramides de crânes ; Xerxès (8), le roi des rois de Perse ; Charlemagne (8) et ses trente ans de guerre contre les Saxons ; **Jules César** (8).
+Tamerlan (8) et ses pyramides de crânes ; Xerxès (8), le roi des rois de Perse ; Charlemagne (8) et ses trente ans de guerre contre les Saxons ; **Jules César** (8).
 
-## 10. 4ᵉ guerre 🎬 (~5 000 soldats 💡), la dernière avant la triade
+## 10. 4ᵉ guerre 🎬 (~5 000 soldats), la dernière avant la triade
 
 Shin contre **Ri Boku** (9) · Koby contre **Akainu** (9) · Guts contre **Ganishka** (9).
 
 ## Tyrans ⚔️ (les derniers, avant la vengeance)
 
-💡 **Alexandre le Grand** (9), invaincu jusqu'en Inde ; **Gengis Khan** (9), le plus grand empire terrestre de l'histoire ; **Napoléon** (9) et sa Grande Armée ; puis, tout à la fin, **Staline** (9) et **Hitler** (9) : des tyrans à abattre (ils restent exclus du gacha, `PERSONNAGES.md`).
+**Alexandre le Grand** (9), invaincu jusqu'en Inde ; **Gengis Khan** (9), le plus grand empire terrestre de l'histoire ; **Napoléon** (9) et sa Grande Armée ; puis, tout à la fin, **Staline** (9) et **Hitler** (9) : des tyrans à abattre (ils restent exclus du gacha, `PERSONNAGES.md`).
 
 ## 11. La vengeance contre la triade 🎬
 
@@ -128,20 +128,20 @@ Contre **Nostradamus** (10+). En plein combat, il révèle ce qu'est la pierre :
 | 4 | 🎬 Tutoriel et revanche | 500 | les mêmes |
 | 5 | 🎬 Attila, à trois | 3 × 500 | Attila 4 |
 | 6 | 🎬 La triade (perdu), mort des mentors | 1 000 | Qin Shi Huang, Imu, Griffith 10 |
-| — | ⚔️ Tyrans | | 💡 Dong Zhuo 4, Cortés 5, Pizarro 5 |
+| — | ⚔️ Tyrans | | Dong Zhuo 4, Cortés 5, Pizarro 5 |
 | 7 | 🎬 1ʳᵉ guerre | ~1 500 | Mangoku 4, Crocodile 5, Zodd 5 |
-| — | ⚔️ Tyrans | | 💡 Sylla 6, Cao Cao 6, Basile II 6 |
+| — | ⚔️ Tyrans | | Sylla 6, Cao Cao 6, Basile II 6 |
 | 8 | 🎬 2ᵉ guerre et sauveurs | 2 000+ | Rinko 6, Doflamingo 6, Rosine 6 ; Richard 7, Akainu 8, Vlad III 6 |
-| — | ⚔️ Tyrans | | 💡 Bai Qi 7, Hulagu 7, Oda Nobunaga 7 |
+| — | ⚔️ Tyrans | | Bai Qi 7, Hulagu 7, Oda Nobunaga 7 |
 | 9 | 🎬 3ᵉ guerre | ~3 500 | Hou Ken 8, Kizaru 8, Grunbeld 7 |
-| — | ⚔️ Tyrans | | 💡 Tamerlan 8, Xerxès 8, Charlemagne 8, César 8 |
+| — | ⚔️ Tyrans | | Tamerlan 8, Xerxès 8, Charlemagne 8, César 8 |
 | 10 | 🎬 4ᵉ guerre | ~5 000 | Ri Boku 9, Akainu 9, Ganishka 9 |
-| — | ⚔️ Tyrans, les derniers | | 💡 Alexandre 9, Gengis Khan 9, Napoléon 9, puis Staline 9 et Hitler 9 |
+| — | ⚔️ Tyrans, les derniers | | Alexandre 9, Gengis Khan 9, Napoléon 9, puis Staline 9 et Hitler 9 |
 | 11 | 🎬 Vengeance contre la triade | ❓ | Qin Shi Huang, Imu, Griffith 10 |
 | 12 | 🎬 Nostradamus (perdu), Einstein | — | Nostradamus 10+ |
 | 13 | 🎬 Bataille finale | — | Nostradamus 10+ |
 
-## L'échelle de difficulté (💡 proposée par Claude)
+## L'échelle de difficulté (✅ validée par Ayoub le 26/11)
 
 | Note | Sens | Exemples |
 |---|---|---|
@@ -219,6 +219,5 @@ Le **palier du gacha** (les taux des coffres communs achetés avec les pièces) 
 
 ## Ce qui reste à décider
 
-- Les tyrans entre les guerres (les 💡 ci-dessus sont des propositions, d'autres tyrans peuvent s'ajouter).
-- Le 2ᵉ objet unique de Guts.
+- ✅ Les tyrans entre les guerres et le nombre de soldats sont validés (Ayoub, 26/11) ; d'autres tyrans peuvent s'ajouter.
 - ✅ **La fin** (Ayoub, 26/11) : une fois la pierre détruite, le jeu **continue en amical**, mais **sans plus aucun but**. Les récompenses de la fin (étape 13) ne servent donc plus à progresser : les coffres puissants doivent arriver avant les derniers combats.

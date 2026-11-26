@@ -47,10 +47,11 @@ Dans le jeu, chacun n'a que sa **fiche de base** (commun), sans aucun indice qu'
 
 ### Les objets des mentors
 
-Reçus au déblocage du 500 contre 500. Un objet **débloque la fiche épique** et donne seulement un **léger bonus** : il ne doit pas être trop fort, puisqu'il sert déjà à débloquer la fiche.
+Laissés par le mentor à sa mort (étape 6 du lore, `CHRONOLOGIE.md`). Un objet **débloque la fiche épique** et donne seulement un **léger bonus** : il ne doit pas être trop fort, puisqu'il sert déjà à débloquer la fiche.
 
 | Objet | Pour | Léger bonus (piste) |
 |---|---|---|
 | Le guandao d'Ouki | Shin | l'armée qu'il mène ATK +5 % |
 | Le Haki de l'armement | Koby | l'armée qu'il mène DEF +5 % |
-| L'armure du Berserker | Guts | quand son armée a perdu la moitié de ses hommes, ATK +10 % |
+| La Dragon Slayer | Guts | l'armée qu'il mène ATK +5 % |
+| L'armure du Berserker (2ᵉ objet, étape 8) | Guts | quand son armée a perdu la moitié de ses hommes, ATK +10 % |

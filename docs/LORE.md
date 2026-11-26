@@ -22,7 +22,7 @@ On va faire des bagarres de rue, des combats et agrandir notre territoire. Puis,
 
 - On combattra une première fois sur un champ de bataille et on perdra (**obligatoirement**).
 - Puis on sera recueilli par un **mentor** qui va nous apprendre la bataille sur champ de bataille : **Ouki** pour Ayoub, **le Chevalier squelette** pour Nicolas, **Garp** pour Mathieu.
-- Ils nous donneront tous un objet ou une faculté : **le guandao d'Ouki** pour Ayoub, **l'armure du Berserker** pour Nicolas, **le Haki de l'armement** pour Mathieu. On gagne un effet à ce moment-là, et notre apparence change : on aura un effet en plus pour nous aider à être plus forts.
+- Ils nous donneront tous un objet ou une faculté : **le guandao d'Ouki** pour Ayoub, **la Dragon Slayer** pour Nicolas, **le Haki de l'armement** pour Mathieu. On gagne un effet à ce moment-là, et notre apparence change : on aura un effet en plus pour nous aider à être plus forts.
 - Puis on avancera sans notre mentor.
 
 ## Les tyrans et la première guerre
@@ -71,7 +71,7 @@ En fonction du choix du joueur, des guerriers différents apparaîtront.
 
 - ✅ **Les joueurs sont eux-mêmes** (Ayoub, Mathieu, Nicolas). En arrivant en ville depuis l'extérieur, l'**âme d'un personnage de fiction s'est liée à chacun** : Shin pour Ayoub, Koby pour Mathieu, Guts pour Nicolas. Ils sont eux et leur personnage à la fois.
 - ✅ **Ceux qui tirent les ficelles** (pour l'instant) : une **alliance entre Imu, Qin Shi Huang et Griffith**.
-- ✅ **Le cadeau du mentor** est un **objet** (guandao, Haki de l'armement, armure du Berserker). Il arrive quand les 3 joueurs débloquent le **mode guerre à 500 contre 500**. Il **débloque la fiche épique** du personnage et donne un **léger bonus**, sans plus (12/11).
+- ✅ **Le cadeau du mentor** est un **objet** (guandao, Haki de l'armement, Dragon Slayer). ✅ Il arrive à la **mort du mentor** (étape 6 de `CHRONOLOGIE.md`, remplace l'ancien moment du 500 contre 500). Il **débloque la fiche épique** du personnage et donne un **léger bonus**, sans plus (12/11).
 - ✅ **Quartiers** : seulement quelques quartiers neutres au début, pour aider à démarrer. Tous les autres sont **dirigés par un tyran**, qu'il faut battre pour prendre le quartier.
 
 ## Points à préciser (notés par Claude)
