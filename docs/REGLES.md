@@ -18,6 +18,15 @@ Ce cadre passe avant tout le reste du document. Les anciennes règles qui le con
   - On peut **miser** des pièces, des ressources ou des personnages.
   - On peut jouer **à plusieurs contre plusieurs**.
 - ✅ **Trahison, seulement dans une bataille amicale** : un joueur peut envoyer un messager à un joueur du camp adverse pour lui proposer de trahir en échange de quelque chose. Celui qui reçoit peut appuyer sur le bouton **« Trahison »** : elle prend effet à sa **première attaque contre son ancien allié**.
+- ✅ **Le découpage (Ayoub, 26/11 ; calcul de Claude dans `prototype/carte/decoupage.js`)** :
+  - Aubagne (et La Valentine) est coupée en **3 secteurs, un par joueur**, autour de son quartier de départ : personne ne se marche dessus. Les secteurs ont autant de bâtiments chacun.
+  - Chaque secteur a **55 petits quartiers**, numérotés de 1 (le départ) à 55 en s'éloignant. Chaque quartier touche un quartier de numéro plus petit : on avance de proche en proche.
+  - ✅ **Chaque quartier donne 100 soldats** (le même nombre partout, pour que tout le monde soit à égalité). À la fin : 55 quartiers, **5 500 soldats** (au moins 5 000).
+  - 💡 Les adversaires : n° 2 **Ray Dark** ; n° 5 **son propre ennemi** (Kyou, le colonel Morgan, le Comte, ~500 hommes : perdu la première fois avec 400 soldats, puis battu après le tutoriel) ; les **tyrans** sur des numéros fixes (12 Dong Zhuo, 14 Cortés, 15 Pizarro, 17 Sylla, 19 Cao Cao, 20 Basile II, 25 Bai Qi, 30 Hulagu, 35 Oda Nobunaga, 38 Tamerlan, 42 Xerxès, 46 Charlemagne, 50 César, 51 à 55 Alexandre, Gengis Khan, Napoléon, Staline, Hitler) ; ailleurs un **personnage du gacha**, de plus en plus fort (commun jusqu'au n° 10, rare jusqu'au 20, épique jusqu'au 35, légendaire après). Son armée : environ 70 % des soldats du joueur (un tyran : 110 %).
+- ✅ **Tout le monde avance au même rythme pour l'histoire (Ayoub, 26/11)** :
+  - les grands moments demandent un nombre de soldats, donc de quartiers : **Attila 500 (5 quartiers), la triade 1 000 (10), 1ʳᵉ guerre 1 500 (15), 2ᵉ guerre 2 000 (20), 3ᵉ guerre 3 500 (35), 4ᵉ guerre 5 000 (50), vengeance 5 500 (55)** ;
+  - celui qui a atteint le nombre ne peut plus attaquer de quartier : un message lui dit qu'**« une tempête approche, mieux vaut ne pas attaquer pour le moment »**, jusqu'à ce que le dernier le rattrape ;
+  - quand les trois ont le nombre, le message **« Il est temps d'écrire l'histoire »** apparaît. Chacun accepte ou non ; le grand moment commence quand **les trois ont accepté**.
 - ✅ **Retirés** : les guerres entre joueurs (section 10), les alliances et les contrats (section 11), la trahison comme quête secrète, les quêtes de `QUETES.md`.
 - ✅ **Gardés** : le journal (avec une image PNG ou JPG et un titre pour la une), le chat et les messagers.
 

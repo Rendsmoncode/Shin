@@ -57,10 +57,11 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 <script src="https://cdn.jsdelivr.net/npm/d3-delaunay@6.0.4/dist/d3-delaunay.min.js"></script>
 <script src="batiments.js"></script>
 <script src="relief.js"></script>
+<script src="decoupage.js"></script>
 <script>
 (async function(){
 const status=document.getElementById('status'),info=document.getElementById('info');
-if(!window.THREE||!window.turf||!window.d3||!window.ShinBat||!window.ShinRelief){status.textContent='Une bibliothèque n\'a pas pu se charger.';return;}
+if(!window.THREE||!window.turf||!window.d3||!window.ShinBat||!window.ShinRelief||!window.ShinDecoupage){status.textContent='Une bibliothèque n\'a pas pu se charger.';return;}
 const pause=()=>new Promise(r=>setTimeout(r,0));
 const say=async t=>{status.textContent=t;await pause();};
 
@@ -75,11 +76,10 @@ const JOUEURS=[
 const SECOURS={'les passons':[5.5935,43.2905],'pin vert':[5.5855,43.3045]};
 const VILLES_JEU=['Aubagne'];                  // découpées en quartiers
 const VILLES_HORS_JEU=['La Penne-sur-Huveaune'];  // affichées, pas encore dans le jeu
-const ECART_MIN=280;                           // deux lieux-dits plus proches que ça (m) ne font qu'un quartier
+const RAYON_MAX=700;                           // un quartier ne s'étend pas à plus de 700 m de son centre (au-delà : collines sans habitants)
 
 const norm=s=>s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[-’']/g,' ').replace(/\s+/g,' ').trim();
-const ownerOf=name=>JOUEURS.find(j=>norm(j.quartier)===norm(name))||null;
-document.getElementById('legend').innerHTML=JOUEURS.map(j=>`<span><i style="background:${j.couleur}"></i>${j.nom} · ${j.quartier}</span>`).join('')+'<span><i style="background:transparent"></i>Quartier neutre (contour clair)</span>';
+document.getElementById('legend').innerHTML=JOUEURS.map(j=>`<span><i style="background:${j.couleur}"></i>${j.nom} · ${j.quartier}</span>`).join('')+'<span>Chaque joueur a son secteur : 55 quartiers numérotés depuis son départ, 100 soldats par quartier</span>';
 
 // ---------- données ----------
 await say('Chargement des données de la ville…');
@@ -148,24 +148,41 @@ const communes={};for(const [nom,rs] of Object.entries(V.communes||{}))if(rs.len
 const lieux=(V.lieux||[]).map(([nom,place,x,z])=>({nom,place,x,z}));
 const manquants=[];
 for(const [k,[lon,lat]] of Object.entries(SECOURS))if(!lieux.some(p=>norm(p.nom)===k)){const j=JOUEURS.find(j=>norm(j.quartier)===k);const [x,z]=ll2xz(lon,lat);lieux.push({nom:j.quartier,place:'suburb',x,z});manquants.push(j.quartier);}
-function decouper(commune,ville){
-  const rang={suburb:0,quarter:1,village:2,neighbourhood:3,hamlet:4,locality:5};
-  let pts=lieux.filter(p=>turf.booleanPointInPolygon([p.x,p.z],commune));
-  pts.sort((a,b)=>(ownerOf(b.nom)?1:0)-(ownerOf(a.nom)?1:0)||(rang[a.place]??9)-(rang[b.place]??9));
-  const keep=[];for(const p of pts)if(!keep.some(k=>Math.hypot(k.x-p.x,k.z-p.z)<ECART_MIN))keep.push(p);
-  if(keep.length<2)return keep.map(p=>({nom:p.nom,ville,geo:commune.geometry}));
-  const [w,s,e,n]=turf.bbox(commune),vor=d3.Delaunay.from(keep.map(p=>[p.x,p.z])).voronoi([w-50,s-50,e+50,n+50]);
-  const out=[];keep.forEach((p,i)=>{const c=vor.cellPolygon(i);if(!c)return;let it=null;try{it=turf.intersect(turf.polygon([c]),commune);}catch(e){}if(it)out.push({nom:p.nom,ville,geo:it.geometry});});
-  return out;
-}
+// petits quartiers, un secteur par joueur, numérotés depuis le départ (decoupage.js, docs/REGLES.md « Le nouveau cadre »)
+const cercle=(x,z,r)=>{const a=[...Array(48)].map((_,i)=>[x+r*Math.cos(i/48*2*Math.PI),z+r*Math.sin(i/48*2*Math.PI)]);a.push(a[0]);return turf.polygon([a]);};
+let zoneVal=communes['La Valentine']||null;
+if(!zoneVal){const p=lieux.find(p=>norm(p.nom)==='la valentine');if(p)zoneVal=cercle(p.x,p.z,900);else manquants.push('La Valentine');}
+let zone=communes['Aubagne']||zoneVal;
+if(communes['Aubagne']&&zoneVal){try{zone=turf.union(communes['Aubagne'],zoneVal)||zone;}catch(e){}}
 const quartiers=[];
-VILLES_JEU.forEach(v=>{if(communes[v])quartiers.push(...decouper(communes[v],v));});
-if(communes['La Valentine'])quartiers.push({nom:'La Valentine',ville:'Marseille (11ᵉ)',geo:communes['La Valentine'].geometry});
-else{const p=lieux.find(p=>norm(p.nom)==='la valentine');if(p)quartiers.push({nom:'La Valentine',ville:'Marseille (11ᵉ)',geo:{type:'Polygon',coordinates:[[...Array(49)].map((_,i)=>[p.x+900*Math.cos(i/48*6.2832),p.z+900*Math.sin(i/48*6.2832)])]}});}
-quartiers.forEach(q=>{q.owner=ownerOf(q.nom);q.rings=ringsOf(q.geo);
+if(zone){
+  const BH=V.champsBat.length,pts=[];
+  for(const b of V.batiments){let x=0,z=0;const n=(b.length-BH)/2;if(!n)continue;for(let i=0;i<n;i++){x+=b[BH+2*i];z+=b[BH+1+2*i];}x/=n;z/=n;if(turf.booleanPointInPolygon([x,z],zone))pts.push([x,z]);}
+  const departs=JOUEURS.map(j=>{const p=lieux.find(p=>norm(p.nom)===norm(j.quartier));
+    if(p)return [p.x,p.z];const f=norm(j.quartier)==='la valentine'&&zoneVal;return f?turf.centroid(f).geometry.coordinates:turf.centroid(zone).geometry.coordinates;});
+  const res=ShinDecoupage.decouper(pts,departs,d3.Delaunay);
+  if(res){
+    const [w,s,e,n]=turf.bbox(zone),vor=res.del.voronoi([w-50,s-50,e+50,n+50]),vus={};
+    const ROMAINS=['','',' II',' III',' IV',' V',' VI',' VII',' VIII',' IX',' X',' XI',' XII',' XIII',' XIV',' XV'];
+    const ordre=res.centres.map((c,i)=>i).sort((a,b)=>res.rang[a]-res.rang[b]);
+    for(const i of ordre){
+      const cell=vor.cellPolygon(i);if(!cell)continue;const [cx,cz]=res.centres[i];
+      let g=null;try{g=turf.intersect(turf.polygon([cell]),zone);if(g)g=turf.intersect(g,cercle(cx,cz,RAYON_MAX));}catch(e){g=null;}
+      if(!g)continue;
+      const jo=JOUEURS[res.secteur[i]],r=res.rang[i];
+      let nom=jo.quartier;
+      if(r>1){let p=null,pv=Infinity;for(const l of lieux){const v=Math.hypot(l.x-cx,l.z-cz);if(v<pv){pv=v;p=l;}}
+        const base=p?p.nom:'Quartier';vus[norm(base)]=(vus[norm(base)]||(JOUEURS.some(j=>norm(j.quartier)===norm(base))?1:0))+1;
+        const k=vus[norm(base)];nom=base+(k<ROMAINS.length?ROMAINS[k]:' '+k);}
+      else vus[norm(nom)]=1;
+      const enVal=zoneVal&&turf.booleanPointInPolygon([cx,cz],zoneVal);
+      quartiers.push({nom,ville:enVal?'Marseille (11ᵉ)':'Aubagne',geo:g.geometry,secteur:jo,rang:r,owner:r===1?jo:null,adv:ShinDecoupage.adversaire(r,jo.nom)});
+    }
+  }
+}
+quartiers.forEach(q=>{q.rings=ringsOf(q.geo);
   q.area=q.rings.reduce((s,r)=>{let a=0;for(let i=0;i<r.length-1;i++)a+=r[i][0]*r[i+1][1]-r[i+1][0]*r[i][1];return s+Math.abs(a)/2;},0);
   q.feature={type:'Feature',geometry:q.geo,properties:{}};});
-if(!quartiers.some(q=>q.nom==='La Valentine'))manquants.push('La Valentine');
 
 // ---------- sol : relief + texture peinte (forêts, champs, eau, routes, couleurs des joueurs) ----------
 await say('Peinture du sol…');
@@ -181,11 +198,11 @@ for(const t of ORDRE){g.fillStyle=SOLC[t];for(const s of solsPar[t]||[]){path(s.
 {const n=document.createElement('canvas');n.width=n.height=128;const ng=n.getContext('2d');for(let i=0;i<2600;i++){const v=150+R()*105|0;ng.fillStyle=`rgb(${v},${v},${v})`;ng.fillRect(R()*128,R()*128,2,2);}
  g.globalCompositeOperation='multiply';g.globalAlpha=.35;g.fillStyle=g.createPattern(n,'repeat');g.fillRect(0,0,CW,CH);g.globalAlpha=1;g.globalCompositeOperation='source-over';}
 // quartiers des joueurs teintés
-for(const q of quartiers)if(q.owner){g.fillStyle=q.owner.couleur;g.globalAlpha=.24;for(const r of q.rings){path(r.flat(),true);g.fill();}g.globalAlpha=1;}
+for(const q of quartiers)if(q.secteur){g.fillStyle=q.secteur.couleur;g.globalAlpha=q.owner?.24:.07;for(const r of q.rings){path(r.flat(),true);g.fill();}g.globalAlpha=1;}
 // les mêmes teintes, seules, posées par-dessus les photos aériennes
 const tcv=document.createElement('canvas');tcv.width=2048;tcv.height=Math.round(2048*GD/GW);
 {const tg=tcv.getContext('2d'),kx=tcv.width/GW,kz=tcv.height/GD;
- for(const q of quartiers)if(q.owner){tg.fillStyle=q.owner.couleur;tg.globalAlpha=.2;
+ for(const q of quartiers)if(q.secteur){tg.fillStyle=q.secteur.couleur;tg.globalAlpha=q.owner?.2:.06;
    for(const r of q.rings){tg.beginPath();r.forEach(([x,z],i)=>i?tg.lineTo((x-X0)*kx,(z-Z0)*kz):tg.moveTo((x-X0)*kx,(z-Z0)*kz));tg.closePath();tg.fill();}}}
 const teinteTex=new THREE.CanvasTexture(tcv);
 // routes peintes (utiles de loin) ; de près elles existent aussi en volume, posées sur le relief fin
@@ -881,9 +898,9 @@ function label(text,x,z,lift,size,color){
 }
 const qLabels=[],vLabels=[];
 for(const q of quartiers){
-  q.border=q.owner?curtain(q.rings,q.owner.couleur,40,.75):curtain(q.rings,'#fff4dc',14,.45);
+  q.border=q.owner?curtain(q.rings,q.owner.couleur,40,.75):curtain(q.rings,q.secteur?q.secteur.couleur:'#fff4dc',14,.45);
   const p=turf.pointOnFeature(q.feature).geometry.coordinates;q.c=p;
-  qLabels.push(label(q.owner?`${q.nom} · ${q.owner.nom}`:q.nom,p[0],p[1],30,q.owner?46:36,q.owner?'#fff':'#f3ead2'));
+  qLabels.push(label(q.owner?`${q.nom} · ${q.owner.nom}`:`${q.rang} · ${q.nom}`,p[0],p[1],30,q.owner?46:36,q.owner?'#fff':'#f3ead2'));
 }
 for(const v of VILLES_JEU.concat(VILLES_HORS_JEU)){const f=communes[v];if(!f)continue;
   curtain(ringsOf(f.geometry),VILLES_JEU.includes(v)?'#f3e6c4':'#9a968c',VILLES_JEU.includes(v)?70:30,.55);
@@ -923,7 +940,11 @@ function montrer(q){
   const add=h=>{const s=document.createElement('span');s.innerHTML=h;info.appendChild(s);};
   add(`<span class="k">Ville :</span> ${q.ville}`);
   add(`<span class="k">Superficie :</span> ${(q.area/1e6).toFixed(2).replace('.',',')} km² · ${nb} bâtiments`);
-  add(q.owner?`<span class="k">Roi :</span> ${q.owner.nom} (capitale)`:'<span class="k">Statut :</span> quartier neutre');
+  if(q.secteur)add(`<span class="k">Secteur de</span> ${q.secteur.nom} · quartier n° ${q.rang} sur ${ShinDecoupage.PAR_JOUEUR}`);
+  if(q.owner)add(`<span class="k">Roi :</span> ${q.owner.nom} (capitale)`);
+  else if(q.adv)add(`<span class="k">Adversaire :</span> ${q.adv.nom} (${q.adv.texte}, difficulté ${q.adv.diff}) · environ ${q.adv.soldats} hommes`);
+  if(q.rang)add(`<span class="k">Donne :</span> ${ShinDecoupage.SOLDATS} soldats (${q.rang*ShinDecoupage.SOLDATS} en tout une fois pris)`);
+  {const p=q.rang&&ShinDecoupage.porteAvant(q.rang);if(p)add(`<span class="k">Avant de l'attaquer :</span> ${p.titre}, quand les trois joueurs ont ${p.n} quartiers (${p.n*ShinDecoupage.SOLDATS} soldats)`);}
   add('<span class="k">Entrer dans le quartier : à venir.</span>');
 }
 const ray=new THREE.Raycaster(),ndc=new THREE.Vector2();let down=null;

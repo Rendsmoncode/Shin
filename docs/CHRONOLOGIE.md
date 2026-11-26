@@ -28,7 +28,7 @@ Les trois garçons rentrent de Paris sans rien savoir : ce sont **les trois seul
 
 ## 2. Son quartier
 
-On arrive sur la carte et on découvre **son quartier** ; sa vraie maison devient l'**hôtel de ville**. Les premiers soldats sont **ses voisins**. On prend vite quelques quartiers neutres.
+On arrive sur la carte et on découvre **son quartier** ; sa vraie maison devient l'**hôtel de ville**. Les premiers soldats sont **ses voisins**. On prend vite quelques quartiers neutres. ✅ Le premier adversaire est **Ray Dark**, le même pour tout le monde (Ayoub, 26/11 ; découpage et seuils de soldats : `REGLES.md`, « Le nouveau cadre »).
 
 ## 3. Trop fort pour nous 🎬 (défaite obligatoire)
 
