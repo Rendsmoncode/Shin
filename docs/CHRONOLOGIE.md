@@ -153,10 +153,56 @@ Contre **Nostradamus** (10+). En plein combat, il révèle ce qu'est la pierre :
 | 10 | Les grands méchants | Qin Shi Huang, Imu, Griffith |
 | 10+ | Le boss final | Nostradamus |
 
+## Les récompenses (💡 proposées par Claude le 26/11, tâche 14)
+
+Les taux des coffres et les garanties sont dans `REGLES.md` (section 8). Le **palier du gacha** (les taux d'un coffre normal) monte avec le lore : palier 1 au début, 2 après la triade (étape 6), 3 à la 2ᵉ guerre (étape 8), 4 à la 4ᵉ guerre (étape 10).
+
+**Selon la difficulté de l'adversaire battu** (chaque joueur reçoit sa récompense, même dans une bataille à trois) :
+
+| Difficulté | Pièces | Coffres | Chance d'avoir le tyran battu |
+|---|---|---|---|
+| 1-2 | 100 | 1 coffre normal | — |
+| 3-4 | 200 | 1 coffre rare | 20 % |
+| 5-6 | 300 | 1 coffre épique | 15 % |
+| 7-8 | 500 | 1 coffre épique + 1 coffre rare | 10 % |
+| 9 | 800 | 1 coffre légendaire | 5 % |
+| 10 | 1 000 | 1 coffre légendaire + 1 coffre épique | — |
+| 10+ | 2 000 | 2 coffres légendaires | — |
+
+- La chance d'avoir le tyran passe par le **coffre du tyran** : si on ne l'obtient pas, le coffre donne un coffre épique à la place. On peut rejouer contre un tyran déjà battu, mais pour une récompense réduite (un coffre normal).
+- **Défaite obligatoire** (étapes 3, 6 et 12) : pas de coffre. À l'étape 6, la récompense est l'objet du mentor.
+- **Guerres** : beaucoup d'XP, plus la récompense de la difficulté de l'ennemi.
+- **Staline et Hitler** (exclus du gacha) : pas de coffre du tyran, un coffre légendaire à la place.
+
+**Étape par étape** :
+
+| N° | Moment | Récompense |
+|---|---|---|
+| 1 | La fusion | 1 000 pièces de départ (10 tirages, un Épique garanti) |
+| 2 | Son quartier | 100 pièces par quartier neutre pris (les 5 premiers) |
+| 3 | Trop fort pour nous (perdu) | rien |
+| 4 | La revanche | 200 pièces + 1 coffre rare (difficulté 2-3) |
+| 5 | Attila, à trois | Attila (donné à chacun) + 300 pièces |
+| 6 | La triade (perdu) | l'objet du mentor ; passage au palier 2 |
+| — | Tyrans (Dong Zhuo, Cortés, Pizarro) | selon la difficulté (4-5) |
+| 7 | 1ʳᵉ guerre | XP + 300 pièces + 1 coffre épique |
+| — | Tyrans (Sylla, Cao Cao, Basile II) | selon la difficulté (6) |
+| 8 | 2ᵉ guerre et sauveurs | XP + 2ᵉ objet unique + 1 coffre épique pour la guerre, 1 coffre épique + 1 coffre rare pour le sauvetage ; passage au palier 3 (les Sous les Cieux deviennent possibles) |
+| — | Tyrans (Bai Qi, Hulagu, Nobunaga) | selon la difficulté (7) |
+| 9 | 3ᵉ guerre | XP + 500 pièces + 1 coffre épique + 1 coffre rare |
+| — | Tyrans (Tamerlan, Xerxès, Charlemagne, César) | selon la difficulté (8) |
+| 10 | 4ᵉ guerre | XP + 800 pièces + 1 coffre légendaire ; passage au palier 4 |
+| — | Tyrans (Alexandre, Gengis Khan, Napoléon, Staline, Hitler) | selon la difficulté (9) |
+| 11 | Vengeance contre la triade | 1 000 pièces + 1 coffre légendaire + 1 coffre épique |
+| 12 | Nostradamus (perdu), Einstein | rien |
+| 13 | Bataille finale | 2 000 pièces + 2 coffres légendaires |
+
+**Ordre de grandeur** : sur tout le lore, un joueur fait environ 150 à 200 tirages. Il obtient en moyenne 6 à 10 légendaires (dont les garanties) et 0 ou 1 Sous les Cieux (le plus souvent grâce à la garantie des 200 tirages, vers la fin). À ajuster quand on saura combien de temps dure une partie.
+
 ## Ce qui reste à décider
 
 - Les tyrans entre les guerres (les 💡 ci-dessus sont des propositions, d'autres tyrans peuvent s'ajouter).
 - Le 2ᵉ objet unique de Guts.
 - La fin : `REGLES.md` dit qu'il n'y a pas de fin de partie ; une fois la pierre détruite, le jeu s'arrête-t-il ?
 - Le cadeau du mentor arrive maintenant à sa mort (étape 6) : mettre à jour `REGLES.md` et `PERSONNAGES.md`.
-- **Ensuite** : les récompenses du gacha pour chaque note de difficulté, et les pourcentages de chaque rareté selon le moment du jeu (tâche 14).
+- 💡 Les récompenses du gacha et les pourcentages par rareté sont proposés plus haut et dans `REGLES.md` (section 8) : à valider (tâche 14).

@@ -252,7 +252,31 @@ Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de
 - ✅ **Aucun argent réel dans le jeu.** La boutique contient seulement un **lien vers la page de dons de MSF** pour la Palestine. Après un don, l'admin offre lui-même un coffre au joueur.
 - ✅ **Raretés** : Commun · Rare · Épique · Légendaire · Sous les Cieux. Un coffre ou un trésor contient un seul personnage.
 - ✅ La liste des personnages est dans [PERSONNAGES.md](PERSONNAGES.md).
-- ❓ Probabilités et équilibrage (à faire ensemble).
+- 💡 **Probabilités du gacha** (tâche 14, proposées par Claude le 26/11, à valider) :
+  - **Un tirage = 100 pièces** de la monnaie du gacha. **10 tirages d'un coup = 900 pièces**, avec au moins un Épique garanti.
+  - Les taux d'un **coffre normal** montent avec l'avancée dans le lore (le palier se débloque au moment indiqué, pour chaque joueur) :
+
+    | Palier du lore | Commun | Rare | Épique | Légendaire | Sous les Cieux |
+    |---|---|---|---|---|---|
+    | 1. Début (étapes 2 à 5) | 70 % | 25 % | 4,5 % | 0,5 % | 0 % |
+    | 2. Après la triade (étapes 6 à 7) | 60 % | 28 % | 10 % | 2 % | 0 % |
+    | 3. 2ᵉ et 3ᵉ guerres (étapes 8 à 9) | 50 % | 30 % | 15 % | 4,5 % | 0,5 % |
+    | 4. 4ᵉ guerre et fin (étape 10 et après) | 40 % | 32 % | 20 % | 7 % | 1 % |
+
+  - **Pas de Sous les Cieux avant la 2ᵉ guerre** : les 7 Grands Généraux doivent rester un moment fort, et ne pas écraser le début du lore.
+  - Les **guerriers mystiques** sont tirés dans la case Légendaire (environ 1 légendaire sur 4 est un guerrier mystique).
+  - **Coffres spéciaux** (gagnés dans le lore, les quêtes ou offerts par l'admin) :
+
+    | Coffre | Contenu |
+    |---|---|
+    | Coffre rare | Rare 80 %, Épique 17 %, Légendaire 3 % |
+    | Coffre épique | Épique 85 %, Légendaire 14 %, Sous les Cieux 1 % (0 % avant la 2ᵉ guerre : Légendaire 15 %) |
+    | Coffre légendaire | Légendaire 95 %, Sous les Cieux 5 % (0 % avant la 2ᵉ guerre) |
+    | Coffre du tyran | Le tyran battu, avec une chance selon sa difficulté (voir `CHRONOLOGIE.md`) ; sinon un coffre épique |
+
+  - **Garanties** (compteur propre à chaque joueur, tous coffres confondus) : un **Légendaire garanti au 60ᵉ tirage** sans légendaire ; un **Sous les Cieux garanti au 200ᵉ tirage** sans Sous les Cieux (le compteur ne tourne qu'à partir de la 2ᵉ guerre). Le compteur revient à zéro dès qu'on obtient la rareté.
+  - **Gagner des pièces** : connexion quotidienne 50 (un tirage tous les deux jours), 7 jours d'affilée 300, quêtes et lieux majeurs 100 à 500, étapes du lore (voir `CHRONOLOGIE.md`).
+  - Les tirages forcés du Game Master (légendaires dédiés) passent au-dessus de ces taux.
 
 ## 9. Les petits combats (moins de 500 hommes)
 
