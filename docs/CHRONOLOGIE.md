@@ -68,11 +68,24 @@ Rédigé par Claude le 26/11 à partir de `LORE.md`, `PERSONNAGES.md` et `REGLES
 - ✅ **Peu après Attila**, un premier combat contre **la triade** (Imu, Qin Shi Huang et Griffith). Les joueurs sont **battus**.
 - ✅ **Le mentor meurt pour que son joueur puisse survivre.**
 - ✅ La **vengeance** ne viendra que **plusieurs batailles et guerres plus tard** (voir l'Acte VI).
-- ❓ Chaque mentor meurt-il face à un membre précis de la triade (par exemple Ouki face à Qin Shi Huang, le Chevalier squelette face à Griffith, Garp face à Imu) ?
+- ✅ **Chaque mentor meurt face à un membre de la triade** : **Ouki** face à **Qin Shi Huang**, **le Chevalier squelette** face à **Griffith**, **Garp** face à **Imu**.
 
 🚩 **Point d'étape 6 : la défaite contre la triade et la mort des mentors.**
 
-## Acte IV : la conquête et les sauveurs
+## Acte IV : la guerre aux portes de la ville (3 contre 3)
+
+- ✅ Après Attila et la défaite contre la triade, **une guerre** : une **immense attaque de 3 généraux ennemis aux portes de la ville** (texte de `LORE.md`). Il faut se battre **à 3 contre 3** (un joueur contre un général).
+- ✅ La guerre est longue (plusieurs jours) et peut se renverser. **En cas d'échec, elle recommence** jusqu'à la victoire.
+- ✅ Pas d'antennes : on se coordonne par **messagers** (règle proposée dans `REGLES.md`, section 11).
+- ✅ **Les 3 généraux sont des ennemis personnels**, un par joueur, tirés de l'histoire de son personnage :
+  - **Shin** contre ❓ un grand général de Kingdom (Mangoku était proposé, mais il n'est pas dans le jeu et n'est pas un grand homme ; 💡 **Ren Pa**, le vrai Lian Po, l'un des quatre grands généraux de Zhao, que Shin affronte dans Kingdom ; ou **Hou Ken**) ;
+  - **Koby** contre **Crocodile** (le premier Grand Corsaire de One Piece) ;
+  - **Guts** contre **Zodd** (l'apôtre immortel de Berserk).
+- ✅ **Ce qu'on y gagne** : surtout de l'**XP**, et peut-être quelques **objets rares** (à décider).
+
+🚩 **Point d'étape 7 : la guerre aux portes de la ville.**
+
+## Acte V : les sauveurs (après la guerre aux portes de la ville)
 
 - ✅ Combat après combat, on fait tomber plusieurs **tyrans**. Les tyrans du passé deviennent **recrutables une fois vaincus** (Attila, Lü Bu, Bai Qi, Tamerlan, Vlad III). Les tyrans modernes (Staline, Hitler) restent des ennemis à abattre.
 - ✅ **Ce qu'ils veulent** : un tyran est un tyran, il cherche **le pouvoir et la domination**. Les plus illustres auront une **motivation personnelle**, écrite plus tard.
@@ -85,20 +98,7 @@ Rédigé par Claude le 26/11 à partir de `LORE.md`, `PERSONNAGES.md` et `REGLES
 - ✅ Selon la **voie choisie**, des **guerriers différents** apparaissent : Alexandre ou Hannibal pour « prêt à tout » ; Musashi en face de Kojirō, le duel de Ganryūjima devenant le symbole des deux voies.
 - ❓ **T11** : la leçon exacte de Musashi. 💡 « La haine finit par te transformer en ce que tu combats. »
 
-🚩 **Points d'étape 7 : les trois sauvetages** (Saladin, Toussaint Louverture, Musashi).
-
-## Acte V : la première guerre (3 contre 3)
-
-- ✅ Après plusieurs tyrans, **une guerre** : une **immense attaque de 3 généraux ennemis aux portes de la ville** (texte de `LORE.md`). Il faut se battre **à 3 contre 3** (un joueur contre un général).
-- ✅ La guerre est longue (plusieurs jours) et peut se renverser. **En cas d'échec, elle recommence** jusqu'à la victoire.
-- ✅ Pas d'antennes : on se coordonne par **messagers** (règle proposée dans `REGLES.md`, section 11).
-- ✅ **Les 3 généraux sont des ennemis personnels**, un par joueur, tirés de l'histoire de son personnage :
-  - **Shin** contre **Mangoku** (Kingdom) ;
-  - **Koby** contre **Crocodile** (le premier Grand Corsaire de One Piece) ;
-  - **Guts** contre **Zodd** (l'apôtre immortel de Berserk).
-- ✅ **Ce qu'on y gagne** : surtout de l'**XP**, et peut-être quelques **objets rares** (à décider).
-
-🚩 **Point d'étape : la guerre aux portes de la ville.**
+🚩 **Point d'étape 8 : les trois sauvetages** (Saladin, Toussaint Louverture, Musashi).
 
 ## Acte V bis : la conquête de la ville (le cœur du jeu, à remplir)
 
@@ -151,8 +151,8 @@ Rédigé par Claude le 26/11 à partir de `LORE.md`, `PERSONNAGES.md` et `REGLES
 | 4 | La revanche et le cadeau du mentor | La fiche épique de Shin, Koby ou Guts |
 | 5 | Attila, à trois contre lui (500 chacun contre 2 000) | Les batailles à plusieurs ; Attila recrutable |
 | 6 | La défaite contre la triade, la mort des mentors | La soif de vengeance |
-| 7 | Les trois sauvetages (un par joueur) | Une faculté par sauveur |
-| 8 | La guerre aux portes de la ville (Mangoku, Crocodile, Zodd) | XP, objets rares |
+| 7 | La guerre aux portes de la ville (❓ pour Shin, Crocodile, Zodd) | XP, objets rares |
+| 8 | Les trois sauvetages : Saladin contre Richard, Toussaint Louverture contre Akainu, Musashi contre Vlad III | Une faculté par sauveur |
 | 8 bis | La conquête de la ville : plein d'étapes à définir | — |
 | 9 | La vengeance contre la triade, puis Nostradamus apparaît | La dernière partie de l'histoire |
 | 10 | L'aide d'Einstein | De quoi affronter Nostradamus |
@@ -160,4 +160,4 @@ Rédigé par Claude le 26/11 à partir de `LORE.md`, `PERSONNAGES.md` et `REGLES
 
 ## Trous qui restent
 
-T11 (la leçon exacte de Musashi), T16 (la cachette de la pierre philosophale, plus tard), qui tue chaque mentor, l'ordre exact entre les sauvetages et la guerre aux portes de la ville, et les étapes de la conquête de la ville (Acte V bis).
+T11 (la leçon exacte de Musashi), T16 (la cachette de la pierre philosophale, plus tard), l'adversaire de Shin à la guerre aux portes de la ville, et les étapes de la conquête de la ville (Acte V bis).
