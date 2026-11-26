@@ -61,7 +61,7 @@ Leur rôle vient de la table de `REGLES.md` (section 3). Chaque niveau augmente 
 | **Infirmerie** | Soigne les blessés | Soins +6 % | Hôpital |
 | **Marché** | Échange de ressources avec les autres joueurs | Frais de vente −2 % | — |
 | **Tour de guet** | Vision de la carte autour du quartier | Portée +10 % ; au 5, repère les espions ennemis | — |
-| **Relais de messagers** | Messagers plus rapides (voir `REGLES.md`, section 11) | Vitesse des messagers +5 % ; au 5, les pigeons ; au 8, les messages interceptés sont signalés | Gare |
+| **Relais de messagers** | Messagers plus rapides (voir `REGLES.md`, section 11) | Vitesse des messagers +5 % ; au 8, les messages interceptés sont signalés | Gare |
 | **Académie** | XP et recherches des généraux | XP +4 % | Lycée |
 | **Écurie** | Vitesse de la cavalerie et des armées en marche | +3 % | — |
 | **Garnison** | Défense du quartier (soldats qui restent sur place) | +100 hommes de garde par niveau | Gendarmerie |

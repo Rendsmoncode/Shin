@@ -116,7 +116,7 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
   - Surnom : tiré de sa phrase célèbre « Je préfère trahir le monde plutôt que le monde me trahisse ».
   - ✅ Animation d'obtention : raconter l'expression chinoise « Quand on parle de Cao Cao, Cao Cao arrive » (l'équivalent de « quand on parle du loup »), tant il était redouté.
   - Lore : seigneur de guerre des Trois Royaumes. À Guandu (200), il bat Yuan Shao, à la tête d'une armée bien plus nombreuse, en brûlant ses réserves de vivres, puis il unifie tout le nord de la Chine. Battu à la Falaise rouge (208). Aussi grand poète. Phrase célèbre (rapportée par une source tardive) : « Je préfère trahir le monde plutôt que le monde me trahisse. » Liens : Guan Yu (qu'il laisse partir), Lü Bu (qu'il fait exécuter), Xu Chu et Dian Wei (ses gardes du corps), Liu Bei (son rival).
-- Hulagu (Mongols, XIIIᵉ siècle), « Le Destructeur de Bagdad » (💡 surnom provisoire)
+- Hulagu (Mongols, XIIIᵉ siècle), « Le Destructeur de Bagdad » (✅ surnom provisoire)
   - Tyran du lore (difficulté 7) : rareté Légendaire selon sa difficulté (26/11).
 - Xerxès Iᵉʳ (Perse, Vᵉ siècle av. J.-C.), « Le Roi des rois »
   - Tyran du lore (difficulté 8) : rareté Légendaire selon sa difficulté (26/11).
@@ -164,7 +164,7 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 - Skanderbeg, « L'Athlète du Christ »
 - Zhuge Liang, « Le Dragon couché »
 - Shikamaru (Naruto), « Le 8ᵉ Hokage »
-- Dong Zhuo (Chine, IIᵉ siècle), « Le Tyran de Luoyang » (💡 surnom provisoire)
+- Dong Zhuo (Chine, IIᵉ siècle), « Le Tyran de Luoyang » (✅ surnom provisoire)
   - Tyran du lore (difficulté 4) : rareté Épique selon sa difficulté (26/11).
 - Sylla (Rome, Iᵉʳ siècle av. J.-C.), « Felix, l'Heureux » (son vrai surnom)
   - Tyran du lore (difficulté 6) : rareté Épique selon sa difficulté (26/11).
@@ -183,7 +183,7 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
   - **Shin** : de paysan (commun) jusqu'à **Grand Général Sous les Cieux** ;
   - **Koby** : pareil, de commun jusqu'à **Sous les Cieux** ;
   - **Guts** : d'enfant (commun) jusqu'à **guerrier mystique**.
-- ✅ **Guts sera le seul guerrier mystique avec le trait Général.** 💡 Peut-être aussi **Kyoukai** (Kingdom).
+- ✅ **Guts et Kyoukai** (Kingdom) sont les seuls guerriers mystiques avec le trait Général (Ayoub, 26/11).
 - ✅ **Monter de rareté** : deux conditions à remplir en même temps, chacune avec son seuil : le **niveau (XP)** du général et le **nombre de soldats de son armée**. Les deux montent en général ensemble, mais il faut atteindre les deux seuils pour passer à la rareté suivante. Valeurs des seuils à fixer à l'équilibrage.
 - ✅ **Guts** : sa rareté finale est **guerrier mystique**, mais il a le **trait Général** : il peut commander une armée comme un général. (Remplace l'idée d'un choix en début de partie.)
 
@@ -194,7 +194,7 @@ Commun · Rare · Épique · Légendaire · **Sous les Cieux** (la plus haute).
 - Nicolas : **le Chevalier squelette** (Berserk), qui sauve Guts pendant l'Éclipse et le guide ensuite par ses conseils. Mentor mystérieux. Il est aussi tirable au gacha (guerrier mystique). Griffith n'est pas son mentor (c'est son rival et frère d'armes) : il est retiré du gacha et devient l'un des grands méchants (voir `LORE.md`).
 - ✅ Le mentor meurt à l'étape 6 du lore, tué en sauvant son élève face à la triade, et lui laisse son objet unique (voir `CHRONOLOGIE.md`).
 
-- 💡 Idée de personnage rare : Adolphe Sax, inventeur du saxophone, qui l'a créé pour les musiques militaires (bonus aux troupes)
+- Non retenu : Adolphe Sax (personnage rare, bonus de musique militaire).
 
 ## Légendaires dédiés (gacha arrangé, à garder secret)
 
@@ -217,7 +217,7 @@ Certains joueurs doivent obtenir les légendaires qui leur correspondent. Le Gam
   - Animation : la dernière phrase de sa présentation est « Les Romains hurlaient : Hannibal est aux portes !! », puis son surnom s'écrase sur l'écran.
 - Napoléon, « Le Petit Caporal »
   - ✅ Scène de Laffrey (7 mars 1815) à reprendre dans son animation d'obtention et/ou son attaque spéciale : un bataillon royaliste (700 à 800 hommes) l'attend avec l'ordre de tirer ; il avance seul, ouvre sa redingote : « S'il est parmi vous un soldat qui veuille tuer son Empereur, me voici ! ». Personne ne tire, le bataillon se rallie à lui ; 19 jours plus tard, il entre à Paris sans un coup de feu. Sources : Mémoires du maréchal Randon (officier du camp royaliste, présent), Henry Houssaye, *1815*.
-  - 💡 Attaque spéciale « Me voici » : des unités ennemies refusent de tirer, voire passent de son côté (surtout troupes au moral bas). Sur la carte : prise d'un quartier sans combat si son prestige est assez haut. À équilibrer.
+  - ✅ Attaque spéciale (le nom sera choisi par Ayoub, comme pour toutes les attaques spéciales) : des unités ennemies refusent de tirer, voire passent de son côté (surtout troupes au moral bas). Sur la carte : prise d'un quartier sans combat si son prestige est assez haut. À équilibrer.
 - Saladin, « Le Roi victorieux »
 - Ouki, « L'Oiseau millénaire de Qin »
 - César, « Le Divin Jules » (provisoire, à remplacer si on trouve mieux)
@@ -230,7 +230,7 @@ Deux généraux invaincus, absents de la légende des 7. ✅ **Pas uniques, mais
 - **Jan Žižka**, « Le Feu sans lumière » : l'aveugle à la tête de paysans, jamais vaincu.
 - ✅ Mise en scène : **deux légendes parallèles**. On sait dès le début qu'il existe deux généraux cachés, chacun avec son surnom et sa propre chaîne de quêtes.
 - ✅ Une animation spéciale se déclenche quand un joueur obtient l'un des deux.
-- 💡 Phrase de l'animation de Žižka : « Celui qui vainc dans les ténèbres ».
+- ✅ Phrase de l'animation de Žižka : « Celui qui vainc dans les ténèbres ».
 
 ## Guerriers mystiques
 
@@ -322,6 +322,23 @@ Raretés : rare et épique (environ 30 épiques). Les guerriers mystiques sont a
 - Boulanger, « C'est toi le pain »
 - Vigile de Carrefour, « Ne suit que les noirs » (critique du contrôle au faciès : c'est le vigile qui est ridicule)
 
+## Les deux voies (✅ règle d'Ayoub, 💡 attribution de Claude, 26/11)
+
+✅ **Chaque général et chaque guerrier mystique appartient à l'une des deux voies** (voir `LORE.md`). 💡 Attribution selon leur histoire : « prêt à tout » pour ceux qui ont gagné par la terreur, les massacres, la trahison ou l'obsession de vaincre à n'importe quel prix ; « la vie des hommes » pour ceux qui ont protégé leur peuple ou leurs hommes, épargné l'ennemi ou refusé l'injustice. Shin, Koby et Guts suivent la voie choisie par leur joueur.
+
+| | « Prêt à tout » (Kojirō, Muramasa) | « La vie des hommes » (Musashi, Masamune) |
+|---|---|---|
+| Sous les Cieux (5 / 2) | Alexandre le Grand, César, Gengis Khan, Hannibal Barca, Napoléon | Ouki, Saladin |
+| Généraux cachés (1 / 1) | Khalid ibn al-Walid | Jan Žižka |
+| Guerriers mystiques (7 / 11) | Achille, Cristiano Ronaldo, Hou Ken, Le Chevalier squelette, Lü Bu, Ragnar, Sasaki Kojirō | Benkei, Bruce Lee, Guan Yu, Jeanne d'Arc, Kyoukai, Lionel Messi, Livaï, Miyamoto Musashi, Muhammad Ali, Thorfinn, Vercingétorix |
+| Généraux légendaires (17 / 10) | Attila, Bai Qi, Cao Cao, Hulagu, Kanki, Mehmed II, Minamoto no Yoshitsune, Nader Shah, Oda Nobunaga, Ousen, Richard Cœur de Lion, Shaka Zulu, Simón Bolívar, Subötaï, Tamerlan, Võ Nguyên Giáp, Xerxès Iᵉʳ | Abd el-Kader, Alexandre Souvorov, Garp, Le roi Arthur, Ménélik II, Ri Boku, Shivaji, Sun Tzu, Toussaint Louverture, Yi Sun-sin |
+| Généraux épiques (18 / 21) | Basile II, Baybars, Charlemagne, Clovis, Dong Zhuo, Erwin Smith, Foch, Harald Hardrada, José Mourinho, Knut le Grand, La reine Nzinga, Lelouch, Samori Touré, Scipion l'Africain, Sylla, Takeda Shingen, Tariq ibn Ziyad, Vlad III | Abd el-Krim, Aragorn, Baudouin IV, Charles Martel, Crazy Horse, Jean Hunyadi, Koutouzov, Leclerc, Luis Enrique, Mavis Vermillion, Maximus, Pep Guardiola, Rani Lakshmibai, Shikamaru, Skanderbeg, Soundiata Keïta, Spartacus, Tecumseh, Trần Hưng Đạo, Uesugi Kenshin, Zhuge Liang |
+| **Total** | **48** | **45** |
+
+Quelques choix à expliquer : Khalid (l'exécution de Malik ibn Nuwayra, la « rivière de sang » d'Ullais) ; Simón Bolívar (son décret de « guerre à mort ») ; Giáp (des pertes énormes acceptées pour vaincre) ; Erwin Smith (il sacrifie ses soldats pour l'objectif) ; Cristiano Ronaldo (l'obsession d'être le meilleur, comme Kojirō) ; Vercingétorix (il se rend pour sauver ses hommes à Alésia) ; Uesugi Kenshin (il envoie du sel à son ennemi Takeda Shingen) ; Ouki (« le général porte la vie de ses hommes »).
+
+**Équilibre** : 48 contre 45, donc équilibré au total. Mais en haut de l'échelle, « prêt à tout » a plus de généraux (5 Sous les Cieux sur 7, 17 légendaires contre 10) et « la vie des hommes » plus de guerriers mystiques (11 contre 7). Pour équilibrer, les prochains généraux légendaires ajoutés devraient plutôt être de la voie « la vie des hommes ».
+
 ## Personnages de soutien : règles (Ayoub, 26/11)
 
 - ✅ **Pas de fiction** dans les catégories de soutien, sauf exceptions choisies par Ayoub : **Leif Erikson** (personnage historique, pour son visuel de Vinland Saga), **Nico Robin** (explorateurs), **Tony Tony Chopper** (soignants), **Lloyd Frontera** (architectes).
@@ -332,7 +349,7 @@ Raretés : rare et épique (environ 30 épiques). Les guerriers mystiques sont a
 - Épiques : Zheng He, Ibn Battuta, Leif Erikson, Pythéas (le Marseillais), Marco Polo, Magellan, Amerigo Vespucci, Amundsen, Shackleton, Aboubakri II, Cousteau
 - Avec la capacité Archéologue (épiques) : Champollion, Howard Carter, Nico Robin (One Piece)
 - Non retenus : Christophe Colomb, Cortés, Pizarro (massacres et esclavage), Armin ; Indiana Jones, Lara Croft (fiction).
-- 💡 Cortés et Pizarro restent des **tyrans du lore**, mais exclus du gacha pour la même raison (comme Staline et Hitler) : battus, ils donnent leur coffre de récompense sans chance d'avoir le tyran.
+- ✅ Cortés et Pizarro restent des **tyrans du lore**, mais exclus du gacha pour la même raison (comme Staline et Hitler) : battus, ils donnent leur coffre de récompense sans chance d'avoir le tyran.
 - ✅ Explorateur et Archéologue sont fusionnés : « Archéologue » est une capacité rare de certains explorateurs, qui permet de déterrer des trésors pendant les parties (soin, bonus temporaire, monstre allié).
 
 ## Soignants

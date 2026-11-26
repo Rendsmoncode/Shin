@@ -646,9 +646,10 @@ Améliorations : voir « Amélioration des troupes » (section 9 bis) : chars de
   4. Le traître reçoit un marqueur **« traître »**.
 - ✅ **Le journal** : chaque joueur peut publier un journal par jour, dont il rédige le gros titre de la une.
 - ✅ **Chat** entre joueurs.
-- 💡 **Les messagers** (proposé par Claude le 26/11, à valider ; vient du lore : les antennes sont détruites, voir `LORE.md`) :
+- ✅ **Les messagers** (validés par Ayoub le 26/11 ; vient du lore : les antennes sont détruites, voir `LORE.md`) :
   - **Dans le jeu, tout message entre joueurs voyage à la vitesse d'un messager** sur les vraies routes : messages du chat, propositions de contrat, demandes de renfort, alertes à un allié (« je suis attaqué »). Le joueur qui reçoit est notifié à l'**arrivée** du messager, pas à l'envoi.
-  - **Trois sortes de messagers** : le **coureur** (gratuit, 6 km/h), le **cavalier** (un peu d'argent, 20 km/h, débloqué avec l'écurie) et le **pigeon voyageur** (60 km/h, débloqué au niveau 5 du relais de messagers, message court seulement). À Aubagne, un cavalier met environ 5 à 20 minutes d'un quartier à l'autre.
+  - ✅ **Deux sortes de messagers** (Ayoub, 26/11 : pas de pigeon voyageur) : le **coureur** (gratuit, 6 km/h) et le **cavalier** (un peu d'argent, 20 km/h, débloqué avec l'écurie). À Aubagne, un cavalier met environ 5 à 20 minutes d'un quartier à l'autre.
+  - ✅ **On peut aussi envoyer un messager à l'adversaire** (négociation, menace, demande de reddition…).
   - **Interception** : un messager qui passe près d'une armée ou d'un espion ennemi peut être intercepté (chance selon l'INT de l'espion). L'ennemi lit le message ; l'envoyeur l'apprend seulement si son relais de messagers est au niveau 8.
   - **Ses propres armées** : les ordres aux armées sur la carte restent immédiats (sinon le jeu devient trop lent).
   - **Pendant une bataille rangée** : un allié n'apprend la bataille qu'à l'arrivée du messager, puis ses renforts marchent jusqu'au bord de la carte (voir « Renforts »).

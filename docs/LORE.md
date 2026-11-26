@@ -59,7 +59,7 @@ En fonction du choix du joueur, des guerriers différents apparaîtront.
 - ✅ **Les sauveurs apparaissent dans des conquêtes prévues dans l'histoire.** Ce sont des batailles **impossibles à gagner** sans un effet ou une faculté que le joueur n'a pas encore. Le joueur perd, une **cinématique** se lance (le sauveur arrive et lui donne une leçon), et le joueur **obtient l'effet**. Il rejoue alors la bataille et la gagne (tout est arrangé pour qu'il gagne).
 - ✅ **L'autre voie** (« prêt à tout ») fait apparaître des hommes prêts à tout pour la victoire : par exemple **Alexandre** ou **Hannibal** (plutôt pas Gengis Khan).
 - ✅ **Les personnages du lore restent tirables au gacha** (sauveurs, guerriers de l'autre voie, Grands Généraux Sous les Cieux, Napoléon…), même s'ils apparaissent dans l'histoire. Exception : les grands méchants (Griffith est retiré du gacha).
-- 💡 Autres guerriers possibles pour la voie « prêt à tout » : César, Mehmed II, Napoléon, Scipion, Takeda Shingen.
+- ✅ **Chaque général et chaque guerrier mystique appartient à l'une des deux voies** (Ayoub, 26/11) : attribution dans `PERSONNAGES.md` (« Les deux voies »).
 - ✅ **Les deux voies ont chacune un sabre et un sabreur** (inspiré de la légende de Masamune et Muramasa et des écrits de Yagyū Munenori, histoire arrangée pour le jeu) :
   - **« Prêt à tout, même au pire »** = le **satsujinken**, « le sabre qui tue ». Son sabreur est **Sasaki Kojirō**, qui manie **Muramasa**, la lame maudite qui coupe tout ce qui passe, sans distinction. Kojirō n'est pas cruel : il est obsédé par l'idée d'être la meilleure lame, à n'importe quel prix (peut-être poussé par la lame).
   - **« La vie des hommes vaut plus que les objectifs »** = le **katsujinken**, « le sabre qui donne la vie ». Son sabreur est **Miyamoto Musashi**, qui manie **Masamune**, la lame qui ne frappe pas l'innocent (les feuilles glissent autour d'elle dans la rivière). Jeune, Musashi a gagné « comme Muramasa » (il a triché contre Kojirō à Ganryūjima), puis il a choisi Masamune : une rédemption de plus.
@@ -79,4 +79,4 @@ En fonction du choix du joueur, des guerriers différents apparaîtront.
 
 - ✅ **Griffith** est retiré du gacha : il fait partie de l'alliance des grands méchants.
 - ✅ **Bataille rangée dès 500 hommes** (avant : 300). Le déblocage du 500 contre 500 amène la bataille perdue du tuto, puis le mentor et son cadeau.
-- 💡 **Les messagers** : règle proposée le 26/11 dans `REGLES.md` (section 11), à valider.
+- ✅ **Les messagers** : règle validée le 26/11 dans `REGLES.md` (section 11).
