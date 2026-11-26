@@ -77,4 +77,4 @@ En fonction du choix du joueur, des guerriers différents apparaîtront.
 
 - ✅ **Griffith** est retiré du gacha : il fait partie de l'alliance des grands méchants.
 - ✅ **Bataille rangée dès 500 hommes** (avant : 300). Le déblocage du 500 contre 500 amène la bataille perdue du tuto, puis le mentor et son cadeau.
-- ❓ **Les messagers** : nouvelle règle à écrire dans `REGLES.md` (vitesse des messages entre alliés pendant une guerre).
+- 💡 **Les messagers** : règle proposée le 26/11 dans `REGLES.md` (section 11), à valider.
