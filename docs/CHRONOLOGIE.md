@@ -6,7 +6,7 @@ Version 4, refaite le 26/11 avec le déroulé d'Ayoub. Elle remplace l'ordre de 
 ❓ = reste à décider. 💡 = idée de Claude, pas encore validée.
 **Difficulté** : note de 1 à 10 de chaque adversaire (échelle en bas). Elle servira de base aux récompenses du gacha.
 
-**Le rythme** (décidé le 26/11) : **prendre un quartier est rapide et facile**, pour avancer vite. Entre les guerres, on affronte des **tyrans, sans cinématique**. Les tyrans sont les mêmes pour les trois joueurs. Ce sont des **généraux historiques** (pas des guerriers mystiques, et **pas de personnages de fiction** : il y en a déjà assez dans le lore). Ils deviennent recrutables une fois vaincus.
+**Le rythme** (décidé le 26/11) : **prendre un quartier est rapide et facile**, pour avancer vite. Entre les guerres, on affronte des **tyrans, sans cinématique**. Les tyrans sont les mêmes pour les trois joueurs. Ce sont des **généraux historiques** (pas des guerriers mystiques, et **pas de personnages de fiction** : il y en a déjà assez dans le lore). Les premiers sont peu connus, puis viennent **les plus grands noms de l'histoire militaire** (César, Napoléon, Alexandre). ❓ Les tyrans peu connus deviennent recrutables une fois vaincus ; les grands (qui sont des Sous les Cieux du gacha) **ne s'obtiennent qu'au gacha** (💡 vaincus, ils disparaissent dans la faille), pour garder leur rareté.
 
 ---
 
@@ -79,7 +79,7 @@ Récompense : un **2ᵉ objet unique** : le bouclier de Hyou Kou (Shin), un autr
 
 ## Tyrans ⚔️ (avant la 3ᵉ guerre)
 
-💡 Bai Qi (7), « le Boucher d'hommes » ; Oda Nobunaga (7), « le Roi démon », qui fit brûler le mont Hiei.
+💡 Tamerlan (7), « le Boiteux de fer », et ses pyramides de crânes ; **Jules César** (8), qui a conquis la Gaule et franchi le Rubicon.
 
 ## 9. 3ᵉ guerre 🎬 (~3 500 soldats 💡)
 
@@ -87,7 +87,7 @@ Shin contre **Hou Ken** (8) · Koby contre **Kizaru** (8) · Guts contre **Grunb
 
 ## Tyrans ⚔️ (avant la 4ᵉ guerre)
 
-💡 Tamerlan (8), « le Boiteux de fer », et ses pyramides de crânes ; Xerxès (8), le roi des rois de Perse et son armée immense (celui des Thermopyles).
+💡 **Napoléon** (9), l'Empereur, et sa Grande Armée ; **Alexandre le Grand** (9), invaincu jusqu'en Inde.
 
 ## 10. 4ᵉ guerre 🎬 (~5 000 soldats 💡), la dernière avant la triade
 
@@ -128,9 +128,9 @@ Contre **Nostradamus** (10+). En plein combat, il révèle ce qu'est la pierre :
 | 7 | 🎬 1ʳᵉ guerre | ~1 500 | Mangoku 4, Crocodile 5, Zodd 5 |
 | — | ⚔️ Tyrans | | 💡 Sylla 6, Basile II 6 |
 | 8 | 🎬 2ᵉ guerre et sauveurs | 2 000+ | Rinko 6, Doflamingo 6, Rosine 6 ; Richard 7, Akainu 8, Vlad III 6 |
-| — | ⚔️ Tyrans | | 💡 Bai Qi 7, Oda Nobunaga 7 |
+| — | ⚔️ Tyrans | | 💡 Tamerlan 7, César 8 |
 | 9 | 🎬 3ᵉ guerre | ~3 500 | Hou Ken 8, Kizaru 8, Grunbeld 7 |
-| — | ⚔️ Tyrans | | 💡 Tamerlan 8, Xerxès 8 |
+| — | ⚔️ Tyrans | | 💡 Napoléon 9, Alexandre 9 |
 | 10 | 🎬 4ᵉ guerre | ~5 000 | Ri Boku 9, Akainu 9, Ganishka 9 |
 | 11 | 🎬 Vengeance contre la triade | ❓ | Qin Shi Huang, Imu, Griffith 10 |
 | 12 | 🎬 Nostradamus (perdu), Einstein | — | Nostradamus 10+ |
